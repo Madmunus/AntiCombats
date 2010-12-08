@@ -1,0 +1,2 @@
+AddDefaultCharset windows-1251
+php_value error_reporting 7

@@ -1,0 +1,13 @@
+.menu				{background-color: #d2d0d0; border-color: #ffffff #626060 #626060 #ffffff; border-style: solid; border-width: 1px; position: absolute; left: 0px; top: 0px; visibility: hidden;}
+a.menuItem			{border: 0px solid #000000; color: #003388; display: block; font-family: MS Sans Serif, Arial, Tahoma,sans-serif; font-size: 8pt; font-weight: bold; padding: 2px 12px 2px 8px; text-decoration: none;}
+a.menuItem:hover	{background-color: #a2a2a2; color: #0066FF;}
+a,
+span				{text-decoration: none; font-weight: bold; color: #003388; cursor: pointer;}
+body				{font-size: 10pt; font-family: Verdana, Arial, Helvetica, Tahoma, sans-serif;}
+a:hover				{color: #0066FF;}
+.number				{font-size: 11pt; font-weight: bold; color: #6F0000;}
+.date				{font-family: Courier; font-size: 8pt; text-decoration:none; font-weight:normal; color: #007000;}
+.date2				{font-family: Courier; font-size: 8pt; text-decoration:none; font-weight:normal; color: #007000; background-color: #00FFAA;}
+.sysdate			{font-family: Courier; font-size: 8pt; text-decoration:none; font-weight:normal; color: #B00000;}
+.p,
+.private			{font-weight: bold; color: red; background-color: #FAE0E0;}

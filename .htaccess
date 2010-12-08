@@ -1,0 +1,15 @@
+# Disable access to this files
+<FilesMatch "\.(dat)$">
+	Deny from all
+</FilesMatch>
+# Globals
+php_value register_globals on
+# UTF8 support
+AddDefaultCharset utf8
+<IfModule mod_charset.c>
+	CharsetDisable on
+	CharsetRecodeMultipartForms Off
+</IfModule>
+php_value default_charset UTF-8
+php_flag zlib.output_compression On 
+FileETag none

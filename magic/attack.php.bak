@@ -1,0 +1,90 @@
+<?
+if(empty($target)){
+?>
+<div align=right>
+<table border=0 cellpadding=0 cellspacing=0 width=300><tr>
+<td width=10><img src='img/cor_l_t.gif'></td><td bgcolor=#cccccc><img src='img/10_10.gif'></td><td width=10><img src='img/cor_r_t.gif'></td>
+</table>
+<table border=0 bgcolor=#cccccc cellpadding=0 cellspacing=0 width=300 height=60>
+<tr><td align=left valign=top>
+<form name='attack' action='?act=magic&school=earth&scroll=<?echo $scroll?>' method='post'>
+<small>
+&nbsp&nbspСитхия земли<BR>
+&nbsp&nbspЗаклятие "Нападение"<BR>
+</small>
+&nbsp&nbspУкажите логин персонажа,на которго Вы хотите наложить заклятие:<BR>
+&nbsp&nbsp<input type=text name='target' class=new style="width=200">
+<BR>
+&nbsp&nbsp<input type=submit value=" Использовать магию " class=new  style="width=200">
+</form>
+</td></tr>
+</table>
+<table border=0 cellpadding=0 cellspacing=0 width=300><tr>
+<td width=10><img src='img/cor_l_b.gif'></td><td bgcolor=#cccccc><img src='img/10_10.gif'></td><td width=10><img src='img/cor_r_b.gif'></td>
+</table>
+</div>
+<?
+}
+else if($db["battle"]==0){
+$S="select * from users where login='$target'";
+$q=mysql_query($S);
+$res=mysql_fetch_array($q);
+$on1 = 0;
+$phrase ="";
+        $chas = date("H");
+        $date = date("H:i", mktime($chas-$GSM));
+        $sss = mysql_query("SELECT * FROM online");
+        while($D = mysql_fetch_array($sss)){
+                if($D["login"] == $target){
+                $on1 = 1;
+                }
+        }
+        if(!$res){
+        print "Персонаж <B>$target</B> не найден в базе данных.";
+        die();
+        }
+        if($on1 == 0){
+        print "Персонаж <B>$target</B> сейчас офф-лайн.";
+        die();
+        }
+        if($res["battle"] != '0'){
+        print "Персонаж <B>$target</B> уже находиться в бою!";
+        die();
+        }
+        if($res["hp"] < '10'){
+        print "Персонаж <B>$target</B> слишком ослаблен!";
+        die();
+        }
+$mine_id=$db["id"];
+if(empty($ip))
+{
+               if (getenv('HTTP_X_FORWARDED_FOR'))
+                {
+                        $ip=getenv('HTTP_X_FORWARDED_FOR');
+                }
+                       else
+                {
+                        $ip=getenv('REMOTE_ADDR');
+                }
+}
+
+        say("$target","Внимание!!! &quot$login&quot напал на Вас!",$target);
+
+$SQL = mysql_query("UPDATE users SET cast = cast+0.5,earth_magic=earth_magic+0.5 WHERE login='$login'");
+        $S = mysql_query("UPDATE inv SET iznos = iznos+1 WHERE id=$scroll");
+        $S_INV = mysql_query("SELECT * FROM inv WHERE id = $scroll");
+        $DATA = mysql_fetch_array($S_INV);
+        $iznos = $DATA["iznos"];
+        $iznos_max = $DATA["iznos_max"];
+        $iznos_k = $iznos+1;
+                if($iznos_k>=$iznos_max){
+                $S_D = mysql_query("DELETE FROM inv WHERE id = $scroll");
+                }
+        $Z = mysql_query("INSERT INTO zayavka(status,type,timeout,creator) VALUES('3','1','3','$mine_id')");
+        $T1 = mysql_query("INSERT INTO team2(player,ip,battle_id,hitted,over) VALUES('$login','$ip','$mine_id','0','0')");
+        $T2 = mysql_query("INSERT INTO team1(player,ip,battle_id,hitted,over) VALUES('$target','unknown','$mine_id','0','0')");
+        goBattle($login);
+        goBattle($target);
+}
+
+?>

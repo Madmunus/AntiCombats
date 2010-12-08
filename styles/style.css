@@ -1,0 +1,96 @@
+body,
+td,
+ol,
+ul,
+li,
+p			{font-size: 10pt; font-family: Verdana, Arial, Helvetica, Tahoma, sans-serif;}
+
+H3			{color: #8f0000; font-family: arial; font-size: 12pt; font-weight: bold; text-align: center;}
+H4			{color: #8f0000; font-family: Arial; font-size: 11pt; font-weight: bold; margin-bottom: 5px;}
+H5			{color: #4f0000; font-family: Arial; font-size: 11pt; font-weight: bold; margin-bottom: 0px; margin-top: 0px;}
+fieldset		{border-bottom: 3px double #ffffff; border-left: 3px double #ffffff; border-right: 3px double #ffffff; border-top: 2px groove #ffffff; -moz-border-radius: 5px; padding: 5px;}
+legend		{color: #770d05;}
+.anketa		{background-color: #f2f0f0; border: #000000 1px solid; color: black; font-family: verdana; font-size: 11px;}
+.err		{font-size: 11px;}
+.nav		{cursor: pointer;}
+.pH3		{color: #8f0000; font-family: Arial; font-size: 12pt; font-weight: bold;}
+.header,
+.usually,
+.usually14,
+.small		{font-family: Tahoma; font-size: 13px;}
+.usuallyb	{font-family: Tahoma; font-size: 13px; color: #354463;}
+a			{font-family: verdana; font-size: 13px; text-decoration: none; color: white; font-weight: bold;}
+a:hover 		{color: #dcdcdc;}
+.us			{font-family: verdana; font-size: 13px; text-decoration: none; color: #D50000; font-weight: bold;}
+.us:hover	{color: red;}
+.us2		{font-family: verdana; font-size: 13px; text-decoration: none; color: #000000; font-weight: bold;}
+.us2:hover,
+.us3:hover	{color: #8A8A8A;}
+.us3		{font-family: verdana; font-size: 13px; text-decoration: none; color: #000099; font-weight: bold;}
+.who		{font-size: 12px; color: #354463;}
+.inv		{background-color: #dcdcdc; color: #354463; font-family: verdana; font-size: 10pt; border: 1pt solid #000000;}
+.new		{color: #354463; font-family: verdana; font-size: 8pt; border: 1pt solid #000000; font-weight: bold;}
+.but,
+.b			{color: #000000; font-family: verdana; font-size: 8pt; border: 1pt solid #000000; font-weight: bold; background-color: #cccccc; cursor: pointer;}
+.ad			{border-bottom: #000000 1px solid; border-left: #000000 1px solid; border-right: #000000 1px solid; border-top: #000000 1px solid;}
+.nick		{font-family: Verdana, Arial, Helvetica, Tahoma, sans-serif; font-weight: bold; font-size: 10pt; color: #003388; text-decoration: none; cursor: pointer;}
+.nick:hover	{color: #0066FF;}
+.sys,
+.sys2		{font-family: Courier; font-weight: normal; font-size: 8pt; color: #B00000; text-decoration: none;}
+.p1			{font-family: verdana; font-weight: bold; font-size: 10pt; color: #991111; text-decoration: none;}
+.p1:hover	{font-family: verdana; font-weight: bold; font-size: 10pt; color: #0066FF; text-decoration: none;}
+.p2			{font-family: verdana; font-weight: bold; font-size: 10pt; color: #121180; text-decoration: none;}
+.t			{font-family: verdana; font-weight: bold; font-size: 10pt; color: #552255; text-decoration: none;}
+.hitted		{font-family: verdana; font-weight: bold; font-size: 10pt; color: #0080C0;}
+.krit		{font-family: verdana; font-weight: bold; font-size: 10pt; color: #990000;}
+.magic		{font-family: verdana; font-weight: bold; font-size: 10pt; color: red;}
+.navik 		{font-family: verdana; font-size: 10pt; font-weight: normal;}
+.sysMain	{font-family: verdana; font-weight: bold; font-size: 8pt; color: #990000;}
+.btn		{border: #817a63 1px double; font-size: 7.5pt; color: #dfddd3; font-family: verdana, arial, helvetica, sans-serif; background-color: #2b2b18;}
+.btn2		{border: 1px double #9a9996; font-size: 12px; color: #dfdfdf; background-color: #504F4C; cursor: pointer;}
+.date		{font-family: Courier; font-size: 8pt; text-decoration:none; font-weight:normal; color: #007000;}
+.date2		{font-family: Courier; font-size: 8pt; text-decoration:none; font-weight:normal; color: #007000; background-color: #00FFAA;}
+select,
+textarea,
+input		{border: solid 1pt #B0B0B0; font-family: MS Sans Serif; font-size: 10px; color: #191970; margin-bottom: 2px; margin-top: 1px;}
+.m 			{background: #99CCCC; text-align: center;}
+.s 			{background: #BBDDDD; text-align: center;}
+.active		{cursor: pointer;}
+.nonactive	{opacity: 0.5; cursor: default;}
+.show 		{border: 0px; background-color: #dedede; font-weight: bold; width: 40px; text-align: right; font-size: 10pt; font-family: Verdana; margin: 0px; padding: 0px; cursor: default; color: black;}
+img.skill	{border: 0px; cursor: pointer;}
+td.skill	{font-weight: bold;}
+
+.ahint		{font-family: MS Sans Serif; font-size: 8px; text-decoration: none; color: #000080; z-index: 99; position: absolute; display: none;}
+#hint2		{width: 140px; background-color: #FFF6DD;}
+#hint3		{width: 240px; background-color: #FFF6DD;}
+#hint4		{width: 240px;}
+
+.tzS		{font-weight: bold; color: #000000; background: #CCCCCC; text-align: center; cursor: default; width: 150px;}
+.notz		{font-weight: bold; color: #003388; background: #CCCCCC; text-align: center; cursor: default;}
+.tz			{font-weight: bold; color: #003388; background: #CCCCCC; text-align: center; cursor: pointer; width: 150px;}
+.tzOver		{background: #C0C0C0;}
+.tzSet		{background: #A6B1C6; cursor: default;}
+.dtz		{display: none;}
+
+.posit		{border-top: 1px solid #FFFFFF; border-right: 1px solid #666666; border-bottom: 1px solid #666666; border-left: 1px solid #FFFFFF; padding: 2px;}
+.mmoves		{border: #666666 1px solid; padding: 2px; visibility: hidden; overflow: visible; white-space: nowrap; position: absolute; background-color: #ffffcc; z-index: 101; text-align: left;}
+.prof_desc	{padding-left: 25px; color: green; display: none;}
+.prof_best	{position: absolute; left: 100px; top: 132px; display: none;}
+.broken		{background-color: transparent;}
+.anketabg	{background-color: #D3D2D0;}
+
+.buttons_under		{white-space: nowrap; padding-left: 3px; padding-right: 3px; height: 10px;}
+a.passage			{font-weight: bold; font-size: 10px; text-decoration: none; color: #3B3936;}
+a.passage:hover		{color: #76726b;}
+a.dis_passage,
+a.dis_passage:hover	{opacity: 0.5; color: gray; text-shadow: 0.1em 0.1em white;}
+
+.help		{background: #A9AFC0;}
+
+.shape		{background: black; width: 120px; height: 220px; border-right: 25px solid #dedede; border-bottom: 2px solid #dedede;}
+.dis_shape	{background: grey;}
+
+#help		{z-index: 110; position: fixed; width: 700px; height: 300px; border-bottom: 3px double #ffffff; border-left: 3px double #ffffff; border-right: 3px double #ffffff; border-top: 2px groove #ffffff; -moz-border-radius: 5px; padding: 5px; display: none; overflow-y: auto; background-color: #D5D5D5;}
+#help_bg	{width: 100%; height: 100%; z-index: 109; position: fixed; background-color: #000000; opacity: 0.5; display: none;}
+.but_close	{cursor: pointer; position: absolute; top: 0px; right: 0px;}

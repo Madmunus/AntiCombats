@@ -1,0 +1,87 @@
+BODY {
+	FONT-SIZE: 10pt; FONT-FAMILY: Verdana, Arial, Helvetica, Tahoma, sans-serif
+}
+TD {
+	FONT-SIZE: 10pt; FONT-FAMILY: Verdana, Arial, Helvetica, Tahoma, sans-serif
+}
+OL {
+	FONT-SIZE: 10pt; FONT-FAMILY: Verdana, Arial, Helvetica, Tahoma, sans-serif
+}
+UL {
+	FONT-SIZE: 10pt; FONT-FAMILY: Verdana, Arial, Helvetica, Tahoma, sans-serif
+}
+LI {
+	FONT-SIZE: 10pt; FONT-FAMILY: Verdana, Arial, Helvetica, Tahoma, sans-serif
+}
+P {
+	FONT-SIZE: 10pt; FONT-FAMILY: Verdana, Arial, Helvetica, Tahoma, sans-serif
+}.inup {
+	
+	BORDER-RIGHT: #302F2A 1px double; BORDER-TOP: #302F2A 1px double; FONT-SIZE: 8pt; BORDER-LEFT: #302F2A 1px double; COLOR: #000000; BORDER-BOTTOM: #302F2A 1px double; FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif; BACKGROUND-COLOR: #DED7BD
+}
+.text {
+	FONT-WEIGHT: normal; FONT-SIZE: 10pt; COLOR: #000000; FONT-FAMILY: Verdana, Arial, Helvetica, Tahoma, sans-serif
+}
+H3 {
+	FONT-WEIGHT: bold; FONT-SIZE: 12pt; COLOR: #8f0000; FONT-FAMILY: Arial; TEXT-ALIGN: center
+}
+H4 {
+	FONT-WEIGHT: bold; FONT-SIZE: 11pt; MARGIN-BOTTOM: 5px; COLOR: #8f0000; FONT-FAMILY: Arial
+}
+A:link {
+	FONT-WEIGHT: normal; COLOR: #524936; TEXT-DECORATION: none
+}
+A:visited {
+	FONT-WEIGHT: normal; COLOR: #633525; TEXT-DECORATION: none
+}
+A:active {
+	FONT-WEIGHT: normal; COLOR: #77684d; TEXT-DECORATION: none
+}
+A:hover {
+	COLOR: #68727B; TEXT-DECORATION: underline
+}
+.date {
+	FONT-WEIGHT: normal; FONT-SIZE: 8pt; COLOR: #007000; FONT-FAMILY: Courier; TEXT-DECORATION: none
+}
+.dsc {
+	FONT-WEIGHT: normal; COLOR: #606060
+}
+SELECT {
+	BORDER-RIGHT: #b0b0b0 1pt solid; BORDER-TOP: #b0b0b0 1pt solid; MARGIN-TOP: 1px; FONT-SIZE: 10px; MARGIN-BOTTOM: 2px; BORDER-LEFT: #b0b0b0 1pt solid; COLOR: #191970; BORDER-BOTTOM: #b0b0b0 1pt solid; FONT-FAMILY: MS Sans Serif
+}
+TEXTAREA {
+	BORDER-RIGHT: #b0b0b0 1pt solid; BORDER-TOP: #b0b0b0 1pt solid; MARGIN-TOP: 1px; FONT-SIZE: 10px; MARGIN-BOTTOM: 2px; BORDER-LEFT: #b0b0b0 1pt solid; COLOR: #191970; BORDER-BOTTOM: #b0b0b0 1pt solid; FONT-FAMILY: MS Sans Serif
+}
+INPUT {
+	BORDER-RIGHT: #b0b0b0 1pt solid; BORDER-TOP: #b0b0b0 1pt solid; MARGIN-TOP: 1px; FONT-SIZE: 10px; MARGIN-BOTTOM: 2px; BORDER-LEFT: #b0b0b0 1pt solid; COLOR: #191970; BORDER-BOTTOM: #b0b0b0 1pt solid; FONT-FAMILY: MS Sans Serif
+}
+.pagetknum {
+	PADDING-RIGHT: 3px; PADDING-LEFT: 3px; FONT-WEIGHT: bold; PADDING-BOTTOM: 0px; MARGIN: 0px; WIDTH: 1em; COLOR: #6f0000; PADDING-TOP: 0px; TEXT-DECORATION: underline
+}
+.pagenum A:link {
+	PADDING-RIGHT: 3px; PADDING-LEFT: 3px; PADDING-BOTTOM: 0px; MARGIN: 0px; WIDTH: 1em; PADDING-TOP: 0px
+}
+.pagenum A:visited {
+	PADDING-RIGHT: 3px; PADDING-LEFT: 3px; PADDING-BOTTOM: 0px; MARGIN: 0px; WIDTH: 1em; PADDING-TOP: 0px
+}
+.pagenum A:active {
+	PADDING-RIGHT: 3px; PADDING-LEFT: 3px; PADDING-BOTTOM: 0px; MARGIN: 0px; WIDTH: 1em; PADDING-TOP: 0px
+}
+.pagenum A:hover {
+	PADDING-RIGHT: 3px; PADDING-LEFT: 3px; PADDING-BOTTOM: 0px; MARGIN: 0px; WIDTH: 1em; PADDING-TOP: 0px; BACKGROUND-COLOR: white
+}
+.pleft {
+	PADDING-RIGHT: 0px; PADDING-LEFT: 20px; PADDING-BOTTOM: 7px; MARGIN: 0px; PADDING-TOP: 3px
+}
+.pages {
+	BACKGROUND-COLOR: #ffefbf
+}
+IMG {
+	BORDER-RIGHT: 0px; BORDER-TOP: 0px; BORDER-LEFT: 0px; BORDER-BOTTOM: 0px
+}
+TABLE {
+	BORDER-RIGHT: 0px; BORDER-TOP: 0px; BORDER-LEFT: 0px; BORDER-BOTTOM: 0px
+}
+.btn {
+	BORDER-RIGHT: #817a63 1px double; BORDER-TOP: #817a63 1px double; FONT-SIZE: 7.5pt; BORDER-LEFT: #817a63 1px double; COLOR: #dfddd3; BORDER-BOTTOM: #817a63 1px double; FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif; BACKGROUND-COLOR: #2b2b18
+}
