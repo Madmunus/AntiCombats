@@ -2,7 +2,9 @@
 defined('AntiBK') or die ("Доступ запрещен!");
 
 $bar = requestVar ('bar');
-
+?>
+<script src="scripts/inventory.js" type="text/javascript"></script>
+<?
 $bars = $adb -> selectRow ("SELECT `stat`, `mod`, `power`, `def`, `btn`, `set` FROM `character_bars` WHERE `guid` = ?d", $guid) or die ("<script>top.location.href = 'index.php';</script>");
 foreach ($bars as $key => $value)
 {
@@ -81,7 +83,7 @@ echo ($orden == 1 || $orden == 2) ?"<strong>$orden_dis$stat_rang</strong><br></s
 												<input type="button" class="nav" value="Анкета" title="Анкета" onclick="location.href = '?action=form&do=info';">
 												<input type="button" class="nav" value="Безопасность" title="Сменить пароль/email" title="Сменить пароль/email" style="font-weight: bold;" onclick="location.href = '?action=form&do=passandmail';">
 												<input type="button" class="help" value="Подсказка" id="hint" link="invent">
-												<input type="button" class="nav" value="Вернуться" id="revert">
+												<input type="button" class="nav" value="Вернуться" id="revert" link="none">
 											</td>
 										</tr>
 									</table>

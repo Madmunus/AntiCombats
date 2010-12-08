@@ -174,26 +174,7 @@ if ($ip != $_SERVER['REMOTE_ADDR'])
 /*------------------Обновление онлайн----------------------*/
 $search = $adb -> selectCell ("SELECT `guid` FROM `online` WHERE `guid` = ?d", $guid);
 if ($search)
-{
-	$adb -> query ("UPDATE `online` 
-					SET `room` = ?s, 
-						`ip` = ?s 
-					WHERE `guid` = ?d", $room ,$_SERVER['REMOTE_ADDR'] ,$guid);
-}
-/*----------------Отключение по таймауту-------------------*/
-$rows = $adb -> select ("SELECT `guid`, 
-								`last_time` 
-						 FROM `online`;");
-foreach ($rows as $clear)
-{
-	if (time () - $clear['last_time'] <= 7200)
-		continue;
-	
-	$adb -> query ("DELETE FROM `online` WHERE `guid` = ?d", $clear['guid']);
-	$adb -> query ("UPDATE `characters` SET `last_time` = ?d WHERE `guid` = ?d", time () ,$clear['guid']);
-	if ($clear['guid'] == $guid)
-		die ("<script>top.main.location.href = 'main.php?action=exit';</script>");
-}
+	$adb -> query ("UPDATE `online` SET `room` = ?s WHERE `guid` = ?d", $room ,$guid);
 /*---------------------Очистка чата------------------------*/
 $seek = $adb -> selectCell ("SELECT COUNT(*) FROM `city_chat` WHERE `city` = ?s and `room` = ?s", $city ,$room);
 if ($seek > 1000)

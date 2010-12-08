@@ -3,18 +3,7 @@ defined('AntiBK') or die ("Доступ запрещен!");
 
 $sell = requestVar ('sell', 0);
 ?>
-<script type="text/javascript">
-function AddCount (entry, name)
-{
-  var x = parseFloat(document.getElementById('x').value);
-  var y = parseFloat(document.getElementById('y').value);
-  $("#hint3").html('<table width="100%" cellspacing="1" cellpadding="0" bgcolor="#CCC3AA"><tr><td align="center"><b>Купить неск. штук</b></td><td width="20" align="right" valign="top" style="cursor: pointer;" onclick="closehint3 ();"><strong>X</strong></td></tr><tr><td colspan="2">'+
-  '<table width="100%" cellspacing="0" cellpadding="0" bgcolor="#FFF6DD"><tr><td colspan="2" align="center"><b><i>'+name+'</i></b></td></tr><tr><td width="80%" align="right">'+
-  'Количество (шт.) <input type="text" name="count" size="4"></td><td width="20%">&nbsp;<input style="cursor: pointer;" type="submit" value=" »» " onclick=\'buyItem ("'+entry+'");\'>'+
-  '</td></tr></table></td></tr></table>').css({'left': x + 50 + "px", 'top': y - 25 + "px"}).fadeIn('fast');
-  $('[name=count]').focus();
-}
-</script>
+<script src="scripts/shop.js" type="text/javascript"></script>
 <script src="scripts/move_check.js" type="text/javascript"></script>
 <?
 if ($sell)
@@ -33,14 +22,15 @@ if ($sell)
 		</td></tr>
 		<tr><td align='left'>
 <?if ($section_shop != 'sell'){?>
-		<form action="" method="post" style="display: inline;" onsubmit="shopSection (); return false;">
-			<table cellspacing='4' cellpadding='0'><tr>
-				<td><b>Фильтр:</b>&nbsp;</td>
-				<td>ур.:<input type="text" name="level_filter" size="4" value='<?echo $level_filter;?>'></td>
-				<td>название:<input type="text" name="name_filter" value='<?echo $name_filter;?>'></td>
-				<td><input type="submit" value="Применить"></td>
-			</tr></table>
-		</form>
+			<form action="" method="post" style="display: inline;" onsubmit="shopSection (); return false;">
+				<table cellspacing='4' cellpadding='0' width='100%'><tr>
+					<td width='60'><b>Фильтр:</b>&nbsp;</td>
+					<td width='60'>ур.:<input type="text" name="level_filter" size="4" value='<?echo $level_filter;?>'></td>
+					<td width='180'>название:<input type="text" name="name_filter" value='<?echo $name_filter;?>'></td>
+					<td width='60'><input type="submit" value="Применить"></td>
+					<td align='right'><img id='loadbar' src='img/loadbar.gif' class='loadbar'></td>
+				</tr></table>
+			</form>
 <?}?>
 		</td></tr>
 	</table>

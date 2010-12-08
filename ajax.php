@@ -19,8 +19,7 @@ $adb = DbSimple_Generic::connect($database['adb']);
 $adb->query("SET NAMES ? ",$database['db_encoding']);
 $adb->setErrorHandler("databaseErrorHandler");
 
-$db = $adb -> selectRow ("SELECT * FROM `characters` WHERE `guid` = ?d", $guid) or die ("<script>top.location.href = 'index.php';</script>");
-$stats = $adb -> selectRow ("SELECT * FROM `character_stats` WHERE `guid` = ?d", $guid) or die ("<script>top.location.href = 'index.php';</script>");
+$db = $adb -> selectRow ("SELECT * FROM `characters` AS `c` LEFT JOIN `character_stats` AS `s` ON `c`.`guid` = `s`.`guid`  WHERE `c`.`guid` = ?d", $guid) or die ("<script>top.location.href = 'index.php';</script>");
 $lang = $adb -> selectCol ("SELECT `key` AS ARRAY_KEY, `text` FROM `server_language`;");
 
 $equip = Equip::setguid($guid);
@@ -260,7 +259,44 @@ switch ($do)
 	}
   break;
   case 'showshapes':
-    die ($equip -> showShapes ($_POST['available']));
+    $available = requestVar ('available', 1);
+	$sex = ($sex == "male") ?"m" :"f";
+	$shapes = $adb -> select ("SELECT * FROM `player_shapes` WHERE `sex` = ?s ORDER BY `id`;", $sex);
+	$required = array ('str', 'dex', 'con', 'vit', 'fire', 'water', 'air', 'earth', 'dark', 'light', 'int', 'wis', 'level', 'sword', 'axe', 'fail', 'knife');
+	$return = "<table cellspacing='0' cellpadding='0' border='0' align='center'><tr>";
+	$i = 0;
+	foreach ($shapes as $shape)
+	{
+	  $availabled = $equip -> checkShape ($shape['id']);
+	  $requirement = "";
+	  $title = "";
+	  foreach ($required as $key)
+	  {
+		if ($shape[$key] <= 0)
+		  continue;
+				
+		$requirement = "$lang[min_stat]:<br>";
+		if ($shape[$key] > $db[$key])
+		  $title .= "<font color=\"#FF0000\">&bull; $lang[$key]: $shape[$key]</font><br>";
+		else
+		  $title .= "&bull; $lang[$key]: $shape[$key]<br>";
+	  }
+	  if ($availabled)
+	  {
+		$return .= "<td class='shape'><a href='javascript:chooseShape ($shape[id]);'><img src='img/chars/$shape[sex]/$shape[img]' alt='<strong>$lang[select_shape]</strong><br>$requirement$title' border='0' style='opacity: 0.6;' onmouseover=\"this.style.opacity = '1';\" onmouseout=\"this.style.opacity = '0.6';\"></a></td>";
+		$i++;
+	  }
+	  else if (!$available)
+	  {
+		$return .= "<td class='shape dis_shape'><img src='img/chars/$shape[sex]/$shape[img]' alt='$requirement$title' border='0' style='opacity: 0.6;'></td>";
+		$i++;
+	  }
+	  
+	  if ($i % 8 === 0)
+		$return .= "</tr><tr>";
+	}
+	$return .= "</tr></table>";
+	die ($return);
   break;
   case 'chooseshape':
     $shape = requestVar ('shape', 0);
@@ -405,7 +441,7 @@ switch ($do)
 	
 	if ($item_id == 0 || !is_numeric($item_id))
 	  die ("errorA_D213");
-		
+	
 	$dat = $adb -> selectRow ("SELECT `i`.`name`, 
 									  `i`.`mass` 
 							   FROM `character_inventory` AS `c` 

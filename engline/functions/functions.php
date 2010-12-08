@@ -1629,63 +1629,6 @@ class Equip extends Error
 	{
 		unset ($_SESSION['bankСredit']);
 	}
-	/*Отображение образов персонажа*/
-	function showShapes ($available)
-	{
-		global $adb;
-		$lang = $adb -> selectCol ("SELECT `key` AS ARRAY_KEY, `text` FROM `server_language`;");
-		$db = $adb -> selectRow ("SELECT `c`.`level`, `c`.`sex`, 
-										 `s`.`str`, `s`.`dex`, 
-										 `s`.`con`, `s`.`vit`, 
-										 `s`.`int`, `s`.`wis`, 
-										 `s`.`sword`, `s`.`fail`, 
-										 `s`.`staff`, `s`.`knife`, 
-										 `s`.`axe`, 
-										 `s`.`fire`, `s`.`water`, 
-										 `s`.`air`, `s`.`earth`, 
-										 `s`.`dark`, `s`.`light` 
-								  FROM `characters` AS `c` 
-								  LEFT JOIN `character_stats` AS `s` 
-								  ON `c`.`guid` = `s`.`guid` 
-								  WHERE `c`.`guid` = ?d", $this->guid);
-		$sex = ($db['sex'] == "male") ?"m" :"f";
-		$shapes = $adb -> select ("SELECT * FROM `player_shapes` WHERE `sex` = ?s ORDER BY `id`;", $sex);
-		$required = array ('str', 'dex', 'con', 'vit', 'fire', 'water', 'air', 'earth', 'dark', 'light', 'int', 'wis', 'level', 'sword', 'axe', 'fail', 'knife');
-		$return = "<table cellspacing='0' cellpadding='0' border='0' align='center'><tr>";
-		$i = 0;
-		foreach ($shapes as $shape)
-		{
-			$availabled = $this -> checkShape ($shape['id']);
-			$requirement = "";
-			$title = "";
-			foreach ($required as $key)
-			{
-				if ($shape[$key] <= 0)
-					continue;
-				
-				$requirement = "$lang[min_stat]:<br>";
-				if ($shape[$key] > $db[$key])
-					$title .= "<font color=\"#FF0000\">&bull; $lang[$key]: $shape[$key]</font><br>";
-				else
-					$title .= "&bull; $lang[$key]: $shape[$key]<br>";
-			}
-			if ($availabled)
-			{
-				$return .= "<td class='shape'><a href='javascript:chooseShape ($shape[id]);'><img src='img/chars/$shape[sex]/$shape[img]' alt='<strong>$lang[select_shape]</strong><br>$requirement$title' border='0' style='opacity: 0.6;' onmouseover=\"this.style.opacity = '1';\" onmouseout=\"this.style.opacity = '0.6';\"></a></td>";
-				$i++;
-			}
-			else if (!$available)
-			{
-				$return .= "<td class='shape dis_shape'><img src='img/chars/$shape[sex]/$shape[img]' alt='$requirement$title' border='0' style='opacity: 0.6;'></td>";
-				$i++;
-			}
-			
-			if ($i % 8 === 0)
-				$return .= "</tr><tr>";
-		}
-		$return .= "</tr></table>";
-		return $return;
-	}
 	/*Проверка доступности образа*/
 	function checkShape ($id)
 	{

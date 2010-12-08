@@ -142,6 +142,7 @@ function AddToPrivate (login)
 	talk.document.talker.phrase.value = s;
 	talk.document.talker.phrase.focus();
 }
+
 $(document).ready(function (){
 	$('[name=menu]').attr('src', 'topp.php');
 	$('[name=main]').attr('src', 'main.php?action=enter');
@@ -150,6 +151,10 @@ $(document).ready(function (){
 	$('[name=talk]').attr('src', 'talk.php');
 	$('[name=ref]').attr('src', 'refresh.php');
 	$('[name=null]').attr('src', 'null.php');
+});
+
+$(window).unload(function() {
+  $('[name=main]').attr('src', 'main.php?action=exit');
 });
 </script>
 </head>

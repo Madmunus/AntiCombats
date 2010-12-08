@@ -104,13 +104,13 @@ $(document).ready(function (){
 		else if (e.type == 'mouseout')
 			$(this).attr('src', 'i/clearg.gif');
 	});
-	$('input[type=button]#revert').live('click', function (){
-		location.href = 'main.php';
+	$('#revert').live('click', function (){
+		location.href = 'main.php?action='+$(this).attr('link');
 	});
-	$('input[type=button]#hint').live('click', function (){
+	$('#hint').live('click', function (){
 		showHelp ($(this).attr('link'));
 	});
-	$('input[type=button]#refresh').live('click', function (){
+	$('#refresh').live('click', function (){
 		location.reload();
 	});
 	$(document).mousemove(function (e){
@@ -171,7 +171,7 @@ echo "<input type='hidden' id='time_to_go' value='$mtime' />";
 switch ($action)
 {
 	case 'go':
-		$file = file ("telegraf/telegraf.dat");
+		/* $file = file ("telegraf/telegraf.dat");
 		$num = count ($file);
 		for ($i = 0; $i <= $num - 1; $i++)
 		{ 
@@ -186,7 +186,7 @@ switch ($action)
 		flock ($fp1, 2);
 		fwrite ($fp1, implode ("", $file));
 		flock ($fp1, 3);
-		fclose ($fp1);
+		fclose ($fp1); */
 		
 		if ($db['dnd'])
 			$adb -> query ("UPDATE `characters` SET `dnd` = '0', `message` = '' WHERE `guid` = ?d", $guid);

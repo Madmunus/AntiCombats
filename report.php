@@ -20,7 +20,7 @@ $rows = $adb -> select ("	SELECT 	`action`,
 <style>
 body {background-color: #e2e0e0;}
 </style>
-<p align="right"><input type="button" class="nav" value="Вернуться" id="revert"></p>
+<p align="right"><input type="button" class="nav" value="Вернуться" id="revert" link="inv"></p>
 <h3>Отчет системы безопасности</h3>
 <form action="?action=report" method="post">
 Вы можете получить отчет о заходах за указанный месяц<br>
@@ -40,6 +40,7 @@ foreach ($rows as $auth)
 {
 	list ($action, $date_a, $ip, $comment) = array_values ($auth);
 	$date_a = date ('d.m.y H:i', $date_a);
+	$city = $adb -> selectCell ("SELECT `name` FROM `server_cities` WHERE `city` = ?s", $city);
 	
 	if (!$reports)
 		$reports = "<h4>$city</h4>";

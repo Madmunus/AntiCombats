@@ -2,7 +2,9 @@
 $mail_to = requestVar ('mail_to', 0);
 $mail_id = requestVar ('mail_id', 0);
 $send_sum = requestVar ('send_sum', 0);
-
+?>
+<script src="scripts/inventory.js" type="text/javascript"></script>
+<?
 $section = $data['sections'][$section];
 
 $mail_recieve = $adb -> selectCell ("SELECT COUNT(*) FROM `city_mail_items` WHERE `to` = ?d", $guid) | 0;

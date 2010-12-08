@@ -15,7 +15,7 @@ switch ($do)
 		echo "<table width='100%' cellspacing='0' cellpadding='0' border='0' style='margin-bottom: -10px;'><tr>";
 		echo "<td valign='top' nowrap><input type='submit' id='shape_a' value='Доступные' class='nav' style='background-color: #A9AFC0;' onclick='showShapes (1);'>&nbsp;<input type='submit' id='shape_na' value='Все образы' class='nav' onclick='showShapes (0);'></td>";
 		echo "<td width='100%' align='right'><h3>Выбрать образ персонажа \"$login\"</h3></td>";
-		echo "<td valign='top' nowrap><input type='button' class='help' value='Подсказка' id='hint' link='image'>&nbsp;<input type='button' value='Вернуться' id='revert' class='nav'></td>";
+		echo "<td valign='top' nowrap><input type='button' class='help' value='Подсказка' id='hint' link='image'>&nbsp;<input type='button' value='Вернуться' id='revert' link='inv' class='nav'></td>";
 		echo "</tr></table>";
 		echo "<font color='red' id='error'></font>";
 		echo "<div id='shapes' style='width: 100%;'></div>";
@@ -93,7 +93,7 @@ switch ($do)
 <table width="100%" cellspacing="0" cellpadding="0" style="margin-bottom: -15px;">
 	<tr>
 		<td width="100%" align="right"><h3>Сменить пароль/email для персонажа "<?echo $login;?>"</h3></td>
-		<td valign="top" nowrap><input type="button" class="help" value="Подсказка" id="hint" link="psw">&nbsp;<input type="button" name="edit" value="Вернуться" id="revert" class="nav"></td>
+		<td valign="top" nowrap><input type="button" class="help" value="Подсказка" id="hint" link="psw">&nbsp;<input type="button" name="edit" value="Вернуться" id="revert" link="inv" class="nav"></td>
 	</tr>
 </table>
 <font color='red' id='error'><?$error -> getFormattedError ($warning, $parameters);?></font>
@@ -183,7 +183,7 @@ switch ($do)
 <table width="100%" cellspacing="0" cellpadding="0" align="center" style="margin-bottom: -15px;">
 	<tr>
 		<td width="100%"><h3>Анкета персонажа "<?echo $login;?>"</h3></td>
-		<td valign="top"><input type="button" value="Вернуться" id="revert" class="nav"></td>
+		<td valign="top"><input type="button" value="Вернуться" id="revert" link="inv" class="nav"></td>
 	</tr>
 </table>
 <table width="95%" border="0" align="center" cellpadding="3" cellspacing="1" bgcolor="#B2B2B2">

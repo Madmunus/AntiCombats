@@ -208,7 +208,7 @@ printf ($up_format, $up_text);
 		<td>&nbsp; &nbsp;<?echo $info -> character ($guid);?></td>
 		<td valign="top" align="right">
 			<input type="button" class="nav" value="Обновить" id="refresh">
-			<input type="button" class="nav" value="Вернуться" id="revert">
+			<input type="button" class="nav" value="Вернуться" id="revert" link="inv">
 		</td>
 	</tr>
 </table>

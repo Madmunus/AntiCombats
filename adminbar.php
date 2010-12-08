@@ -185,7 +185,7 @@ $(document).ready(function (){
 </td>
 <td align="right">
 <input type="button" class="nav" value="Обновить" id="refresh">
-<input type="button" class="nav" value="Вернуться" id="revert">
+<input type="button" class="nav" value="Вернуться" id="revert" link="inv">
 </td>
 </tr>
 </table>
@@ -281,5 +281,5 @@ foreach ($all_characters as $one_character)
 $("[name=Боёвой]").html('sdfsdf');
 </script>
 <?
-
+echo $HTTP_SERVER_VARS['QUERY_STRING'];
 ?>
