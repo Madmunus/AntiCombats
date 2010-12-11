@@ -78,7 +78,7 @@ print "<td valign=top bgcolor=#fffbbb><span class=usuallyb>";
 
                 <TD>
 <form><input type=hidden name=act value=kuznawork>
-		<select name="obj_type" class="field" style="width=203;">
+        <select name="obj_type" class="field" style="width=203;">
         <option value="armor">Броня</option>
         <option value="helmet">Шлемы</option>
         <option value="shield">Шиты</option>
@@ -101,8 +101,8 @@ print "<td valign=top bgcolor=#fffbbb><span class=usuallyb>";
 <?
 
 
-		  }
-		  elseif($num == "0"){
+          }
+          elseif($num == "0"){
 include 'conf.cfg';
 $data = mysql_connect($base_name, $base_user, $base_pass);
     if(!mysql_select_db($db_name,$data)){
@@ -112,7 +112,7 @@ mysql_query("SET NAMES cp1251");
      die();
     }
 
-		  ?>
+          ?>
 <table border=1 bordercolor=black width=100% bgcolor=#fffbbb><tr><td>
 <table border=0 width=100% cellpadding=0 cellspacing=0 height=20>
 <tr>

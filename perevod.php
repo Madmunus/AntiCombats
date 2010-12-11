@@ -28,7 +28,7 @@ if(empty($tar)){$tar="";}
 
 if(empty($tar)){
 $chas = date("H");
-$d=date("d.m.Y", mktime($chas-$GSM));	
+$d=date("d.m.Y", mktime($chas-$GSM));    
 ?>
 <body  background="images/bg-inv.gif">
 <form name='per' action='perevod.php' method='post'>

@@ -66,7 +66,7 @@ $time_to_cure_f=0;
         if(empty($clan_s)){$clan="";}
         else{$clan="<img src='img/clan/$clan_s.gif' border=0 alt='$clan_f'>";}
         if(empty($orden_d)){$orden="";}
-	else{
+    else{
 if ($orden_d==2) {$orden="<img src='img/orden/arm/$rang.gif' width=12 height=15 border=0 alt='$orden_dis'>";} 
 else{$orden="<img src='img/orden/$orden_d.gif' border=0 alt='$orden_dis'>";}
 if ($orden_d==1) {$orden="<img src='img/orden/pal/$rang.gif' width=12 height=15 border=0 alt='$orden_dis'>";} }
@@ -86,35 +86,35 @@ showMN(<?echo "$mp[0],$mp[1]"?>);
 ?>
 var rnd = Math.random();
 //-- Смена хитпоинтов
-var delay = 123;	// Каждые 123сек. увеличение HP на 1%
-var redHP = 0.33;	// меньше 30% красный цвет
+var delay = 123;    // Каждые 123сек. увеличение HP на 1%
+var redHP = 0.33;    // меньше 30% красный цвет
 var yellowHP = 0.66;    // меньше 60% желтый цвет, иначе зеленый
-var TimerOn = -1;	// id таймера
+var TimerOn = -1;    // id таймера
 var tkHP, maxHP;
 var speed=1000;
 var mspeed=100;
 
 function show(value, max, newspeed) {
-	tkHP=value; maxHP=max;
-	if (TimerOn>=0) { clearTimeout(TimerOn); TimerOn=-1; }
-	speed=newspeed;
-	setHPlocal();
+    tkHP=value; maxHP=max;
+    if (TimerOn>=0) { clearTimeout(TimerOn); TimerOn=-1; }
+    speed=newspeed;
+    setHPlocal();
 }
 function setHPlocal() {
-	if (tkHP>maxHP) { tkHP=maxHP; }
-	var le=Math.round(tkHP)+"/"+maxHP;
-	le=260 - (le.length + 2)*7;
-	var sz1 = Math.round(((le-1)/maxHP)*tkHP);
-	var sz2 = le - sz1;
-		if (tkHP/maxHP < redHP) { imag="img/icon/red.gif"; }
-		else {
-			if (tkHP/maxHP < yellowHP) { imag="img/icon/yellow.gif"; }
-			else { imag="img/icon/green.gif"; }
-		}
+    if (tkHP>maxHP) { tkHP=maxHP; }
+    var le=Math.round(tkHP)+"/"+maxHP;
+    le=260 - (le.length + 2)*7;
+    var sz1 = Math.round(((le-1)/maxHP)*tkHP);
+    var sz2 = le - sz1;
+        if (tkHP/maxHP < redHP) { imag="img/icon/red.gif"; }
+        else {
+            if (tkHP/maxHP < yellowHP) { imag="img/icon/yellow.gif"; }
+            else { imag="img/icon/green.gif"; }
+        }
         rhp=Math.round(tkHP)+"/"+maxHP;
-	tkHP = (tkHP+(maxHP/100)*speed/1000);
-	if (tkHP<maxHP) { TimerOn=setTimeout('setHPlocal()', delay*100); }
-	else { TimerOn=-1; }
+    tkHP = (tkHP+(maxHP/100)*speed/1000);
+    if (tkHP<maxHP) { TimerOn=setTimeout('setHPlocal()', delay*100); }
+    else { TimerOn=-1; }
 
 info.innerHTML="<table valign=bottom border=0 cellpadding=0 cellspacing=0 width=260 height=8 bgcolor=#dedede><tr valign=bottom><td><small>"+rhp+"</small></td><td align=right width=100%><img src='"+imag+"' alt='Уровень жизни' width="+sz1+" height='8'><img src='img/icon/grey.gif' alt='Уровень жизни' width="+sz2+" height='8'></td><td><span style='width:1px; height:10px'></span></td><td align=right><img border=0 src=img/icon/heart_03.gif alt='Уровень жизни' width=10 height=9></td></tr></table>";
 
@@ -148,20 +148,20 @@ $level   = $db["level"];
 $room   = $db["room"];
 $rang = $db["rang"];
 
-	if($travm!=0){
-	$travm_i = "<img src='img/travma2.gif' alt='Персонаж повежден'>";
-	}
-	else{$travm_i="";}
+    if($travm!=0){
+    $travm_i = "<img src='img/travma2.gif' alt='Персонаж повежден'>";
+    }
+    else{$travm_i="";}
 
-	if($orden_d==1){$orden_dis="Белое братство";}
-	else if($orden_d==2){$orden_dis="Темное братство";}
-	else if($orden_d==3){$orden_dis="Нейтральное братсво";}
-	else if($orden_d==4){$orden_dis="Алхимик";}
-	else if($orden_d==5){$orden_dis="Тюремный заключеный";}
-	if(empty($clan_s)){$clan="";}
-	else{$clan="<img src='img/clan/$clan_s.gif' border=0 alt='$clan_f'>";}
-	if(empty($orden_d)){$orden="";}
-	else{ 
+    if($orden_d==1){$orden_dis="Белое братство";}
+    else if($orden_d==2){$orden_dis="Темное братство";}
+    else if($orden_d==3){$orden_dis="Нейтральное братсво";}
+    else if($orden_d==4){$orden_dis="Алхимик";}
+    else if($orden_d==5){$orden_dis="Тюремный заключеный";}
+    if(empty($clan_s)){$clan="";}
+    else{$clan="<img src='img/clan/$clan_s.gif' border=0 alt='$clan_f'>";}
+    if(empty($orden_d)){$orden="";}
+    else{ 
 if ($orden_d==2) {$orden="<img src='img/orden/arm/$rang.gif' width=12 height=15 border=0 alt='$orden_dis'>";} 
 else{$orden="<img src='img/orden/$orden_d.gif' border=0 alt='$orden_dis'>";}
 if ($orden_d==1) {$orden="<img src='img/orden/pal/$rang.gif' width=12 height=15 border=0 alt='$orden_dis'>";}}

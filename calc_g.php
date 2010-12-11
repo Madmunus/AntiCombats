@@ -45,14 +45,14 @@ $attack_vlad="staff";
 }
 $attack_vladenie=$ATTACK_DATA["$attack_vlad"];
 if($attack_weapon!=0){
-	if($hand == 0){
-	$attack_wp_min=$ATTACK_DATA["hand_r_hitmin"];
-	$attack_wp_max=$ATTACK_DATA["hand_r_hitmax"];
-	}
-	else if($hand == 1){
-	$attack_wp_min=$ATTACK_DATA["hand_l_hitmin"];
-	$attack_wp_max=$ATTACK_DATA["hand_l_hitmax"];
-	}
+    if($hand == 0){
+    $attack_wp_min=$ATTACK_DATA["hand_r_hitmin"];
+    $attack_wp_max=$ATTACK_DATA["hand_r_hitmax"];
+    }
+    else if($hand == 1){
+    $attack_wp_min=$ATTACK_DATA["hand_l_hitmin"];
+    $attack_wp_max=$ATTACK_DATA["hand_l_hitmax"];
+    }
 $attack_minhit=($attack_wp_min + $attack_str/2)*(1 + $attack_vladenie/100)-3;
 $attack_maxhit=($attack_wp_max + $attack_str/2)*(1 + $attack_vladenie/100)+3;
 }

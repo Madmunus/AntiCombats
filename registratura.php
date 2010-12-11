@@ -38,7 +38,7 @@ $result = mysql_query($sql);
 $db = mysql_fetch_array($result);
 $city=$db["city"];
 
- /*	if($city != "Dream Town"){
+ /*    if($city != "Dream Town"){
      print "<script>location.href='index.php'</script>";
     }
 */
@@ -242,64 +242,64 @@ print "<B>$login</B>";
 else{
 
 
-	if(empty($clan_name_short) OR empty($clan_site) OR empty($userfile) OR empty($clan_history) OR empty($clan_glava_fio)){
-	print "Не все поля заявки заполнены!<BR>";
-	print "<a href='registratura.php?act=reg_clan' class=us2>вернуться</a>";
-	die();
-	}
-	if($db["money"]<250){
-	print "Суммы на Вашем счету недостаточно для регистрации клана!<BR>";
-	print "<a href='registratura.php?act=reg_clan' class=us2>вернуться</a>";
-	die();
-	}
-	if($db["level"]<0){
-	print "Уровень главы клана меньше необходимого(7).<BR>";
-	print "<a href='registratura.php?act=reg_clan' class=us2>вернуться</a>";
-	die();
-	}
+    if(empty($clan_name_short) OR empty($clan_site) OR empty($userfile) OR empty($clan_history) OR empty($clan_glava_fio)){
+    print "Не все поля заявки заполнены!<BR>";
+    print "<a href='registratura.php?act=reg_clan' class=us2>вернуться</a>";
+    die();
+    }
+    if($db["money"]<250){
+    print "Суммы на Вашем счету недостаточно для регистрации клана!<BR>";
+    print "<a href='registratura.php?act=reg_clan' class=us2>вернуться</a>";
+    die();
+    }
+    if($db["level"]<0){
+    print "Уровень главы клана меньше необходимого(7).<BR>";
+    print "<a href='registratura.php?act=reg_clan' class=us2>вернуться</a>";
+    die();
+    }
 
 
-	
+    
 
-	$SEEK_NAME = mysql_query("SELECT * FROM clan");
-	while($NAME_D = mysql_fetch_array($SEEK_NAME)){
-		if($clan_name == $NAME_D["name"]){
-		print "Название клана <B>$clan_name</B> уже занято! Выберите другое название.";
-		die();
-		}
-		if(!ereg("[a-zA-Z0-9]$",$clan_name_short)){
-		print "Короткое название должно состоять только из английских букв и цифр! Придумайте другую аббревиатуру.";
-		die();
-		}
-		if($clan_name_short == $NAME_D["name_short"]){
-		print "Короткое название <B>$clan_name_short</B> уже занято! Придумайте другую аббревиатуру.";
-		die();
-		}
-	}
+    $SEEK_NAME = mysql_query("SELECT * FROM clan");
+    while($NAME_D = mysql_fetch_array($SEEK_NAME)){
+        if($clan_name == $NAME_D["name"]){
+        print "Название клана <B>$clan_name</B> уже занято! Выберите другое название.";
+        die();
+        }
+        if(!ereg("[a-zA-Z0-9]$",$clan_name_short)){
+        print "Короткое название должно состоять только из английских букв и цифр! Придумайте другую аббревиатуру.";
+        die();
+        }
+        if($clan_name_short == $NAME_D["name_short"]){
+        print "Короткое название <B>$clan_name_short</B> уже занято! Придумайте другую аббревиатуру.";
+        die();
+        }
+    }
 
-	if(!empty($userfile)){
-	if($userfile_size>5120){
-	print "<B>Внимание!!! Размер загружаемого Вами файла \"<span class=crit>$userfile_name</span>\" превышает максимально допустимый размер 5 Кб!</B><BR>";
-	print "<a href='registratura.php?act=reg_clan' class=us2>вернуться</a><BR>";
-	}
-	if($userfile_type != "image/gif"){
+    if(!empty($userfile)){
+    if($userfile_size>5120){
+    print "<B>Внимание!!! Размер загружаемого Вами файла \"<span class=crit>$userfile_name</span>\" превышает максимально допустимый размер 5 Кб!</B><BR>";
+    print "<a href='registratura.php?act=reg_clan' class=us2>вернуться</a><BR>";
+    }
+    if($userfile_type != "image/gif"){
 print "<B>Внимание!!! Загружаемый Вами файл \"<span class=crit>$userfile_name</span>\" не являеться gif-рисунком!</B><BR>";
-	print "<a href='registratura.php?act=reg_clan' class=us2>вернуться</a><BR>";
-	}
-	else{
-		if(!empty($userfile)){
-		$newname="img/clan/$clan_name_short.gif";
-		copy($userfile,$newname);
-		print "Заявка подана. В ближайшее время она будет рассмотрена паладинским отделом регистрации кланов и Вы и совет клана будете направлены на паладинскую проверку. После прохождения проверки с Вашего счета снимется 10000 кр. и клан откроется. К моменту прохождения проверки на Вашем счету должны быть 10000 кр, иначе Ваша заявка будет отклонена.";
-		$clan_history = htmlspecialchars($clan_history);
-		$clan_history = str_replace("\n","<BR>",$clan_history);
-		$chas = date("H");
-		$date=date("d.m.Y-H:i:s", mktime($chas-$GSM));
+    print "<a href='registratura.php?act=reg_clan' class=us2>вернуться</a><BR>";
+    }
+    else{
+        if(!empty($userfile)){
+        $newname="img/clan/$clan_name_short.gif";
+        copy($userfile,$newname);
+        print "Заявка подана. В ближайшее время она будет рассмотрена паладинским отделом регистрации кланов и Вы и совет клана будете направлены на паладинскую проверку. После прохождения проверки с Вашего счета снимется 10000 кр. и клан откроется. К моменту прохождения проверки на Вашем счету должны быть 10000 кр, иначе Ваша заявка будет отклонена.";
+        $clan_history = htmlspecialchars($clan_history);
+        $clan_history = str_replace("\n","<BR>",$clan_history);
+        $chas = date("H");
+        $date=date("d.m.Y-H:i:s", mktime($chas-$GSM));
 
-		$S = mysql_query("INSERT INTO clan_zayavka(name,name_short,site,znak,history,orden,glava,glava_fio,sovet1,sovet1_fio,sovet2,sovet2_fio,date,confirm) VALUES('$clan_name','$clan_name_short','$clan_site','$newname','$clan_history','$clan_orden','$login','$clan_glava_fio','$c_1','$clan_sovet1_fio','$c_2','$clan_sovet2_fio','$date','0')");
-		}
-	}
-	}
+        $S = mysql_query("INSERT INTO clan_zayavka(name,name_short,site,znak,history,orden,glava,glava_fio,sovet1,sovet1_fio,sovet2,sovet2_fio,date,confirm) VALUES('$clan_name','$clan_name_short','$clan_site','$newname','$clan_history','$clan_orden','$login','$clan_glava_fio','$c_1','$clan_sovet1_fio','$c_2','$clan_sovet2_fio','$date','0')");
+        }
+    }
+    }
 
 }
 }
@@ -307,20 +307,20 @@ if($act == "archive"){
 print "Добро пожаловать в Государственный Архив кланов. Здесь Вы сможете просмотреть все записи о кланах, а также подробную информацию о них.<BR>";
 $i = 1;
 $S = mysql_query("SELECT * FROM clan ORDER BY name ASC");
-	while($DATA = mysql_fetch_array($S)){
-	$name = $DATA["name"];
-	$name_s = $DATA["name_short"];
-	$glava = $DATA["glava"];
-	$orden = $DATA["orden"];
-	if($orden == ""){$orden_i = "";}
-	else if($orden == 1){$orden_i = "<img src='img/orden/1.gif' alt='Белое братство'>";}
-	else if($orden == 2){$orden_i = "<img src='img/orden/2.gif' alt='Темное братство'>";}
-	else if($orden == 3){$orden_i = "<img src='img/orden/3.gif' alt='Нейтральное братство'>";}
-	else if($orden == 4){$orden_i = "<img src='img/orden/4.gif' alt='Алхимик'>";}
-	$clan_i = "<img src='img/clan/$name_s.gif' alt='$name' border=0>";
-	print "$i.$orden_i$clan_i<B>$name</B> <a href='clan_inf.php?clan=$name_s' class=us2 target=$name_s><small><B>>>></B></small></a><BR>";
-	$i++;
-	}
+    while($DATA = mysql_fetch_array($S)){
+    $name = $DATA["name"];
+    $name_s = $DATA["name_short"];
+    $glava = $DATA["glava"];
+    $orden = $DATA["orden"];
+    if($orden == ""){$orden_i = "";}
+    else if($orden == 1){$orden_i = "<img src='img/orden/1.gif' alt='Белое братство'>";}
+    else if($orden == 2){$orden_i = "<img src='img/orden/2.gif' alt='Темное братство'>";}
+    else if($orden == 3){$orden_i = "<img src='img/orden/3.gif' alt='Нейтральное братство'>";}
+    else if($orden == 4){$orden_i = "<img src='img/orden/4.gif' alt='Алхимик'>";}
+    $clan_i = "<img src='img/clan/$name_s.gif' alt='$name' border=0>";
+    print "$i.$orden_i$clan_i<B>$name</B> <a href='clan_inf.php?clan=$name_s' class=us2 target=$name_s><small><B>>>></B></small></a><BR>";
+    $i++;
+    }
 }
 ?>
 

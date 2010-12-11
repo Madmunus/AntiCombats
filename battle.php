@@ -54,7 +54,7 @@ $pl1 = str_replace(" ","%20",$who);
         if(empty($clan_s)){$clan="";}
         else{$clan="<img src='img/clan/$clan_s.gif' border=0 alt='$clan_f'>";}
         if(empty($orden_d)){$orden="";}
-	else{
+    else{
 if ($orden_d==2) {$orden="<img src='img/orden/arm/$rang.gif' width=12 height=15 border=0 alt='$orden_dis'>";}
 else{$orden="<img src='img/orden/$orden_d.gif' border=0 alt='$orden_dis'>";}
 if ($orden_d==1) {$orden="<img src='img/orden/pal/$rang.gif' width=12 height=15 border=0 alt='$orden_dis'>";} }
@@ -136,132 +136,132 @@ $timeout = $lasthit+$to - time();
 
 
 
-	if($timeout<0){
-		if($team == 1){
-		$SS = mysql_query("UPDATE battles SET win='1',status='finished' WHERE id=$bid");
-		mysql_query("SET CHARSET cp1251");
-		$winer=1;
-		$loser=2;
-		}
-		else if($team == 2){
-		$SS = mysql_query("UPDATE battles SET win='2',status='finished' WHERE id=$bid");
-		mysql_query("SET CHARSET cp1251");
-		$winer=2;
-		$loser=1;
-		}
-	print "<script>location.href='battle.php?act=exit'</script>";
-	die();
-	}
+    if($timeout<0){
+        if($team == 1){
+        $SS = mysql_query("UPDATE battles SET win='1',status='finished' WHERE id=$bid");
+        mysql_query("SET CHARSET cp1251");
+        $winer=1;
+        $loser=2;
+        }
+        else if($team == 2){
+        $SS = mysql_query("UPDATE battles SET win='2',status='finished' WHERE id=$bid");
+        mysql_query("SET CHARSET cp1251");
+        $winer=2;
+        $loser=1;
+        }
+    print "<script>location.href='battle.php?act=exit'</script>";
+    die();
+    }
 
 }
 
 if($act == "exit"){
-	if($db["battle"]!=0){
-	$S = mysql_query("SELECT * FROM battles WHERE id=$bid");
-	mysql_query("SET CHARSET cp1251");
+    if($db["battle"]!=0){
+    $S = mysql_query("SELECT * FROM battles WHERE id=$bid");
+    mysql_query("SET CHARSET cp1251");
 
 
-	$D = mysql_fetch_array($S);
-	if($team == 1){$an_team = 2;}
-	else{ $an_team = 1;}
-		if($team == $D["win"]){
-		win($team,$bid);
-		lose($an_team,$bid,0);
-		clearZayavka($creator,$bid);
-		}
-		else{
-		win($an_team,$bid);
-		lose($team,$bid,0);
-		clearZayavka($creator,$bid);
-		}
-	print "<script>location.href='main.php?act=none'</script>";
-	die();
-	}
+    $D = mysql_fetch_array($S);
+    if($team == 1){$an_team = 2;}
+    else{ $an_team = 1;}
+        if($team == $D["win"]){
+        win($team,$bid);
+        lose($an_team,$bid,0);
+        clearZayavka($creator,$bid);
+        }
+        else{
+        win($an_team,$bid);
+        lose($team,$bid,0);
+        clearZayavka($creator,$bid);
+        }
+    print "<script>location.href='main.php?act=none'</script>";
+    die();
+    }
 }
 
-	$team1_c = 0;
-	$team2_c = 0;
+    $team1_c = 0;
+    $team2_c = 0;
 
-	$T1 = mysql_query("SELECT * FROM team1 WHERE battle_id='$creator'");
-	while($T1_DATA = mysql_fetch_array($T1)){
-	$player=$T1_DATA["player"];
-	$S = mysql_query("SELECT hp FROM characters WHERE login='$player'");
-	$D = mysql_fetch_array($S);
-		if($D["hp"] > 0){$team1_c++;}
-	}
+    $T1 = mysql_query("SELECT * FROM team1 WHERE battle_id='$creator'");
+    while($T1_DATA = mysql_fetch_array($T1)){
+    $player=$T1_DATA["player"];
+    $S = mysql_query("SELECT hp FROM characters WHERE login='$player'");
+    $D = mysql_fetch_array($S);
+        if($D["hp"] > 0){$team1_c++;}
+    }
 
-	$T2 = mysql_query("SELECT * FROM team2 WHERE battle_id='$creator'");
-	while($T2_DATA = mysql_fetch_array($T2)){
-	$player=$T2_DATA["player"];
-	$S = mysql_query("SELECT hp FROM characters WHERE login='$player'");
-	$D = mysql_fetch_array($S);
-		if($D["hp"] > 0){$team2_c++;}
-	}
+    $T2 = mysql_query("SELECT * FROM team2 WHERE battle_id='$creator'");
+    while($T2_DATA = mysql_fetch_array($T2)){
+    $player=$T2_DATA["player"];
+    $S = mysql_query("SELECT hp FROM characters WHERE login='$player'");
+    $D = mysql_fetch_array($S);
+        if($D["hp"] > 0){$team2_c++;}
+    }
 
-	$BOT = mysql_query("SELECT * FROM bot_temp WHERE battle_id='$bid'");
-	while($BOTD = mysql_fetch_array($BOT)){
-	$player = $BOTD["bot_name"];
-	$S = mysql_query("SELECT hp,team FROM bot_temp WHERE battle_id='$bid'");
-	$D = mysql_fetch_array($S);
-		if($D["team"]==1){
-			if($D["hp"]>0){$team1_c++;}
-		}
-		else if($D["team"]==2){
-			if($D["hp"]>0){$team2_c++;}
-		}
+    $BOT = mysql_query("SELECT * FROM bot_temp WHERE battle_id='$bid'");
+    while($BOTD = mysql_fetch_array($BOT)){
+    $player = $BOTD["bot_name"];
+    $S = mysql_query("SELECT hp,team FROM bot_temp WHERE battle_id='$bid'");
+    $D = mysql_fetch_array($S);
+        if($D["team"]==1){
+            if($D["hp"]>0){$team1_c++;}
+        }
+        else if($D["team"]==2){
+            if($D["hp"]>0){$team2_c++;}
+        }
 
-	}
+    }
 
-	if($team1_c == 0 AND $team2_c>0){
-	$winer=2;
-	$loser=1;
-	$SS = mysql_query("UPDATE battles SET win='2',status='finished' WHERE id=$bid");
-	}
-	if($team2_c == 0 AND $team1_c>0){
-	$winer=1;
-	$loser=2;
-	$SS = mysql_query("UPDATE battles SET win='1',status='finished' WHERE id=$bid");
-	}
-	if($team1_c == 0 AND $team2_c == 0){
-	lose(1,$bid,1);
-	lose(2,$bid,1);
-	clearZayavka($creator,$bid);
-	}
+    if($team1_c == 0 AND $team2_c>0){
+    $winer=2;
+    $loser=1;
+    $SS = mysql_query("UPDATE battles SET win='2',status='finished' WHERE id=$bid");
+    }
+    if($team2_c == 0 AND $team1_c>0){
+    $winer=1;
+    $loser=2;
+    $SS = mysql_query("UPDATE battles SET win='1',status='finished' WHERE id=$bid");
+    }
+    if($team1_c == 0 AND $team2_c == 0){
+    lose(1,$bid,1);
+    lose(2,$bid,1);
+    clearZayavka($creator,$bid);
+    }
 
 if($opponent == '' AND $b == 1){
-	if($team == 1){
-	$LIST = mysql_query("SELECT * FROM team2 WHERE battle_id = $creator");
-	}
-	else if($team == 2){
-	$LIST = mysql_query("SELECT * FROM team1 WHERE battle_id = $creator");
-	}
-	$opp = array();
-	$i=0;
-	while($LIST_DATA = mysql_fetch_array($LIST)){
-	$player = $LIST_DATA["player"];
-	$PL_SQL = mysql_query("SELECT battle_opponent FROM characters WHERE login = '$player'");
-	$PL_DATA = mysql_fetch_array($PL_SQL);
-		if($PL_DATA["battle_opponent"]==''){
-		$opp[$i] = $player;
-		$i++;
-		}
-	}
-	$j = count($opp);
-	$BOT_LIST = mysql_query("SELECT * FROM bot_temp WHERE battle_id='$bid'");
-	while($BLD = mysql_fetch_array($BOT_LIST)){
-		if($team == 1){
-			if($BLD["team"]==2 AND $BLD["hp"]>0){
-			$opp[$j] = $BLD["bot_name"];
-			$j++;
-			}
-		}
-		else if($team == 2){
-			if($BLD["team"]==1 AND $BLD["hp"]>0){
-			$opp[$j] = $BLD["bot_name"];
-			$j++;
-			}
-		}
-	}
+    if($team == 1){
+    $LIST = mysql_query("SELECT * FROM team2 WHERE battle_id = $creator");
+    }
+    else if($team == 2){
+    $LIST = mysql_query("SELECT * FROM team1 WHERE battle_id = $creator");
+    }
+    $opp = array();
+    $i=0;
+    while($LIST_DATA = mysql_fetch_array($LIST)){
+    $player = $LIST_DATA["player"];
+    $PL_SQL = mysql_query("SELECT battle_opponent FROM characters WHERE login = '$player'");
+    $PL_DATA = mysql_fetch_array($PL_SQL);
+        if($PL_DATA["battle_opponent"]==''){
+        $opp[$i] = $player;
+        $i++;
+        }
+    }
+    $j = count($opp);
+    $BOT_LIST = mysql_query("SELECT * FROM bot_temp WHERE battle_id='$bid'");
+    while($BLD = mysql_fetch_array($BOT_LIST)){
+        if($team == 1){
+            if($BLD["team"]==2 AND $BLD["hp"]>0){
+            $opp[$j] = $BLD["bot_name"];
+            $j++;
+            }
+        }
+        else if($team == 2){
+            if($BLD["team"]==1 AND $BLD["hp"]>0){
+            $opp[$j] = $BLD["bot_name"];
+            $j++;
+            }
+        }
+    }
 
 $c = count($opp);
 $set_opp = $opp[rand(0,count($opp)-1)];
@@ -291,8 +291,8 @@ $hand_r_weapon = false;
 $hand_l_weapon = false;
 $two_hands     = false;
 
-	for($n=0;$n<count($weapons);$n++){
-     	if($hand_r_type == $weapons[$n]){
+    for($n=0;$n<count($weapons);$n++){
+         if($hand_r_type == $weapons[$n]){
          $hand_r_weapon = true;
         }
         if($hand_l_type == $weapons[$n]){
@@ -456,90 +456,90 @@ top.talk.talker.phrase.focus();
   <TD VALIGN=TOP>
   <?
   if($winer!=0 AND $loser!=0){
-	$b = 0;
+    $b = 0;
   }
 
-	 if($b == 1){
-	  showHeader($login);
-	  }
+     if($b == 1){
+      showHeader($login);
+      }
 
 
-	if($act == "magic"){
-	$GET_DAT = mysql_query("SELECT * FROM inv WHERE id='$scroll' AND owner='$login'");
-	$SCROLL = mysql_fetch_array($GET_DAT);
-	$obj_id = $SCROLL["object_id"];
-	$GET_SCROLL = mysql_query("SELECT * FROM scroll WHERE id='$obj_id'");
-	$SCROLL_DATA = mysql_fetch_array($GET_SCROLL);
-	$name = $SCROLL_DATA["name"];
-	$min_v = $SCROLL_DATA["min_wis"];
-	$min_i = $SCROLL_DATA["min_int"];
-	$min_l = $SCROLL_DATA["min_level"];
-	$tear_max = $SCROLL_DATA["tear_max"];
-	$iznos = $SCROLL["iznos"];
-	$orden = $SCROLL_DATA["orden"];
-	$mp = $SCROLL_DATA["mp"];
-	$school = $SCROLL_DATA["school"];
-	$file = $SCROLL_DATA["file"];
+    if($act == "magic"){
+    $GET_DAT = mysql_query("SELECT * FROM inv WHERE id='$scroll' AND owner='$login'");
+    $SCROLL = mysql_fetch_array($GET_DAT);
+    $obj_id = $SCROLL["object_id"];
+    $GET_SCROLL = mysql_query("SELECT * FROM scroll WHERE id='$obj_id'");
+    $SCROLL_DATA = mysql_fetch_array($GET_SCROLL);
+    $name = $SCROLL_DATA["name"];
+    $min_v = $SCROLL_DATA["min_wis"];
+    $min_i = $SCROLL_DATA["min_int"];
+    $min_l = $SCROLL_DATA["min_level"];
+    $tear_max = $SCROLL_DATA["tear_max"];
+    $iznos = $SCROLL["iznos"];
+    $orden = $SCROLL_DATA["orden"];
+    $mp = $SCROLL_DATA["mp"];
+    $school = $SCROLL_DATA["school"];
+    $file = $SCROLL_DATA["file"];
 
-	if($min_i == ''){$min_i=0;}
-	if(!empty($orden)){
-		if($orden == $db["orden"]){
-		$ordens = 1;
-		}
-		else{
-		$ordens = 0;
-		}
-	}
-	else{
-	$ordens = 1;
-	}
+    if($min_i == ''){$min_i=0;}
+    if(!empty($orden)){
+        if($orden == $db["orden"]){
+        $ordens = 1;
+        }
+        else{
+        $ordens = 0;
+        }
+    }
+    else{
+    $ordens = 1;
+    }
 
-	if($db["int"]>=$min_i && $db["wis"]>=$min_v && $db["level"]>=$min_l && $ordens == 1 && $db["mp"]>=$mp){
+    if($db["int"]>=$min_i && $db["wis"]>=$min_v && $db["level"]>=$min_l && $ordens == 1 && $db["mp"]>=$mp){
 
-	$cast_d = $db["cast"];
+    $cast_d = $db["cast"];
 
-	$cast = floor(($cast_d/100 + 1)*70.9);
+    $cast = floor(($cast_d/100 + 1)*70.9);
 
-	$cast_suc=array();
-	for($i=0;$i<=$cast;$i++){
-	$cast_suc[$i]=$i;
-	}
-	for($i=$cast+1;$i<=100;$i++){
-	$cast_suc[$i]="empty";
-	}
+    $cast_suc=array();
+    for($i=0;$i<=$cast;$i++){
+    $cast_suc[$i]=$i;
+    }
+    for($i=$cast+1;$i<=100;$i++){
+    $cast_suc[$i]="empty";
+    }
 
-	$cast_numer=rand(0,100);
+    $cast_numer=rand(0,100);
 
-	$is_cast="0";
-	for($i=0;$i<=100;$i++){
-		if($cast_numer==$cast_suc[$i]){
-		$is_cast="1";
-		}
-	}
+    $is_cast="0";
+    for($i=0;$i<=100;$i++){
+        if($cast_numer==$cast_suc[$i]){
+        $is_cast="1";
+        }
+    }
 
-		if($is_cast == "0"){
-		print "<br>Вам неудалось прокастовать это заклинание!<BR>";
-		print "<a href='?act=showMagic' class=us2>вернуться</a>";
-		$S = mysql_query("UPDATE inv SET iznos = iznos+1 WHERE id=$scroll");
-		$S_INV = mysql_query("SELECT * FROM inv WHERE id = $scroll");
-		$DAT = mysql_fetch_array($S_INV);
-		$iznos = $DAT["iznos"];
-		$tear_max = $DAT["tear_max"];
-		$iznos_k = $iznos+1;
-		if($iznos_k>=$tear_max){
-		$S_D = mysql_query("DELETE FROM inv WHERE id = $scroll");
-		}
-		$SQL = mysql_query("UPDATE characters SET cast = cast+0.1 WHERE login='$login'");
-		}
-		else{
-		include "magic/$file";
-		}
-		}
-	else{
-	print "<BR>У Вас недостаточно параметров для кастования этого заклятия!<BR>";
-	print "<a href='?act=showMagic' class=us2>вернуться</a>";
-	}
-	}
+        if($is_cast == "0"){
+        print "<br>Вам неудалось прокастовать это заклинание!<BR>";
+        print "<a href='?act=showMagic' class=us2>вернуться</a>";
+        $S = mysql_query("UPDATE inv SET iznos = iznos+1 WHERE id=$scroll");
+        $S_INV = mysql_query("SELECT * FROM inv WHERE id = $scroll");
+        $DAT = mysql_fetch_array($S_INV);
+        $iznos = $DAT["iznos"];
+        $tear_max = $DAT["tear_max"];
+        $iznos_k = $iznos+1;
+        if($iznos_k>=$tear_max){
+        $S_D = mysql_query("DELETE FROM inv WHERE id = $scroll");
+        }
+        $SQL = mysql_query("UPDATE characters SET cast = cast+0.1 WHERE login='$login'");
+        }
+        else{
+        include "magic/$file";
+        }
+        }
+    else{
+    print "<BR>У Вас недостаточно параметров для кастования этого заклятия!<BR>";
+    print "<a href='?act=showMagic' class=us2>вернуться</a>";
+    }
+    }
 
 
 
@@ -550,63 +550,63 @@ top.talk.talker.phrase.focus();
   else{
 
 
-	  if($opponent!='' AND $b == 1){
-		if(empty($act) OR $act == "none" OR $act == "hit"){
-		  genForm($login);
+      if($opponent!='' AND $b == 1){
+        if(empty($act) OR $act == "none" OR $act == "hit"){
+          genForm($login);
 
-		}
+        }
 
-		else if($act == "showMagic" AND $db["level"]>0){
-		  genMagicForm($login);
-		}
-		else if($act == "tech" AND $db["level"]>0){
-		  genTechForm($login);
-		}
-
-
+        else if($act == "showMagic" AND $db["level"]>0){
+          genMagicForm($login);
+        }
+        else if($act == "tech" AND $db["level"]>0){
+          genTechForm($login);
+        }
 
 
-	  }
 
-	  else{
-	  $GET_TIMEOUT = mysql_query("SELECT lasthit FROM timeout WHERE battle_id='$bid'");
-	  $T_D = mysql_fetch_array($GET_TIMEOUT);
-	  $lasthit = $T_D["lasthit"];
-	  $SEEK_T = mysql_query("SELECT timeout FROM zayavka WHERE creator = '$creator'");
-	  $SEEK_TD = mysql_fetch_array($SEEK_T);
-	  $to = $SEEK_TD["timeout"]*60;
-	  $timeout = $lasthit+$to - time();
-	  $minutes_l = floor($timeout/60);
-	  $seconds_l = $timeout - $minutes_l*60;
+
+      }
+
+      else{
+      $GET_TIMEOUT = mysql_query("SELECT lasthit FROM timeout WHERE battle_id='$bid'");
+      $T_D = mysql_fetch_array($GET_TIMEOUT);
+      $lasthit = $T_D["lasthit"];
+      $SEEK_T = mysql_query("SELECT timeout FROM zayavka WHERE creator = '$creator'");
+      $SEEK_TD = mysql_fetch_array($SEEK_T);
+      $to = $SEEK_TD["timeout"]*60;
+      $timeout = $lasthit+$to - time();
+      $minutes_l = floor($timeout/60);
+      $seconds_l = $timeout - $minutes_l*60;
 
       print "<center><img border=0 src=img/line2.gif width=360 height=10></center>";
 
 
       if($winer!=0 AND $loser!=0){
-			if($team == $winer){
-			print "</center><center>Поздравляем! Вы победили!<br>";
-			print "<input type=button value='Вернуться' class=but onClick=\"location.href='battle.php?act=exit'\"></center>";
-			$b = 0;
-			}
-			else{
-			print "</center><center>К сожалению вы проиграли!<BR>";
-			print "<input type=button value='Вернуться' class=but onClick=\"location.href='battle.php?act=exit'\"></center>";
-			$b = 0;
-			}
-	  }
+            if($team == $winer){
+            print "</center><center>Поздравляем! Вы победили!<br>";
+            print "<input type=button value='Вернуться' class=but onClick=\"location.href='battle.php?act=exit'\"></center>";
+            $b = 0;
+            }
+            else{
+            print "</center><center>К сожалению вы проиграли!<BR>";
+            print "<input type=button value='Вернуться' class=but onClick=\"location.href='battle.php?act=exit'\"></center>";
+            $b = 0;
+            }
+      }
 
-		if($timeout > 0 AND $b == 1){
-		print "</center>Ожидаем хода противника... До таймаута осталось<font color=#333399><B> $minutes_l мин. $seconds_l сек.</B></font><BR>";
-		print "<center><input type=button value='Обновить' class=ad onClick=\"location.href='battle.php'\"></center>";
+        if($timeout > 0 AND $b == 1){
+        print "</center>Ожидаем хода противника... До таймаута осталось<font color=#333399><B> $minutes_l мин. $seconds_l сек.</B></font><BR>";
+        print "<center><input type=button value='Обновить' class=ad onClick=\"location.href='battle.php'\"></center>";
 
-		}
-		if($timeout < 0 AND $b == 1){
-		print "</center>Таймаут:<BR>";
-	  	print "<center><input type=button value='Обновить' class=ad onClick=\"location.href='battle.php'\"></center>";
-  		print "<center><input type=button value='Победа' class=ad onClick=\"location.href='battle.php?act=t_win'\"></center>";
-		}
+        }
+        if($timeout < 0 AND $b == 1){
+        print "</center>Таймаут:<BR>";
+          print "<center><input type=button value='Обновить' class=ad onClick=\"location.href='battle.php'\"></center>";
+          print "<center><input type=button value='Победа' class=ad onClick=\"location.href='battle.php?act=t_win'\"></center>";
+        }
         print "<center><img border=0 src=img/line2.gif width=360 height=10>";
-  	}
+      }
   }
   print "</center>";
   $dis_file = file("logs/$bid.dis");
@@ -614,33 +614,33 @@ top.talk.talker.phrase.focus();
   $c = count($dis)-1;
   if($c>30){$b = $c; $e = $c-30; $l = 1;}
   else{$b = $c; $e = 0; $l = 0;}
-	for($i = $b;$i >= $e;$i--){
-	print "$dis[$i]<BR>";
-	}
-	if($l == 1){
-	print "<br><I>Вырезано для уменьшения объема. Полный лог боя <a href='log.php?log=$bid' class=us2 target=_newlog>здесь.</a></I><BR>";
-	}
-	if($team == 1){
-	$P_HIT = mysql_query("SELECT * FROM team1 WHERE battle_id='$creator' AND player='$login'");
-	}
-	else if($team == 2){
-	$P_HIT = mysql_query("SELECT * FROM team2 WHERE battle_id='$creator' AND player='$login'");
-	}
+    for($i = $b;$i >= $e;$i--){
+    print "$dis[$i]<BR>";
+    }
+    if($l == 1){
+    print "<br><I>Вырезано для уменьшения объема. Полный лог боя <a href='log.php?log=$bid' class=us2 target=_newlog>здесь.</a></I><BR>";
+    }
+    if($team == 1){
+    $P_HIT = mysql_query("SELECT * FROM team1 WHERE battle_id='$creator' AND player='$login'");
+    }
+    else if($team == 2){
+    $P_HIT = mysql_query("SELECT * FROM team2 WHERE battle_id='$creator' AND player='$login'");
+    }
   $P_HDATA = mysql_fetch_array($P_HIT);
   $hitted = $P_HDATA["hitted"];
   print "<center><img border=0 src=img/line2.gif width=360 height=10>";
   print "</center>Всего Вами нанесено урона: <B>$hitted</B>.";
   if($hitted==''){
-	$UP = mysql_query("UPDATE characters SET battle='0' WHERE login='$login'");
-	if($team == 1){
-	$CZ = mysql_query("UPDATE team1 SET over='1' WHERE player='$login'");
-	}
-	if($team == 2){
-	$CZ = mysql_query("UPDATE team2 SET over='1' WHERE player='$login'");
-	}
-	clearZayavka($creator,$bid);
-	print "<script>location.href='main.php?act=none'</script>";
-	die();
+    $UP = mysql_query("UPDATE characters SET battle='0' WHERE login='$login'");
+    if($team == 1){
+    $CZ = mysql_query("UPDATE team1 SET over='1' WHERE player='$login'");
+    }
+    if($team == 2){
+    $CZ = mysql_query("UPDATE team2 SET over='1' WHERE player='$login'");
+    }
+    clearZayavka($creator,$bid);
+    print "<script>location.href='main.php?act=none'</script>";
+    die();
   }
   ?>
   </TD>
@@ -649,22 +649,22 @@ top.talk.talker.phrase.focus();
   <?
   if($opponent!='' AND $db["hp"]>0){
   $bot = 0;
-	$BOT_L = mysql_query("SELECT * FROM bot_temp WHERE battle_id='$bid'");
-	while($BOT_D = mysql_fetch_array($BOT_L)){
-		if($BOT_D["bot_name"] == $opponent){
-		$bot = 1;
-		$prototype = $BOT_D["prototype"];
-		}
-	}
+    $BOT_L = mysql_query("SELECT * FROM bot_temp WHERE battle_id='$bid'");
+    while($BOT_D = mysql_fetch_array($BOT_L)){
+        if($BOT_D["bot_name"] == $opponent){
+        $bot = 1;
+        $prototype = $BOT_D["prototype"];
+        }
+    }
 
-	if($bot == 0){
-	  showHPMPop($opponent);
-	  showPlayer($opponent);
-	}
-	else if($bot == 1){
-	showHPMPBot($opponent,$bid);
-	showPlayer($prototype);
-	}
+    if($bot == 0){
+      showHPMPop($opponent);
+      showPlayer($opponent);
+    }
+    else if($bot == 1){
+    showHPMPBot($opponent,$bid);
+    showPlayer($prototype);
+    }
   }
   else{
   $num = rand(1,21);

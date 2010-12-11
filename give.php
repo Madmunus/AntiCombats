@@ -65,22 +65,22 @@ $city=$target_dat["city_game"];
 $is_online = 0;
 
 
-	if($orden_d==1){$orden_dis="Белое братство";}
-	else if($orden_d==2){$orden_dis="Темное братство";}
-	else if($orden_d==3){$orden_dis="Нейтральное братство";}
-	else if($orden_d==4){$orden_dis="Алхимик";}
-	else if($orden_d==5){$orden_dis="Тюремный заключеный.";}
-	if(empty($clan_s)){$clan="";}
-	else{$clan="<img src='img/clan/$clan_s.gif' border=0 alt='$clan_f'>";}
-	if(empty($orden_d)){$orden="";}
-	else{
+    if($orden_d==1){$orden_dis="Белое братство";}
+    else if($orden_d==2){$orden_dis="Темное братство";}
+    else if($orden_d==3){$orden_dis="Нейтральное братство";}
+    else if($orden_d==4){$orden_dis="Алхимик";}
+    else if($orden_d==5){$orden_dis="Тюремный заключеный.";}
+    if(empty($clan_s)){$clan="";}
+    else{$clan="<img src='img/clan/$clan_s.gif' border=0 alt='$clan_f'>";}
+    if(empty($orden_d)){$orden="";}
+    else{
 if ($orden_d==1) {$orden="<img src='img/orden/pal/$rang.gif' width=12 height=15 border=0 alt='$orden_dis'>";} 
 else{$orden="<img src='img/orden/$orden_d.gif' border=0 alt='$orden_dis'>";}}
 
 
 $SEARCH = mysql_query("SELECT * FROM online WHERE login = '$login'");
 
-	if(mysql_fetch_array($SEARCH)){$is_online = 1;}
+    if(mysql_fetch_array($SEARCH)){$is_online = 1;}
 
 if(!$target_dat){
 print "Ошибка!!! Персонаж \"$target\" не найден в базе данных!<Br><input type=button value=\"Вернуться\" class=nav onclick=\"javascript:location.href='main.php?act=none'\">";
@@ -405,159 +405,159 @@ print "</td></tr><tr><td></td></tr></td></tr></table>";
 
 $S = mysql_query("SELECT * FROM inv WHERE object_razdel='thing' ORDER BY date DESC");
 while($DAT = mysql_fetch_array($S)){
-	if($DAT["owner"]==$login){
+    if($DAT["owner"]==$login){
 
-		if($DAT["object_type"]=="wood"){
-		$obj_id = $DAT["object_id"];
-		$obj_s = mysql_query("SELECT * FROM wood WHERE id=$obj_id");
-		$obj_data = mysql_fetch_array($obj_s);
-		$name = $obj_data["name"];
-		$img = $obj_data["img"];
-		$item_id = $DAT["id"];
-		$mass = $obj_data["mass"];
-		$price = $obj_data["price"];
+        if($DAT["object_type"]=="wood"){
+        $obj_id = $DAT["object_id"];
+        $obj_s = mysql_query("SELECT * FROM wood WHERE id=$obj_id");
+        $obj_data = mysql_fetch_array($obj_s);
+        $name = $obj_data["name"];
+        $img = $obj_data["img"];
+        $item_id = $DAT["id"];
+        $mass = $obj_data["mass"];
+        $price = $obj_data["price"];
 
-		print "<table border=0 bgcolor=#cccccc width=100%>";
-		print "<tr><td><hr color=#000000 width=100% size=1 align=left>Дерево&nbsp";
-		print "<a href='main.php?act=del_item&item=$item_id'><img src='img/icon/del.gif' width=14 height=14 border=0 alt='Выбросить предмет $name'></a>";
-		print "</td></tr></table>";
-		print "<table border=0 bgcolor=#cccccc width=100%><tr><td width=75><img src='img/$img' alt='$name'><BR>";
-		print "<a href='main.php?act=gift&item_id=$item_id&to=$target' class=us2>подарить</a><BR>";
-		print "<a href='main.php?act=give&item_id=$item_id&to=$target' class=us2>передать</a>";
-		print "</td><td valign=top>";
-		print "Цена: $price зл.<BR>";
-		print "Масса: $mass ед.<BR>";
-		print "Ресурс: $name<BR>";
-		print "</td></tr>";
-		print "<tr><td align=center>";
-		
-		print "</td><td>&nbsp</td></tr>";
-		print"</table>";
-		}
+        print "<table border=0 bgcolor=#cccccc width=100%>";
+        print "<tr><td><hr color=#000000 width=100% size=1 align=left>Дерево&nbsp";
+        print "<a href='main.php?act=del_item&item=$item_id'><img src='img/icon/del.gif' width=14 height=14 border=0 alt='Выбросить предмет $name'></a>";
+        print "</td></tr></table>";
+        print "<table border=0 bgcolor=#cccccc width=100%><tr><td width=75><img src='img/$img' alt='$name'><BR>";
+        print "<a href='main.php?act=gift&item_id=$item_id&to=$target' class=us2>подарить</a><BR>";
+        print "<a href='main.php?act=give&item_id=$item_id&to=$target' class=us2>передать</a>";
+        print "</td><td valign=top>";
+        print "Цена: $price зл.<BR>";
+        print "Масса: $mass ед.<BR>";
+        print "Ресурс: $name<BR>";
+        print "</td></tr>";
+        print "<tr><td align=center>";
+        
+        print "</td><td>&nbsp</td></tr>";
+        print"</table>";
+        }
 
 
-		if($DAT["object_type"]=="book"){
-		$obj_id = $DAT["object_id"];
-		$obj_s = mysql_query("SELECT * FROM book WHERE id=$obj_id");
-		$obj_data = mysql_fetch_array($obj_s);
-		$name = $obj_data["name"];
-		$img = $obj_data["img"];
-		$min_i = $obj_data["min_int"];
-		$min_v = $obj_data["min_wis"];
-		$min_level = $obj_data["min_level"];
-		$add_i = $obj_data["add_int"];
-		$add_mp = $obj_data["add_mp"];
-		$add_water = $obj_data["add_water"];
-		$add_earth = $obj_data["add_earth"];
-		$add_fire = $obj_data["add_fire"];
-		$add_air = $obj_data["add_fire"];
-		$item_id = $DAT["id"];
-		$pages = $obj_data["pages"];
-		$pages_used = $DAT["pages_used"];
-		$gift_author = $DAT["gift_author"];
-		$book_name = $DAT["book_name"];
-		$iznos = $DAT["iznos"];
-		$iznos_all = $DAT["tear_max"];
-		if(empty($book_name)){$book_name = "Без названия.";}
+        if($DAT["object_type"]=="book"){
+        $obj_id = $DAT["object_id"];
+        $obj_s = mysql_query("SELECT * FROM book WHERE id=$obj_id");
+        $obj_data = mysql_fetch_array($obj_s);
+        $name = $obj_data["name"];
+        $img = $obj_data["img"];
+        $min_i = $obj_data["min_int"];
+        $min_v = $obj_data["min_wis"];
+        $min_level = $obj_data["min_level"];
+        $add_i = $obj_data["add_int"];
+        $add_mp = $obj_data["add_mp"];
+        $add_water = $obj_data["add_water"];
+        $add_earth = $obj_data["add_earth"];
+        $add_fire = $obj_data["add_fire"];
+        $add_air = $obj_data["add_fire"];
+        $item_id = $DAT["id"];
+        $pages = $obj_data["pages"];
+        $pages_used = $DAT["pages_used"];
+        $gift_author = $DAT["gift_author"];
+        $book_name = $DAT["book_name"];
+        $iznos = $DAT["iznos"];
+        $iznos_all = $DAT["tear_max"];
+        if(empty($book_name)){$book_name = "Без названия.";}
 
-		print "<table border=0 bgcolor=#cccccc width=100%>";
-		print "<tr><td><hr color=#000000 width=100% size=1 align=left>$name";
-		print "<a href='main.php?act=del_item&item=$item_id'><img src='img/icon/del.gif' width=14 height=14 border=0 alt='Выбросить предмет $name'></a>";
-		print "</td></tr></table>";
-		print "<table border=0 bgcolor=#cccccc width=100%><tr><td width=75><img src='img/$img' alt='$name\n$book_name'><BR>";
-		print "<a href='main.php?act=gift&item_id=$item_id&to=$target' class=us2>подарить</a><BR>";
-		print "<a href='main.php?act=give&item_id=$item_id&to=$target' class=us2>передать</a>";
-		print "</td><td valign=top>";
-		print "Заглавие: $book_name<BR>";
-		print "Использований: $iznos/$iznos_all<BR>";
-		if(!empty($add_i)){
-		print "Разум: <font color=#00990>+$add_i</font><BR>";
-		}
-		if(!empty($add_mp)){
-		print "Уровень маны: +$add_mp<BR>";
-		}
-		if($add_water>0){
-		print "Магия воды: +$add_water<BR>";
-		}
-		if($add_earth>0){
-		print "Магия земли: +$add_earth<BR>";
-		}
-		if($add_fire>0){
-		print "Магия огня: +$add_fire<BR>";
-		}
-		if($add_air>0){
-		print "Магия воздуха: +$add_air<BR>";
-		}
-		print "Страниц: <font color=#000099>$pages_used/$pages</font><BR>";
-		print "</td></tr>";
-		print "<tr><td align=center>";
-		
-		print "</td><td>&nbsp</td></tr>";
-		print"</table>";
-		}
-		if($DAT["object_type"]=="scroll"){
-		$obj_id = $DAT["object_id"];
-		$obj_s = mysql_query("SELECT * FROM scroll WHERE id=$obj_id");
-		$obj_data = mysql_fetch_array($obj_s);
-		$name = $obj_data["name"];
-		$img = $obj_data["img"];
-		$min_i = $obj_data["min_int"];
-		$min_v = $obj_data["min_wis"];
-		$min_level = $obj_data["min_level"];
-		$item_id = $DAT["id"];
-		$desc = $obj_data["desc"];
-		$gift_author = $DAT["gift_author"];
-		$iznos = $DAT["iznos"];
-		$iznos_all = $DAT["tear_max"];
-		$type = $obj_data["type"];
-		$mp = $obj_data["mp"];
+        print "<table border=0 bgcolor=#cccccc width=100%>";
+        print "<tr><td><hr color=#000000 width=100% size=1 align=left>$name";
+        print "<a href='main.php?act=del_item&item=$item_id'><img src='img/icon/del.gif' width=14 height=14 border=0 alt='Выбросить предмет $name'></a>";
+        print "</td></tr></table>";
+        print "<table border=0 bgcolor=#cccccc width=100%><tr><td width=75><img src='img/$img' alt='$name\n$book_name'><BR>";
+        print "<a href='main.php?act=gift&item_id=$item_id&to=$target' class=us2>подарить</a><BR>";
+        print "<a href='main.php?act=give&item_id=$item_id&to=$target' class=us2>передать</a>";
+        print "</td><td valign=top>";
+        print "Заглавие: $book_name<BR>";
+        print "Использований: $iznos/$iznos_all<BR>";
+        if(!empty($add_i)){
+        print "Разум: <font color=#00990>+$add_i</font><BR>";
+        }
+        if(!empty($add_mp)){
+        print "Уровень маны: +$add_mp<BR>";
+        }
+        if($add_water>0){
+        print "Магия воды: +$add_water<BR>";
+        }
+        if($add_earth>0){
+        print "Магия земли: +$add_earth<BR>";
+        }
+        if($add_fire>0){
+        print "Магия огня: +$add_fire<BR>";
+        }
+        if($add_air>0){
+        print "Магия воздуха: +$add_air<BR>";
+        }
+        print "Страниц: <font color=#000099>$pages_used/$pages</font><BR>";
+        print "</td></tr>";
+        print "<tr><td align=center>";
+        
+        print "</td><td>&nbsp</td></tr>";
+        print"</table>";
+        }
+        if($DAT["object_type"]=="scroll"){
+        $obj_id = $DAT["object_id"];
+        $obj_s = mysql_query("SELECT * FROM scroll WHERE id=$obj_id");
+        $obj_data = mysql_fetch_array($obj_s);
+        $name = $obj_data["name"];
+        $img = $obj_data["img"];
+        $min_i = $obj_data["min_int"];
+        $min_v = $obj_data["min_wis"];
+        $min_level = $obj_data["min_level"];
+        $item_id = $DAT["id"];
+        $desc = $obj_data["desc"];
+        $gift_author = $DAT["gift_author"];
+        $iznos = $DAT["iznos"];
+        $iznos_all = $DAT["tear_max"];
+        $type = $obj_data["type"];
+        $mp = $obj_data["mp"];
                 $Sa = mysql_query("SELECT * FROM scroll ORDER BY id DESC");
                 $dats = mysql_fetch_array($Sa);
-		$massa = $dats["mass"];
+        $massa = $dats["mass"];
 
-		print "<table border=0 bgcolor=#cccccc width=100%>";
-		print "<tr><td><hr color=#000000 width=100% size=1 align=left>";
-		print "</td></tr></table>";
-		print "<table border=0 bgcolor=#cccccc width=100%><tr><td width=250><center><img src='img/$img' alt='$name'><BR>";
-		print "<a href='main.php?act=gift&item_id=$item_id&to=$target' class=nick>подарить</a><BR>";
-		print "<a href='main.php?act=give&item_id=$item_id&to=$target' class=nick>передать</a>";
-		print "</td><td valign=top>";
-		print "<font color=#003388><B>$name</b></font>&nbsp(Масса: $massa)<a href='main.php?act=del_item&item=$item_id'><img src='img/icon/del.gif' width=14 height=14 border=0 alt='Выбросить предмет $name'></a><br>";
-		print "Долговечность: $iznos/$iznos_all<BR>";
-		print "<B>Требуется минимальное:</b><BR>";
-		if($min_level>$db["level"]){
-		print "&bull; Уровень: <font color=#D50000>$min_level</font><BR>";
-		}
-		if($min_level<=$db["level"]){
-		print "&bull; Уровень: $min_level<BR>";
-		}
-		if(!empty($min_i) && $min_i>$db["int"]){
-		print "&bull; Интеллект: <font color=#D50000>$min_i</font><BR>";
-		}
-		else if(!empty($min_i) && $min_i<=$db["int"]){
-		print "&bull; Интеллект: $min_i<BR>";
-		}
-		if(!empty($min_v) && $min_v>$db["wis"]){
-		print "&bull; Мудрость: <font color=#D50000>$min_v</font><BR>";
-		}
-		if(!empty($min_v) && $min_v<=$db["wis"]){
-		print "&bull; Мудрость: $min_v<BR>";
-		}
-		if($mp<=$db["mp"]){
-		print "&bull; Исп. маны: $mp<BR>";
-		}
-		if($mp>$db["mp"]){
-		print "&bull; Исп. маны: <font color=#D50000>$mp</font><BR>";
-		}
-		print "<b>Параметры:</b><BR>";
-		print "$desc<BR>";
-		print "</td></tr>";
-		print "<tr><td align=center>";
-		
-		print "</td><td>&nbsp</td></tr>";
-		print"</table>";
-		}
-	}
+        print "<table border=0 bgcolor=#cccccc width=100%>";
+        print "<tr><td><hr color=#000000 width=100% size=1 align=left>";
+        print "</td></tr></table>";
+        print "<table border=0 bgcolor=#cccccc width=100%><tr><td width=250><center><img src='img/$img' alt='$name'><BR>";
+        print "<a href='main.php?act=gift&item_id=$item_id&to=$target' class=nick>подарить</a><BR>";
+        print "<a href='main.php?act=give&item_id=$item_id&to=$target' class=nick>передать</a>";
+        print "</td><td valign=top>";
+        print "<font color=#003388><B>$name</b></font>&nbsp(Масса: $massa)<a href='main.php?act=del_item&item=$item_id'><img src='img/icon/del.gif' width=14 height=14 border=0 alt='Выбросить предмет $name'></a><br>";
+        print "Долговечность: $iznos/$iznos_all<BR>";
+        print "<B>Требуется минимальное:</b><BR>";
+        if($min_level>$db["level"]){
+        print "&bull; Уровень: <font color=#D50000>$min_level</font><BR>";
+        }
+        if($min_level<=$db["level"]){
+        print "&bull; Уровень: $min_level<BR>";
+        }
+        if(!empty($min_i) && $min_i>$db["int"]){
+        print "&bull; Интеллект: <font color=#D50000>$min_i</font><BR>";
+        }
+        else if(!empty($min_i) && $min_i<=$db["int"]){
+        print "&bull; Интеллект: $min_i<BR>";
+        }
+        if(!empty($min_v) && $min_v>$db["wis"]){
+        print "&bull; Мудрость: <font color=#D50000>$min_v</font><BR>";
+        }
+        if(!empty($min_v) && $min_v<=$db["wis"]){
+        print "&bull; Мудрость: $min_v<BR>";
+        }
+        if($mp<=$db["mp"]){
+        print "&bull; Исп. маны: $mp<BR>";
+        }
+        if($mp>$db["mp"]){
+        print "&bull; Исп. маны: <font color=#D50000>$mp</font><BR>";
+        }
+        print "<b>Параметры:</b><BR>";
+        print "$desc<BR>";
+        print "</td></tr>";
+        print "<tr><td align=center>";
+        
+        print "</td><td>&nbsp</td></tr>";
+        print"</table>";
+        }
+    }
 
 }
 if($total==0){

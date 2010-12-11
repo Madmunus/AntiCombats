@@ -25,20 +25,20 @@ $test -> Battle ($db);
 <style type="text/css">
 <!--
 a:link {
-	color: #0000FF;
+    color: #0000FF;
 }
 a:visited {
-	color: #0000FF;
+    color: #0000FF;
 }
 a:hover {
-	color: #0099FF;
+    color: #0099FF;
 }
 a:active {
-	color: #0000FF;
+    color: #0000FF;
 }
 .style1 {
-	color: #FF3300;
-	font-weight: bold;
+    color: #FF3300;
+    font-weight: bold;
 }
 -->
 </style></head>

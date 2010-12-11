@@ -16,7 +16,7 @@ $infond = mysql_query("UPDATE lotto_fond SET fond=fond+1");
 ?><style type="text/css">
 <!--
 body {
-	background-color: #E4E4E4;
+    background-color: #E4E4E4;
 }
 -->
 </style>

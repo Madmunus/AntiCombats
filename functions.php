@@ -4,7 +4,7 @@ class database{
      include "conf.php";//Загружаем конфигурацию...
      $data = mysql_connect($base_name, $base_user, $base_pass);//Подключаем к БД
      mysql_select_db($db_name,$data);
-	 mysql_query("SET CHARSET cp1251");//Выбераем БД...
+     mysql_query("SET CHARSET cp1251");//Выбераем БД...
     }
 
     function get_value($column,$table,$login){
@@ -20,15 +20,15 @@ $base -> connect();
 
 function say ($to,$text,$sender)
 {
-	$result = mysql_query("SELECT room,city_game FROM characters WHERE login='$sender'");
-	$db = mysql_fetch_array($result);
-	$login=$to;
-	$room = $db["room"];
-	$city = $db["city_game"];
-	$d=date("H:i");
-	$time = time();
-	$text = "Смотритель private [$login] <B>$text</b></font>";
-	$S = mysql_query("INSERT INTO chat(date,name,room,msg,class,date_stamp,city) VALUES('$d','','$room','$text','sys','$time','$city')");
+    $result = mysql_query("SELECT room,city_game FROM characters WHERE login='$sender'");
+    $db = mysql_fetch_array($result);
+    $login=$to;
+    $room = $db["room"];
+    $city = $db["city_game"];
+    $d=date("H:i");
+    $time = time();
+    $text = "Смотритель private [$login] <B>$text</b></font>";
+    $S = mysql_query("INSERT INTO chat(date,name,room,msg,class,date_stamp,city) VALUES('$d','','$room','$text','sys','$time','$city')");
 }
 /*===============================================================*/
 /*===================запись в историю============================*/
@@ -598,7 +598,7 @@ mysql_query("SET CHARSET cp1251");
         if($hands == 2){
                 if($slot=="hand_r"){$n2q=mysql_query("UPDATE characters SET hand_r_type='$w_type',hand_r_free='0',hand_l_free='0' WHERE login='$who'");}
                 if($slot=="hand_l"){$n2q=mysql_query("UPDATE characters SET hand_l_type='$w_type',hand_l_free='0',hand_r_free='0' WHERE login='$who'");}
-				mysql_query("SET CHARSET cp1251");
+                mysql_query("SET CHARSET cp1251");
         }
         else{
                 if($slot=="hand_r"){$n2q=mysql_query("UPDATE characters SET hand_r_type='$w_type',hand_r_free='0' WHERE login='$who'");}
@@ -969,7 +969,7 @@ $pl1 = str_replace(" ","%20",$who);
         if(empty($clan_s)){$clan="";}
         else{$clan="<img src='img/clan/$clan_s.gif' border=0 alt='$clan_f'>";}
         if(empty($orden_d)){$orden="";}
-	else{
+    else{
 if ($orden_d==2) {$orden="<img src='img/orden/arm/$rang.gif' width=12 height=15 border=0 alt='$orden_dis'>";}
 else{$orden="<img src='img/orden/$orden_d.gif' border=0 alt='$orden_dis'>";}
 if ($orden_d==1) {$orden="<img src='img/orden/pal/$rang.gif' width=12 height=15 border=0 alt='$orden_dis'>";} }
@@ -989,35 +989,35 @@ showMN(<?echo "$mp[0],$mp[1]"?>);
 ?>
 var rnd = Math.random();
 //-- Смена хитпоинтов
-var delay = 123;	// Каждые 123сек. увеличение HP на 1%
-var redHP = 0.33;	// меньше 30% красный цвет
+var delay = 123;    // Каждые 123сек. увеличение HP на 1%
+var redHP = 0.33;    // меньше 30% красный цвет
 var yellowHP = 0.66;    // меньше 60% желтый цвет, иначе зеленый
-var TimerOn = -1;	// id таймера
+var TimerOn = -1;    // id таймера
 var tkHP, maxHP;
 var speed=1000;
 var mspeed=100;
 
 function setsHP(value, max, newspeed) {
-	tkHP=value; maxHP=max;
-	if (TimerOn>=0) { clearTimeout(TimerOn); TimerOn=-1; }
-	speed=newspeed;
-	setHPlocal();
+    tkHP=value; maxHP=max;
+    if (TimerOn>=0) { clearTimeout(TimerOn); TimerOn=-1; }
+    speed=newspeed;
+    setHPlocal();
 }
 function setHPlocal() {
-	if (tkHP>maxHP) { tkHP=maxHP; }
-	var le=Math.round(tkHP)+"/"+maxHP;
-	le=260 - (le.length + 2)*7;
-	var sz1 = Math.round(((le-1)/maxHP)*tkHP);
-	var sz2 = le - sz1;
-		if (tkHP/maxHP < redHP) { imag="img/icon/red.gif"; }
-		else {
-			if (tkHP/maxHP < yellowHP) { imag="img/icon/yellow.gif"; }
-			else { imag="img/icon/green.gif"; }
-		}
+    if (tkHP>maxHP) { tkHP=maxHP; }
+    var le=Math.round(tkHP)+"/"+maxHP;
+    le=260 - (le.length + 2)*7;
+    var sz1 = Math.round(((le-1)/maxHP)*tkHP);
+    var sz2 = le - sz1;
+        if (tkHP/maxHP < redHP) { imag="img/icon/red.gif"; }
+        else {
+            if (tkHP/maxHP < yellowHP) { imag="img/icon/yellow.gif"; }
+            else { imag="img/icon/green.gif"; }
+        }
         rhp=Math.round(tkHP)+"/"+maxHP;
-	tkHP = (tkHP+(maxHP/100)*speed/1000);
-	if (tkHP<maxHP) { TimerOn=setTimeout('setHPlocal()', delay*100); }
-	else { TimerOn=-1; }
+    tkHP = (tkHP+(maxHP/100)*speed/1000);
+    if (tkHP<maxHP) { TimerOn=setTimeout('setHPlocal()', delay*100); }
+    else { TimerOn=-1; }
 
 info.innerHTML="<table valign=bottom border=0 cellpadding=0 cellspacing=0 width=260 height=8 bgcolor=#dedede><tr valign=bottom><td><small>"+rhp+"</small></td><td align=right width=100%><img src='"+imag+"' alt='Уровень жизни' width="+sz1+" height='8'><img src='img/icon/grey.gif' alt='Уровень жизни' width="+sz2+" height='8'></td><td><span style='width:1px; height:10px'></span></td><td align=right><img border=0 src=img/icon/heart_03.gif alt='Уровень жизни' width=10 height=9></td></tr></table>";
 
@@ -1174,9 +1174,9 @@ $to_money=$data2["money"]+$sum;
 
           if($data["money"]>=$sum && $sum>0){
           $uq=mysql_query("UPDATE characters SET money='$who_money' WHERE login='$who'");
-		  mysql_query("SET CHARSET cp1251");
+          mysql_query("SET CHARSET cp1251");
           $tq=mysql_query("UPDATE characters SET money='$to_money' WHERE login='$to'");
-		  mysql_query("SET CHARSET cp1251");
+          mysql_query("SET CHARSET cp1251");
 
               if(empty($ip))
               {
@@ -1228,7 +1228,7 @@ $name=$item_info["name"];
          else
          {
          $q1=mysql_query("UPDATE inv SET owner='$to',gift='1',gift_author='$who' WHERE id=$itm");
-		 mysql_query("SET CHARSET cp1251");
+         mysql_query("SET CHARSET cp1251");
              if($q1){
 
                   if(empty($ip)){
@@ -1279,7 +1279,7 @@ $name=$item_info["name"];
          {
          $s1="UPDATE inv SET owner='$to' WHERE id=$itm";
          $q1=mysql_query($s1);
-		 mysql_query("SET CHARSET cp1251");
+         mysql_query("SET CHARSET cp1251");
              if($q1){
 
                  if(empty($ip))
@@ -1316,7 +1316,7 @@ mysql_query("SET CHARSET cp1251");
                     if($p == $who){
                     $battle = $TD1["battle_id"];
                     $Z = mysql_query("SELECT status FROM zayavka WHERE creator = $battle");
-					mysql_query("SET CHARSET cp1251");
+                    mysql_query("SET CHARSET cp1251");
                     $ZD = mysql_fetch_array($Z);
                         if($ZD["status"]==3){
                          goBattle($who);
@@ -1328,7 +1328,7 @@ mysql_query("SET CHARSET cp1251");
                   if($p == $who){
                   $battle = $TD2["battle_id"];
                   $Z = mysql_query("SELECT status FROM zayavka WHERE creator = $battle");
-				  mysql_query("SET CHARSET cp1251");
+                  mysql_query("SET CHARSET cp1251");
                   $ZD = mysql_fetch_array($Z);
                        if($ZD["status"]==3){
                         goBattle($who);
@@ -1350,19 +1350,19 @@ mysql_query("SET CHARSET cp1251");
 
         if($object_type=="medal"){
         $SI = mysql_query("SELECT * FROM medal WHERE id='$object_id'");
-		mysql_query("SET CHARSET cp1251");
+        mysql_query("SET CHARSET cp1251");
         $D = mysql_fetch_array($SI);
         $add_l = $D["add_l"];
         $add_u = $D["add_u"];
         $S_U = mysql_query("SELECT * FROM characters WHERE login='$who'");
-		mysql_query("SET CHARSET cp1251");
+        mysql_query("SET CHARSET cp1251");
         $D_U = mysql_fetch_array($S_U);
         $new_l = $D_U["dex"] - $add_l;
         $new_u = $D_U["con"] - $add_u;
         $U_U = mysql_query("UPDATE characters SET dex='$new_l',con='$new_u' WHERE login='$who'");
-		mysql_query("SET CHARSET cp1251");
+        mysql_query("SET CHARSET cp1251");
         $O_U = mysql_query("UPDATE inv SET wear = '0' WHERE id=$item_id");
-		mysql_query("SET CHARSET cp1251");
+        mysql_query("SET CHARSET cp1251");
         print "<script>location.href='main.php?act=inv&section=thing'</script>";
         }
      }
@@ -1380,19 +1380,19 @@ $object_id = $DATA["object_id"];
 
         if($object_type=="medal"){
         $SI = mysql_query("SELECT * FROM medal WHERE id='$object_id'");
-		mysql_query("SET CHARSET cp1251");
+        mysql_query("SET CHARSET cp1251");
         $D = mysql_fetch_array($SI);
         $add_l = $D["add_l"];
         $add_u = $D["add_u"];
         $S_U = mysql_query("SELECT * FROM characters WHERE login='$who'");
-		mysql_query("SET CHARSET cp1251");
+        mysql_query("SET CHARSET cp1251");
         $D_U = mysql_fetch_array($S_U);
         $new_l = $D_U["dex"] + $add_l;
         $new_u = $D_U["con"] + $add_u;
         $U_U = mysql_query("UPDATE characters SET dex='$new_l',con='$new_u' WHERE login='$who'");
-		mysql_query("SET CHARSET cp1251");
+        mysql_query("SET CHARSET cp1251");
         $O_U = mysql_query("UPDATE inv SET wear = '1' WHERE id=$item_id");
-		mysql_query("SET CHARSET cp1251");
+        mysql_query("SET CHARSET cp1251");
         print "<script>location.href='main.php?act=inv&section=thing'</script>";
         }
 }
@@ -1435,8 +1435,8 @@ $city=$db["city_game"];
         $d=date("H:i:s", mktime($chas-$GSM));
 
         $S = mysql_query("INSERT INTO chat(date,name,room,msg,class,date_stamp,city)
-		VALUES('$d','Кнут','$room','$phrase','us','".time()."','$city')");
-		mysql_query("SET CHARSET cp1251");
+        VALUES('$d','Кнут','$room','$phrase','us','".time()."','$city')");
+        mysql_query("SET CHARSET cp1251");
 }
 /*===============================================================*/
 function move($who,$dest){
@@ -1493,8 +1493,8 @@ $LOOK = mysql_query("SELECT * FROM river WHERE login = '$who'");
         if($data["login"] == $who){
 
                print "<script>location.href='river2.php?login=";
-	print($who);
-	print"'</script>";
+    print($who);
+    print"'</script>";
         }
     }
 
@@ -1575,10 +1575,10 @@ $is_crime="0";
         die();
         }else if($res["resource"]>$count){
          $DEL = mysql_query("UPDATE res SET resource=resource-$count WHERE locate='$locate'");
-		 mysql_query("SET CHARSET cp1251");
+         mysql_query("SET CHARSET cp1251");
          $INS = mysql_query("INSERT INTO miners(login,time,resource,count,type) VALUES('$who','$time','wood','$count','$locate')");
          print "<script>location.href='main.php'</script>";
-		 mysql_query("SET CHARSET cp1251");
+         mysql_query("SET CHARSET cp1251");
         }else{
          print "На участке нет такого колличества ресурсов.";
         }
@@ -1617,13 +1617,13 @@ BORDER-LEFT: #000000 1px solid; BORDER-RIGHT: #000000 1px solid; BORDER-TOP: #00
                 if($type == "dub"){$res_type = 1;}
                 for($i=1;$i<=$count;$i++){
                 $SSS = mysql_query("INSERT INTO inv(owner,object_id,object_type,object_razdel,gift,wear,iznos) VALUES('$who','$res_type','$res','thing','0','0','0')");
-				mysql_query("SET CHARSET cp1251");
+                mysql_query("SET CHARSET cp1251");
                 }
                 $S = mysql_query("DELETE FROM miners WHERE login='$who'");
-				mysql_query("SET CHARSET cp1251");
+                mysql_query("SET CHARSET cp1251");
                 $UP = mysql_query("UPDATE characters SET navik_wood=navik_wood+0.0*$count WHERE login='$who'");
                 print "Вы удачно добыли <B>$count</B> ед. ресурсов.<BR>";
-				mysql_query("SET CHARSET cp1251");
+                mysql_query("SET CHARSET cp1251");
                 die();
                 }
         }
@@ -1826,7 +1826,7 @@ $T1 = mysql_query("SELECT * FROM team1 WHERE battle_id='$creator'");
                 if(empty($clan)){$clan_img="";}
                 else{$clan_img="<img src='img/clan/$clan_s.gif' border=0 alt='$clan'>";}
                 if(empty($orden)){$orden_img="";}
-	        else{
+            else{
 if ($orden==2) {$orden_img="<img src='img/orden/arm/$rang.gif' width=12 height=15 border=0 alt='$orden_dis'>";}
 else{$orden_img="<img src='img/orden/$orden.gif' border=0 alt='$orden_dis'>";}
 if ($orden==1) {$orden_img="<img src='img/orden/pal/$rang.gif' width=12 height=15 border=0 alt='$orden_dis'>";} }
@@ -1863,7 +1863,7 @@ $T2 = mysql_query("SELECT * FROM team2 WHERE battle_id='$creator'");
                 if(empty($clan)){$clan_img="";}
                 else{$clan_img="<img src='img/clan/$clan_s.gif' border=0 alt='$clan'>";}
                 if(empty($orden)){$orden_img="";}
-	        else{
+            else{
 if ($orden==2) {$orden_img="<img src='img/orden/arm/$rang.gif' width=12 height=15 border=0 alt='$orden_dis'>";}
 else{$orden_img="<img src='img/orden/$orden.gif' border=0 alt='$orden_dis'>";}
 if ($orden==1) {$orden_img="<img src='img/orden/pal/$rang.gif' width=12 height=15 border=0 alt='$orden_dis'>";} }
@@ -2478,26 +2478,26 @@ while($DATA = mysql_fetch_array($T)){
 
 include "basexp.php";
 
-	$base_hp=array();
-	$base_hp[0]="40";
-	$base_hp[1]="50";
-	$base_hp[2]="60";
-	$base_hp[3]="70";
-	$base_hp[4]="90";
-	$base_hp[5]="110";
-	$base_hp[6]="140";
-	$base_hp[7]="300";
-	$base_hp[8]="450";
-	$base_hp[9]="550";
-	$base_hp[10]="600";
+    $base_hp=array();
+    $base_hp[0]="40";
+    $base_hp[1]="50";
+    $base_hp[2]="60";
+    $base_hp[3]="70";
+    $base_hp[4]="90";
+    $base_hp[5]="110";
+    $base_hp[6]="140";
+    $base_hp[7]="300";
+    $base_hp[8]="450";
+    $base_hp[9]="550";
+    $base_hp[10]="600";
       $base_hp[11]="700";
       $base_hp[12]="850";
       $base_hp[13]="950";
       $base_hp[14]="1050";
-	$base_hp[15]="1100";
-	$base_hp[16]="1200";
-	$base_hp[17]="1250";
-	$base_hp[18]="1350";
+    $base_hp[15]="1100";
+    $base_hp[16]="1200";
+    $base_hp[17]="1250";
+    $base_hp[18]="1350";
       $base_hp[19]="1500";
       $base_hp[20]="1600";
       $base_hp[21]="1700";
@@ -2506,10 +2506,10 @@ include "basexp.php";
       $base_hp[24]="1950";
       $base_hp[25]="2000";
       $base_hp[26]="2050";
-	$base_hp[27]="2150";
-	$base_hp[28]="2250";
-	$base_hp[29]="2350";
-	$base_hp[30]="2500";
+    $base_hp[27]="2150";
+    $base_hp[28]="2250";
+    $base_hp[29]="2350";
+    $base_hp[30]="2500";
       $base_hp[31]="2700";
       $base_hp[32]="2850";
       $base_hp[33]="3000";
@@ -2517,10 +2517,10 @@ include "basexp.php";
       $base_hp[35]="3200";
       $base_hp[36]="3300";
       $base_hp[37]="3400";
-	$base_hp[38]="3500";
-	$base_hp[39]="3600";
-	$base_hp[40]="3700";
-	$base_hp[41]="3800";
+    $base_hp[38]="3500";
+    $base_hp[39]="3600";
+    $base_hp[40]="3700";
+    $base_hp[41]="3800";
       $base_hp[42]="3900";
       $base_hp[43]="4000";
       $base_hp[44]="4100";
@@ -2698,7 +2698,7 @@ include "basexp.php";
         $WINNER=mysql_query($WINNER_SQL);
                 if($WINNER && !empty($player)){
         $d=date("H:i");
-	$city = $WINNER_DATA["city_game"];
+    $city = $WINNER_DATA["city_game"];
         $time = time();
         $room = $WINNER_DATA["room"];
         $login = $WINNER_DATA["login"];
@@ -2918,7 +2918,7 @@ while($DATA = mysql_fetch_array($T)){
                 if($LOSER && !empty($player)){
                         if($phrase == 0){
         $d=date("H:i");
-	$city = $LOSER_DATA["city_game"];
+    $city = $LOSER_DATA["city_game"];
         $time = time();
         $room = $LOSER_DATA["room"];
         $login = $LOSER_DATA["login"];

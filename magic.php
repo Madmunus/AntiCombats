@@ -24,24 +24,24 @@ $name = $DATA["name"];
 $mp = $DATA["mp"];
 $file = $DATA["file"];
 if($min_i == ''){$min_i=0;}
-	if(!empty($orden)){
-		if($orden == $db["orden"]){
-		$ordens = 1;
-		}
-		else{
-		$ordens = 0;
-		}
-	}
-	else{
-	$ordens = 1;
-	}
-	if($db["int"]>=$min_i && $db["wis"]>=$min_v && $db["level"]>=$min_l && $ordens == 1 && $db["mp"]>=$mp){
+    if(!empty($orden)){
+        if($orden == $db["orden"]){
+        $ordens = 1;
+        }
+        else{
+        $ordens = 0;
+        }
+    }
+    else{
+    $ordens = 1;
+    }
+    if($db["int"]>=$min_i && $db["wis"]>=$min_v && $db["level"]>=$min_l && $ordens == 1 && $db["mp"]>=$mp){
 
-	include "magic/$file";
+    include "magic/$file";
 
-	}
-	else{
+    }
+    else{
         print"<script>location.href=\"main.php?act=inv&section=thing&warning=3\";</script>";
-	}
+    }
 }
 ?>

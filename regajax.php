@@ -19,15 +19,15 @@ $adb->setErrorHandler("databaseErrorHandler");
 switch ($_POST['do'])
 {
   case 'checklogin':
-	unset ($_SESSION['reg_login']);
+    unset ($_SESSION['reg_login']);
     $login_check = $adb -> selectCell ("SELECT `guid` FROM `characters` WHERE `login` = ?s", $_POST['login']);
-	if ($login_check)
-	  echo "occupy";
-	else
-	{
-	  $_SESSION['reg_login'] = $_POST['login'];
-	  echo "free";
-	}
+    if ($login_check)
+      echo "occupy";
+    else
+    {
+      $_SESSION['reg_login'] = $_POST['login'];
+      echo "free";
+    }
   break;
 }
 ?>

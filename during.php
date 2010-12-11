@@ -39,20 +39,20 @@ $time_to_cure_f=0;
 }
 }
 
-	if($travm!=0){
-	$travm_i = "<img src='img/travma2.gif' alt='Персонаж поврежден'>";
-	}
-	else{$travm_i="";}
+    if($travm!=0){
+    $travm_i = "<img src='img/travma2.gif' alt='Персонаж поврежден'>";
+    }
+    else{$travm_i="";}
 
-	if($orden_d==1){$orden_dis="Белое братство";}
-	else if($orden_d==2){$orden_dis="Темное братство";}
-	else if($orden_d==3){$orden_dis="Нейтральное братство";}
-	else if($orden_d==4){$orden_dis="Алхимик";}
-	else if($orden_d==5){$orden_dis="Тюремный заключеный";}
-	if(empty($clan_s)){$clan="";}
-	else{$clan="<img src='img/clan/$clan_s.gif' border=0 alt='$clan_f'>";}
-	if(empty($orden_d)){$orden="";}
-	else{
+    if($orden_d==1){$orden_dis="Белое братство";}
+    else if($orden_d==2){$orden_dis="Темное братство";}
+    else if($orden_d==3){$orden_dis="Нейтральное братство";}
+    else if($orden_d==4){$orden_dis="Алхимик";}
+    else if($orden_d==5){$orden_dis="Тюремный заключеный";}
+    if(empty($clan_s)){$clan="";}
+    else{$clan="<img src='img/clan/$clan_s.gif' border=0 alt='$clan_f'>";}
+    if(empty($orden_d)){$orden="";}
+    else{
 if ($orden_d==2) {$orden="<img src='img/orden/arm/$rang.gif' width=12 height=15 border=0 alt='$orden_dis'>";} 
 else{$orden="<img src='img/orden/$orden_d.gif' border=0 alt='$orden_dis'>";}
 if ($orden_d==1) {$orden="<img src='img/orden/pal/$rang.gif' width=12 height=15 border=0 alt='$orden_dis'>";} }
@@ -122,50 +122,50 @@ while($D = mysql_fetch_array($S)){
 $cr = $D["creator"];
 $T1 = mysql_query("SELECT * FROM team1 WHERE battle_id=$cr");
 $T2 = mysql_query("SELECT * FROM team2 WHERE battle_id=$cr");
-	$team1 = "";
-	while($T1D = mysql_fetch_array($T1)){
-	$p = $T1D["player"];
+    $team1 = "";
+    while($T1D = mysql_fetch_array($T1)){
+    $p = $T1D["player"];
         $p1 = str_replace(" ","%20",$p);
-	$SP = mysql_query("SELECT level,battle,orden,clan_short,clan,rang FROM characters WHERE login='$p'");
-	$SPD = mysql_fetch_array($SP);
-	$lev = $SPD["level"];
-	$bid = $SPD["battle"];
-	$orden = $SPD["orden"];
-	$clan_s = $SPD["clan_short"];
-	$clan = $SPD["clan"];
-	$rang = $SPD["rang"];
-	if($orden!=0){ 
+    $SP = mysql_query("SELECT level,battle,orden,clan_short,clan,rang FROM characters WHERE login='$p'");
+    $SPD = mysql_fetch_array($SP);
+    $lev = $SPD["level"];
+    $bid = $SPD["battle"];
+    $orden = $SPD["orden"];
+    $clan_s = $SPD["clan_short"];
+    $clan = $SPD["clan"];
+    $rang = $SPD["rang"];
+    if($orden!=0){ 
 if ($orden==2) {$orden_d="<img src='img/orden/arm/$rang.gif' width=12 height=15 border=0 alt='$orden_dis'>";} 
 else{$orden_d="<img src='img/orden/$orden_d.gif' border=0 alt='$orden_dis'>";}
 if ($orden==1) {$orden_d="<img src='img/orden/pal/$rang.gif' width=12 height=15 border=0 alt='$orden_dis'>";}
-	}
-	if($clan!=''){
-	$clan_i = "<img src='img/clan/$clan_s.gif' alt='$clan'>";
-	}
-	$team1.="$orden_d$clan_i$p [$lev]<a href='info.php?log=$p1' target=$p.i><img src='img/inf.gif' border=0></a> ";
-	}
-	$team2 = "";
-	while($T2D = mysql_fetch_array($T2)){
-	$p = $T2D["player"];
+    }
+    if($clan!=''){
+    $clan_i = "<img src='img/clan/$clan_s.gif' alt='$clan'>";
+    }
+    $team1.="$orden_d$clan_i$p [$lev]<a href='info.php?log=$p1' target=$p.i><img src='img/inf.gif' border=0></a> ";
+    }
+    $team2 = "";
+    while($T2D = mysql_fetch_array($T2)){
+    $p = $T2D["player"];
         $p1 = str_replace(" ","%20",$p);
-	$SP = mysql_query("SELECT level,battle,orden,clan_short,clan,rang FROM characters WHERE login='$p'");
-	$SPD = mysql_fetch_array($SP);
-	$lev = $SPD["level"];
-	$bid = $SPD["battle"];
-	$orden = $SPD["orden"];
-	$clan_s = $SPD["clan_short"];
-	$clan = $SPD["clan"];
-	$rang = $SPD["rang"];
-	if($orden!=0){
+    $SP = mysql_query("SELECT level,battle,orden,clan_short,clan,rang FROM characters WHERE login='$p'");
+    $SPD = mysql_fetch_array($SP);
+    $lev = $SPD["level"];
+    $bid = $SPD["battle"];
+    $orden = $SPD["orden"];
+    $clan_s = $SPD["clan_short"];
+    $clan = $SPD["clan"];
+    $rang = $SPD["rang"];
+    if($orden!=0){
 if ($orden==2) {$orden_d="<img src='img/orden/arm/$rang.gif' width=12 height=15 border=0 alt='$orden_dis'>";} 
 else{$orden_d="<img src='img/orden/$orden_d.gif' border=0 alt='$orden_dis'>";}
 if ($orden==1) {$orden_d="<img src='img/orden/pal/$rang.gif' width=12 height=15 border=0 alt='$orden_dis'>";} 
-	}
-	if($clan!=''){
-	$clan_i = "<img src='img/clan/$clan_s.gif' alt='$clan'>";
-	}
-	$team2.="$orden_d$clan_i$p [$lev]<a href='info.php?log=$p1' target=$p.i><img src='img/inf.gif' border=0></a> ";
-	}
+    }
+    if($clan!=''){
+    $clan_i = "<img src='img/clan/$clan_s.gif' alt='$clan'>";
+    }
+    $team2.="$orden_d$clan_i$p [$lev]<a href='info.php?log=$p1' target=$p.i><img src='img/inf.gif' border=0></a> ";
+    }
 
 print "$team1 <B>VS</B> $team2 <a href='log.php?log=$bid' class=us2 target=_new>смотреть<small>>>></small></a><BR>";
 }

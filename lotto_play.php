@@ -6,28 +6,28 @@ $conn = @mysql_connect("$base_name","$base_user","$base_pass");
 !@mysql_select_db("$db_name",$conn);
 mysql_query("SET NAMES cp1251");
 $num = rand(0,9999);
-	$fondasd = mysql_query("SELECT * FROM lotto_fond");
-	$resta = mysql_fetch_array($fondasd);
-	$fond = $resta['fond'];
+    $fondasd = mysql_query("SELECT * FROM lotto_fond");
+    $resta = mysql_fetch_array($fondasd);
+    $fond = $resta['fond'];
 
-	$sqlwin = mysql_query("SELECT * FROM lotto WHERE number='$num'");
-	$reswinrow = mysql_num_rows($sqlwin);
-		if($reswinrow == 0){
-			$win = "нет";;
-			$sbrosf = mysql_query("UPDATE lotto_fond SET fond=0");
-			$sbrosl = mysql_query("TRUNCATE TABLE lotto");
-		}else{
-			while ($reswin = mysql_fetch_array($sqlwin)){
-			$win = $reswin['name'];
-			}
-			$plus = mysql_query("UPDATE characters SET money=money+'$fond' WHERE login='$win'");
-			$sbrosf = mysql_query("UPDATE lotto_fond SET fond=0");
-			$sbrosl = mysql_query("TRUNCATE TABLE lotto");
-			}
+    $sqlwin = mysql_query("SELECT * FROM lotto WHERE number='$num'");
+    $reswinrow = mysql_num_rows($sqlwin);
+        if($reswinrow == 0){
+            $win = "нет";;
+            $sbrosf = mysql_query("UPDATE lotto_fond SET fond=0");
+            $sbrosl = mysql_query("TRUNCATE TABLE lotto");
+        }else{
+            while ($reswin = mysql_fetch_array($sqlwin)){
+            $win = $reswin['name'];
+            }
+            $plus = mysql_query("UPDATE characters SET money=money+'$fond' WHERE login='$win'");
+            $sbrosf = mysql_query("UPDATE lotto_fond SET fond=0");
+            $sbrosl = mysql_query("TRUNCATE TABLE lotto");
+            }
 ?><style type="text/css">
 <!--
 body {
-	background-color: #E4E4E4;
+    background-color: #E4E4E4;
 }
 -->
 </style>

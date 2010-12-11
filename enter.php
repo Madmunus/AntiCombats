@@ -27,8 +27,8 @@ $password = $_POST['password'];
 <script type="text/javascript">
 if (navigator.appName != 'Netscape')
 {
-	alert('Поддерживается только браузер Mozilla Firefox');
-	location.href = 'index.php';
+  alert('Поддерживается только браузер Mozilla Firefox');
+  location.href = 'index.php';
 }
 </script>
 </head>
@@ -38,16 +38,16 @@ $top = "Произошла ошибка:<br><br><span class='err'>";
 $bot = "</span><br><br><a href='javascript: window.history.go(-1);' class='us2'>Назад</a><hr>";
 
 if (empty($login) || empty($password))
-	die ("$top Вы не ввели логин либо пароль.$bot");
+    die ("$top Вы не ввели логин либо пароль.$bot");
 
-$char_info = $adb -> selectRow ("	SELECT 	`guid`, 
-											`password`, 
-											`city`, 
-											`block`, 
-											`room`, 
-											`city` 
-									FROM `characters` 
-									WHERE `login` = ?s", $login) or die ("$top Логин $login не найден в базе.$bot");
+$char_info = $adb -> selectRow ("SELECT `guid`, 
+                                        `password`, 
+                                        `city`, 
+                                        `block`, 
+                                        `room`, 
+                                        `city` 
+                                 FROM `characters` 
+                                 WHERE `login` = ?s", $login) or die ("$top Логин $login не найден в базе.$bot");
 $guid = $char_info['guid'];
 $online = $adb -> selectCell ("SELECT `guid` FROM `online` WHERE `guid` = ?d", $guid);
 
@@ -55,33 +55,32 @@ $history = History::setguid($guid);
 
 if (session_is_registered ('guid') || $online)
 {
-	$adb -> query ("DELETE FROM `online` WHERE `guid` = ?d", $guid);
-	session_unregister ('guid');
-	$history -> authorization (0, $char_info['city'], 'wrong_count');
-	die ("$top Двое или больше пользователей пытаются играть с одной машины!<br>Попробуйте войти еще раз!$bot");
+  $adb -> query ("DELETE FROM `online` WHERE `guid` = ?d", $guid);
+  unset($_SESSION['guid']);
+  $history -> authorization (0, $char_info['city'], 'wrong_count');
+  die ("$top Двое или больше пользователей пытаются играть с одной машины!<br>Попробуйте войти еще раз!$bot");
 }
 else if (SHA1 ($guid.':'.$password) != $char_info['password'])
 {
-	$history -> authorization (0, $char_info['city'], 'wrong_password');
-	die ("$top Неверный пароль для $login.$bot");
+  $history -> authorization (0, $char_info['city'], 'wrong_password');
+  die ("$top Неверный пароль для $login.$bot");
 }
 else if ($char_info['block'])
 {
-	$history -> authorization (0, $char_info['city'], 'blocked');
-	die ("$top Внимание!!! Персонаж $login заблокирован!$bot");
+  $history -> authorization (0, $char_info['city'], 'blocked');
+  die ("$top Внимание!!! Персонаж $login заблокирован!$bot");
 }
 
 if (session_is_registered ('guid'))
 {
-	session_unregister ('guid');
-	session_register ('guid');
+  unset($_SESSION['guid']);
+  $_SESSION['guid'] = $guid;
 }
 else
-	session_register ('guid');
-$ip = $_SERVER['REMOTE_ADDR'];
+  $_SESSION['guid'] = $guid;
 
 $adb -> query ("INSERT INTO `online` (`guid`, `login_display`, `ip`, `city`, `room`, `last_time`) 
-				VALUES (?d, ?s, ?s, ?s, ?s, ?d);", $guid ,$login ,$ip ,$char_info['city'] ,$char_info['room'] ,time ());
+                VALUES (?d, ?s, ?s, ?s, ?s, ?d);", $guid ,$login ,$_SERVER['REMOTE_ADDR'] ,$char_info['city'] ,$char_info['room'] ,time ());
 $adb -> query ("UPDATE `characters` SET `last_go` = ?d WHERE `guid` = ?d", time () ,$guid);
 $zayavka_c_m = 1;
 $zayavka_c_o = 1;

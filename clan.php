@@ -40,47 +40,47 @@ print "<table><td width=200 valign=top><input type=button class=but value='Со�
 if($db["clan_take"]==1){
 print "<input type=button class=but value='Принять в клан' onClick=\"location.href='main.php?act=clan&do=3'\" style=\"width=150\"><BR><BR>";
 }
-		if($db["glava"]==1){
-		print "<input type=button class=but value='Сменить статус' onClick=\"location.href='main.php?act=clan&do=2&a=chin'\" style=\"width=150\"><BR><BR>";
-		print "<input type=button class=but value='Выгнать из клана' onClick=\"location.href='main.php?act=clan&do=2&a=out'\" style=\"width=150\"><BR><BR>";
-		print "<input type=button class=but value='Передать главенство' onClick=\"location.href='main.php?act=clan&do=2&a=give'\" style=\"width=150\"><BR><BR>";
-		print "<input type=button class=but value='Заместитель' onClick=\"location.href='main.php?act=clan&do=2&a=zam'\" style=\"width=150\"><BR><BR>";
-		print "<input type=button class=but value='Настройки клана' onClick=\"location.href='main.php?act=clan&do=2&a=opt'\" style=\"width=150\"><BR><BR>";
-		}
+        if($db["glava"]==1){
+        print "<input type=button class=but value='Сменить статус' onClick=\"location.href='main.php?act=clan&do=2&a=chin'\" style=\"width=150\"><BR><BR>";
+        print "<input type=button class=but value='Выгнать из клана' onClick=\"location.href='main.php?act=clan&do=2&a=out'\" style=\"width=150\"><BR><BR>";
+        print "<input type=button class=but value='Передать главенство' onClick=\"location.href='main.php?act=clan&do=2&a=give'\" style=\"width=150\"><BR><BR>";
+        print "<input type=button class=but value='Заместитель' onClick=\"location.href='main.php?act=clan&do=2&a=zam'\" style=\"width=150\"><BR><BR>";
+        print "<input type=button class=but value='Настройки клана' onClick=\"location.href='main.php?act=clan&do=2&a=opt'\" style=\"width=150\"><BR><BR>";
+        }
 print "<input type=button class=but value='Наш сайт' onClick=\"goSite()\" style=\"width=150\"><BR><BR></td><td>";
-		if(empty($a)){$a="";}
-			if($a=="chin"){
-			include "clan/chin.php";
-			}
-			if($a=="out"){
-			include "clan/out.php";
-			}
-			if($a=="give"){
-			include "clan/give.php";
-			}
-			if($a=="zam"){
-			include "clan/zam.php";
-			}
-			if($a=="opt"){
-			include "clan/opt.php";
-			}
+        if(empty($a)){$a="";}
+            if($a=="chin"){
+            include "clan/chin.php";
+            }
+            if($a=="out"){
+            include "clan/out.php";
+            }
+            if($a=="give"){
+            include "clan/give.php";
+            }
+            if($a=="zam"){
+            include "clan/zam.php";
+            }
+            if($a=="opt"){
+            include "clan/opt.php";
+            }
 if(!empty($do)){
-	if($do==1){
-	$S = mysql_query("SELECT * FROM characters WHERE clan='$clan_t' ORDER BY login ASC");
-	print "Список Ваших соклановцев:<BR>";
-		while($DAT = mysql_fetch_array($S)){
-		$log = $DAT["login"];
+    if($do==1){
+    $S = mysql_query("SELECT * FROM characters WHERE clan='$clan_t' ORDER BY login ASC");
+    print "Список Ваших соклановцев:<BR>";
+        while($DAT = mysql_fetch_array($S)){
+        $log = $DAT["login"];
                 $log1 = str_replace(" ","%20",$log);
-		$lev = $DAT["level"];
-		$chin = $DAT["chin"];
-		print "$orden$clan <b>$log</b> [$lev]<a href='info.php?log=$log1' target=_new$log><img src='img/inf.gif' border=0></a> - <B>$chin</B><BR>";
+        $lev = $DAT["level"];
+        $chin = $DAT["chin"];
+        print "$orden$clan <b>$log</b> [$lev]<a href='info.php?log=$log1' target=_new$log><img src='img/inf.gif' border=0></a> - <B>$chin</B><BR>";
 }
-	}
-	if($do == 3){
-		if($db["clan_take"] == 1){
-		include "clan/take.php";
-		}
-	}
+    }
+    if($do == 3){
+        if($db["clan_take"] == 1){
+        include "clan/take.php";
+        }
+    }
 }
 
 }

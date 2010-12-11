@@ -25,10 +25,10 @@ $db = mysql_fetch_array($result);
 $city=$db["city"];
 $room=$db["room"];
 
-	if($city != "Demons City"){
+    if($city != "Demons City"){
      print "<script>top.location.href='index.php'</script>";
     }
-	if($room != "Ремонтная мастерская"){
+    if($room != "Ремонтная мастерская"){
      print "<script>top.location.href='index.php'</script>";
     }
 
@@ -130,63 +130,63 @@ else{
 $SQL=mysql_query("SELECT * FROM inv WHERE owner='$login' AND object_razdel='obj' AND iznos>0");
 while($data=mysql_fetch_array($SQL)){
 
-	if($data["owner"]==$login){
-	print "<table border=0 width=650 bgcolor=#cccccc>";
-	$item_id=$data["id"];
-	$obj_id=$data["object_id"];
-	$obj_type=$data["object_type"];
-	$obj_section=$data["object_razdel"];
-	$wear=$data["wear"];
-	$iznos=$data["iznos"];
-	$tear_max=$data["tear_max"];
-	$gift=$data["gift"];
-	$gift_author=$data["gift_author"];
-	$is_artefakt=$data["is_artefakt"];
-	$is_personal=$data["is_personal"];
-	$presonal_owner=$data["personal_owner"];
-	$is_aligned=$data["is_aligned"];
-	$q2="SELECT * FROM $obj_type WHERE id=$obj_id";
-	$r2=mysql_query($q2);
-	$dat=mysql_fetch_array($r2);
-	$name=$dat["name"];
-	$img=$dat["img"];
-	$mass=$dat["mass"];
-	$price1=$data["iznos"]*0.1;
-	$price = sprintf ("%01.2f", $price1);
-	$price_gos=$dat["price"];
-	$min_s=$dat["min_str"];
-	$min_l=$dat["min_dex"];
-	$min_u=$dat["min_con"];
-	$min_p=$dat["min_vit"];
-	$min_i=$dat["min_int"];
-	$min_v=$dat["min_wis"];
-	$min_level=$dat["min_level"];
-	$add_s=$dat["add_str"];
-	$add_l=$dat["add_dex"];
-	$add_u=$dat["add_con"];
-	$add_hp=$dat["add_hp"];
-	$add_i=$dat["add_int"];
-	$add_mp=$dat["add_mp"];
-	$addsword=$dat["sword"];
-	$addaxe=$dat["axe"];
-	$addfail=$dat["fail"];
-	$addknife=$dat["knife"];
-	$addstaff=$dat["staff"];
-	$p_h=$dat["def_head"];
-	$p_c=$dat["def_corp"];
-	$p_p=$dat["def_poyas"];
-	$p_l=$dat["def_legs"];
-	$mf_crit=$dat["mf_crit"];
-	$mf_anticrit=$dat["mf_anticrit"];
-	$mf_uvorot=$dat["mf_uvorot"];
-	$mf_antiuvorot=$dat["mf_antiuvorot"];
-	$min_a=$dat["min_attack"];
-	$max_a=$dat["max_attack"];
-	$qq="SELECT * FROM characters WHERE login='$login'";
-	$res=mysql_query($qq);
-	$d=mysql_fetch_array($res);
-		if($wear==0){
-		
+    if($data["owner"]==$login){
+    print "<table border=0 width=650 bgcolor=#cccccc>";
+    $item_id=$data["id"];
+    $obj_id=$data["object_id"];
+    $obj_type=$data["object_type"];
+    $obj_section=$data["object_razdel"];
+    $wear=$data["wear"];
+    $iznos=$data["iznos"];
+    $tear_max=$data["tear_max"];
+    $gift=$data["gift"];
+    $gift_author=$data["gift_author"];
+    $is_artefakt=$data["is_artefakt"];
+    $is_personal=$data["is_personal"];
+    $presonal_owner=$data["personal_owner"];
+    $is_aligned=$data["is_aligned"];
+    $q2="SELECT * FROM $obj_type WHERE id=$obj_id";
+    $r2=mysql_query($q2);
+    $dat=mysql_fetch_array($r2);
+    $name=$dat["name"];
+    $img=$dat["img"];
+    $mass=$dat["mass"];
+    $price1=$data["iznos"]*0.1;
+    $price = sprintf ("%01.2f", $price1);
+    $price_gos=$dat["price"];
+    $min_s=$dat["min_str"];
+    $min_l=$dat["min_dex"];
+    $min_u=$dat["min_con"];
+    $min_p=$dat["min_vit"];
+    $min_i=$dat["min_int"];
+    $min_v=$dat["min_wis"];
+    $min_level=$dat["min_level"];
+    $add_s=$dat["add_str"];
+    $add_l=$dat["add_dex"];
+    $add_u=$dat["add_con"];
+    $add_hp=$dat["add_hp"];
+    $add_i=$dat["add_int"];
+    $add_mp=$dat["add_mp"];
+    $addsword=$dat["sword"];
+    $addaxe=$dat["axe"];
+    $addfail=$dat["fail"];
+    $addknife=$dat["knife"];
+    $addstaff=$dat["staff"];
+    $p_h=$dat["def_head"];
+    $p_c=$dat["def_corp"];
+    $p_p=$dat["def_poyas"];
+    $p_l=$dat["def_legs"];
+    $mf_crit=$dat["mf_crit"];
+    $mf_anticrit=$dat["mf_anticrit"];
+    $mf_uvorot=$dat["mf_uvorot"];
+    $mf_antiuvorot=$dat["mf_antiuvorot"];
+    $min_a=$dat["min_attack"];
+    $max_a=$dat["max_attack"];
+    $qq="SELECT * FROM characters WHERE login='$login'";
+    $res=mysql_query($qq);
+    $d=mysql_fetch_array($res);
+        if($wear==0){
+        
 
 print "<tr><td><hr color=#000000 noshade size=1 width=100% align=left><table><tr><td width=55%>";
 print "<center><img src='img/$img' border=0 alt='$name($iznos/$tear_max)'><BR>";
@@ -348,11 +348,11 @@ print "&bull; Мф. антиувертливости: $mf_antiuvorot<BR>";
 </td></tr></table></td></tr></table> 
 <?
 
-		}	
-	}
+        }    
+    }
 
 
-}	
+}    
 }
 die("<table border=0 width=650 bgcolor=#cccccc><TR><TD>
 </td></tr></table>

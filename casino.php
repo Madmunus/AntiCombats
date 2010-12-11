@@ -1,19 +1,19 @@
 <META http-equiv=Content-Type content="text/html; charset=utf-8"><title>Заработок!</title><style type="text/css">
 <!--
 body {
-	background-image: url(/img/fon_white.jpg);
+    background-image: url(/img/fon_white.jpg);
 }
 a:link {
-	color: #0099FF;
+    color: #0099FF;
 }
 a:visited {
-	color: #0099FF;
+    color: #0099FF;
 }
 a:hover {
-	color: #0099FF;
+    color: #0099FF;
 }
 a:active {
-	color: #0099FF;
+    color: #0099FF;
 }
 -->
 </style>

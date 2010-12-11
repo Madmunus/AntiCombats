@@ -6,19 +6,19 @@
   include "functions.php";
 
   $UNWEAR_S = mysql_query("SELECT * FROM characters");
-	if(!$UNWEAR_S){
-	print "wrong connect!";
-	}
-	else{
-	print "conected...<BR>";
-	}
+    if(!$UNWEAR_S){
+    print "wrong connect!";
+    }
+    else{
+    print "conected...<BR>";
+    }
 
     while($DATA = mysql_fetch_array($UNWEAR_S)){
      $login = $DATA["login"];
-	if(!empty($login) && $login!="."){
+    if(!empty($login) && $login!="."){
      unwear_full($login);
      print "$login done<BR>";
-	}
+    }
     }
   echo mysql_error();
   die("done");

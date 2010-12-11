@@ -12,7 +12,7 @@ $adb->setErrorHandler("databaseErrorHandler");
 $test = new test;
 
 if (empty($login))
-	echo "<script>top.location.href='index.php';</script>";
+    echo "<script>top.location.href='index.php';</script>";
 
 include ("functions.php");
 
@@ -41,26 +41,26 @@ $test -> Battle ($db);
 
 if ($db['battle'] == 0)
 {
-	if ($time_to_cure > 0)
-	{
-		$percent_hp = floor ((100 * $time_to_cure) / 1200);
-		$percent = 100 - $percent_hp;
-		$hp[0] = floor (($hhh * $percent) / 100);
-		$q = $adb -> query ("	UPDATE `characters` 
-								SET `hp` = '$hp[0]' 
-								WHERE `login` = '$login';
-							");
-	}
-	else
-	{
-		$hp[0] = $db['hp_all'];
-		$q = $adb -> query ("	UPDATE `characters` 
-								SET `hp` = '$hp[0]', 
-									`cure_hp` = '0' 
-								WHERE `login` = '$login';
-								");
-		$time_to_cure_f = 0;
-	}
+    if ($time_to_cure > 0)
+    {
+        $percent_hp = floor ((100 * $time_to_cure) / 1200);
+        $percent = 100 - $percent_hp;
+        $hp[0] = floor (($hhh * $percent) / 100);
+        $q = $adb -> query ("    UPDATE `characters` 
+                                SET `hp` = '$hp[0]' 
+                                WHERE `login` = '$login';
+                            ");
+    }
+    else
+    {
+        $hp[0] = $db['hp_all'];
+        $q = $adb -> query ("    UPDATE `characters` 
+                                SET `hp` = '$hp[0]', 
+                                    `cure_hp` = '0' 
+                                WHERE `login` = '$login';
+                                ");
+        $time_to_cure_f = 0;
+    }
 }
 
 $travm_i = ($travm != 0) ?"<img src='img/travma2.gif' title='Персонаж повежден'>" :"";
@@ -78,16 +78,16 @@ $orden = ($orden_d == 1) ?"<img src='img/orden/pal/$rang.gif' width='12' height=
 <body bgColor="#e2e0e0" leftMargin="5" topMargin="5" marginheight="5" marginwidth="5">
 <div align="left">
 <table align="center" width="100%" border="0" cellspacing="0" cellpadding="0">
-	<tr>
-		<td align="left" valign="middle" width="50%"><b><font size="2"><?showHPMP($login);?></font></b></td>
-		<td align="right" valign="middle">
-			<input type="button" value="Обновить" onclick="location.href = 'boy_bot.php';">
-			<input type="button" value="Вернуться" onclick="location.href = 'main.php?act=none';">
-		</td>
-	</tr>
+    <tr>
+        <td align="left" valign="middle" width="50%"><b><font size="2"><?showHPMP($login);?></font></b></td>
+        <td align="right" valign="middle">
+            <input type="button" value="Обновить" onclick="location.href = 'boy_bot.php';">
+            <input type="button" value="Вернуться" onclick="location.href = 'main.php?act=none';">
+        </td>
+    </tr>
 </table>
 <table align="center" cellSpacing="1" cellPadding="1" width="100%">
-	<tr>
+    <tr>
 <?
 if($room == "Зал воинов" || $room == "Зал воинов 2" || $room == "Зал воинов 3" || $room == "Будуар" || $room == "Рыцарский Зал" || $room == "Комната Знахаря" || $room == "Торговый Зал" || $room == "Зал закона")
 {
@@ -122,33 +122,33 @@ die ();
 <?
 if (isset($train))
 {
-	$q_team1 = $adb -> selectCell ("SELECT `player` FROM `team1` WHERE `player` = '$login';");
-	$q_team2 = $adb -> selectCell ("SELECT `player` FROM `team2` WHERE `player` = '$login';");
-	if ($q_team1 || $q_team2)
-	{
-		echo "Вы не можете принять этот вызов! Сначала отзовите свою заявку.<br>";
-		die ();
+    $q_team1 = $adb -> selectCell ("SELECT `player` FROM `team1` WHERE `player` = '$login';");
+    $q_team2 = $adb -> selectCell ("SELECT `player` FROM `team2` WHERE `player` = '$login';");
+    if ($q_team1 || $q_team2)
+    {
+        echo "Вы не можете принять этот вызов! Сначала отзовите свою заявку.<br>";
+        die ();
 
-	}
-	if ($db['hp_all'] / 3 > $db['hp'])
-	{
-		echo "Вы слишком ослаблены для поединка! Восстановитесь!<br>";
-		die ();
-	}
-	if ($db['level'] > 5)
-	{
-		echo "К сожалению, эти поединки проводятся до 5-го уровня.";
-		die ();
-	}
-	else
-	{
-		unwear_full ($login);
-		startTrain ($login);
-	}
+    }
+    if ($db['hp_all'] / 3 > $db['hp'])
+    {
+        echo "Вы слишком ослаблены для поединка! Восстановитесь!<br>";
+        die ();
+    }
+    if ($db['level'] > 5)
+    {
+        echo "К сожалению, эти поединки проводятся до 5-го уровня.";
+        die ();
+    }
+    else
+    {
+        unwear_full ($login);
+        startTrain ($login);
+    }
 }
 else
 {
-	echo "<input type='button' value=' Начать поединок ' class='but' onClick=\"location.href = '?train=1';\">";
+    echo "<input type='button' value=' Начать поединок ' class='but' onClick=\"location.href = '?train=1';\">";
 }
 ?>
 </center>

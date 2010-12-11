@@ -65,11 +65,11 @@ $s2=mysql_query("Update characters Set podval ='Подвал $ox$x$oy' where log
 $QUERY=mysql_query("SELECT * FROM characters WHERE login='$login'");
 $data=mysql_fetch_array($QUERY);
 if ($data["battle"]=="0") {
-	$at = 1;
-	if($at == 1){
-		$attacker = 'tester';
-		attack($login,$attacker,'1');
-	}
+    $at = 1;
+    if($at == 1){
+        $attacker = 'tester';
+        attack($login,$attacker,'1');
+    }
 }
 
 }

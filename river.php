@@ -30,8 +30,8 @@ testBattle($login);
     <td width="5" valign="top" align="left"><img border="0" src="buttons/1_1.gif" width="5" height="5"></td>
     <td width="400" valign="top" face="time new romanina" align="left"><b><font  color="#CC0000">Правила:<br>
       </font></b><br>1)не кто не наподает на рыбаков</br>
-	  <br>2)рыба продаёться в магазин - обмену не пренодлежит</br>
-	  <br>3)пруд обнавляеться (сам) каждые 30 минут</br>
+      <br>2)рыба продаёться в магазин - обмену не пренодлежит</br>
+      <br>3)пруд обнавляеться (сам) каждые 30 минут</br>
       </b></font>
        <p><b><font face="Tahoma" size="2" color="#CC0000">Передвижение:<br>
       </font></b>

@@ -9,14 +9,14 @@ $sql = mysql_query("SELECT * FROM characters WHERE login='$login'");
 while ($res = mysql_fetch_array($sql)){
 $money = $res['money'];
 }
-	$fondasd = mysql_query("SELECT * FROM lotto_fond");
-	$resta = mysql_fetch_array($fondasd);
-	$fond = $resta['fond'];
+    $fondasd = mysql_query("SELECT * FROM lotto_fond");
+    $resta = mysql_fetch_array($fondasd);
+    $fond = $resta['fond'];
 if($act == none){
 ?><style type="text/css">
 <!--
 body {
-	background-color: #E4E4E4;
+    background-color: #E4E4E4;
 }
 -->
 </style>
@@ -59,14 +59,14 @@ if ($orden == 1){
 <?
 exit();}
 if ($act == "buy"){
-	if ($money >= "100000000000000000000000.00"){
-	print "<META HTTP-EQUIV='Refresh' CONTENT = '0; URL=lotto_buy.php'>";
-	exit();}
-	if ($money < "100000000000000000000000.00"){
-	print "У вас недостаточно денег";
-	exit();}
+    if ($money >= "100000000000000000000000.00"){
+    print "<META HTTP-EQUIV='Refresh' CONTENT = '0; URL=lotto_buy.php'>";
+    exit();}
+    if ($money < "100000000000000000000000.00"){
+    print "У вас недостаточно денег";
+    exit();}
 }
 if ($act == "play"){
-	print "<META HTTP-EQUIV='Refresh' CONTENT = '604800; URL=lotto_play.php'>";
+    print "<META HTTP-EQUIV='Refresh' CONTENT = '604800; URL=lotto_play.php'>";
 exit();}
 ?>

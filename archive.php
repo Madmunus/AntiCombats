@@ -48,20 +48,20 @@ $time_to_cure_f=0;
 }
 }
 
-	if($travm!=0){
-	$travm_i = "<img src='img/travma2.gif' alt='Персонаж поврежден'>";
-	}
-	else{$travm_i="";}
+    if($travm!=0){
+    $travm_i = "<img src='img/travma2.gif' alt='Персонаж поврежден'>";
+    }
+    else{$travm_i="";}
 
-	if($orden_d==1){$orden_dis="Белое братство";}
-	else if($orden_d==2){$orden_dis="Темное братство";}
-	else if($orden_d==3){$orden_dis="Нейтральное братство";}
-	else if($orden_d==4){$orden_dis="Алхимик";}
-	else if($orden_d==5){$orden_dis="Тюремный заключеный";}
-	if(empty($clan_s)){$clan="";}
-	else{$clan="<img src='img/clan/$clan_s.gif' border=0 alt='$clan_f'>";}
-	if(empty($orden_d)){$orden="";}
-	else{
+    if($orden_d==1){$orden_dis="Белое братство";}
+    else if($orden_d==2){$orden_dis="Темное братство";}
+    else if($orden_d==3){$orden_dis="Нейтральное братство";}
+    else if($orden_d==4){$orden_dis="Алхимик";}
+    else if($orden_d==5){$orden_dis="Тюремный заключеный";}
+    if(empty($clan_s)){$clan="";}
+    else{$clan="<img src='img/clan/$clan_s.gif' border=0 alt='$clan_f'>";}
+    if(empty($orden_d)){$orden="";}
+    else{
 if ($orden_d==2) {$orden="<img src='img/orden/arm/$rang.gif' width=12 height=15 border=0 alt='$orden_dis'>";} 
 else{$orden="<img src='img/orden/$orden_d.gif' border=0 alt='$orden_dis'>";}
 if ($orden_d==1) {$orden="<img src='img/orden/pal/$rang.gif' width=12 height=15 border=0 alt='$orden_dis'>";} }
@@ -149,92 +149,92 @@ if(!empty($target) AND !empty($view)){
 $date = str_replace(".","",$date);
 $SEEK = mysql_query("SELECT * FROM battles WHERE status='finished'");
 $i=1;
-	while($DATA = mysql_fetch_array($SEEK)){
-	$date_db = substr($DATA["date"],0,10);
+    while($DATA = mysql_fetch_array($SEEK)){
+    $date_db = substr($DATA["date"],0,10);
     $date_db = str_replace("-","",$date_db);
-		if($date == $date_db){
-		$bid = $DATA["id"];
-		$TEAM1 = mysql_query("SELECT player,ip FROM team1_history WHERE battle_id='$bid'");
-		$TEAM2 = mysql_query("SELECT player,ip FROM team2_history WHERE battle_id='$bid'");
+        if($date == $date_db){
+        $bid = $DATA["id"];
+        $TEAM1 = mysql_query("SELECT player,ip FROM team1_history WHERE battle_id='$bid'");
+        $TEAM2 = mysql_query("SELECT player,ip FROM team2_history WHERE battle_id='$bid'");
 
-		while($T1_D = mysql_fetch_array($TEAM1)){
-				if($T1_D["player"] == $target){
-				$team1 = "";
-				$team2 = "";
-				if($DATA["win"]==1){$win1 = "<img src='img/icon/unlock.gif' alt='Победа за этой командой'>";$win2="";}
-				else{$win2 = "<img src='img/icon/unlock.gif' alt='Победа за этой командой'>";$win1="";}
-				$LIST_TEAM1 = mysql_query("SELECT player,ip FROM team1_history WHERE battle_id='$bid'");
-				while($T1_LISTD = mysql_fetch_array($LIST_TEAM1)){
-				$pl = $T1_LISTD["player"];
+        while($T1_D = mysql_fetch_array($TEAM1)){
+                if($T1_D["player"] == $target){
+                $team1 = "";
+                $team2 = "";
+                if($DATA["win"]==1){$win1 = "<img src='img/icon/unlock.gif' alt='Победа за этой командой'>";$win2="";}
+                else{$win2 = "<img src='img/icon/unlock.gif' alt='Победа за этой командой'>";$win1="";}
+                $LIST_TEAM1 = mysql_query("SELECT player,ip FROM team1_history WHERE battle_id='$bid'");
+                while($T1_LISTD = mysql_fetch_array($LIST_TEAM1)){
+                $pl = $T1_LISTD["player"];
                                 $pl1 = str_replace(" ","%20",$pl);
-				if($orden == 1){
-				$ip = $T1_LISTD["ip"];
-				$ip_t = "<span class=us2>(<i>ip: <small>$ip</small></I>)</span>";
-				}
-				else{$ip_t = "";}
-				$PL_L = mysql_query("SELECT level FROM characters WHERE login='$pl'");
-				$PL_LD = mysql_fetch_array($PL_L);
-				$lev = $PL_LD["level"];
-				$team1 .= "$pl$ip_t&nbsp[$lev]<a href='info.php?log=$pl1' target=$pl><img src='img/inf.gif' border=0></a>,";
-				}
-				$LIST_TEAM2 = mysql_query("SELECT player,ip FROM team2_history WHERE battle_id='$bid'");
-				while($T2_LISTD = mysql_fetch_array($LIST_TEAM2)){
-				$pl = $T2_LISTD["player"];
+                if($orden == 1){
+                $ip = $T1_LISTD["ip"];
+                $ip_t = "<span class=us2>(<i>ip: <small>$ip</small></I>)</span>";
+                }
+                else{$ip_t = "";}
+                $PL_L = mysql_query("SELECT level FROM characters WHERE login='$pl'");
+                $PL_LD = mysql_fetch_array($PL_L);
+                $lev = $PL_LD["level"];
+                $team1 .= "$pl$ip_t&nbsp[$lev]<a href='info.php?log=$pl1' target=$pl><img src='img/inf.gif' border=0></a>,";
+                }
+                $LIST_TEAM2 = mysql_query("SELECT player,ip FROM team2_history WHERE battle_id='$bid'");
+                while($T2_LISTD = mysql_fetch_array($LIST_TEAM2)){
+                $pl = $T2_LISTD["player"];
                                 $pl1 = str_replace(" ","%20",$pl);
-				if($orden == 1){
-				$ip = $T2_LISTD["ip"];
-				$ip_t = "<span class=us2>(<i>ip: <small>$ip</small></I>)</span>";
-				}
-				else{$ip_t = "";}
-				$PL_L = mysql_query("SELECT level FROM characters WHERE login='$pl'");
-				$PL_LD = mysql_fetch_array($PL_L);
-				$lev = $PL_LD["level"];
-				$team2 .= "$pl$ip_t&nbsp[$lev]<a href='info.php?log=$pl1' target=$pl><img src='img/inf.gif' border=0></a>,";
-				}
-				print "$i. <span class=p1>$team1</span>$win1 <B>VS</b> <span class=p2>$team2</span>$win2 - <a href='log.php?log=$bid' class=us2 target=battle_$bid>смотреть <small>>>></small></a><BR>";
-				$i++;
-				}
-			}
-			while($T2_D = mysql_fetch_array($TEAM2)){
-				if($T2_D["player"] == $target){
-				$team1 = "";
-				$team2 = "";
-				if($DATA["win"]==1){$win1 = "<img src='img/icon/unlock.gif' alt='Победа за этой командой'>";$win2="";}
-				else{$win2 = "<img src='img/icon/unlock.gif' alt='Победа за этой командой'>";$win1="";}
-				$LIST_TEAM1 = mysql_query("SELECT player,ip FROM team1_history WHERE battle_id='$bid'");
-				while($T1_LISTD = mysql_fetch_array($LIST_TEAM1)){
-				$pl = $T1_LISTD["player"];
+                if($orden == 1){
+                $ip = $T2_LISTD["ip"];
+                $ip_t = "<span class=us2>(<i>ip: <small>$ip</small></I>)</span>";
+                }
+                else{$ip_t = "";}
+                $PL_L = mysql_query("SELECT level FROM characters WHERE login='$pl'");
+                $PL_LD = mysql_fetch_array($PL_L);
+                $lev = $PL_LD["level"];
+                $team2 .= "$pl$ip_t&nbsp[$lev]<a href='info.php?log=$pl1' target=$pl><img src='img/inf.gif' border=0></a>,";
+                }
+                print "$i. <span class=p1>$team1</span>$win1 <B>VS</b> <span class=p2>$team2</span>$win2 - <a href='log.php?log=$bid' class=us2 target=battle_$bid>смотреть <small>>>></small></a><BR>";
+                $i++;
+                }
+            }
+            while($T2_D = mysql_fetch_array($TEAM2)){
+                if($T2_D["player"] == $target){
+                $team1 = "";
+                $team2 = "";
+                if($DATA["win"]==1){$win1 = "<img src='img/icon/unlock.gif' alt='Победа за этой командой'>";$win2="";}
+                else{$win2 = "<img src='img/icon/unlock.gif' alt='Победа за этой командой'>";$win1="";}
+                $LIST_TEAM1 = mysql_query("SELECT player,ip FROM team1_history WHERE battle_id='$bid'");
+                while($T1_LISTD = mysql_fetch_array($LIST_TEAM1)){
+                $pl = $T1_LISTD["player"];
                                 $pl1 = str_replace(" ","%20",$pl);
-				if($orden == 1){
-				$ip = $T1_LISTD["ip"];
-				$ip_t = "<span class=us2>(<i>ip: <small>$ip</small></I>)</span>";
-				}
-				else{$ip_t = "";}
-				$PL_L = mysql_query("SELECT level FROM characters WHERE login='$pl'");
-				$PL_LD = mysql_fetch_array($PL_L);
-				$lev = $PL_LD["level"];
-				$team1 .= "$pl$ip_t&nbsp[$lev]<a href='info.php?log=$pl1' target=$pl><img src='img/inf.gif' border=0></a>,";
-				}
-				$LIST_TEAM2 = mysql_query("SELECT player,ip FROM team2_history WHERE battle_id='$bid'");
-				while($T2_LISTD = mysql_fetch_array($LIST_TEAM2)){
-				$pl = $T2_LISTD["player"];
+                if($orden == 1){
+                $ip = $T1_LISTD["ip"];
+                $ip_t = "<span class=us2>(<i>ip: <small>$ip</small></I>)</span>";
+                }
+                else{$ip_t = "";}
+                $PL_L = mysql_query("SELECT level FROM characters WHERE login='$pl'");
+                $PL_LD = mysql_fetch_array($PL_L);
+                $lev = $PL_LD["level"];
+                $team1 .= "$pl$ip_t&nbsp[$lev]<a href='info.php?log=$pl1' target=$pl><img src='img/inf.gif' border=0></a>,";
+                }
+                $LIST_TEAM2 = mysql_query("SELECT player,ip FROM team2_history WHERE battle_id='$bid'");
+                while($T2_LISTD = mysql_fetch_array($LIST_TEAM2)){
+                $pl = $T2_LISTD["player"];
                                 $pl1 = str_replace(" ","%20",$pl);
-				if($orden == 1){
-				$ip = $T2_LISTD["ip"];
-				$ip_t = "<span class=us2>(<i>ip: <small>$ip</small></I>)</span>";
-				}
-				else{$ip_t = "";}
-				$PL_L = mysql_query("SELECT level FROM characters WHERE login='$pl'");
-				$PL_LD = mysql_fetch_array($PL_L);
-				$lev = $PL_LD["level"];
-				$team2 .= "$pl$ip_t&nbsp[$lev]<a href='info.php?log=$pl1' target=$pl><img src='img/inf.gif' border=0></a>,";
-				}
-				print "$i. <span class=p1>$team1</span>$win1 <B>VS</b> <span class=p2>$team2</span>$win2 - <a href='log.php?log=$bid' class=us2 target=battle_$bid>смотреть <small>>>></small></a><BR>";
-				$i++;
-				}
-			}
-		}
-	}
+                if($orden == 1){
+                $ip = $T2_LISTD["ip"];
+                $ip_t = "<span class=us2>(<i>ip: <small>$ip</small></I>)</span>";
+                }
+                else{$ip_t = "";}
+                $PL_L = mysql_query("SELECT level FROM characters WHERE login='$pl'");
+                $PL_LD = mysql_fetch_array($PL_L);
+                $lev = $PL_LD["level"];
+                $team2 .= "$pl$ip_t&nbsp[$lev]<a href='info.php?log=$pl1' target=$pl><img src='img/inf.gif' border=0></a>,";
+                }
+                print "$i. <span class=p1>$team1</span>$win1 <B>VS</b> <span class=p2>$team2</span>$win2 - <a href='log.php?log=$bid' class=us2 target=battle_$bid>смотреть <small>>>></small></a><BR>";
+                $i++;
+                }
+            }
+        }
+    }
 }
 
 if(!empty($target) AND !empty($scan)){
@@ -243,60 +243,60 @@ $GDB = mysql_fetch_array($GET_DB);
 $ip_target = $GDB["reg_ip"];
 
 $SEEK_IP1 = mysql_query("SELECT * FROM team1_history WHERE ip = '$ip_target'");
-	while($DAT = mysql_fetch_array($SEEK_IP1)){
-	$bid = $DAT["battle_id"];
-	$T1 = mysql_query("SELECT player FROM team1_history WHERE battle_id='$bid'");
-	$team1 = "";
-		while($TD1 = mysql_fetch_array($T1)){
-		$pl = $TD1["player"];
+    while($DAT = mysql_fetch_array($SEEK_IP1)){
+    $bid = $DAT["battle_id"];
+    $T1 = mysql_query("SELECT player FROM team1_history WHERE battle_id='$bid'");
+    $team1 = "";
+        while($TD1 = mysql_fetch_array($T1)){
+        $pl = $TD1["player"];
                 $pl1 = str_replace(" ","%20",$pl);
-		$PL_L = mysql_query("SELECT level FROM characters WHERE login='$pl'");
-		$PL_LD = mysql_fetch_array($PL_L);
-		$lev = $PL_LD["level"];
-		$team1 .= "$pl&nbsp[$lev]<a href='info.php?log=$pl1' target=$pl><img src='img/inf.gif' border=0></a>,";
-		}
+        $PL_L = mysql_query("SELECT level FROM characters WHERE login='$pl'");
+        $PL_LD = mysql_fetch_array($PL_L);
+        $lev = $PL_LD["level"];
+        $team1 .= "$pl&nbsp[$lev]<a href='info.php?log=$pl1' target=$pl><img src='img/inf.gif' border=0></a>,";
+        }
 
-	$T2 = mysql_query("SELECT player FROM team2_history WHERE battle_id='$bid'");
-	$team2 = "";
-		while($TD2 = mysql_fetch_array($T2)){
-		$pl = $TD2["player"];
+    $T2 = mysql_query("SELECT player FROM team2_history WHERE battle_id='$bid'");
+    $team2 = "";
+        while($TD2 = mysql_fetch_array($T2)){
+        $pl = $TD2["player"];
                 $pl1 = str_replace(" ","%20",$pl);
-		$PL_L = mysql_query("SELECT level FROM characters WHERE login='$pl'");
-		$PL_LD = mysql_fetch_array($PL_L);
-		$lev = $PL_LD["level"];
-		$team2 .= "$pl&nbsp[$lev]<a href='info.php?log=$pl1' target=$pl><img src='img/inf.gif' border=0></a>,";
-		}
+        $PL_L = mysql_query("SELECT level FROM characters WHERE login='$pl'");
+        $PL_LD = mysql_fetch_array($PL_L);
+        $lev = $PL_LD["level"];
+        $team2 .= "$pl&nbsp[$lev]<a href='info.php?log=$pl1' target=$pl><img src='img/inf.gif' border=0></a>,";
+        }
 
-	$bat .= "$bid. <span class=p1>$team1</span> <B>VS</B> <span class=p2>$team2</span> - <a href='log.php?log=$bid' class=us2 target=battle_$bid>смотреть <small>>>></small></a><BR>";
-	}
+    $bat .= "$bid. <span class=p1>$team1</span> <B>VS</B> <span class=p2>$team2</span> - <a href='log.php?log=$bid' class=us2 target=battle_$bid>смотреть <small>>>></small></a><BR>";
+    }
 
 $SEEK_IP2 = mysql_query("SELECT * FROM team2_history WHERE ip = '$ip_target'");
-	while($DAT = mysql_fetch_array($SEEK_IP2)){
-	$bid = $DAT["battle_id"];
-	$T12 = mysql_query("SELECT player FROM team1_history WHERE battle_id='$bid'");
-	$team1 = "";
-		while($TD12 = mysql_fetch_array($T12)){
-		$pl = $TD12["player"];
+    while($DAT = mysql_fetch_array($SEEK_IP2)){
+    $bid = $DAT["battle_id"];
+    $T12 = mysql_query("SELECT player FROM team1_history WHERE battle_id='$bid'");
+    $team1 = "";
+        while($TD12 = mysql_fetch_array($T12)){
+        $pl = $TD12["player"];
                 $pl1 = str_replace(" ","%20",$pl);
-		$PL_L = mysql_query("SELECT level FROM characters WHERE login='$pl'");
-		$PL_LD = mysql_fetch_array($PL_L);
-		$lev = $PL_LD["level"];
-		$team1 .= "$pl&nbsp[$lev]<a href='info.php?log=$pl1' target=$pl><img src='img/inf.gif' border=0></a>,";
-		}
+        $PL_L = mysql_query("SELECT level FROM characters WHERE login='$pl'");
+        $PL_LD = mysql_fetch_array($PL_L);
+        $lev = $PL_LD["level"];
+        $team1 .= "$pl&nbsp[$lev]<a href='info.php?log=$pl1' target=$pl><img src='img/inf.gif' border=0></a>,";
+        }
 
-	$T22 = mysql_query("SELECT player FROM team2_history WHERE battle_id='$bid'");
-	$team2 = "";
-		while($TD22 = mysql_fetch_array($T22)){
-		$pl = $TD22["player"];
+    $T22 = mysql_query("SELECT player FROM team2_history WHERE battle_id='$bid'");
+    $team2 = "";
+        while($TD22 = mysql_fetch_array($T22)){
+        $pl = $TD22["player"];
                 $pl1 = str_replace(" ","%20",$pl);
-		$PL_L = mysql_query("SELECT level FROM characters WHERE login='$pl'");
-		$PL_LD = mysql_fetch_array($PL_L);
-		$lev = $PL_LD["level"];
-		$team2 .= "$pl&nbsp[$lev]<a href='info.php?log=$pl1' target=$pl><img src='img/inf.gif' border=0></a>,";
-		}
+        $PL_L = mysql_query("SELECT level FROM characters WHERE login='$pl'");
+        $PL_LD = mysql_fetch_array($PL_L);
+        $lev = $PL_LD["level"];
+        $team2 .= "$pl&nbsp[$lev]<a href='info.php?log=$pl1' target=$pl><img src='img/inf.gif' border=0></a>,";
+        }
 
-	$bat .= "$bid. <span class=p1>$team1</span> <B>VS</B> <span class=p2>$team2</span> - <a href='log.php?log=$bid' class=us2 target=battle_$bid>смотреть <small>>>></small></a><BR>";
-	}
+    $bat .= "$bid. <span class=p1>$team1</span> <B>VS</B> <span class=p2>$team2</span> - <a href='log.php?log=$bid' class=us2 target=battle_$bid>смотреть <small>>>></small></a><BR>";
+    }
 
 print "Бои-multyIP,проведенные с одного IP-адреса.:<BR>";
 
@@ -305,97 +305,97 @@ $i=1;
 
 $LOOK = mysql_query("SELECT * FROM team1_history WHERE player='$target'");
 
-	while($LD = mysql_fetch_array($LOOK)){
-	$ip_t = $LD["ip"];
-	$bid = $LD["battle_id"];
-	$MT = mysql_query("SELECT * FROM team2_history WHERE battle_id='$bid' AND ip='$ip_t'");
-		while($DAT = mysql_fetch_array($MT)){
-		$B = $DAT["battle_id"];
-		if(!empty($B)){
-		$B_SEEK = mysql_query("SELECT * FROM battles WHERE id='$B'");
-		$BSD = mysql_fetch_array($B_SEEK);
-		if($BSD["win"]==1){$win1 = "<img src='img/icon/unlock.gif' alt='Победа за этой командой'>";$win2="";}
-		else{$win2 = "<img src='img/icon/unlock.gif' alt='Победа за этой командой'>";$win1="";}
-		$T12 = mysql_query("SELECT player,ip FROM team1_history WHERE battle_id='$B'");
-		$team1 = "";
-		while($TD12 = mysql_fetch_array($T12)){
-		$pl = $TD12["player"];
+    while($LD = mysql_fetch_array($LOOK)){
+    $ip_t = $LD["ip"];
+    $bid = $LD["battle_id"];
+    $MT = mysql_query("SELECT * FROM team2_history WHERE battle_id='$bid' AND ip='$ip_t'");
+        while($DAT = mysql_fetch_array($MT)){
+        $B = $DAT["battle_id"];
+        if(!empty($B)){
+        $B_SEEK = mysql_query("SELECT * FROM battles WHERE id='$B'");
+        $BSD = mysql_fetch_array($B_SEEK);
+        if($BSD["win"]==1){$win1 = "<img src='img/icon/unlock.gif' alt='Победа за этой командой'>";$win2="";}
+        else{$win2 = "<img src='img/icon/unlock.gif' alt='Победа за этой командой'>";$win1="";}
+        $T12 = mysql_query("SELECT player,ip FROM team1_history WHERE battle_id='$B'");
+        $team1 = "";
+        while($TD12 = mysql_fetch_array($T12)){
+        $pl = $TD12["player"];
                 $pl1 = str_replace(" ","%20",$pl);
-		$PL_L = mysql_query("SELECT level FROM characters WHERE login='$pl'");
-		$PL_LD = mysql_fetch_array($PL_L);
-		$lev = $PL_LD["level"];
-		$ip = $TD12["ip"];
-		if($ip == $ip_t){$ip = "<font color=#D50000>$ip</FONT>";}
-		$ip_t2 = "<span class=us2>(<i>ip: <small>$ip</small></I>)</span>";
-		$team1 .= "$pl$ip_t2&nbsp[$lev]<a href='info.php?log=$pl1' target=$pl><img src='img/inf.gif' border=0></a>,";
-		}
+        $PL_L = mysql_query("SELECT level FROM characters WHERE login='$pl'");
+        $PL_LD = mysql_fetch_array($PL_L);
+        $lev = $PL_LD["level"];
+        $ip = $TD12["ip"];
+        if($ip == $ip_t){$ip = "<font color=#D50000>$ip</FONT>";}
+        $ip_t2 = "<span class=us2>(<i>ip: <small>$ip</small></I>)</span>";
+        $team1 .= "$pl$ip_t2&nbsp[$lev]<a href='info.php?log=$pl1' target=$pl><img src='img/inf.gif' border=0></a>,";
+        }
 
-		$T22 = mysql_query("SELECT player,ip FROM team2_history WHERE battle_id='$B'");
-		$team2 = "";
-		while($TD22 = mysql_fetch_array($T22)){
-		$pl = $TD22["player"];
+        $T22 = mysql_query("SELECT player,ip FROM team2_history WHERE battle_id='$B'");
+        $team2 = "";
+        while($TD22 = mysql_fetch_array($T22)){
+        $pl = $TD22["player"];
                 $pl1 = str_replace(" ","%20",$pl);
-		$PL_L = mysql_query("SELECT level FROM characters WHERE login='$pl'");
-		$PL_LD = mysql_fetch_array($PL_L);
-		$lev = $PL_LD["level"];
-		$ip = $PL_LD["ip"];
-		$ip = $TD22["ip"];
-		if($ip == $ip_t){$ip = "<font color=#D50000>$ip</FONT>";}
-		$ip_t2 = "<span class=us2>(<i>ip: <small>$ip</small></I>)</span>";
-		$team2 .= "$pl$ip_t2&nbsp[$lev]<a href='info.php?log=$pl1' target=$pl><img src='img/inf.gif' border=0></a>,";
-		}
-		}
-	$bat_MIP .= "$i. <span class=p1>$team1</span>$win1 <B>VS</B> <span class=p2>$team2</span>$win2 - <a href='log.php?log=$B' class=us2 target=battle_$B>смотреть <small>>>></small></a><BR>";
-	$i++;
-		}
-	}
+        $PL_L = mysql_query("SELECT level FROM characters WHERE login='$pl'");
+        $PL_LD = mysql_fetch_array($PL_L);
+        $lev = $PL_LD["level"];
+        $ip = $PL_LD["ip"];
+        $ip = $TD22["ip"];
+        if($ip == $ip_t){$ip = "<font color=#D50000>$ip</FONT>";}
+        $ip_t2 = "<span class=us2>(<i>ip: <small>$ip</small></I>)</span>";
+        $team2 .= "$pl$ip_t2&nbsp[$lev]<a href='info.php?log=$pl1' target=$pl><img src='img/inf.gif' border=0></a>,";
+        }
+        }
+    $bat_MIP .= "$i. <span class=p1>$team1</span>$win1 <B>VS</B> <span class=p2>$team2</span>$win2 - <a href='log.php?log=$B' class=us2 target=battle_$B>смотреть <small>>>></small></a><BR>";
+    $i++;
+        }
+    }
 
 $LOOK2 = mysql_query("SELECT * FROM team2_history WHERE player='$target'");
 
-	while($LD = mysql_fetch_array($LOOK2)){
-	$ip_t = $LD["ip"];
-	$bid = $LD["battle_id"];
-	$MT = mysql_query("SELECT * FROM team1_history WHERE battle_id='$bid' AND ip='$ip_t'");
-		while($DAT = mysql_fetch_array($MT)){
-		$B = $DAT["battle_id"];
-		if(!empty($B)){
-		$B_SEEK = mysql_query("SELECT * FROM battles WHERE id='$B'");
-		$BSD = mysql_fetch_array($B_SEEK);
-		if($BSD["win"]==1){$win1 = "<img src='img/icon/unlock.gif' alt='Победа за этой командой'>";$win2="";}
-		else{$win2 = "<img src='img/icon/unlock.gif' alt='Победа за этой командой'>";$win1="";}
-		$T12 = mysql_query("SELECT player,ip FROM team1_history WHERE battle_id='$B'");
-		$team1 = "";
-		while($TD12 = mysql_fetch_array($T12)){
-		$pl = $TD12["player"];
+    while($LD = mysql_fetch_array($LOOK2)){
+    $ip_t = $LD["ip"];
+    $bid = $LD["battle_id"];
+    $MT = mysql_query("SELECT * FROM team1_history WHERE battle_id='$bid' AND ip='$ip_t'");
+        while($DAT = mysql_fetch_array($MT)){
+        $B = $DAT["battle_id"];
+        if(!empty($B)){
+        $B_SEEK = mysql_query("SELECT * FROM battles WHERE id='$B'");
+        $BSD = mysql_fetch_array($B_SEEK);
+        if($BSD["win"]==1){$win1 = "<img src='img/icon/unlock.gif' alt='Победа за этой командой'>";$win2="";}
+        else{$win2 = "<img src='img/icon/unlock.gif' alt='Победа за этой командой'>";$win1="";}
+        $T12 = mysql_query("SELECT player,ip FROM team1_history WHERE battle_id='$B'");
+        $team1 = "";
+        while($TD12 = mysql_fetch_array($T12)){
+        $pl = $TD12["player"];
                 $pl1 = str_replace(" ","%20",$pl);
-		$PL_L = mysql_query("SELECT level FROM characters WHERE login='$pl'");
-		$PL_LD = mysql_fetch_array($PL_L);
-		$lev = $PL_LD["level"];
-		$ip = $TD12["ip"];
-		if($ip == $ip_t){$ip = "<font color=#D50000>$ip</FONT>";}
-		$ip_t2 = "<span class=us2>(<i>ip: <small>$ip</small></I>)</span>";
-		$team1 .= "$pl$ip_t2&nbsp[$lev]<a href='info.php?log=$pl1' target=$pl><img src='img/inf.gif' border=0></a>,";
-		}
+        $PL_L = mysql_query("SELECT level FROM characters WHERE login='$pl'");
+        $PL_LD = mysql_fetch_array($PL_L);
+        $lev = $PL_LD["level"];
+        $ip = $TD12["ip"];
+        if($ip == $ip_t){$ip = "<font color=#D50000>$ip</FONT>";}
+        $ip_t2 = "<span class=us2>(<i>ip: <small>$ip</small></I>)</span>";
+        $team1 .= "$pl$ip_t2&nbsp[$lev]<a href='info.php?log=$pl1' target=$pl><img src='img/inf.gif' border=0></a>,";
+        }
 
-		$T22 = mysql_query("SELECT player,ip FROM team2_history WHERE battle_id='$B'");
-		$team2 = "";
-		while($TD22 = mysql_fetch_array($T22)){
-		$pl = $TD22["player"];
+        $T22 = mysql_query("SELECT player,ip FROM team2_history WHERE battle_id='$B'");
+        $team2 = "";
+        while($TD22 = mysql_fetch_array($T22)){
+        $pl = $TD22["player"];
                 $pl1 = str_replace(" ","%20",$pl);
-		$PL_L = mysql_query("SELECT level FROM characters WHERE login='$pl'");
-		$PL_LD = mysql_fetch_array($PL_L);
-		$lev = $PL_LD["level"];
-		$ip = $PL_LD["ip"];
-		$ip = $TD22["ip"];
-		if($ip == $ip_t){$ip = "<font color=#D50000>$ip</FONT>";}
-		$ip_t2 = "<span class=us2>(<i>ip: <small>$ip</small></I>)</span>";
-		$team2 .= "$pl$ip_t2&nbsp[$lev]<a href='info.php?log=$pl1' target=$pl><img src='img/inf.gif' border=0></a>,";
-		}
-		}
-	$bat_MIP .= "$i. <span class=p1>$team1</span>$win1 <B>VS</B> <span class=p2>$team2</span>$win2 - <a href='log.php?log=$B' class=us2 target=battle_$B>смотреть <small>>>></small></a><BR>";
-	$i++;
-		}
-	}
+        $PL_L = mysql_query("SELECT level FROM characters WHERE login='$pl'");
+        $PL_LD = mysql_fetch_array($PL_L);
+        $lev = $PL_LD["level"];
+        $ip = $PL_LD["ip"];
+        $ip = $TD22["ip"];
+        if($ip == $ip_t){$ip = "<font color=#D50000>$ip</FONT>";}
+        $ip_t2 = "<span class=us2>(<i>ip: <small>$ip</small></I>)</span>";
+        $team2 .= "$pl$ip_t2&nbsp[$lev]<a href='info.php?log=$pl1' target=$pl><img src='img/inf.gif' border=0></a>,";
+        }
+        }
+    $bat_MIP .= "$i. <span class=p1>$team1</span>$win1 <B>VS</B> <span class=p2>$team2</span>$win2 - <a href='log.php?log=$B' class=us2 target=battle_$B>смотреть <small>>>></small></a><BR>";
+    $i++;
+        }
+    }
 
 print "$bat_MIP<hr size=1 noshade color=#000000 width=45% align=left><BR>";
 

@@ -58,44 +58,44 @@ print "<td valign=top bgcolor=#fffbbb><span class=usuallyb>";
 
 <html><head>
 
-<html><head><meta http-equiv="refresh" content="1;url=/kuznawork.php?&login=<? echo $login; ?>&obj_type=<? print $obj_type; ?>">	<script language="javascript">
-	var TIMELEFT = 7200;
-	var DURATION = 1000;
+<html><head><meta http-equiv="refresh" content="1;url=/kuznawork.php?&login=<? echo $login; ?>&obj_type=<? print $obj_type; ?>">    <script language="javascript">
+    var TIMELEFT = 7200;
+    var DURATION = 1000;
 
-	function commaFormat(x) {
-	var len;
-	var newStr = "";
-	var i,j;
-	
-		x = x + ""; 
-		len = x.length-1; 
-		j = 0;
-		for(i=len;i>=0;i--) {
-			j = j + 1
-			if (j > 3) {
-				newStr = "," + newStr;
-				j = 1;
-			}
-			newStr = x.charAt(i) + newStr;
-		}
-		return newStr;
-	}
-	
-	function heartBeat() {
-		if(TIMELEFT > 0) TIMELEFT--;
-		
-			if(document.all) Counter.innerHTML = commaFormat(TIMELEFT);
-			else { 
-				var cElement = document.getElementById('Counter');
-				cElement.innerHTML = commaFormat(TIMELEFT);
-			}
-		
-		if(TIMELEFT > 0) window.setTimeout("heartBeat()",DURATION);
-		else {
-		
-		}
-	}
-	</script></head><body onLoad="window.setTimeout('heartBeat()',50);">
+    function commaFormat(x) {
+    var len;
+    var newStr = "";
+    var i,j;
+    
+        x = x + ""; 
+        len = x.length-1; 
+        j = 0;
+        for(i=len;i>=0;i--) {
+            j = j + 1
+            if (j > 3) {
+                newStr = "," + newStr;
+                j = 1;
+            }
+            newStr = x.charAt(i) + newStr;
+        }
+        return newStr;
+    }
+    
+    function heartBeat() {
+        if(TIMELEFT > 0) TIMELEFT--;
+        
+            if(document.all) Counter.innerHTML = commaFormat(TIMELEFT);
+            else { 
+                var cElement = document.getElementById('Counter');
+                cElement.innerHTML = commaFormat(TIMELEFT);
+            }
+        
+        if(TIMELEFT > 0) window.setTimeout("heartBeat()",DURATION);
+        else {
+        
+        }
+    }
+    </script></head><body onLoad="window.setTimeout('heartBeat()',50);">
 <table cellspacing=0 cellpadding=0 width="50%" border=0>
                  <TR>
                 <TD>Откиньтесь на спинку кресла пока машина зделает работу... это займёт 2 чиса</TD>
@@ -115,14 +115,14 @@ else {
 <?
 $query=mysql_query("SELECT * FROM `characters` WHERE login='$who'");
 $db=mysql_fetch_array($query);
-	{
+    {
 
-		$chanced = rand(1, $all_res);
+        $chanced = rand(1, $all_res);
 
-		$q2   = mysql_query("SELECT * FROM `$obj_type` WHERE id = '$chanced'");
+        $q2   = mysql_query("SELECT * FROM `$obj_type` WHERE id = '$chanced'");
 $res = mysql_fetch_array($q2);
 if(!$q2){print '11';}
-		$res_name = $res["name"];
+        $res_name = $res["name"];
 if($data["num"]<1000){
 $zarplata = '0.1';
 }
@@ -134,48 +134,48 @@ $zarplata = '0.15';
 
 
 
-		Вещь <b><? print $res_name; ?></b> готова! Вам зачислены <b><? print $zarplata; ?></b> Ст.
+        Вещь <b><? print $res_name; ?></b> готова! Вам зачислены <b><? print $zarplata; ?></b> Ст.
 
 
 <script language="javascript">
-	var TIMELEFT = 7200;
-	var DURATION = 1000;
+    var TIMELEFT = 7200;
+    var DURATION = 1000;
 
-	function commaFormat(x) {
-	var len;
-	var newStr = "";
-	var i,j;
-	
-		x = x + ""; 
-		len = x.length-1; 
-		j = 0;
-		for(i=len;i>=0;i--) {
-			j = j + 1
-			if (j > 3) {
-				newStr = "," + newStr;
-				j = 1;
-			}
-			newStr = x.charAt(i) + newStr;
-		}
-		return newStr;
-	}
-	
-	function heartBeat() {
-		if(TIMELEFT > 0) TIMELEFT--;
-		
-			if(document.all) Counter.innerHTML = commaFormat(TIMELEFT);
-			else { 
-				var cElement = document.getElementById('Counter');
-				cElement.innerHTML = commaFormat(TIMELEFT);
-			}
-		
-		if(TIMELEFT > 0) window.setTimeout("heartBeat()",DURATION);
-		else {
+    function commaFormat(x) {
+    var len;
+    var newStr = "";
+    var i,j;
+    
+        x = x + ""; 
+        len = x.length-1; 
+        j = 0;
+        for(i=len;i>=0;i--) {
+            j = j + 1
+            if (j > 3) {
+                newStr = "," + newStr;
+                j = 1;
+            }
+            newStr = x.charAt(i) + newStr;
+        }
+        return newStr;
+    }
+    
+    function heartBeat() {
+        if(TIMELEFT > 0) TIMELEFT--;
+        
+            if(document.all) Counter.innerHTML = commaFormat(TIMELEFT);
+            else { 
+                var cElement = document.getElementById('Counter');
+                cElement.innerHTML = commaFormat(TIMELEFT);
+            }
+        
+        if(TIMELEFT > 0) window.setTimeout("heartBeat()",DURATION);
+        else {
 
-			
-		}
-	}
-	</script><body onLoad="window.setTimeout('heartBeat()',50);">
+            
+        }
+    }
+    </script><body onLoad="window.setTimeout('heartBeat()',50);">
 <table cellspacing=0 cellpadding=0 width="50%" border=0>
                  <TR>
                 <TD>Подготавливаем новый материал...</TD>
@@ -187,12 +187,12 @@ $zarplata = '0.15';
 <a class=us2 href="main.php?act=go&room_go=centplosh">Главный Хол</a>
 <?
 
-		$qqq = mysql_query("UPDATE `$obj_type` SET mountown=mountown+1 WHERE name='$res_name'");
-		$qqqq = mysql_query("UPDATE `characters` SET money=money+'$zarplata' WHERE login='$who'");
-		$qqqqq = mysql_query("UPDATE `sapojn` SET num=num+'1' WHERE login='$who'");
-		}
-	}
-	
+        $qqq = mysql_query("UPDATE `$obj_type` SET mountown=mountown+1 WHERE name='$res_name'");
+        $qqqq = mysql_query("UPDATE `characters` SET money=money+'$zarplata' WHERE login='$who'");
+        $qqqqq = mysql_query("UPDATE `sapojn` SET num=num+'1' WHERE login='$who'");
+        }
+    }
+    
 
 
 print "</td></tr></table></td></tr></table></td></tr></table>";

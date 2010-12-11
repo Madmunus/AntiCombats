@@ -309,7 +309,7 @@ print "<img src='img/orden/$need_orden.gif' border=0 alt='Требуемый о�
                     }
 if($is_artefact==1){
         print "<img src='img/icon/artefakt.gif' width=20 height=16 border=0 alt='Артефактная вещь'>&nbsp&nbsp";}
-		$wearable=0;
+        $wearable=0;
 print " (Масса: $mass ед.)<BR>";
 print "<table cellpadding=0 cellspacing=0 width=100%><td width=160px><span class=usuallyb>&nbsp;<b>";
 print "<b>Цена</b>: <b>$price_gos</b> кр.<BR>";

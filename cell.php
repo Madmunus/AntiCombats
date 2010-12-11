@@ -99,7 +99,7 @@ $Q=mysql_query($SQL_NUM);
 ?>
 <table cellpadding="0" cellspacing="0" width="100%" height=100%>
 <tr>
-	<td width=210 align=center bgcolor=DDDDDD class=us2 valign="top" style="border-top: 1px solid #999999; border-right: 1px solid #999999; border-bottom: 1px solid #999999; border-left: 1px solid #999999;">
+    <td width=210 align=center bgcolor=DDDDDD class=us2 valign="top" style="border-top: 1px solid #999999; border-right: 1px solid #999999; border-bottom: 1px solid #999999; border-left: 1px solid #999999;">
 <?
 
 $money1=$db["money"];

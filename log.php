@@ -31,8 +31,8 @@ print "<B>АнтиБК+</B><BR>";
 $S = mysql_query("SELECT * FROM battles WHERE id='$log'");
 $DATA = mysql_fetch_array($S);
 $status = $DATA["status"];
-	if($status == "finished"){$s_t = "Поединок завершен.";}
-	else{$s_t = "Поединок идет.";}
+    if($status == "finished"){$s_t = "Поединок завершен.";}
+    else{$s_t = "Поединок идет.";}
 $yyyy = substr($DATA["date"],0,4);
 $mm = substr($DATA["date"],5,2);
 $dd = substr($DATA["date"],8,2);
@@ -51,15 +51,15 @@ $seek = mysql_query("SELECT * FROM `team2_history` WHERE `battle_id`=$log");
 $span = "p2";
 }
 $status = $DATA["status"];
-	if($status == "finished"){
+    if($status == "finished"){
 while($dat=mysql_fetch_array($seek)){
-	$p = $dat["player"];
-	$winner .= "$p";
-	}
+    $p = $dat["player"];
+    $winner .= "$p";
+    }
 $w = "Победа за <span class=$span>$winner</span>";
 
 }
-	else{
+    else{
 print "";
 }
 
