@@ -143,7 +143,7 @@ if (empty($zayavka_status))
 ?>
 <table align="center" width="100%" border="0" cellspacing="0" cellpadding="0">
     <tr>
-        <td align="left" valign="middle" width="50%"><b><font size="2"><?showHPMP ($login);?></font></b></td>
+        <td align="left" valign="middle" width="50%"><b><font size="2"></font></b></td>
         <td align="right" valign="middle">
             <input type="button" value="Обновить" onclick="location.href = 'zayavka.php?boy=phisic';">
             <input type="button" value="Вернуться" onclick="location.href = 'main.php';">

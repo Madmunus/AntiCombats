@@ -24,7 +24,7 @@ $adb->setErrorHandler("databaseErrorHandler");
 $test = Test::setguid($guid);
 $chat = new Chat;
 
-$test -> GuidForm ($guid, &$db);
+$test -> Guid ($guid);
 
 global $h;
 

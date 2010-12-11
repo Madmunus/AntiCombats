@@ -22,7 +22,7 @@ $adb->setErrorHandler("databaseErrorHandler");
 
 $test = Test::setguid($guid);
 
-$test -> GuidForm ($guid, &$db);
+$test -> Guid ($guid);
 
 $h = requestVar ('h');
 $color = requestVar ('color');

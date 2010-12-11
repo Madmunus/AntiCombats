@@ -178,7 +178,7 @@ else if (isset($_POST['save_skill']) && $travm == 0 && $stats['skills'] != $_POS
   $adb -> query ("UPDATE `character_stats` SET `skills` = ?d WHERE `guid` = ?d", $_POST['skills_base'] , $guid);
 }
 
-$added = $equip -> showStatAddition ();
+$equip -> showStatAddition ();
 
 $stats = $adb -> selectRow ("SELECT * FROM `character_stats` WHERE `guid` = ?d", $guid);
 $dis_buttons = "<td><img src='img/minus.gif' class='nonactive' title='уменьшить'>&nbsp;<img src='img/plus.gif' class='nonactive' title='увеличить'></td>";

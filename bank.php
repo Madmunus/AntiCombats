@@ -279,7 +279,6 @@ else
   list ($id, $cash, $euro) = array_values ($bank_info);
   $note = $adb -> selectCell ("SELECT `bank_note` FROM `character_info` WHERE `guid` = ?d", $guid);
   $note = str_replace (array("<br>", '\&quot;', "\'"), array("\n", '"', "'"), $note);
-  $money = getMoney ($money);
   $m_dis = ($money == 0) ?" disabled" :"";
   $g_dis = ($cash == 0) ?" disabled" :"";
   $e_dis = ($euro == 0) ?" disabled" :"";
@@ -294,7 +293,7 @@ else
       <tr><td>Кредитов:</td><td><b><?echo $cash;?> кр.</b></td></tr>
       <tr><td>Еврокредитов:</td><td><b><?echo $euro;?> екр.</b></td></tr>
       <tr><td colspan="2"><hr></td></tr>
-      <tr><td>При себе наличных:</td><td><b><?echo $money;?> кр.</b></td></tr>
+      <tr><td>При себе наличных:</td><td><b><?echo getMoney ($money);?> кр.</b></td></tr>
     </table>
     </fieldset>
   </td>

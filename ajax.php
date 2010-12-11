@@ -378,9 +378,7 @@ switch ($do)
       die ("errorA_D403");
     
     $buycount = 0;
-    
     $amount = $city.'-'.$room;
-      
     $room_shop = $adb -> selectCell ("SELECT `shop` FROM `city_rooms` WHERE `city` = ?s and `room` = ?s", $city ,$room);
     if (!$room_shop)
       die ("errorA_D403");
@@ -402,8 +400,8 @@ switch ($do)
     for ($i = 1; $i <= $count; $i++)
     {
       $time = ($validity > 0) ?time () + $validity * 3600 :0;
-      $price = $equip -> getBuyValue ($price);
-      $price_euro = $equip -> getBuyValue ($price_euro);
+      $equip -> getBuyValue ($price);
+      $equip -> getBuyValue ($price_euro);
       
       if (($price > 0 && !($equip -> Money ($price))) || ($price_euro > 0 && !($equip -> Money ($price_euro, 'euro'))))
         continue;

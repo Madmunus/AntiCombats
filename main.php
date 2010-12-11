@@ -29,7 +29,7 @@ $error = new Error;
 $chat = new Chat;
 $info = new Info;
 
-$test -> GuidForm ($guid, &$db);
+$test -> Guid ($guid);
 $test -> Block ($db['block']);
 $test -> Prision ($db['prision']);
 $test -> Battle ($db['battle']);
@@ -165,7 +165,8 @@ $orden = $db['orden'];
 $shut = $db['shut'];
 $date = date ('d.m.y H:i:s', mktime(date ('H') - $GSM));
 
-$mtime = $equip -> getRoomGoTime ();
+$mtime = 0;
+$equip -> getRoomGoTime ($mtime);
 echo "<input type='hidden' id='time_to_go' value='$mtime' />";
 
 switch ($action)

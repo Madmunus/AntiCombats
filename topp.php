@@ -22,7 +22,7 @@ $adb->setErrorHandler("databaseErrorHandler");
 
 $test = Test::setguid($guid);
 
-$test -> GuidForm ($guid, &$db);
+$test -> Guid ($guid);
 
 $mail = $adb -> selectCell ("SELECT COUNT(*) FROM `city_mail_items` WHERE `to` = ?d", $guid) | 0;
 ?>

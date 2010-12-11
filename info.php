@@ -86,7 +86,7 @@ $room = $adb -> selectCell ("SELECT `name` FROM `city_rooms` WHERE `room` = ?s",
 $city = $adb -> selectCell ("SELECT `name` FROM `server_cities` WHERE `city` = ?s", $db['city']);
 $online = $adb -> selectCell ("SELECT COUNT(*) FROM `online` WHERE `guid` = ?d", $guid);
 
-$added = $equip -> showStatAddition ('info');
+$equip -> showStatAddition ('info');
 ?>
 <html>
 <head>

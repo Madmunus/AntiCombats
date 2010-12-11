@@ -13,9 +13,9 @@ class Test extends Error
     return $object;
   }
   /*Проверка существования гайда*/
-  function GuidForm ($guid, &$db)
+  function Guid ($guid)
   {
-    global $adb;
+    global $adb, $db;
     $error = "<script>top.main.location.href = 'main.php?action=exit';</script>";
     
     if ($guid == 0 || !is_numeric($guid))
@@ -23,11 +23,10 @@ class Test extends Error
     
     $db = $adb -> selectRow ("SELECT `block`, `prision`, `battle`, `shut`, `login`, `admin_level` FROM `characters` WHERE `guid` = ?d", $this->guid);
     $stats = $adb -> selectCell ("SELECT `guid` FROM `character_stats` WHERE `guid` = ?d", $this->guid);
+    $info = $adb -> selectCell ("SELECT `guid` FROM `character_info` WHERE `guid` = ?d", $this->guid);
     
-    if (!$db || !$stats)
+    if (!$db || !$stats || !$info)
       die ($error);
-    
-    return;
   }
   /*Проверка блока персонажа*/
   function Block ($block)
@@ -36,7 +35,6 @@ class Test extends Error
       return;
     
     die ("<script>top.main.location.href = 'main.php?action=exit';</script>");
-    return;
   }
   /*Проверка заключения персонажа*/
   function Prision ($prision)
@@ -48,7 +46,6 @@ class Test extends Error
                     SET `prision` = '0', 
                         `orden` = '0' 
                     WHERE `guid` = ?d", $this->guid);
-    return;
   }
   /*Проверка участия персонажа в заявке*/
   function Zayavka ()
@@ -103,7 +100,6 @@ class Test extends Error
       return;
     
     die ("<script>top.main.location.href = 'battle.php';</script>");
-    return;
   }
   /*Проверка молчанки у персонажа*/
   function Shut ($shut)
@@ -112,7 +108,6 @@ class Test extends Error
       return;
     
     $adb -> query ("UPDATE `characters` SET `shut` = '0' WHERE `guid` = ?d", $this->guid);
-    return;
   }
   /*Восстановление здоровья/маны*/
   function Regen ()
@@ -135,7 +130,7 @@ class Test extends Error
     {
       if ($cure[$key] == 0 && $now[$key] < $value)
       {
-        $cure[$key] = getCureValue ($now[$key], $value, $regen[$key]) + time ();
+        getCureValue ($now[$key], $value, $regen[$key], $cure[$key]);
         $adb -> query ("UPDATE `character_stats` SET ?# = ?d WHERE `guid` = ?d", $key.'_cure' ,$cure[$key] ,$this->guid);
       }
       else if ($cure[$key] == 0)
@@ -150,10 +145,9 @@ class Test extends Error
         $adb -> query ("UPDATE `character_stats` SET ?# = '0' WHERE `guid` = ?d", $key.'_cure' ,$this->guid);
         continue;
       }
-      $cure[$key] = getCureValue ($regenerated, $value, $regen[$key]) + time ();
+      getCureValue ($regenerated, $value, $regen[$key], $cure[$key]);
       $adb -> query ("UPDATE `character_stats` SET ?# = ?d WHERE `guid` = ?d", $key.'_cure' ,$cure[$key] ,$this->guid);
     }
-    return;
   }
   /*Проверка травм у персонажа*/
   function Travm ()
@@ -174,7 +168,6 @@ class Test extends Error
     
     $adb -> query ("UPDATE `characters` SET `travm` = '0' WHERE `guid` = ?d" ,$this->guid);
     $adb -> query ("UPDATE `character_stats` SET ?# = ?d WHERE `guid` = ?d", $travm_stat ,$travm_old_stat ,$this->guid);
-    return;
   }
   /*Проверка на получение апа/лвла*/
   function Up ()
@@ -230,7 +223,6 @@ class Test extends Error
         $adb -> query ("UPDATE `character_bars` SET ?# = ?s WHERE `guid` = ?d", $value ,$bar_enums[$value]."|1" ,$this->guid);
       }
     }
-    return;
   }
   /*Проверка участия персонажа в походе*/
   function Move ()
@@ -335,7 +327,6 @@ class Test extends Error
     
     if (($time_to_go - (time () - $last_go)) > 0)
       $this -> Map (110);
-    return;
   }
   /*Проверка всех предметов*/
   function Items ()
@@ -353,7 +344,7 @@ class Test extends Error
                                 WHERE `guid` = ?d", $this->guid);
     foreach ($wear as $key => $value)
     {
-      if ($value != 0 && $equip -> checkItemStats ($value))
+      if ($value != 0 && !($equip -> checkItemStats ($value)))
         $equip -> equipItem ($value, -1);
     }
     $rows = $adb -> select ("SELECT `c`.`id`, 
@@ -368,21 +359,23 @@ class Test extends Error
     $all_mass = 0;
     foreach ($rows as $inventory)
     {
-      if (!$inventory['wear'] && $equip -> checkItemValidity ($inventory['id']))
+      if (!$inventory['mailed'] && !$inventory['wear'])
+        $all_mass += $inventory['mass'];
+      
+      if ($equip -> checkItemValidity ($inventory['id']))
+        continue;
+      
+      if (!$inventory['wear'])
         $equip -> deleteItem ($inventory['id']);
-      else if ($inventory['wear'] && $equip -> checkItemValidity ($inventory['id']))
+      else if ($inventory['wear'])
       {
         $equip -> equipItem ($inventory['id'], -1);
         $equip -> deleteItem ($inventory['id']);
       }
-      if (!$inventory['mailed'] && !$inventory['wear'])
-        $all_mass += $inventory['mass'];
     }
     
     if ($all_mass != $mass)
       $adb -> query ("UPDATE `characters` SET `mass` = ?f WHERE `guid` = ?d", $all_mass ,$this->guid);
-    
-    return;
   }
   /*Проверка доступности комнаты*/
   function Room ()
@@ -396,8 +389,6 @@ class Test extends Error
     
     if ($room == 'bank' && !in_array ($action, $actions))
       $this -> Map (0);
-    
-    return;
   }
   /*Проверка состояния персонажа*/
   function Afk ()
@@ -407,8 +398,6 @@ class Test extends Error
     
     if ((time () - $db['last_time']) >= 300 && !$db['dnd'])
       $adb -> query ("UPDATE `characters` SET `afk` = '1' WHERE `guid` = ?d", $this->guid);
-    
-    return;
   }
   /*Обновление состояния персонажа*/
   function WakeUp ()
@@ -419,8 +408,6 @@ class Test extends Error
 
     if ($adb -> selectCell ("SELECT `afk` FROM `characters` WHERE `guid` = ?d", $this->guid))
       $adb -> query ("UPDATE `characters` SET `afk` = '0', `message` = '' WHERE `guid` = ?d", $this->guid);
-    
-    return;
   }
 }
 
@@ -474,23 +461,17 @@ class Equip extends Error
     return $sell;
   }
   /*Вычисление цены покупки предмета*/
-  function getBuyValue ($value)
+  function getBuyValue (&$value)
   {
     global $adb;
     $trade = $adb -> selectCell ("SELECT `trade` FROM `character_stats` WHERE `guid` = ?d", $this->guid);
-    $buy = round (($value - $trade / 50), 2);
-    return $buy;
-  }
-  /*Отображение здоровья/маны*/
-  function showHPMP ()
-  {
-    return "<div id='HP'></div><div id='MP'></div>";
+    $value = round (($value - $trade / 50), 2);
   }
   /*Проверка характеристик предмета и персонажа*/
   function checkItemStats ($item_id)
   {
     if ($item_id == 0 || !is_numeric($item_id))
-      return true;
+      return false;
     
     global $adb;
     $dat = $adb -> selectRow ("SELECT `i`.`min_level`, 
@@ -532,32 +513,32 @@ class Equip extends Error
                                  WHERE `c`.`guid` = ?d", $this->guid);
     foreach ($stats as $key => $value)
     {
-      if ($key != 'sex' && $key != 'orden' && $value < $dat['min_'.$key])        return true;
-      if ($key == 'sex' && $dat['sex'] && $value != $dat['sex'])                return true;
-      if ($key == 'orden' && $dat['orden'] != 0 && $value != $dat['orden'])    return true;
+      if ($key != 'sex' && $key != 'orden' && $value < $dat['min_'.$key])   return false;
+      if ($key == 'sex' && $dat['sex'] && $value != $dat['sex'])            return false;
+      if ($key == 'orden' && $dat['orden'] != 0 && $value != $dat['orden']) return false;
     }
     
     if ($dat['is_personal'] && $dat['personal_owner'] != $this->guid)
-      return true;
+      return false;
     
     if ($dat['tear_cur'] >= $dat['tear_max'])
-      return true;
+      return false;
     
-    return false;
+    return true;
   }
   /*Проверка годности предмета*/
   function checkItemValidity ($item_id)
   {
     if ($item_id == 0 || !is_numeric($item_id))
-      return true;
+      return false;
     
     global $adb;
     $date = $adb -> selectCell ("SELECT `date` FROM `character_inventory` WHERE `guid` = ?d and `id` = ?d", $this->guid ,$item_id);
     
     if ($date != 0 && $date < time ())
-      return true;
+      return false;
     
-    return false;
+    return true;
   }
   /*Проверка отображения модификаторов*/
   function checkHandStatus ($hand)
@@ -579,16 +560,18 @@ class Equip extends Error
         if ($hand_l != 0 && $hand_l_type != 'shield')
           return true;
       break;
+      default:
+        return false;
+      break;
     }
-    return false;
   }
   /*Удаление предмета*/
   function deleteItem ($item_id)
   {
-    global $adb, $history;
     if ($item_id == 0 || !is_numeric($item_id))
       return;
     
+    global $adb, $history;
     $name = $adb -> selectCell ("SELECT `i`.`name`
                                  FROM `character_inventory` AS `c` 
                                  LEFT JOIN `item_template` AS `i` 
@@ -602,7 +585,6 @@ class Equip extends Error
     
     $adb -> query ("DELETE FROM `character_inventory` WHERE `id` = ?d", $item_id);
     $history -> transfers ('Throw out', $name, $_SERVER['REMOTE_ADDR'], 'Dump');
-    return;
   }
   /*Отображение снаряжения*/
   function showEquipment ($type = '')
@@ -669,7 +651,6 @@ class Equip extends Error
        . "showHP ($hp, $hp_all, $hp_regen);"
        . "showMP ($mp, $mp_all, $mp_regen);"
        . "</script>";
-    return;
   }
   /*Перечисление предметов нуждающихся в ремонте*/
   function needItemRepair ()
@@ -739,7 +720,7 @@ class Equip extends Error
     }
     if ($item_id == 0)
       return "<img src='img/items/w$type.gif' width='$w' height='$h' border='0' alt='".$lang[$type.'_f']."'>";
-    if ($this -> checkItemStats ($item_id))
+    if (!($this -> checkItemStats ($item_id)))
     {
       $this -> equipItem ($item_id, -1);
       return;
@@ -823,12 +804,12 @@ class Equip extends Error
     $price_euro = $item_info['price_euro'];
     if ($price_euro > 0)
     {
-      $price = $this -> getBuyValue ($price_euro);
-      $price = ($price > $money_euro) ?"<font color='#FF0000'>$price</font> екр." :"$price екр.";
+      $this -> getBuyValue ($price_euro);
+      $price = ($price_euro > $money_euro) ?"<font color='#FF0000'>$price_euro</font> екр." :"$price_euro екр.";
     }
-    else
+    else if ($price > 0)
     {
-      $price = $this -> getBuyValue ($price);
+      $this -> getBuyValue ($price);
       $price = ($price > $money) ?"<font color='#FF0000'>$price</font> кр." :"$price кр.";
     }
     $item_flags = $item_info['item_flags'];
@@ -850,7 +831,7 @@ class Equip extends Error
     switch ($type)
     {
       case 'inv':
-        $wearable = !$this -> checkItemStats ($item_id);
+        $wearable = $this -> checkItemStats ($item_id);
         $return .= "<td width='150' align='center'>";
         $return .= "<img src='img/items/$img' border='0'$color /><br><center style='padding-top: 4px;'>";
         
@@ -922,11 +903,11 @@ class Equip extends Error
     {
       switch ($need_orden)
       {
-        case 1:    $orden_dis = "Белое братство";            break;
-        case 2:    $orden_dis = "Темное братство";            break;
-        case 3:    $orden_dis = "Нейтральное братство";    break;
-        case 4:    $orden_dis = "Алхимик";                    break;
-        case 5:    $orden_dis = "Тюремный заключенный";    break;
+        case 1:    $orden_dis = "Белое братство";       break;
+        case 2:    $orden_dis = "Темное братство";      break;
+        case 3:    $orden_dis = "Нейтральное братство"; break;
+        case 4:    $orden_dis = "Алхимик";              break;
+        case 5:    $orden_dis = "Тюремный заключенный"; break;
       }
       $orden = "<img src='img/orden/align$need_orden.gif' border='0' alt='$lang[min_bent]: <strong>$orden_dis</strong>'>";
     }
@@ -1022,8 +1003,8 @@ class Equip extends Error
         if ($item_info[$key] <= 0)
           continue;
         
-        $chance = $this -> getFormatedChance ($item_info[$key]);
-        $return .= "<br>&bull; $lang[$key]: $lang[$chance]";
+        $this -> getFormatedChance ($item_info[$key]);
+        $return .= "<br>&bull; $lang[$key]: ".$lang[$item_info[$key]];
       }
     }
     if (in_array ($i_type, array_keys ($armors)))
@@ -1055,16 +1036,16 @@ class Equip extends Error
     return $return;
   }
   /*Получение отформатированного шанса*/
-  private function getFormatedChance ($chance)
+  private function getFormatedChance (&$chance)
   {
-    if ($chance == 0)                    return "never";
-    if ($chance > 0 && $chance < 10)     return "ex_rarely";
-    if ($chance >= 10 && $chance < 20)   return "rarely";
-    if ($chance >= 20 && $chance < 26)   return "little";
-    if ($chance >= 26 && $chance < 60)   return "naa";
-    if ($chance >= 60 && $chance < 81)   return "regular";
-    if ($chance >= 81 && $chance < 91)   return "often";
-    if ($chance >= 91 && $chance <= 100) return "always";
+    if ($chance == 0)                    $chance = "never";
+    if ($chance > 0 && $chance < 10)     $chance = "ex_rarely";
+    if ($chance >= 10 && $chance < 20)   $chance = "rarely";
+    if ($chance >= 20 && $chance < 26)   $chance = "little";
+    if ($chance >= 26 && $chance < 60)   $chance = "naa";
+    if ($chance >= 60 && $chance < 81)   $chance = "regular";
+    if ($chance >= 81 && $chance < 91)   $chance = "often";
+    if ($chance >= 91 && $chance <= 100) $chance = "always";
   }
   /*Получение отформатированного кубика*/
   private function getFormatedBrick ($min, $max)
@@ -1107,8 +1088,8 @@ class Equip extends Error
     $i_type = ($dat['type'] == 'heavy_armor' || $dat['type'] == 'light_armor') ?"armor" :$dat['type'];
     $i_hands = $dat['hands'];
     
-    if ($type == 1 && $this -> checkItemStats ($i_id))
-      return false;
+    if ($type == 1 && !($this -> checkItemStats ($i_id)))
+      return;
     
     if ($type == 1)
     {
@@ -1417,7 +1398,6 @@ class Equip extends Error
         }
       }
     }
-    return true;
   }
   /*Снять все предметы*/
   function unWearAllItems ()
@@ -1437,12 +1417,12 @@ class Equip extends Error
       if ($value)
         $this -> equipItem ($value, -1);
     }
-    return true;
   }
   /*Время востановления здоровья*/
   function setTimeToHPMP ($now, $all, $regen, $type)
   {
     global $adb;
+    $cure = 0;
     if ($now > $all)
     {
       $adb -> query ("UPDATE `characters` SET ?# = ?d WHERE `guid` = ?d", $type ,$all ,$this->guid);
@@ -1456,10 +1436,9 @@ class Equip extends Error
       $time = $cure_full - $one * $now;
       $put_to_base = time () + $time;
       $add_cure = ($cure < 100) ?0.01 :0; */
-      $cure = getCureValue ($now, $all, $regen) + time ();
+      getCureValue ($now, $all, $regen, $cure);
       $adb -> query ("UPDATE `character_stats` SET ?# = ?d WHERE `guid` = ?d", $type.'_cure' ,$cure ,$this->guid);
     }
-    return;
   }
   /*Увеличение характеристики*/
   function increaseStat ($stat, $count = 1)
@@ -1545,13 +1524,15 @@ class Equip extends Error
                         WHERE `guid` = ?d", $count ,$this->guid);
         return true;
       break;
+      default:
+        return false;
+      break;
     }
-    return false;
   }
   /*Отображение дополнительной характеристики*/
   function showStatAddition ($type = 'skills')
   {
-    global $adb;
+    global $adb, $added;
     $added = array('str' => 0, 'dex' => 0, 'con' => 0, 'int' => 0, 'sword' => 0, 'axe' => 0, 'fail' => 0, 'knife' => 0, 'staff' => 0, 'shot' => 0, 'fire' => 0, 'water' => 0, 'air' => 0, 'earth' => 0, 'light' => 0, 'gray' => 0, 'dark' => 0);
     $rows = $adb -> select ("SELECT `i`.`add_str`, `c`.`inc_str`, 
                                     `i`.`add_dex`, `c`.`inc_dex`, 
@@ -1579,7 +1560,7 @@ class Equip extends Error
     }
     
     if ($type != 'skills')
-      return $added;
+      return;
     
     foreach ($rows as $dat)
     {
@@ -1597,7 +1578,6 @@ class Equip extends Error
       $added['gray'] += $dat['gray'];
       $added['dark'] += $dat['dark'];
     }
-    return $added;
   }
   /*Начало работы с банковским счетом*/
   function loginBank ($id, $pass)
@@ -1795,7 +1775,7 @@ class Equip extends Error
     return $return;
   }
   /*Получение времени до возможности перехода*/
-  function getRoomGoTime ()
+  function getRoomGoTime (&$mtime)
   {
     global $adb;
     $db = $adb -> selectRow ("SELECT `last_go`, 
@@ -1806,15 +1786,13 @@ class Equip extends Error
     $time_to_go = $adb -> selectCell ("SELECT `time_to_go` FROM `city_rooms` WHERE `room` = ?s", $room);
     
     if (!$time_to_go || !$room)
-      return 0;
+      return;
     
-    return ($time_to_go - (time () - $last_go));
+    $mtime = ($time_to_go - (time () - $last_go));
   }
   /*Вычитание/прибаление денег у персонажа*/
   function Money ($sum, $type = '', $guid = '')
   {
-    global $adb;
-    
     if (!is_numeric($sum))
       return false;
     
@@ -1823,6 +1801,7 @@ class Equip extends Error
     if ($sum == 0)
       return false;
     
+    global $adb;
     $guid = (!$guid) ?$this->guid :$guid;
     switch ($type)
     {
@@ -1848,8 +1827,6 @@ class Equip extends Error
   /*Вычитание/прибаление денег у персонажа в банке*/
   function MoneyBank ($sum, $id, $type = '', $guid = '')
   {
-    global $adb;
-    
     if ($id == 0 || !is_numeric($sum) || !is_numeric($id))
       $this -> Map (326);
     
@@ -1858,6 +1835,7 @@ class Equip extends Error
     if ($sum == 0)
       $this -> Map (325);
     
+    global $adb;
     $guid = (!$guid) ?$this->guid :$guid;
     switch ($type)
     {
@@ -1914,7 +1892,6 @@ class Equip extends Error
         $this -> equipItem ($item_id);
     }
     $this -> Inventory (0);
-    return;
   }
 }
 
@@ -1962,14 +1939,13 @@ class Mail extends Error
     /*Отправка денег*/
     function sendMoney ($mail_to, $send_money)
     {
-      global $adb, $history, $equip;
-      
       if ($send_money == 0 || !is_numeric($send_money))
         $this -> Mail (325);
       
       if ($mail_to == 0 || !is_numeric($mail_to))
         $this -> Mail (106, 'money');
       
+      global $adb, $history, $equip;
       $mail_to = $adb -> selectCell ("SELECT `guid` FROM `characters` WHERE `guid` = ?d", $mail_to) or $this -> Mail (106, 'items');
       $transfers = $adb -> selectCell ("SELECT `transfers` FROM `characters` WHERE `guid` = ?d", $this->guid);
       
@@ -1987,16 +1963,14 @@ class Mail extends Error
                       VALUES (?d, ?d, '1000', ?f, ?d, ?d)", $this->guid ,$mail_to ,$send_money ,time () ,time ());
       $history -> mail ('Send', "Деньги: $send_money кр", $_SERVER['REMOTE_ADDR'], $mail_to);
       $this -> Mail (409, 'money', $send_money);
-      return;
     }
     /*Получение/Возврат денег*/
     function Money ($mail_id, $type)
     {
-      global $adb, $history, $equip;
-      
       if ($mail_id == 0 || !is_numeric($mail_id))
         $this -> Mail (112, 'get_mail');
       
+      global $adb, $history, $equip;
       $dat = $adb -> selectRow ("SELECT `m`.`id`, 
                                         `m`.`sender`, 
                                         `i`.`name`, 
@@ -2025,14 +1999,10 @@ class Mail extends Error
           $this -> Mail (408, 'get_mail', $name);
         break;
       }
-      
-      return;
     }
     /*Отправка предмета*/
     function sendItem ($mail_to, $item_id)
     {
-      global $adb, $history, $equip;
-      
       if ($item_id == 0 || !is_numeric($item_id))
         $this -> Mail (213, 'items');
       
@@ -2042,6 +2012,7 @@ class Mail extends Error
       if ($mail_to == $this->guid)
         $this -> Mail (218);
       
+      global $adb, $history, $equip;
       $mail_to = $adb -> selectCell ("SELECT `guid` FROM `characters` WHERE `guid` = ?d", $mail_to) or $this -> Mail (106, 'items');
       $transfers = $adb -> selectCell ("SELECT `transfers` FROM `characters` WHERE `guid` = ?d", $this->guid);
       
@@ -2071,16 +2042,14 @@ class Mail extends Error
                       VALUES (?d, ?d, ?d, ?d, ?d)", $this->guid ,$mail_to ,$item_id ,$delivery_time ,time ());
       $history -> mail ('Send', "$name ($price кр)", $_SERVER['REMOTE_ADDR'], $mail_to);
       $this -> Mail (406, 'items', "$name|$price");
-      return;
     }
     /*Получение/Возврат предмета*/
     function ItemMail ($item_id, $type)
     {
-      global $adb, $history;
-      
       if ($item_id == 0 || !is_numeric($item_id))
         $this -> Mail (112, 'get_mail');
       
+      global $adb, $history;
       $dat = $adb -> selectRow ("SELECT `m`.`id`, 
                                         `m`.`sender`, 
                                         `i`.`name` 
@@ -2113,7 +2082,6 @@ class Mail extends Error
           $this -> Mail (408, 'get_mail', $name);
         break;
       }
-      return;
     }
 }
 
@@ -2142,7 +2110,6 @@ class Chat
     $adb -> query ("INSERT INTO `city_chat` (`sender`, `to`, `room`, `msg`, `class`, `date_stamp`, `city`) 
                     VALUES (?s, ?s, ?s, ?s, ?s, ?d, ?s)", $sender ,$to ,$room ,$text ,$class ,time () ,$city);
     echo "<script>top.frames.ref.location = 'refresh.php';</script>";
-    return true;
   }
   /*Выполнение комманд в чате*/
   function executeCommand ($name, $message, $guid)
@@ -2185,7 +2152,7 @@ class Chat
           return false;
         break;
     }
-}
+  }
 }
 
 /*Функции информации*/
@@ -2224,27 +2191,19 @@ class Info
     {
       switch ($travm_var)
       {
-        case 1: $travm_var = "легкая травма";
-        break;
-        case 2: $travm_var = "средняя травма";
-        break;
-        case 3: $travm_var = "тяжелая травма";
-        break;
+        case 1: $travm_var = "легкая травма";  break;
+        case 2: $travm_var = "средняя травма"; break;
+        case 3: $travm_var = "тяжелая травма"; break;
       }
       switch ($travm_stat)
       {
-        case 'str': $travm_stat = "сила";
-        break;
-        case 'dex': $travm_stat = "ловкость";
-        break;
-        case 'con': $travm_stat = "интуиция";
-        break;
-        case 'vit': $travm_stat = "выносливость";
-        break;
+        case 'str': $travm_stat = "сила";         break;
+        case 'dex': $travm_stat = "ловкость";     break;
+        case 'con': $travm_stat = "интуиция";     break;
+        case 'vit': $travm_stat = "выносливость"; break;
       }
       echo "<img src='img/icon/travma2.gif'><small>У персонажа $travm_var - <b>\"ослабленна характеристика $travm_stat\"</b> еще ".getFormatedTime($travm)."</small>";
     }
-    return;
   }
   /*Показ строки персонажа*/
   function character ($guid, $type = 'clan')
@@ -2292,8 +2251,8 @@ class Info
       case 'news':   return "$orden_img$clan<font class='header'>$login</font> [$level]$login_info"; break;
       case 'info':   return "<img src='img/icon/lock3.gif' border='0'onclick=window.opener.to('$login'); style='cursor: pointer;'> $orden_img$clan<b>$login</b> [$level]$login_info"; break;
       case 'mail':   return "<font color='red'>$login</font> $login_info"; break;
+      default:       return "";
     }
-    return false;
   }
   /*Показ кол-ва человек в комнате*/
   function roomOnline ($name, $type = 'full')
@@ -2306,7 +2265,7 @@ class Info
     if ($type == 'full') return "<strong>$room[name]</strong><br>Сейчас в комнате: $online";
     if ($type == 'map')  return $online;
     if ($type == 'mini') return "Время перехода: $room[time_to_go] сек.<br>Сейчас в комнате: $online";
-                         return false;
+                         return "";
   }
   /*Вывод списка профессионалов*/
   function showArch ($prof)
@@ -2318,7 +2277,7 @@ class Info
     
     foreach ($rows as $num => $char)
       return $this -> character ($char)."<br>";
-    return;
+    return "";
   }
 }
 
@@ -2421,7 +2380,6 @@ class Error
       $err_text = "$err_text<br>";
     
     vprintf ($err_text, $parametr);
-    return;
   }
 }
 
@@ -2451,9 +2409,9 @@ function getUpdateBar ()
   return print $return;
 }
 /*Получение времени восстановления здоровья*/
-function getCureValue ($now, $all, $regen)
+function getCureValue ($now, $all, $regen, &$value)
 {
-  return floor (((($all - $now) / ($all * 0.01)) * 10) / ($regen * 0.01));
+  $value = floor (((($all - $now) / ($all * 0.01)) * 10) / ($regen * 0.01)) + time ();
 }
 /*Получение количества восстановленного здоровья*/
 function getRegeneratedValue ($all, $cure, $regen)
@@ -2480,7 +2438,7 @@ function getFormatedTime ($timestamp)
   $m = ($m < 0) ?0 :$m;
   $s = $time - $m * 60;
   $s = ($s < 0) ?0 :$s;
-
+  
   if ($d > 0 && $h == 0) return "$d дн.";
   if ($d > 0)            return "$d дн. $h ч.";
   if ($h > 0)            return "$h ч. $m мин.";

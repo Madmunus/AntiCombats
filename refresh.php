@@ -27,7 +27,7 @@ $info = new Info;
 
 $go = (isset($_GET['go'])) ?1 :0;
 
-$test -> GuidForm ($guid, &$db);
+$test -> Guid ($guid);
 $test -> Zayavka ();
 $test -> Afk ();
 ?>
