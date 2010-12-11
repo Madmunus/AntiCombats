@@ -95,9 +95,9 @@ function deleteItem (id)
 	  else if (item[0] == 'complete')
 	  {
 	    var count_items = parseInt($("#count_items").html()) - 1;
-		$("#item_id_"+id).slideUp('10000', function (){$(this).remove();});
-		$("#mass").fadeOut('10000', function (){$(this).html(item[1]).fadeIn('10000');});
-		$("#count_items").fadeOut('10000', function (){$(this).html(count_items).fadeIn('10000');});
+      $("#item_id_"+id).slideUp('10000', function (){$(this).remove();});
+      $("#mass").fadeOut('10000', function (){$(this).html(item[1]).fadeIn('10000');});
+      $("#count_items").fadeOut('10000', function (){$(this).html(count_items).fadeIn('10000');});
 	  }
 	});
 }

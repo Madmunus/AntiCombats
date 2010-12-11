@@ -4,8 +4,8 @@ function showShopSection (section_shop)
   var name_filter = $("input[name=name_filter]").val();
   $("#loadbar").show();
   $.post('ajax.php', 'do=showshopsection&section_shop='+section_shop+'&level_filter='+level_filter+'&name_filter='+name_filter, function (data){
-	if (data)
-	  $("#section").fadeOut('10000', function (){$(this).html(data).fadeIn('10000'); $("#loadbar").hide();});
+    if (data)
+      $("#section").fadeOut('10000', function (){$(this).html(data).fadeIn('10000'); $("#loadbar").hide();});
   });
 }
 
@@ -14,13 +14,13 @@ function shopSection (section_shop)
   var cur_section_shop = getCookie ('section_shop');
   if (section_shop)
   {
-	$("#section_shop_"+cur_section_shop+", #section_shop_knife").css('backgroundColor', '');
-	$("#section_shop_"+section_shop).css('backgroundColor', '#C7C7C7');
-	setCookie ('section_shop', section_shop, getTimePlusHour ());
-	$.post('ajax.php', 'do=getshoptitle&section_shop='+section_shop, function (data){
-	  if (data)
-		$("#shop_title").html(data);
-	});
+    $("#section_shop_"+cur_section_shop+", #section_shop_knife").css('backgroundColor', '');
+    $("#section_shop_"+section_shop).css('backgroundColor', '#C7C7C7');
+    setCookie ('section_shop', section_shop, getTimePlusHour ());
+    $.post('ajax.php', 'do=getshoptitle&section_shop='+section_shop, function (data){
+      if (data)
+        $("#shop_title").html(data);
+    });
   }
   section_shop = getCookie ('section_shop');
   showShopSection (section_shop);
@@ -30,19 +30,38 @@ function buyItem (entry)
 {
   var count = ($('input[name=count]').val()) ?$('input[name=count]').val() :1;
   $.post('ajax.php', 'do=buyitem&entry='+entry+'&count='+count, function (data){
-	closehint3 ();
-	var item = data.split('A_D');
-	if (item[0] == 'error')
-	  showError (item[1], item[2]);
-	else if (item[0] == 'complete')
-	{
-	  if (item[3] == 400)
-		$("#money").fadeOut('10000', function (){$(this).html(item[1]).fadeIn('10000');});
-	  else if (item[3] == 401)
-		$("#money_euro").fadeOut('10000', function (){$(this).html(item[1]).fadeIn('10000');});
-	  $("#mass").fadeOut('10000', function (){$(this).html(item[2]).fadeIn('10000');});
-	  showError (item[3], item[4]);
-	}
+    closehint3 ();
+    var item = data.split('A_D');
+    if (item[0] == 'error')
+      showError (item[1], item[2]);
+    else if (item[0] == 'complete')
+    {
+      if (item[3] == 400)
+        $("#money").fadeOut('10000', function (){$(this).html(item[1]).fadeIn('10000');});
+      else if (item[3] == 401)
+        $("#money_euro").fadeOut('10000', function (){$(this).html(item[1]).fadeIn('10000');});
+      $("#mass").fadeOut('10000', function (){$(this).html(item[2]).fadeIn('10000');});
+      showError (item[3], item[4]);
+    }
+  });
+}
+
+function sellItem (id)
+{
+  $.post('ajax.php', 'do=sellitem&id='+id, function (data){
+    var item = data.split('A_D');
+    if (item[0] == 'error')
+      showError (item[1], item[2]);
+    else if (item[0] == 'complete')
+    {
+      if (item[3] == 404)
+        $("#money").fadeOut('10000', function (){$(this).html(item[1]).fadeIn('10000');});
+      else if (item[3] == 405)
+        $("#money_euro").fadeOut('10000', function (){$(this).html(item[1]).fadeIn('10000');});
+      $("#item_id_"+id).slideUp('10000', function (){$(this).remove();});
+      $("#mass").fadeOut('10000', function (){$(this).html(item[2]).fadeIn('10000');});
+      showError (item[3], item[4]);
+    }
   });
 }
 
