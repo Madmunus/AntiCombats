@@ -1,13 +1,12 @@
-function drop(name, n, txt){
-	var table = 	'<TABLE width=100%><TD><IMG src="http://img.combats.com/i/items/'+name+
-			'.gif"></TD><TD>Предмет <NOBR><B>\''+txt+'\'</B></NOBR> будет утерян, вы уверены ?</TABLE>'+
- (!specialscript?'<input type=checkbox name="dropall" value="'+txt+'"><SMALL> Все предметы этого вида</SMALL>':'')+
-	'<INPUT type=hidden name=drop value="'+name+'"><INPUT type=hidden name=n value="'+n+'"><INPUT type=hidden name=sd4 value="' + sd4+'">';
-// window.clipboardData.setData('Text', table);
-	dialogconfirm('Выбросить предмет?', (specialscript?specialscript:'main.pl'),table);
+function drop (id, img, txt)
+{
+	var table = '<table width="100%"><td><img src="img/items/'+img+'"></td><td>Предмет <nobr><b>\''+txt+'\'</b></nobr> будет утерян, вы уверены ?</table>'+
+              '<input type="checkbox" name="dropall"><small> Все предметы этого вида</small>';
+	dialogconfirm ('Выбросить предмет?', 'deleteItem (\''+id+'\');', table);
 }
 
-function drophlam(){
+function drophlam ()
+{
 	var table = 	'<TABLE width=100%><TR><TD width="10%"><IMG src="http://img.combats.com/i/items/just_junk.gif">'+
 			'</TD><TD>Выбросить разный хлам типа выписок, квитанций и увядших букетов?</TD></TR>'+
 			'<TR><TD colspan="2"><small><B style="color:red">Внимание!</B> Имеющие срок годности предметы, купленные за зубы (эликсиры, корм для животных и т.д.), будут уничтожены.</small></TD></TR></TABLE>'+
@@ -83,22 +82,6 @@ function chooseShape (shape)
 	    location.href = 'main.php?action=inv';
 	  else if (shapes[0] == 'error')
 	    showError (shapes[1]);
-	});
-}
-
-function deleteItem (id)
-{
-	$.post('ajax.php', 'do=deleteitem&id='+id, function (data){
-	  var item = data.split('A_D');
-	  if (item[0] == 'error')
-	    showError (item[1]);
-	  else if (item[0] == 'complete')
-	  {
-	    var count_items = parseInt($("#count_items").html()) - 1;
-      $("#item_id_"+id).slideUp('10000', function (){$(this).remove();});
-      $("#mass").fadeOut('10000', function (){$(this).html(item[1]).fadeIn('10000');});
-      $("#count_items").fadeOut('10000', function (){$(this).html(count_items).fadeIn('10000');});
-	  }
 	});
 }
 

@@ -22,12 +22,12 @@ function bank_open (ac_list, name)
 	}
 	opt += '</select>';	
 	s = '<table border="0" width="100%" cellspacing="0" cellpadding="2" >'+
-		'<tr><td colspan="2" align="center">Выберите счёт и введите пароль</td></tr>' +
-		'<tr>'+
-			'<td style="padding-left: 5px; text-align: right;">' + opt+ '&nbsp;<input style="width: 100px;" type="password" name="pass" size="12" maxlength="30"></td>' +
-			'<td><input type="image" src="#IMGSRC#" width="27" height="20" border="0" onclick="inventoryLoginBank ();"></td>'+
-		'</tr>'+
-		'</table>';
+      '<tr><td colspan="2" align="center">Выберите счёт и введите пароль</td></tr>'+
+      '<tr>'+
+        '<td style="padding-left: 5px; text-align: right;">' + opt+ '&nbsp;<input style="width: 100px;" type="password" name="pass" size="12" maxlength="30"></td>'+
+        '<td><input type="image" src="#IMGSRC#" width="27" height="20" border="0" onclick="inventoryLoginBank ();"></td>'+
+      '</tr>'+
+      '</table>';
 	s = crtmagic ('', 'Счёт в банке', s, '');
 	if (!name)
 		name = "hint3";
@@ -37,14 +37,25 @@ function bank_open (ac_list, name)
 	Hint3Name = 'credit';
 }
 
+function dialogconfirm (title, script, text, mtype)
+{
+	var s;
+	s = '<table border="0" width="100%" cellspacing="0" cellpadding="2"><tr><td colspan="2">'+text+
+      '</td></tr><tr><td width="50%" align="center"><input type="submit" name="yes" value="Да" style="width: 70%;" onclick="'+script+';"></td><td width="50%" align="center"><input type="button" style="width: 70%;" value="Нет" onclick="closehint3 ();"></td></tr></table>';
+	s = crtmagic (mtype, title, s);
+  $('#hint3').html(s).css({'left': 100, 'top': document.body.scrollTop + 50, 'zIndex': 200}).fadeIn('fast');
+  $('[name=yes]').focus();
+	Hint3Name = "hint3";
+}
+
 function findlogin (title, script, name, defaultlogin, mtype, addon, noclose)
 {
 	var s;
-	s = '<form action="'+script+'" method="get" name="slform" style="display: inline;">' +
-		'<table border="0" width="100%" cellspacing="0" cellpadding="2"><tr>' +
-		'<td colspan="2">Укажите логин персонажа:<small><br>(можно щелкнуть по логину в чате)</td></tr>'+
-		'<tr><td width="50%" align="right" style="padding-left: 5px;"><input style="width: 100%" type="text" name="'+name+'" value="'+defaultlogin+'"></td>' +
-		'<td width="50%"><input type=image src="#IMGSRC#" width="27" height="20" border="0" onclick="slform.'+name+'.value = fixspaces (slform.'+name+'.value);">'+(addon ?addon :'')+'</td></tr></table></form>';
+	s = '<form action="'+script+'" method="get" name="slform" style="display: inline;">'+
+      '<table border="0" width="100%" cellspacing="0" cellpadding="2"><tr>'+
+      '<td colspan="2">Укажите логин персонажа:<small><br>(можно щелкнуть по логину в чате)</td></tr>'+
+      '<tr><td width="50%" align="right" style="padding-left: 5px;"><input style="width: 100%" type="text" name="'+name+'" value="'+defaultlogin+'"></td>'+
+      '<td width="50%"><input type=image src="#IMGSRC#" width="27" height="20" border="0" onclick="slform.'+name+'.value = fixspaces (slform.'+name+'.value);">'+(addon ?addon :'')+'</td></tr></table></form>';
 	s = crtmagic (mtype, title, s, noclose);
 
 	$('#hint3').html(s).css({'left': 100, 'top': document.body.scrollTop + 50, 'zIndex': 200}).fadeIn('fast');
@@ -71,9 +82,8 @@ function foundmagictype (mtypes)
 				maxfound = k;
 				doubl = 0;
 			}
-			else
-				if (k == maxfound)
-					doubl = 1;
+			else if (k == maxfound)
+				doubl = 1;
 		}
 		if (doubl)
 			return 0;
@@ -115,7 +125,7 @@ function crtmagic (mtype, title, body, noclose)
 					'<td width="100%" bgcolor="#'+colors[mtype*2]+'"' + (names[mtype*10+9] ?' style="padding-top: '+names[mtype*10+9]+'px;"' :'') + '>'+
 						'<table border="0" width="100%" cellspacing="0" cellpadding="0">'+
 							'<td align="center"><b>'+title+'</b></td>'+
-							'<td width="20" align="right" valign="top">' + (noclose ?'' :'<img src="i/clearg.gif" width="13" height="13" style="cursor: pointer;" onclick="closehint3 ();">') + '&nbsp;</td>'+
+							'<td width="20" align="right" valign="top">' + ((noclose) ?'' :'<img id="clear" src="i/clearg.gif" width="13" height="13" style="cursor: pointer;" onclick="closehint3 ();">') + '&nbsp;</td>'+
 						'</table>'+
 						'<div align="center" style="background-color:#'+colors[mtype*2+1]+';">'+body+'</div>'+
 					'</td>'+
@@ -139,5 +149,5 @@ function crtmagic (mtype, title, body, noclose)
 function closehint3 ()
 {
 	$('#hint3').fadeOut('fast', function (){$(this).html('');});
-    Hint3Name = '';
+  Hint3Name = '';
 }
