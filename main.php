@@ -98,10 +98,10 @@ $(document).ready(function (){
   if ($(".broken").html() != undefined)
     setInterval (BrokenItems, 4100);
   
-  $('#clear').live('mouseover mouseout', function (e){
+  $('#clear').live('mouseover mouseleave', function (e){
     if (e.type == 'mouseover')
       $(this).attr('src', 'i/clear.gif');
-    else if (e.type == 'mouseout')
+    else if (e.type == 'mouseleave')
       $(this).attr('src', 'i/clearg.gif');
   });
   $('#revert').live('click', function (){

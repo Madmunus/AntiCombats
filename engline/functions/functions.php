@@ -805,12 +805,12 @@ class Equip extends Error
     if ($price_euro > 0)
     {
       $this -> getBuyValue ($price_euro);
-      $price = ($price_euro > $money_euro) ?"<font color='#FF0000'>$price_euro</font> екр." :"$price_euro екр.";
+      $price_s = ($price_euro > $money_euro) ?"<font color='#FF0000'>$price_euro</font> екр." :"$price_euro екр.";
     }
     else if ($price > 0)
     {
       $this -> getBuyValue ($price);
-      $price = ($price > $money) ?"<font color='#FF0000'>$price</font> кр." :"$price кр.";
+      $price_s = ($price > $money) ?"<font color='#FF0000'>$price</font> кр." :"$price кр.";
     }
     $item_flags = $item_info['item_flags'];
     $item_id = (isset($item_info['id'])) ?$item_info['id'] :0;
@@ -827,7 +827,7 @@ class Equip extends Error
     $add['con'] = (isset($item_info['inc_con'])) ?$item_info['add_con'] + $item_info['inc_con'] :$item_info['add_con'];
     $add['int'] = (isset($item_info['inc_int'])) ?$item_info['add_int'] + $item_info['inc_int'] :$item_info['add_int'];
     $chet = ($i) ?"C7C7C7" :"D5D5D5";
-    $return = "<div id='item_id_$item_id'><table width='100%' border='0' cellspacing='1' cellpadding='0' bgColor='#a5a5a5' style='margin-top: -1px;'><tr bgColor='#$chet'>";
+    $return = "<div id='item_id_$item_id' name='item_entry_$entry'><table width='100%' border='0' cellspacing='1' cellpadding='0' bgColor='#a5a5a5' style='margin-top: -1px;'><tr bgColor='#$chet'>";
     switch ($type)
     {
       case 'inv':
@@ -838,12 +838,14 @@ class Equip extends Error
         if ($wearable)
           $return .= "<a href='?action=wear_item&item_id=$item_id' class='nick'>надеть</a>&nbsp;";
         
-        $return .= "<a href='javascript:deleteItem ($item_id);' onclick=\"if (confirm ('Вы уверены что хотите удалить $name?')){return true;} else {return false;}\"><img src='img/icon/clear.gif' width='14' height='14' border='0' alt='Выбросить предмет <strong>$name</strong><br>'></a>";
+        $return .= "<a href=\"javascript:drop ($item_id, '$img', '$name');\"><img src='img/icon/clear.gif' width='14' height='14' border='0' alt='Выбросить предмет'></a>";
       break;
       case 'shop':
+        $s_price = ($price_euro > 0) ?$price_euro :$price;
+        $s_kr = ($price_euro > 0) ?"екр." :"кр.";
         $return .= "<td width='200' align='center'>";
         $return .= "<img src='img/items/$img' border='0' /><br><center style='padding-top: 4px;'>";
-        $return .= "<a href='javascript:buyItem ($entry);' class='nick'>купить</a>&nbsp;<img src='img/icon/plus.gif' width='11' height='11' border='0' alt='Купить несколько штук' style='cursor: pointer;' onclick=\"AddCount('$entry', '$name')\"></center>";
+        $return .= "<a href='javascript:buyItem ($entry);' class='nick'>купить</a>&nbsp;<img src='img/icon/plus.gif' width='11' height='11' border='0' alt='Купить несколько штук' style='cursor: pointer;' onclick=\"AddCount('$entry', '$name', '$s_price', '$s_kr')\"></center>";
       break;
       case 'sell':
         $s_price = ($price_euro > 0) ?$this -> getSellValue ($item_id, 'euro')." екр." :$this -> getSellValue ($item_id)." кр.";
@@ -866,11 +868,11 @@ class Equip extends Error
       break;
       case 'money_in':
         $name = sprintf ($name, $item_info['count']);
-        $price = "$item_info[count] кр.";
+        $price_s = "$item_info[count] кр.";
         $mail_id = $item_info['id'];
         $return .= "<td width='260' align='center'>";
         $return .= "<img src='img/items/$img' border='0'$color /><br><center style='padding-top: 4px;'>";
-        $return .= "<a href='main.php?do=get_money&mail_id=$mail_id' onclick=\"if (confirm ('Забрать $price?')){return true;} else {return false;}\" class='nick'>Забрать</a><br><a href='main.php?do=return_money&mail_id=$mail_id' onclick=\"if (confirm ('Отказаться от $price?')){return true;} else {return false;}\" class='nick'>Отказаться</a>";
+        $return .= "<a href='main.php?do=get_money&mail_id=$mail_id' onclick=\"if (confirm ('Забрать $price_s?')){return true;} else {return false;}\" class='nick'>Забрать</a><br><a href='main.php?do=return_money&mail_id=$mail_id' onclick=\"if (confirm ('Отказаться от $price?')){return true;} else {return false;}\" class='nick'>Отказаться</a>";
         $return .= "<br><small>(".getFormatedTime ($item_info['delivery_time'] + 5184000).")</small>";
       break;
     }
@@ -919,7 +921,7 @@ class Equip extends Error
     if ($item_flags & 4)
       $return .= "&nbsp;<img src='img/icon/artefakt.gif' width='16' height='16' border='0' alt='$lang[artefact]'>";
     
-    $return .= "<br><b>$lang[price]: $price</b>";
+    $return .= "<br><b>$lang[price]: $price_s</b>";
     $return .= "<br>$lang[durability]: $tear_show";
     
     if (($type == 'inv' | $type == 'sell') && $validity > 0) $return .= "<br>".sprintf ($lang['validity'], date ('d.m.y H:i', $validity), getFormatedTime ($validity));

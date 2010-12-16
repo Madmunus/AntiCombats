@@ -421,9 +421,9 @@ switch ($do)
       $buycount++;
     }
     if ($buycount != 0 && $price > 0)
-      die ("completeA_D".$money."A_D".$mass."A_D400A_D$name|$price|$buycount");
+      die ("completeA_D".$money."A_D".$mass."A_D400A_D$name|".($price*$buycount)."|$buycount");
     else if ($buycount != 0 && $price_euro > 0)
-      die ("completeA_D".$money_euro."A_D".$mass."A_D401A_D$name|$price_euro|$buycount");
+      die ("completeA_D".$money_euro."A_D".$mass."A_D401A_D$name|".($price_euro*$buycount)."|$buycount");
     else
       die ("errorA_D107");
   break;
@@ -453,7 +453,7 @@ switch ($do)
       $money = $money + $price;
       $mass = $mass - $i_mass;
       $adb -> query ("UPDATE `characters` SET `mass` = ?f WHERE `guid` = ?d", $mass ,$guid);
-      $adb -> query ("DELETE FROM `character_inventory` WHERE `id` = ?d", $item_id);
+      $adb -> query ("DELETE FROM `character_inventory` WHERE `id` = ?d and `guid` = ?d", $item_id ,$guid);
       $history -> transfers ('Sell', "$name ($price кр)", $_SERVER['REMOTE_ADDR'], 'Shop');
       die ("completeA_D".$money."A_D".$mass."A_D404A_D$name|$price");
     }
@@ -464,31 +464,61 @@ switch ($do)
       $money_euro = $money_euro + $price_euro;
       $mass = $mass - $i_mass;
       $adb -> query ("UPDATE `characters` SET `mass` = ?f WHERE `guid` = ?d", $mass ,$guid);
-      $adb -> query ("DELETE FROM `character_inventory` WHERE `id` = ?d", $item_id);
+      $adb -> query ("DELETE FROM `character_inventory` WHERE `id` = ?d and `guid` = ?d", $item_id ,$guid);
       $history -> transfers ('Sell', "$name ($price екр)", $_SERVER['REMOTE_ADDR'], 'Shop');
       die ("completeA_D".$money_euro."A_D".$mass."A_D405A_D$name|$price");
     }
   break;
   case 'deleteitem':
     $item_id = requestVar ('id', 0);
+    $dropall = requestVar ('dropall', 0);
     
     if ($item_id == 0 || !is_numeric($item_id))
       die ("errorA_D213");
     
-    $dat = $adb -> selectRow ("SELECT `i`.`name`, 
-                                      `i`.`mass` 
-                               FROM `character_inventory` AS `c` 
-                               LEFT JOIN `item_template` AS `i` 
-                               ON `c`.`item_template` = `i`.`entry` 
-                               WHERE `c`.`guid` = ?d 
-                                 and `c`.`id` = ?d 
-                                 and `c`.`wear` = '0' 
-                                 and `c`.`mailed` = '0';", $guid ,$item_id) or die ("errorA_D213");
-    $mass = $mass - $dat['mass'];
-    $adb -> query ("UPDATE `characters` SET `mass` = ?f WHERE `guid` = ?d", $mass ,$guid);
-    $adb -> query ("DELETE FROM `character_inventory` WHERE `id` = ?d", $item_id);
-    $history -> transfers ('Throw out', $dat['name'], $_SERVER['REMOTE_ADDR'], 'Dump');
-    die ("completeA_D$mass");
+    switch ($dropall)
+    {
+      default:
+      case 0:
+        $dat = $adb -> selectRow ("SELECT `i`.`name`, 
+                                          `i`.`mass` 
+                                   FROM `character_inventory` AS `c` 
+                                   LEFT JOIN `item_template` AS `i` 
+                                   ON `c`.`item_template` = `i`.`entry` 
+                                   WHERE `c`.`guid` = ?d 
+                                     and `c`.`id` = ?d 
+                                     and `c`.`wear` = '0' 
+                                     and `c`.`mailed` = '0';", $guid ,$item_id) or die ("errorA_D213");
+        $mass = $mass - $dat['mass'];
+        $adb -> query ("UPDATE `characters` SET `mass` = ?f WHERE `guid` = ?d", $mass ,$guid);
+        $adb -> query ("DELETE FROM `character_inventory` WHERE `id` = ?d and `guid` = ?d", $item_id ,$guid);
+        $history -> transfers ('Throw out', $dat['name'], $_SERVER['REMOTE_ADDR'], 'Dump');
+        die ("completeA_D".$mass."A_D1");
+      break;
+      case 1:
+        $item_entry = $adb -> selectCell ("SELECT `item_template` FROM `character_inventory` WHERE `guid` = ?d and `id` = ?d and `wear` = '0' and `mailed` = '0';", $guid ,$item_id) or die ("errorA_D213");
+        $dat = $adb -> select ("SELECT `c`.`id`, 
+                                       `i`.`name`, 
+                                       `i`.`mass` 
+                                FROM `character_inventory` AS `c` 
+                                LEFT JOIN `item_template` AS `i` 
+                                ON `c`.`item_template` = `i`.`entry` 
+                                WHERE `c`.`guid` = ?d 
+                                  and `c`.`item_template` = ?d 
+                                  and `c`.`wear` = '0' 
+                                  and `c`.`mailed` = '0';", $guid ,$item_entry) or die ("errorA_D213");
+        $i = 0;
+        foreach ($dat as $item_info)
+        {
+          $mass = $mass - $item_info['mass'];
+          $adb -> query ("UPDATE `characters` SET `mass` = ?f WHERE `guid` = ?d", $mass ,$guid);
+          $adb -> query ("DELETE FROM `character_inventory` WHERE `id` = ?d and `guid` = ?d", $item_info['id'] ,$guid);
+          $history -> transfers ('Throw out', $item_info['name'], $_SERVER['REMOTE_ADDR'], 'Dump');
+          $i++;
+        }
+        die ("completeA_D".$mass."A_D".$i."A_D".$item_entry);
+      break;
+    }
   break;
 }
 ?>
