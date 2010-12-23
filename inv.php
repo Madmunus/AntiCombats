@@ -78,12 +78,12 @@ echo ($orden == 1 || $orden == 2) ?"<strong>$orden_dis$stat_rang</strong><br></s
                     <tr>
                       <td background="im/menu-but.gif" height="25" align="right" valign="middle">
                         <font color='red' id='error'><?$error -> getFormattedError ($warning, $parameters);?></font>
-                        <input type="button" class="nav" value="Образ" title="Выбрать образ персонажа" onclick="location.href = '?action=form&do=shape';">
-                        <input type="button" class="nav" value="Умения" onclick="location.href = '?action=skills';">
-                        <input type="button" class="nav" value="Анкета" title="Анкета" onclick="location.href = '?action=form&do=info';">
-                        <input type="button" class="nav" value="Безопасность" title="Сменить пароль/email" title="Сменить пароль/email" style="font-weight: bold;" onclick="location.href = '?action=form&do=passandmail';">
+                        <input type="button" class="nav" value="Образ" title="Выбрать образ персонажа" id="link" link="form&do=shape">
+                        <input type="button" class="nav" value="Умения" id="link" link="skills">
+                        <input type="button" class="nav" value="Анкета" title="Анкета" id="link" link="form&do=info">
+                        <input type="button" class="nav" value="Безопасность" title="Сменить пароль/email" title="Сменить пароль/email" style="font-weight: bold;" id="link" link="form&do=passandmail">
                         <input type="button" class="help" value="Подсказка" id="hint" link="invent">
-                        <input type="button" class="nav" value="Вернуться" id="revert" link="none">
+                        <input type="button" class="nav" value="Вернуться" id="link" link="none">
                       </td>
                     </tr>
                   </table>

@@ -23,21 +23,6 @@ function stop_fireworks (id)
   document.getElementById(id).removeNode(true);
   return false;
 }
-
-$(document).ready(function (){
-  $('input[type=button]#club_map').live('click', function (){
-    location.href = 'main.php?action=map';
-  }).val('Карта клуба').css({'font-weight': 'bold', 'width': '102px'});
-  $('input[type=button]#return').live('click', function (){
-    location.href = 'main.php?action=return';
-  }).val('Возврат').css({'font-weight': 'bold', 'width': '102px'});
-  $('input[type=button]#forum').live('click', function (){
-    window.open('/forum');
-  }).val('Форум');
-  $('input[type=button]#fights').live('click', function (){
-    location.href = 'zayavka.php';
-  }).val('Поединки').css({'font-weight': 'bold', 'width': '102px'});
-});
 </script>
 <script src="scripts/move_check.js" type="text/javascript"></script>
 <?

@@ -16,7 +16,7 @@ class Test extends Error
   function Guid ($guid)
   {
     global $adb, $db;
-    $error = "<script>top.main.location.href = 'main.php?action=exit';</script>";
+    $error = "<script>top.main.location.href = 'index.php';</script>";
     
     if ($guid == 0 || !is_numeric($guid))
       die ($error);
@@ -381,7 +381,7 @@ class Test extends Error
   function Room ()
   {
     global $adb, $action;
-    $actions = array ('none', 'go', 'admin', 'enter', 'exit');
+    $actions = array ('none', 'go', 'admin', 'enter', 'exit', '');
     $room = $adb -> selectCell ("SELECT `room` FROM `characters` WHERE `guid` = ?d", $this->guid);
     
     if ($room == 'mail' && !in_array ($action, $actions))
@@ -603,7 +603,7 @@ class Equip extends Error
     switch ($type)
     {
       case 'inv':
-        $name = "alt='$login (Перейти в \"Умения\")' onclick=\"document.location = '?action=skills'\" style='cursor: pointer;'";
+        $name = "alt='$login (Перейти в \"Умения\")' id='link' link='skills' style='cursor: pointer;'";
         $backup = "<img src='img/items/w20.gif' border='0' alt='Пустой правый карман'><img src='img/items/w20.gif' border='0' alt='Пустой карман'><img src='img/items/w20.gif' border='0' alt='Пустой левый карман'><img src='img/items/w21.gif' border='0' alt='Смена оружия'><img src='img/items/w21.gif' border='0' alt='Смена оружия'><img src='img/items/w21.gif' border='0' alt='Смена оружия'>";
       break;
       case 'info':
@@ -611,7 +611,7 @@ class Equip extends Error
         $backup = "<img src='img/items/slot_bottom0.gif' border='0'>";
       break;
       default:
-        $name = "alt='$login (Перейти в \"Инвентарь\")' onclick=\"document.location = '?action=inv&section=1'\" style='cursor: pointer;'";
+        $name = "alt='$login (Перейти в \"Инвентарь\")' id='link' link='inv' style='cursor: pointer;'";
         $backup = "<img src='img/items/w20.gif' border='0' alt='Пустой правый карман'><img src='img/items/w20.gif' border='0' alt='Пустой карман'><img src='img/items/w20.gif' border='0' alt='Пустой левый карман'><img src='img/items/w21.gif' border='0' alt='Смена оружия'><img src='img/items/w21.gif' border='0' alt='Смена оружия'><img src='img/items/w21.gif' border='0' alt='Смена оружия'>";
       break;
     }
@@ -1668,7 +1668,7 @@ class Equip extends Error
     switch ($type)
     {
       default:
-      case 'stat':    /*Характеристики*/
+      case 'stat':       /*Характеристики*/
         $level = $adb -> selectCell ("SELECT `level` FROM `characters` WHERE `guid` = ?d", $this->guid);
         foreach ($behaviour as $key => $value)
         {
@@ -1721,7 +1721,7 @@ class Equip extends Error
                   . "<span title='$lang[mf_blockshield_m]'>$lang[mf_blockshield_i]: $mf_blockshield</span><br>";
         $content .= ($hand_r != 0 || $hand_l != 0) ?"<span title='$lang[mastery_m]'>$lang[mastery]: $show_r_mastery$show_l_mastery</span><br>" :"";
       break;
-      case 'power':    /*Мощность*/
+      case 'power':      /*Мощность*/
         $mf_damage = array ('sting', 'slash', 'crush', 'sharp');
         $mf_magic = array ('fire', 'water', 'air', 'earth', 'light', 'gray', 'dark');
         foreach ($mf_damage as $key)
@@ -1740,7 +1740,7 @@ class Equip extends Error
           $content .= "<span title='".$lang[$key.'_d']."'>".$lang[$key.'_i'].": ".$stats['resist_'.$key]."</span><br>";
       break;
       case 'btn':        /*Кнопки*/
-        $content .= "&nbsp;<input type='button' value='$lang[unwear_all]' class='btn' onclick=\"location.href = 'main.php?action=unwear_full';\" style='font-weight: bold;'><br>";
+        $content .= "&nbsp;<input type='button' value='$lang[unwear_all]' class='btn' id='link' link='unwear_full' style='font-weight: bold;'><br>";
       break;
       case 'set':        /*Комплекты*/
         $sets = $adb -> select ("SELECT * FROM `character_sets`;");
@@ -2513,18 +2513,18 @@ function databaseErrorHandler($message, $info)
   echo "</table>";
 }
 /*Получение переменной GET, POST и COOKIE*/
-function requestVar ($var, $stand = '', $round = false, $may_cookie = false)
+function requestVar ($var, $stand = '', $flags = 3)
 {
-  if (isset($_GET[$var]))
+  if (isset($_GET[$var]) && ($flags & 1))
     $value = $_GET[$var];
-  else if (isset($_POST[$var]))
+  else if (isset($_POST[$var]) && ($flags & 2))
     $value = $_POST[$var];
-  else if (isset($_COOKIE[$var]) && $may_cookie)
+  else if (isset($_COOKIE[$var]) && ($flags & 4))
     $value = $_COOKIE[$var];
   else
     return $stand;
 
-  if (is_numeric ($stand) && is_numeric ($value)) return (is_numeric ($round)) ?round ($value, 2) :$value;
+  if (is_numeric ($stand) && is_numeric ($value)) return ($flags & 8) ?round ($value, 2) :$value;
   else if (!is_numeric ($stand))                  return htmlspecialchars ($value);
   else                                            return $stand;
 }

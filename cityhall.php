@@ -54,11 +54,11 @@ $(document).ready(function (){
 </table>
 <br>
 <div style="text-align: center; border: 2px solid #cccccc; -moz-border-radius: 50px; background: #cccccc;">
-  <input type="button" class="b" value=" Правила " onClick="location.href='?do=profession';">&nbsp; &nbsp; &nbsp;
-  <input type="button" class="b" value=" Получить профессию " onClick="location.href='?do=reg_prof';">&nbsp; &nbsp; &nbsp;
-  <input type="button" class="b" value=" Уволиться " onClick="location.href='?do=fire';">&nbsp; &nbsp; &nbsp;
-  <input type="button" class="b" value=" Архив " onClick="location.href='?do=best_prof';">&nbsp; &nbsp; &nbsp;
-  <input type="button" class="b" value=" Выход " onClick="location.href='?action=go&room_go=centplosh';">
+  <input type="button" class="b" value=" Правила " id="link" link="none&do=profession">&nbsp; &nbsp; &nbsp;
+  <input type="button" class="b" value=" Получить профессию " id="link" link="none&do=reg_prof">&nbsp; &nbsp; &nbsp;
+  <input type="button" class="b" value=" Уволиться " id="link" link="none&do=fire">&nbsp; &nbsp; &nbsp;
+  <input type="button" class="b" value=" Архив " id="link" link="none&do=best_prof">&nbsp; &nbsp; &nbsp;
+  <input type="button" class="b" value=" Выход " id="link" link="go&room_go=centplosh">
 </div>
 <br>
 <div style="border: 2px solid #cccccc; -moz-border-radius: 15px; background: #cccccc; padding: 0 5px 5px 5px;">
@@ -110,8 +110,8 @@ switch ($do)
     if (!empty($prof))
     {
       echo "<center>Вы уверены что хотите выбрать профессию <b>".$lang['prof_'.$prof]."</b>?<br>";
-      echo "<input type='button' class='but' value='Да' onClick=\"location.href='?do=reg_prof&prof=$prof&conf=1'\"> &nbsp;";
-      echo "<input type='button' class='but' value='Нет' onClick=\"location.href='?do=reg_prof'\"></center>";
+      echo "<input type='button' class='but' value='Да' id='link' link='none&do=reg_prof&prof=$prof&conf=1'> &nbsp;";
+      echo "<input type='button' class='but' value='Нет' id='link' link='none&do=reg_prof'></center>";
       die ($bot);
     }
 ?>
@@ -141,8 +141,8 @@ switch ($do)
     if ($conf == 1)
     {
       echo "<center>Вы уверены что хотите уволиться с профессии <b>$prof_d</b>?<br>";
-      echo "<input type='button' class='but' value='Да' onClick=\"location.href='?do=fire&conf=2'\"> &nbsp;";
-      echo "<input type='button' class='but' value='Нет' onClick=\"location.href='?do=fire'\"></center>";
+      echo "<input type='button' class='but' value='Да' id='link' link='none&do=fire&conf=2'> &nbsp;";
+      echo "<input type='button' class='but' value='Нет' id='link' link='none&do=fire'></center>";
       die ($bot);
     }
     if ($conf == 2)
@@ -173,7 +173,7 @@ switch ($do)
         die ($error_text['fire_money']);
     }
     echo "Ваша текущая профессия: <b>$prof_d</b><br>";
-    echo "<input type='button' class='but' value='Уволиться (100 кр.)' onClick=\"location.href = '?do=fire&conf=1;'\">";
+    echo "<input type='button' class='but' value='Уволиться (100 кр.)' id='link' link='none&do=fire&conf=1'>";
   break;
   case 'best_prof':
     echo "<center><b>Архив:</b></center>";

@@ -7,10 +7,7 @@ ini_set ('error_reporting', E_ALL);
 
 define ('AntiBK', true);
 
-if (empty($_SESSION['guid']))
-	die ("<script>top.location.href = 'index.php';</script>");
-else
-  $guid = $_SESSION['guid'];
+$guid = (empty($_SESSION['guid'])) ?0 :$_SESSION['guid'];
 
 include ("engline/config.php");
 include ("engline/dbsimple/Generic.php");
@@ -90,7 +87,7 @@ switch ($do)
   break;
   case 'sortinventory':
     $type = requestVar ('type');
-    $section = requestVar ('section', 1, false, true);
+    $section = requestVar ('section', 1, 7);
     $sort = ($_POST['num'] == 1) ?' DESC' :'';
     $items = $adb -> selectCol ("SELECT `c`.`id` AS ARRAY_KEY, `i`.?#
                                  FROM `character_inventory` AS `c` 
@@ -114,10 +111,10 @@ switch ($do)
     if (!$room_shop)
       die ("<table width='100%' cellspacing='1' cellpadding='2' bgcolor='#A5A5A5'><tr><td bgcolor='#E2E0E0' align='center'>Это место не является магазином</td></tr></table>");
     
-    $section_shop = requestVar ('section_shop', '', false, true);
-    $level_filter = requestVar ('level_filter', '', false, true);
+    $section_shop = requestVar ('section_shop', '', 7);
+    $level_filter = requestVar ('level_filter', '', 7);
     $check_level = ($level_filter > 0 || $level_filter == '0');
-    $name_filter = requestVar ('name_filter', '', false, true);
+    $name_filter = requestVar ('name_filter', '', 7);
     setCookie ('level_filter', $level_filter,  time () + 3600);
     setCookie ('name_filter', $name_filter,  time () + 3600);
     $rows = $adb -> select ("SELECT * 

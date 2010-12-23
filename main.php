@@ -7,10 +7,7 @@ ini_set ('error_reporting', E_ALL);
 
 define ('AntiBK', true);
 
-if (empty($_SESSION['guid']))
-	die ("<script>top.location.href = 'index.php';</script>");
-else
-  $guid = $_SESSION['guid'];
+$guid = (empty($_SESSION['guid'])) ?0 :$_SESSION['guid'];
 
 include ("engline/config.php");
 include ("engline/dbsimple/Generic.php");
@@ -43,8 +40,7 @@ $test -> WakeUp ();
 
 $action = requestVar ('action', 'none');
 $do = requestVar ('do');
-$section = requestVar ('section', 1, false, true);
-$section_shop = (isset($_GET['section_shop']) && array_key_exists ($_COOKIE['section_shop'], $data['sections_shop'])) ?htmlspecialchars ($_GET['section_shop']) :((isset($_COOKIE['section_shop'])) ?$_COOKIE['section_shop'] :"knife");
+$section = requestVar ('section', 1, 7);
 $login_mail = (isset($_GET['login_mail'])) ?htmlspecialchars ($_GET['login_mail']) :((isset($_COOKIE['login_mail']) && $_COOKIE['login_mail'] != $guid && $_COOKIE['login_mail'] != $db['login']) ?$_COOKIE['login_mail'] :"");
 $credit = requestVar ('credit');
 $pass = requestVar ('pass');
@@ -54,8 +50,8 @@ $stat = requestVar ('stat');
 $warning = requestVar ('warning', 0);
 $set_name = requestVar ('set_name');
 $parameters = requestVar ('parameters');
-$level_filter = requestVar ('level_filter', -1, false, true);
-$name_filter = requestVar ('name_filter', '', false, true);
+$level_filter = requestVar ('level_filter', -1, 7);
+$name_filter = requestVar ('name_filter', '', 7);
 $level_filter = ($level_filter < 0) ?'' :$level_filter;
 
 setCookie ('login_mail', $login_mail,  time () + 3600);
@@ -74,53 +70,6 @@ setCookie ('login_mail', $login_mail,  time () + 3600);
 var link = top.location.href.split("/");
 if (link[link.length - 1] != 'game.php')
   top.location.href = "index.php";
-
-var broken = new Array ();
-var i = 1;
-
-function BrokenItems ()
-{
-  $(".broken").each(function (){
-    bgcolor = $(this).parents('tr[bgColor]').attr('bgColor');
-    $(this).animate({backgroundColor: ((broken[i]) ?"#f88383" :bgcolor)}, 2000);
-    broken[i] = !broken[i];
-    i++;
-  });
-  i = 1;
-}
-
-$(document).ready(function (){
-  $(".broken").each(function (){
-    broken[i] = true;
-    i++;
-  });
-  i = 1;
-  if ($(".broken").html() != undefined)
-    setInterval (BrokenItems, 4100);
-  
-  $('#clear').live('mouseover mouseleave', function (e){
-    if (e.type == 'mouseover')
-      $(this).attr('src', 'i/clear.gif');
-    else if (e.type == 'mouseleave')
-      $(this).attr('src', 'i/clearg.gif');
-  });
-  $('#revert').live('click', function (){
-    location.href = 'main.php?action='+$(this).attr('link');
-  });
-  $('#hint').live('click', function (){
-    showHelp ($(this).attr('link'));
-  });
-  $('#refresh').live('click', function (){
-    location.reload();
-  });
-  $(document).mousemove(function (e){
-    $("#x").val(e.pageX);
-    $("#y").val(e.pageY);
-  });
-  $('input[type=button], input[type=radio], input[type=submit], a').live('click', function (){
-    $(this).blur();
-  });
-});
 </script>
 </head>
 <body bgcolor="#dedede" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">

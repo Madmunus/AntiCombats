@@ -25,12 +25,6 @@ function stop_fireworks (id)
 }
 
 $(document).ready(function (){
-  $('input[type=button]#club_map').live('click', function (){
-    location.href = 'main.php?action=map';
-  }).val('Карта клуба').css({'font-weight': 'bold', 'width': '102px'});
-  $('input[type=button]#return').live('click', function (){
-    location.href = 'main.php?action=return';
-  }).val('Возврат').css({'font-weight': 'bold', 'width': '102px'});
   $('input[type=button]#forum').live('click', function (){
     window.open('/forum');
   }).val('Форум');
@@ -114,13 +108,6 @@ switch ($room)
       <div class="map_discrp"><small>Благородный дон желает стоять как столб посреди комнаты, и пугать своим видом новичков, или все-таки поднимется на второй этаж, где творятся настоящие дела?</small></div>
       <hr>
 <?
-if ($return_status)
-  echo "<input type='button' class='btn2' id='return' />";
-?>
-      <input type="button" class="btn2" id="club_map" />
-      <input type="button" class="btn2" id="forum" />
-      <input type="button" class="btn2" value="Подсказка" style="width: 102px;" id="hint" link="top" /><br>
-<?
   break;
   case 'km_1':
 ?>
@@ -145,13 +132,6 @@ if ($return_status)
       <div class="map_discrp"><small>Возможно, вы ошиблись этажом - настоящие сражения проходят выше.</small></div>
       <hr>
       <input type="button" class="btn2" id="fights" />
-<?
-if ($return_status)
-  echo "<input type='button' class='btn2' id='return' />";
-?>
-      <input type="button" class="btn2" id="club_map" />
-      <input type="button" class="btn2" id="forum" />
-      <input type="button" class="btn2" value="Подсказка" style="width: 102px;" id="hint" link="top" /><br>
 <?
   break;
   case 'km_2':
@@ -178,13 +158,6 @@ if ($return_status)
       <hr>
       <input type="button" class="btn2" id="fights" />
 <?
-if ($return_status)
-  echo "<input type='button' class='btn2' id='return' />";
-?>
-      <input type="button" class="btn2" id="club_map" />
-      <input type="button" class="btn2" id="forum" />
-      <input type="button" class="btn2" value="Подсказка" style="width: 102px;" id="hint" link="top" /><br>
-<?
   break;
   case 'km_3':
 ?>
@@ -210,13 +183,6 @@ if ($return_status)
       <hr>
       <input type="button" class="btn2" id="fights" />
 <?
-if ($return_status)
-  echo "<input type='button' class='btn2' id='return' />";
-?>
-      <input type="button" class="btn2" id="club_map" />
-      <input type="button" class="btn2" id="forum" />
-      <input type="button" class="btn2" value="Подсказка" style="width: 102px;" id="hint" link="top" /><br>
-<?
   break;
   case 'km_4':
 ?>
@@ -241,13 +207,6 @@ if ($return_status)
       <hr>
       <input type="button" class="btn2" id="fights" />
 <?
-if ($return_status)
-  echo "<input type='button' class='btn2' id='return' />";
-?>
-      <input type="button" class="btn2" id="club_map" />
-      <input type="button" class="btn2" id="forum" />
-      <input type="button" class="btn2" value="Подсказка" style="width: 102px;" id="hint" link="top" /><br>
-<?
   break;
   case 'castle2':
 ?>
@@ -271,13 +230,6 @@ if ($return_status)
       <div id="add_text"></div>
       <div class="map_discrp"><small>Если есть желание купить, продать, лечить, точить – посетите Торговый Зал. Если есть желание изменить себя, освоить новые умения и поправить расшатанное эликсирами здоровье - пройдите в комнату Знахаря. Если есть желание драться, то вам в Рыцарский Зал. Если есть желание драться, драться, драться и ещё раз драться, обсуждая в перерывах превосходство мощного крита в репу над всякой магической заумью, то вам в Башню Рыцарей Магов.</small></div>
       <hr>
-<?
-if ($return_status)
-  echo "<input type='button' class='btn2' id='return' />";
-?>
-      <input type="button" class="btn2" id="club_map" />
-      <input type="button" class="btn2" id="forum" />
-      <input type="button" class="btn2" value="Подсказка" style="width: 102px;" id="hint" link="top" /><br>
 <?
   break;
   case 'km_7':
@@ -304,13 +256,6 @@ if ($return_status)
       <hr>
       <input type="button" class="btn2" id="fights" />
 <?
-if ($return_status)
-  echo "<input type='button' class='btn2' id='return' />";
-?>
-      <input type="button" class="btn2" id="club_map" />
-      <input type="button" class="btn2" id="forum" />
-      <input type="button" class="btn2" value="Подсказка" style="width: 102px;" id="hint" link="top" /><br>
-<?
   break;
   case 'km_6':
 ?>
@@ -336,19 +281,18 @@ if ($return_status)
         <hr>
         <input type="button" class="btn2" id="fights" />
 <?
-if ($return_status)
-  echo "<input type='button' class='btn2' id='return' />";
-?>
-        <input type="button" class="btn2" id="club_map" />
-        <input type="button" class="btn2" id="forum" />
-        <input type="button" class="btn2" value="Подсказка" style="width: 102px;" id="hint" link="top" /><br>
-<?
   break;
 }
+
+if ($return_status)
+  echo "<input type='button' class='btn2' value='Возврат' id='link' link='return' style='font-weight: bold; width: 102px;' />";
 ?>
-    <small><b>Внимание!</b> Никогда и никому не говорите пароль от своего персонажа. Не вводите пароль на других сайтах, типа "новый город", "лотерея", "там, где все дают на халяву". Пароль не нужен ни паладинам, ни кланам, ни администрации, <u>только взломщикам</u> для кражи вашего героя.<br><i>Администрация.</i></small><br>Сейчас в клубе <?echo $online;?> чел.
-    </td>
-  </tr>
+        <input type="button" class="btn2" value="Карта клуба" id="link" link="map" style="font-weight: bold; width: 102px;" />
+        <input type="button" class="btn2" id="forum" />
+        <input type="button" class="btn2" value="Подсказка" style="width: 102px;" id="hint" link="top" /><br>
+        <small><b>Внимание!</b> Никогда и никому не говорите пароль от своего персонажа. Не вводите пароль на других сайтах, типа "новый город", "лотерея", "там, где все дают на халяву". Пароль не нужен ни паладинам, ни кланам, ни администрации, <u>только взломщикам</u> для кражи вашего героя.<br><i>Администрация.</i></small><br>Сейчас в клубе <?echo $online;?> чел.
+      </td>
+    </tr>
 </table>
     </td>
   </tr>

@@ -92,7 +92,7 @@ switch ($do)
     list ($id, $cash, $euro) = array_values($credit);
     if (isset($_POST['add_kredit']))
     {
-      $add_sum = requestVar ('add_sum', 0, true);
+      $add_sum = requestVar ('add_sum', 0, 11);
       
       if (!($equip -> Money ($add_sum)))
         $error -> Map (107);
@@ -103,7 +103,7 @@ switch ($do)
     }
     else if (isset($_POST['get_kredit']))
     {
-      $get_sum = requestVar ('get_sum', 0, true);
+      $get_sum = requestVar ('get_sum', 0, 11);
       $equip -> MoneyBank ($get_sum, $id);
       $equip -> Money (-$get_sum);
       $history -> bank ($id, '', $get_sum, '', 3);
@@ -111,7 +111,7 @@ switch ($do)
     }
     else if (isset($_POST['transfer_kredit']))
     {
-      $trf_sum = requestVar ('transfer_sum', 0, true);
+      $trf_sum = requestVar ('transfer_sum', 0, 11);
       if ($level < 8)
         $error -> Map (306);
       
@@ -132,7 +132,7 @@ switch ($do)
     }
     else if (isset($_POST['convert_ekredit']))
     {
-      $convert_sum = requestVar ('convert_sum', 0, true);
+      $convert_sum = requestVar ('convert_sum', 0, 11);
       if ($convert_sum == 0 || !is_numeric($convert_sum))
         $error -> Map (327);
       
@@ -213,7 +213,7 @@ if (empty($_SESSION['bankСredit']))
 <li>Перевести кредиты/еврокредиты с одного счета на другой
 <li>Обменный пункт. Обмен еврокредитов на кредиты
 </ol>
-Хотите открыть свой счет? Услуга платная: 3.00 кр.  <input class='nav' type="button" value="Открыть счёт" onclick="location.href = '?deist=new';"/>
+Хотите открыть свой счет? Услуга платная: 3.00 кр.  <input class='nav' type="button" value="Открыть счёт" id='link' link='none&deist=new' />
 <?
     if ($rows)
     {

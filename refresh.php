@@ -9,10 +9,7 @@ ini_set ('error_reporting', E_ALL);
 
 define ('AntiBK', true);
 
-if (empty($_SESSION['guid']))
-	die ("<script>top.location.href = 'index.php';</script>");
-else
-  $guid = $_SESSION['guid'];
+$guid = (empty($_SESSION['guid'])) ?0 :$_SESSION['guid'];
 
 include ("engline/config.php");
 include ("engline/dbsimple/Generic.php");

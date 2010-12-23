@@ -20,7 +20,7 @@ $rows = $adb -> select ("SELECT `action`,
 <style>
 body {background-color: #e2e0e0;}
 </style>
-<p align="right"><input type="button" class="nav" value="Вернуться" id="revert" link="inv"></p>
+<p align="right"><input type="button" class="nav" value="Вернуться" id="link" link="inv"></p>
 <h3>Отчет системы безопасности</h3>
 <form action="?action=report" method="post">
 Вы можете получить отчет о заходах за указанный месяц<br>

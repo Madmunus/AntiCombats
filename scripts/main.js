@@ -185,3 +185,50 @@ function getRandomInt (min, max)
 {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
+
+var broken = new Array ();
+var i = 1;
+
+function BrokenItems ()
+{
+  $(".broken").each(function (){
+    bgcolor = $(this).parents('tr[bgColor]').attr('bgColor');
+    $(this).animate({backgroundColor: ((broken[i]) ?"#f88383" :bgcolor)}, 2000);
+    broken[i] = !broken[i];
+    i++;
+  });
+  i = 1;
+}
+
+$(document).ready(function (){
+  $(".broken").each(function (){
+    broken[i] = true;
+    i++;
+  });
+  i = 1;
+  if ($(".broken").html() != undefined)
+    setInterval (BrokenItems, 4100);
+  
+  $('#clear').live('mouseover mouseleave', function (e){
+    if (e.type == 'mouseover')
+      $(this).attr('src', 'i/clear.gif');
+    else if (e.type == 'mouseleave')
+      $(this).attr('src', 'i/clearg.gif');
+  });
+  $('#link').live('click', function (){
+    location.href = 'main.php?action='+$(this).attr('link');
+  });
+  $('#hint').live('click', function (){
+    showHelp ($(this).attr('link'));
+  });
+  $('#refresh').live('click', function (){
+    location.reload();
+  });
+  $(document).mousemove(function (e){
+    $("#x").val(e.pageX);
+    $("#y").val(e.pageY);
+  });
+  $('input[type=button], input[type=radio], input[type=submit], a').live('click', function (){
+    $(this).blur();
+  });
+});

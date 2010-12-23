@@ -1,7 +1,9 @@
 <?
 defined('AntiBK') or die ("Доступ запрещен!");
 
-$sell = requestVar ('sell', 0);
+$room_info = $adb -> selectRow ("SELECT `shop`, `shop_section` FROM `city_rooms` WHERE `city` = ?s and `room` = ?s", $city ,$room);
+$section_shop = requestVar ('section_shop', '', 7);
+$section_shop = (array_key_exists ($section_shop, $data['sections_shop'])) ?$section_shop :$room_info['shop_section'];
 ?>
 <script src="scripts/shop.js" type="text/javascript"></script>
 <script src="scripts/move_check.js" type="text/javascript"></script>
@@ -74,9 +76,9 @@ else
 <div style="margin-left: 25px; margin-top: 10px;">
 <?
 if ($section_shop == 'sell')
-  echo "<input type='button' value='Купить вещи' onClick=\"location.href = '?section_shop=$_COOKIE[section_shop]';\" class='nav'>";
+  echo "<input type='button' value='Купить вещи' id='link' link='none&section_shop=$_COOKIE[section_shop]' class='nav'>";
 else
-  echo "<input type='button' value='Продать вещи' onClick=\"location.href = '?section_shop=sell';\" class='nav'>";
+  echo "<input type='button' value='Продать вещи' id='link' link='none&section_shop=sell' class='nav'>";
 ?>
 <div style="background-color: #A5A5A5; padding: 1px; font-weight: bold; text-align: center;">Отделы магазина</div>
 <?
