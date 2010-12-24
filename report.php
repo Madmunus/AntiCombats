@@ -47,21 +47,12 @@ foreach ($rows as $auth)
   
   switch ($action)
   {
-    case 1:
-        $reports .= "$date_a Входит \"$login\" $ip<br>";
-    break;
+    case 1:                    $reports .= "$date_a Входит \"$login\" $ip<br>";                       break;
     case 0:
       switch ($comment)
       {
-        case 'wrong_count':
-          $reports .= "$date_a <B>Попытка игры с нескольких машин</B>, $ip<br>";
-        break;
-        case 'wrong_password':
-          $reports .= "$date_a <B>Неверный пароль</B>, $ip<br>";
-        break;
-        case 'blocked':
-          $reports .= "$date_a <B>Персонаж заблокирован</B>, $ip<br>";
-        break;
+        case 'wrong_password': $reports .= "$date_a <B>Неверный пароль</B>, $ip<br>";                 break;
+        case 'blocked':        $reports .= "$date_a <B>Персонаж заблокирован</B>, $ip<br>";           break;
       }
     break;
   }

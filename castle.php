@@ -57,7 +57,7 @@ foreach ($behaviour as $key => $value)
 echo ($stats['ups'] > 0) ?" <a class='nick' href='?action=skills'>+ Способности</a> " :'';
 echo ($stats['skills'] > 0) ?"&bull; <a class='nick' href='?action=skills'><b> Обучение</b></a><br>" :"<br>";
 echo "<br>";
-echo "Опыт: <b>$exp</b> ($next_up)<br>";
+echo "Опыт: <b>".getExp ($exp)."</b> (".getExp ($next_up).")<br>";
 echo "Уровень: $level<br>";
 echo "Побед: $win<br>";
 echo "Поражений: $lose<br>";

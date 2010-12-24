@@ -39,7 +39,7 @@ class Test extends Error
   /*Проверка заключения персонажа*/
   function Prision ($prision)
   {
-    if (!$prision || floor ($prision - time()) > 0)
+    if (!$prision || intval ($prision - time()) > 0)
       return;
     
     $adb -> query ("UPDATE `characters` 
@@ -104,7 +104,7 @@ class Test extends Error
   /*Проверка молчанки у персонажа*/
   function Shut ($shut)
   {
-    if (!$shut || floor (($shut - time()) / 60) > 0)
+    if (!$shut || intval (($shut - time()) / 60) > 0)
       return;
     
     $adb -> query ("UPDATE `characters` SET `shut` = '0' WHERE `guid` = ?d", $this->guid);
@@ -163,7 +163,7 @@ class Test extends Error
     if (!$travm)
       return;
     
-    if (floor (($travm - time()) / 60) > 0)
+    if (intval (($travm - time()) / 60) > 0)
       return;
     
     $adb -> query ("UPDATE `characters` SET `travm` = '0' WHERE `guid` = ?d" ,$this->guid);
@@ -241,8 +241,8 @@ class Test extends Error
     
     list ($all_time, $dest_g, $dest, $len, $napr) = array_values ($ld);
     $to_go = $all_time - time();
-    $to_go_sec = floor (($all_time - time()));    /*seconds*/
-    $time_to_go = floor ($len / $speed * 3600);    /*секунд идти*/
+    $to_go_sec = intval (($all_time - time()));    /*seconds*/
+    $time_to_go = intval ($len / $speed * 3600);    /*секунд идти*/
     $atg = $time_to_go - $to_go_sec;
     $len_done = getMoney ($speed * $atg / 3600);
     $speed_form = getMoney ($speed / 1000);
@@ -421,44 +421,6 @@ class Equip extends Error
     $object = new Equip;
     $object->guid = $guid;
     return $object;
-  }
-  /*Вычисление цены продажи предмета*/
-  function getSellValue ($item_id, $type = 'none')
-{
-    if ($item_id == 0 || !is_numeric($item_id))
-      return 0;
-    
-    global $adb;
-    $item_info = $adb -> selectRow ("SELECT `i`.`price_euro`, `i`.`price`, 
-                                            `c`.`tear_cur`, `c`.`tear_max`, 
-                                            `i`.`tear` 
-                                     FROM `character_inventory` AS `c` 
-                                     LEFT JOIN `item_template` AS `i` 
-                                     ON `c`.`item_template` = `i`.`entry` 
-                                     WHERE `c`.`id` = ?d
-                                       and `c`.`guid` = ?d
-                                      and (`i`.`item_flags` & '1');", $item_id ,$this->guid);
-    if (!$item_info)
-      return 0;
-    
-    list ($price_euro, $price, $tear_cur, $tear_max, $max_tear) = array_values ($item_info);
-    $price = ($type == 'euro') ?$price_euro :$price;
-    if ($tear_cur == 0 && $tear_max < $max_tear)
-      $cof = abs (2 + (((100 - (($tear_max / $max_tear) * 100)) * 2) / 100));
-    else if ($tear_cur == 0 && $tear_max > $max_tear)
-      $cof = abs (2 - (((100 - (($max_tear / $tear_max) * 100)) * 2) / 100));
-    else if ($tear_cur > 0 && $tear_max <= $max_tear)
-      $cof = abs (4 - (((100 - (($tear_cur / $tear_max) * 100)) * 2) / 100) + (((100 - (($tear_max / $max_tear) * 100)) * 2) / 100));
-    else if ($tear_cur > 0 && $tear_max > $max_tear)
-      $cof = abs (4 - (((100 - (($tear_cur / $tear_max) * 100)) * 2) / 100) + (((100 - (($max_tear / $tear_max) * 100)) * 2) / 100));
-    else if ($tear_cur == 0 && $tear_max == $max_tear)
-      $cof = 2;
-    $sell = round (($price / $cof), 2);
-    
-    if ($sell < 0.01)
-      $sell = 0.01;
-    
-    return $sell;
   }
   /*Вычисление цены покупки предмета*/
   function getBuyValue (&$value)
@@ -669,7 +631,7 @@ class Equip extends Error
       list ($tear_cur, $tear_max, $name) = array_values ($repair);
       
       if ($tear_cur >= $tear_max * 0.90)
-        $return .= "&nbsp;<b>$name</b> [<font color='#990000'>".floor ($tear_cur)."/".ceil ($tear_max)."</font>] требуется ремонт<br>";
+        $return .= "&nbsp;<b>$name</b> [<font color='#990000'>".intval ($tear_cur)."/".intval ($tear_max)."</font>] требуется ремонт<br>";
     }
     return $return;
   }
@@ -739,7 +701,7 @@ class Equip extends Error
                                WHERE `c`.`guid` = ?d
                                  and `c`.`id` = ?d", $this->guid ,$item_id);
     list ($tear_cur, $tear_max, $min_attack, $max_attack, $name, $img, $add_hp, $def_h_min, $def_h_max, $def_a_min, $def_a_max, $def_b_min, $def_b_max, $def_l_min, $def_l_max) = array_values ($dat);
-    $tear_show = ($tear_cur >= $tear_max * 0.90) ?"<font color=#990000>".floor ($tear_cur)."/".ceil ($tear_max)."</font>" :floor ($tear_cur)."/".ceil ($tear_max);
+    $tear_show = ($tear_cur >= $tear_max * 0.90) ?"<font color=#990000>".intval ($tear_cur)."/".ceil ($tear_max)."</font>" :intval ($tear_cur)."/".ceil ($tear_max);
     $name = ($action == 'inv') ?"Снять $name" :$name;
     $protect = array (
       'h' => array ($def_h_min, $def_h_max, $this -> getFormatedBrick ($def_h_min, $def_h_max)),
@@ -815,7 +777,7 @@ class Equip extends Error
     $item_flags = $item_info['item_flags'];
     $item_id = (isset($item_info['id'])) ?$item_info['id'] :0;
     $made_in = (isset($item_info['made_in'])) ?$adb -> selectCell ("SELECT `name` FROM `server_cities` WHERE `city` = ?s", $item_info['made_in']) :'';
-    $tear_cur = (isset($item_info['tear_cur'])) ?floor ($item_info['tear_cur']) :0;
+    $tear_cur = (isset($item_info['tear_cur'])) ?intval ($item_info['tear_cur']) :0;
     $tear_max = (isset($item_info['tear_max'])) ?ceil ($item_info['tear_max']) :$item_info['tear'];
     $color = ($tear_cur >= $tear_max * 0.9) ?" class='broken'" :"";
     $validity = (isset($item_info['date'])) ?$item_info['date'] :$item_info['validity'];
@@ -848,7 +810,7 @@ class Equip extends Error
         $return .= "<a href='javascript:buyItem ($entry);' class='nick'>купить</a>&nbsp;<img src='img/icon/plus.gif' width='11' height='11' border='0' alt='Купить несколько штук' style='cursor: pointer;' onclick=\"AddCount('$entry', '$name', '$s_price', '$s_kr')\"></center>";
       break;
       case 'sell':
-        $s_price = ($price_euro > 0) ?$this -> getSellValue ($item_id, 'euro')." екр." :$this -> getSellValue ($item_id)." кр.";
+        $s_price = getSellValue ($item_info, true);
         $return .= "<td width='260' align='center'>";
         $return .= "<img src='img/items/$img' border='0'$color /><br><center style='padding-top: 4px;'>";
         $return .= "<a href='javascript:sellItem ($item_id);' onclick=\"if (confirm ('Вы уверены что хотите продать предмет $name за $s_price?')){return true;} else {return false;}\" class='nick'>продать за $s_price</a>";
@@ -927,40 +889,41 @@ class Equip extends Error
     if (($type == 'inv' | $type == 'sell') && $validity > 0) $return .= "<br>".sprintf ($lang['validity'], date ('d.m.y H:i', $validity), getFormatedTime ($validity));
     else if ($type == 'shop' && $validity > 0)               $return .= "<br>$lang[val_life]: ".getFormatedTime ($validity * 3600 + time ());
     
+    $val = "";
+    $require = "";
     foreach ($required as $key)
     {
-      if (($key != 'sex' && $item_info['min_'.$key] > 0) || ($key == 'sex' && $item_info[$key]))
-      {
-        $return .= "<br><b>$lang[required]:</b>";
-        break;
-      }
+      if (($key != 'sex' && $item_info['min_'.$key] <= 0) || ($key == 'sex' && $item_info[$key] == ''))
+        continue;
+      
+      if (!$val)
+        $val = "<br><b>$lang[required]:</b>";
+      
+      if ($key != 'sex' && $item_info['min_'.$key] > 0) $require .= ($item_info['min_'.$key] > $db[$key]) ?"<br>&bull; <font color='#FF0000'>$lang[$key]: {$item_info['min_'.$key]}</font>" :"<br>&bull; $lang[$key]: ".$item_info['min_'.$key];
+      else if ($key == 'sex' && $item_info[$key])       $require .= ($item_info[$key] != $db[$key]) ?"<br>&bull; <font color='#FF0000'>$lang[$key]: ".$lang[$item_info[$key]]."</font>" :"<br>&bull; $lang[$key]: ".$lang[$item_info[$key]];
     }
-    foreach ($required as $key)
-    {
-      if ($key != 'sex' && $item_info['min_'.$key] > 0) $return .= ($item_info['min_'.$key] > $db[$key]) ?"<br>&bull; <font color='#FF0000'>$lang[$key]: {$item_info['min_'.$key]}</font>" :"<br>&bull; $lang[$key]: ".$item_info['min_'.$key];
-      else if ($key == 'sex' && $item_info[$key] != '') $return .= ($item_info[$key] != $db[$key]) ?"<br>&bull; <font color='#FF0000'>$lang[$key]: ".$lang[$item_info[$key]]."</font>" :"<br>&bull; $lang[$key]: ".$lang[$item_info[$key]];
-    }
-    $mod_yes = false;
+    $return .= $val.$require;
+    
+    if (($add['str'] != 0 || $add['dex'] != 0 || $add['con'] != 0 || $add['int'] != 0 
+        || $def['h'][1] != 0 || $def['a'][1] != 0 || $def['b'][1] != 0 || $def['l'][1] != 0 || $inc_count > 0 
+        || (!in_array ($i_type, $weapons) && ($max_attack != 0 || $min_attack != 0))))
+      $val = "<br><b>$lang[act]:</b>";
+    
+    $inc = ($inc_count > 0) ?"<br>&bull; $lang[inc_count]: <span id='inc_count_$item_id'>$inc_count</span>" :"";
+    $val = "";
+    $modifier = "";
     foreach ($modifiers as $key)
     {
       if ($item_info[$key] == 0)
         continue;
       
-      $return .= "<br><b>$lang[act]:</b>";
-      $mod_yes = true;
-      break;
+      if (!$val)
+        $val = "<br><b>$lang[act]:</b>";
+      
+      if ($item_info[$key] > 0)      $modifier .= "<br>&bull; $lang[$key]: +".$item_info[$key];
+      else if ($item_info[$key] < 0) $modifier .= "<br>&bull; $lang[$key]: ".$item_info[$key];
     }
-    if (!$mod_yes && ($add['str'] != 0 || $add['dex'] != 0 || $add['con'] != 0 || $add['int'] != 0 
-        || $def['h'][1] != 0 || $def['a'][1] != 0 || $def['b'][1] != 0 || $def['l'][1] != 0 || $inc_count > 0 
-        || (!in_array ($i_type, $weapons) && ($max_attack != 0 || $min_attack != 0))))
-      $return .= "<br><b>$lang[act]:</b>";
-    
-    if ($inc_count > 0)              $return .= "<br>&bull; $lang[inc_count]: <span id='inc_count'>$inc_count</span>";
-    foreach ($modifiers as $key)
-    {
-      if ($item_info[$key] > 0)      $return .= "<br>&bull; $lang[$key]: +".$item_info[$key];
-      else if ($item_info[$key] < 0) $return .= "<br>&bull; $lang[$key]: ".$item_info[$key];
-    }
+    $return .= $val.$inc.$modifier;
     foreach ($add as $key => $value)
     {
       if ($value == 0 && $type == 'inv' && $inc_count > 0)    $return .= "<br>&bull; $lang[$key]: <span id='inc_{$item_id}_{$key}_val'>$value</span> ".$this->getIncButton ($item_id, $key);
@@ -992,38 +955,36 @@ class Equip extends Error
       else if ($block == 2) $return .= "++";
       else                  $return .= "-";
       
+      $val = "";
+      $chance = "";
       foreach ($chances as $key)
       {
         if ($item_info[$key] <= 0)
           continue;
         
-        $return .= "<br><b>$lang[features]:</b>";
-        break;
-      }
-      foreach ($chances as $key)
-      {
-        if ($item_info[$key] <= 0)
-          continue;
+        if (!$val)
+          $val = "<br><b>$lang[features]:</b>";
         
         $this -> getFormatedChance ($item_info[$key]);
-        $return .= "<br>&bull; $lang[$key]: ".$lang[$item_info[$key]];
+        $chance .= "<br>&bull; $lang[$key]: ".$lang[$item_info[$key]];
       }
+      $return .= $val.$chance;
     }
     if (in_array ($i_type, array_keys ($armors)))
     {
+      $val = "";
+      $armor = "";
       foreach ($features as $key)
       {
         if ($item_info[$key.$armors[$i_type]] <= 0)
           continue;
         
-        $return .= "<br><b>$lang[features]:</b>";
-        break;
+        if (!$val)
+          $val = "<br><b>$lang[features]:</b>";
+        
+        $armor .= "<br>&bull; $lang[$key]: ".$item_info[$key.$armors[$i_type]];
       }
-      foreach ($features as $key)
-      {
-        if ($item_info[$key.$armors[$i_type]] > 0)
-          $return .= "<br>&bull; $lang[$key]: ".$item_info[$key.$armors[$i_type]];
-      }
+      $return .= $val.$armor;
     }
     if ($item_info['description'])
       $return .= "<br><small>$lang[description]:<br>$item_info[description]</small>";
@@ -1424,7 +1385,6 @@ class Equip extends Error
   function setTimeToHPMP ($now, $all, $regen, $type)
   {
     global $adb;
-    $cure = 0;
     if ($now > $all)
     {
       $adb -> query ("UPDATE `characters` SET ?# = ?d WHERE `guid` = ?d", $type ,$all ,$this->guid);
@@ -1433,7 +1393,7 @@ class Equip extends Error
     else
     {
       /* $cure = $adb -> selectCell ("SELECT `cure` FROM `character_stats` WHERE `guid` = ?d", $this->guid);
-      $cure_full = floor (1200 - $cure * 12 / 2);
+      $cure_full = intval (1200 - $cure * 12 / 2);
       $one = $cure_full / $all;
       $time = $cure_full - $one * $now;
       $put_to_base = time () + $time;
@@ -2232,7 +2192,7 @@ class Info
       case 2:  $orden_img = "<img src='img/orden/arm/$rang.gif' width='12' height='15' border='0' title='Темное братство'>"; break;
       case 3:  $orden_img = "<img src='img/orden/3.gif' width='12' height='15' border='0' title='Нейтральное братство'>";    break;
       case 4:  $orden_img = "<img src='img/orden/4.gif' width='12' height='15' border='0' title='Алхимик'>";                 break;
-      case 5:  $orden_img = "<img src='img/orden/2.gif' width='12' height='15' border='0' title='Хаос'>";                    break;
+      case 5:  $orden_img = "<img src='img/orden/5.gif' width='12' height='15' border='0' title='Хаос'>";                    break;
       default: $orden_img = "";                                                                                              break;
     }
     $clan = ($clan_s != '') ?"<img src='img/clan/$clan_s.gif' border='0' title='$clan_f'>" :"";
@@ -2245,14 +2205,14 @@ class Info
     $afk = ($afk) ?"<font title='$message'><b>afk</b></font>&nbsp;" :(($dnd && $message) ?"<font title='$message'><b>dnd</b></font>&nbsp;" :'');
     switch ($type)
     {
-      case 'online': return "&nbsp;<a href=javascript:top.AddToPrivate('$login_link',true);><img border='0' src='img/lock.gif' title='Приватное сообщение'></a>&nbsp;&nbsp;$afk$orden_img$clan<a href=javascript:top.AddTo('$login_link'); class='nick'><b>$login</b></a>[$level]$login_info$mol$travm<br>"; break;
-      case 'mults':  return "$orden_img$clan<b>$login</b> [$level]$login_info $banned <br>"; break;
-      case 'clan':   return "$orden_img$clan<b>$login</b> [$level]$login_info"; break;
-      case 'turn':   return $orden_img; break;
-      case 'name':   return $login; break;
-      case 'news':   return "$orden_img$clan<font class='header'>$login</font> [$level]$login_info"; break;
-      case 'info':   return "<img src='img/icon/lock3.gif' border='0'onclick=window.opener.to('$login'); style='cursor: pointer;'> $orden_img$clan<b>$login</b> [$level]$login_info"; break;
-      case 'mail':   return "<font color='red'>$login</font> $login_info"; break;
+      case 'online': return "&nbsp;<a href=javascript:top.AddToPrivate('$login_link',true);><img border='0' src='img/lock.gif' title='Приватное сообщение'></a>&nbsp;&nbsp;$afk$orden_img$clan<a href=javascript:top.AddTo('$login_link'); class='nick'><b>$login</b></a>[$level]$login_info$mol$travm<br>";
+      case 'mults':  return "$orden_img$clan<b>$login</b> [$level]$login_info $banned <br>";
+      case 'clan':   return "$orden_img$clan<b>$login</b> [$level]$login_info";
+      case 'turn':   return $orden_img;
+      case 'name':   return $login;
+      case 'news':   return "$orden_img$clan<font class='header'>$login</font> [$level]$login_info";
+      case 'info':   return "<img src='img/icon/lock3.gif' border='0'onclick=window.opener.to('$login'); style='cursor: pointer;'> $orden_img$clan<b>$login</b> [$level]$login_info";
+      case 'mail':   return "<font color='red'>$login</font> $login_info";
       default:       return "";
     }
   }
@@ -2264,10 +2224,13 @@ class Info
     $room = $adb -> selectRow ("SELECT `name`, `time_to_go` FROM `city_rooms` WHERE `room` = ?s", $name);
     
     if (!$room)          return "Bug";
-    if ($type == 'full') return "<strong>$room[name]</strong><br>Сейчас в комнате: $online";
-    if ($type == 'map')  return $online;
-    if ($type == 'mini') return "Время перехода: $room[time_to_go] сек.<br>Сейчас в комнате: $online";
-                         return "";
+    switch ($type)
+    {
+      case 'full':  return "<strong>$room[name]</strong><br>Сейчас в комнате: $online";
+      case 'map':   return $online;
+      case 'mini':  return "Время перехода: $room[time_to_go] сек.<br>Сейчас в комнате: $online";
+      default:      return "";
+    }
   }
   /*Вывод списка профессионалов*/
   function showArch ($prof)
@@ -2410,15 +2373,34 @@ function getUpdateBar ()
           . "</table></td></tr></table>";
   return print $return;
 }
+/*Вычисление цены продажи предмета*/
+function getSellValue ($item_info, $text = false)
+{
+  if (!$item_info)
+    return 0;
+  
+  $price = ($item_info['price_euro'] > 0) ?$item_info['price_euro'] :$item_info['price'];
+  $price_diff = $price*0.35;
+  $tear_max_diff = ($item_info['tear_max'] < $item_info['tear']) ?$price_diff*(1 - $item_info['tear_max']/$item_info['tear']) :0;
+  $tear_diff = ($item_info['tear_cur'] > 0) ?$price_diff*($item_info['tear_cur']/$item_info['tear_max']) :$tear_max_diff;
+  $sell_price = $price*0.75 - $tear_max_diff - $tear_diff;
+  $sell_price = round ($sell_price, 2);
+  
+  if ($sell_price < 0.01)
+    $sell_price = 0.01;
+  
+  $sell_price = ($text) ?(($item_info['price_euro'] > 0) ?$sell_price." екр." :$sell_price." кр.") :$sell_price;
+  return $sell_price;
+}
 /*Получение времени восстановления здоровья*/
 function getCureValue ($now, $all, $regen, &$value)
 {
-  $value = floor (((($all - $now) / ($all * 0.01)) * 10) / ($regen * 0.01)) + time ();
+  $value = intval (((($all - $now) / ($all * 0.01)) * 10) / ($regen * 0.01)) + time ();
 }
 /*Получение количества восстановленного здоровья*/
 function getRegeneratedValue ($all, $cure, $regen)
 {
-  return $all - floor ((($cure * ($regen * 0.01)) / 10) * ($all * 0.01));
+  return $all - intval ((($cure * ($regen * 0.01)) / 10) * ($all * 0.01));
 }
 /*Получение отформатированного времени*/
 function getFormatedTime ($timestamp)
@@ -2429,35 +2411,38 @@ function getFormatedTime ($timestamp)
   if (!is_numeric($timestamp))
     $timestamp = time();
   
-  $time = abs ($timestamp - time());
-  $d = floor ($time / 86400);
-  $d = ($d < 0) ?0 :$d;
-  $time = $time - $d * 86400;
-  $h = floor ($time / 3600);
-  $h = ($h < 0) ?0 :$h;
-  $time = $time - $h * 3600;
-  $m = floor ($time / 60);
-  $m = ($m < 0) ?0 :$m;
-  $s = $time - $m * 60;
-  $s = ($s < 0) ?0 :$s;
+  $seconds = abs ($timestamp - time());
+  $d = intval ($seconds / 86400);
+  $seconds %= 86400;
+  $h = intval ($seconds / 3600);
+  $seconds %= 3600;
+  $m = intval ($seconds / 60);
+  $seconds %= 60;
+  $s = $seconds;
   
-  if ($d > 0 && $h == 0) return "$d дн.";
-  if ($d > 0)            return "$d дн. $h ч.";
-  if ($h > 0)            return "$h ч. $m мин.";
-  if ($m > 0 && $s == 0) return "$m мин.";
-  if ($m > 0)            return "$m мин. $s сек.";
-                         return "$s сек.";
+  if ($d && $h == 0) return "$d дн.";
+  if ($d)            return "$d дн. $h ч.";
+  if ($h && $m == 0) return "$h ч.";
+  if ($h)            return "$h ч. $m мин.";
+  if ($m && $s == 0) return "$m мин.";
+  if ($m)            return "$m мин. $s сек.";
+                     return "$s сек.";
 }
 /*Перевод в float*/
 function getMoney ($money)
 {
   return sprintf ("%01.2f", $money);
 }
+/*Внедрение пробела*/
+function getExp ($exp)
+{
+  return number_format ($exp, 0, "", " ");
+}
 /*Получение цвета улучшения*/
 function getStatSkillColor ($cur, $add)
 {
   $diff = ($add > 0) ?(1 - (($cur - $add) / $cur)) * 255 :($add < 0) ?(1 -(($cur - $add*(-1)) / $cur)) * 255 :-50;
-  $diff = abs (floor ($diff)) + 50;
+  $diff = abs (intval ($diff)) + 50;
   
   if ($diff > 150 && $add > 0) return "#00AA00";
   if ($diff > 150 && $add < 0) return "#AA0000";

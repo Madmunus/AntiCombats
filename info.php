@@ -66,7 +66,6 @@ $lose = $db['lose'];
 $win = $db['win'];
 $draw = $db['draw'];
 
-$exp = $db['exp'];
 $level = $db['level'];
 $admin_level = $db['admin_level'];
 $clan = $db['clan'];
@@ -74,13 +73,12 @@ $name_s = $db['clan_short'];
 $chin = $db['chin'];
 $orden = $db['orden'];
 $orden_dis = ($orden == 1) ?"Орден Паладинов - " :(($orden == 2) ?"Армада - " :"");
+$stat_rang = $db['stat_rang'];
 $status = $db['status'];
 $prof = $db['profession'];
 $metka = $db['metka'];
-$ip = $db['reg_ip'];
 $date = ($admin_level > 0) ?"До начала времен" :date ('d.m.y H:i', $date);
 $state = ($admin_level > 0) ?"Этого никто не знает" :$adb -> selectCell ("SELECT `name` FROM `server_cities` WHERE `city` = ?s", $state);
-$stat_rang = $db['stat_rang'];
 $delo = $db['delo'];
 $room = $adb -> selectCell ("SELECT `name` FROM `city_rooms` WHERE `room` = ?s", $db['room']);
 $city = $adb -> selectCell ("SELECT `name` FROM `server_cities` WHERE `city` = ?s", $db['city']);
@@ -119,11 +117,11 @@ $equip -> showStatAddition ('info');
     echo ($level >= 10) ?"Духовность: <b>$spi</b><br>" :"";
     echo "<hr align='left' width='300' size='1'>"
        . "<small>Уровень: $level<br>"
-       . "Побед: $win<br>"
+       . "Побед: <a href='stat.php' class='nick' style='font-size: 10px;'>$win</a><br>"
        . "Поражений: $lose<br>"
        . "Ничьих: $draw<br>";
     echo ($prof) ?"Профессия: <b>".$lang['prof_'.$prof]."</b><br>" :"";
-    echo ($clan) ?"Клан: <strong><a href='clan_inf.php?clan=$name_s' class='us2' target='_blank' style='font-size: 10px; color: #003388;'>$clan</a> - $chin</strong><br>" :"";
+    echo ($clan) ?"Клан: <strong><a href='clan_inf.php?clan=$name_s' class='nick' target='_blank' style='font-size: 10px;'>$clan</a> - $chin</strong><br>" :"";
     echo ($orden) ?"<strong>$orden_dis$stat_rang</strong><br>" :(($status) ?"Статус: <strong>$status</strong><br>" :"");
     echo ($state) ?"Место рождения: <strong>$state</strong><br>" :"";
     echo ($date) ?"Дата рождения персонажа: $date</small><br>" :"";

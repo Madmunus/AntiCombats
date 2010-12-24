@@ -7,7 +7,7 @@ $xaos = $adb -> selectCell ("SELECT COUNT(*) FROM `characters` WHERE `prision` !
   <tr>
     <td><img src="img/prison.jpg"><br>Всего в тюрьме: <b><?echo $xaos;?></b></td>
     <td width="100%" valign="top">
-    <center>Тюряга - место покоя тех, кто был глуп и наивен.</center>
+    <center>Тюрьма - место покоя тех, кто был глуп и наивен.</center>
 <?
 if (!$db['prision'])
 {

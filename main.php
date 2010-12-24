@@ -114,7 +114,6 @@ $orden = $db['orden'];
 $shut = $db['shut'];
 $date = date ('d.m.y H:i:s', mktime(date ('H') - $GSM));
 
-$mtime = 0;
 $equip -> getRoomGoTime ($mtime);
 echo "<input type='hidden' id='time_to_go' value='$mtime' />";
 

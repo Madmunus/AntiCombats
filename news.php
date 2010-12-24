@@ -16,6 +16,7 @@ $adb->setErrorHandler("databaseErrorHandler");
 ?>
 <html>
 <head>
+<link rel="SHORTCUT ICON" href="img/favicon.ico" />
 <title>Новости АнтиБК+</title>
 <meta http-equiv="Content-type" content="text/html; charset=utf-8">
 <meta http-equiv="Pragma" content="no-cache">

@@ -19,6 +19,7 @@ $info = new info;
 ?>
 <html>
 <head>
+<link rel="SHORTCUT ICON" href="img/favicon.ico" />
 <title>Анти Бойцовский Клуб: Рейтинг бойцов</title>
 <meta http-equiv="Content-type" content="text/html; charset=utf-8">
 <meta http-equiv="Pragma" content="no-cache">
@@ -54,7 +55,7 @@ $info = new info;
                       <td width='18' align='right' scope='col'><img src='img/site/ram12_35.gif' width='13' height='11'></td>
                     </tr>
                   </table>
-<?
+<?//
 $players = $adb -> select ("SELECT `guid`, 
                                    `login`, 
                                    `exp` 
@@ -66,16 +67,15 @@ echo "<table width='100%' border='0' cellpadding='0' cellspacing='1' align='cent
 echo "<tr bgcolor='#ECDFAA'>";
 echo "<td align='left' width='2%'><b>№</b></td>";
 echo "<td>&nbsp;</td>";
-echo "<td align='right' width='2%'><b>рейтинг</b></td>";
+echo "<td align='right'><b>рейтинг</b></td>";
 echo "</tr>";
 for ($i = 0; $i < count ($players); $i++)
 {
   $bg = (!($i % 2 === 0) || $i == 1) ?" bgcolor='#ECDFAA'" :"";
-  $exp = $players[$i]['exp'];
   echo "<tr$bg>";
   echo "<td align='right'>".($i + 1).".</td>";
-  echo "<td>{$info -> character ($players[$i]['guid'])}</td>";
-  echo "<td align='right'><b>$exp</b></td>";
+  echo "<td>".$info -> character ($players[$i]['guid'])."</td>";
+  echo "<td align='right'><b>".getExp ($players[$i]['exp'])."</b></td>";
   echo "</tr>";
 }
 echo "</table>";

@@ -29,10 +29,6 @@ function stop_fireworks (id)
 if (in_array (date('m'), array (12, 1, 2)))
   echo '<script src="scripts/snow.js" type="text/javascript"></script>';
 $online = $adb -> selectCell ("SELECT COUNT(*) FROM `online` WHERE `city` = ?s", $city);
-$room_buduar = ($sex == 'female' || $admin_level >= 1) ?"" :"alert ('Вход разрешен только женщинам');";
-$floor_2 = ($level > 1 || $admin_level >= 1) ?"solo ('castle2');" :"alert ('Вход разрешен только со 2-ого уровня');";
-$room_trade = ($orden == 1 || $orden == 2 || $level > 3 || $admin_level >= 1) ?"solo ('km_7');" :"alert ('Вход разрешен только Тарманам');";
-$room_law = ($orden == 1 || $orden == 2 || $admin_level >= 1) ?"solo ('km_8');" :"alert ('Вход разрешен только c 4-ого уровня');";
 
 $night = (date ('H') > 20 || date ('H') < 7) ?1 :0;
 ?>
@@ -49,7 +45,7 @@ foreach ($behaviour as $key => $value)
 echo ($stats['ups'] > 0) ?" <a class='nick' href='?action=skills'>+ Способности</a> " :'';
 echo ($stats['skills'] > 0) ?"&bull; <a class='nick' href='?action=skills'><b> Обучение</b></a><br>" :"<br>";
 echo "<br>";
-echo "Опыт: <b>$exp</b> ($next_up)<br>";
+echo "Опыт: <b>".getExp ($exp)."</b> (".getExp ($next_up).")<br>";
 echo "Уровень: $level<br>";
 echo "Побед: $win<br>";
 echo "Поражений: $lose<br>";

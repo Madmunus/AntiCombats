@@ -152,10 +152,6 @@ $(document).ready(function (){
   $('[name=ref]').attr('src', 'refresh.php');
   $('[name=null]').attr('src', 'null.php');
 });
-
-$(window).unload(function() {
-  $('[name=main]').attr('src', 'main.php?action=exit');
-});
 </script>
 </head>
   <frameset rows="35, *, 30, 5" frameborder="0" border="0" framespacing="0">

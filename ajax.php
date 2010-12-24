@@ -273,8 +273,10 @@ switch ($do)
       {
         if ($shape[$key] <= 0)
           continue;
-                
-        $requirement = "$lang[min_stat]:<br>";
+        
+        if (!$requirement)
+          $requirement = "$lang[min_stat]:<br>";
+        
         if ($shape[$key] > $db[$key])
           $title .= "<font color=\"#FF0000\">&bull; $lang[$key]: $shape[$key]</font><br>";
         else
@@ -433,7 +435,9 @@ switch ($do)
     $dat = $adb -> selectRow ("SELECT `i`.`name`, 
                                       `i`.`mass`, 
                                       `i`.`price`, 
-                                      `i`.`price_euro` 
+                                      `i`.`price_euro`, 
+                                      `c`.`tear_cur`, `c`.`tear_max`, 
+                                      `i`.`tear` 
                                FROM `character_inventory` AS `c` 
                                LEFT JOIN `item_template` AS `i` 
                                ON `c`.`item_template` = `i`.`entry` 
@@ -442,28 +446,25 @@ switch ($do)
                                   and `c`.`guid` = ?d 
                                   and `c`.`wear` = '0' 
                                   and `c`.`mailed` = '0';", $item_id ,$guid) or die ("errorA_D213");
-    list ($name, $i_mass, $price, $price_euro) = array_values ($dat);
+    list ($name, $i_mass, $price, $price_euro, $tear_cur, $tear_max, $tear) = array_values ($dat);
+    $sell_price = getSellValue ($dat);
+    $mass = $mass - $i_mass;
+    $adb -> query ("UPDATE `characters` SET `mass` = ?f WHERE `guid` = ?d", $mass ,$guid);
     if ($price > 0)
     {
-      $price = $equip -> getSellValue ($item_id);
-      $equip -> Money (-$price);
-      $money = $money + $price;
-      $mass = $mass - $i_mass;
-      $adb -> query ("UPDATE `characters` SET `mass` = ?f WHERE `guid` = ?d", $mass ,$guid);
+      $equip -> Money (-$sell_price);
+      $money = $money + $sell_price;
       $adb -> query ("DELETE FROM `character_inventory` WHERE `id` = ?d and `guid` = ?d", $item_id ,$guid);
-      $history -> transfers ('Sell', "$name ($price кр)", $_SERVER['REMOTE_ADDR'], 'Shop');
-      die ("completeA_D".$money."A_D".$mass."A_D404A_D$name|$price");
+      $history -> transfers ('Sell', "$name ($sell_price кр)", $_SERVER['REMOTE_ADDR'], 'Shop');
+      die ("completeA_D".$money."A_D".$mass."A_D404A_D$name|$sell_price");
     }
     else if ($price_euro > 0)
     {
-      $price_euro = $equip -> getSellValue ($item_id, 'euro');
-      $equip -> Money (-$price_euro, 'euro');
-      $money_euro = $money_euro + $price_euro;
-      $mass = $mass - $i_mass;
-      $adb -> query ("UPDATE `characters` SET `mass` = ?f WHERE `guid` = ?d", $mass ,$guid);
+      $equip -> Money (-$sell_price, 'euro');
+      $money_euro = $money_euro + $sell_price_euro;
       $adb -> query ("DELETE FROM `character_inventory` WHERE `id` = ?d and `guid` = ?d", $item_id ,$guid);
-      $history -> transfers ('Sell', "$name ($price екр)", $_SERVER['REMOTE_ADDR'], 'Shop');
-      die ("completeA_D".$money_euro."A_D".$mass."A_D405A_D$name|$price");
+      $history -> transfers ('Sell', "$name ($sell_price екр)", $_SERVER['REMOTE_ADDR'], 'Shop');
+      die ("completeA_D".$money_euro."A_D".$mass."A_D405A_D$name|$sell_price");
     }
   break;
   case 'deleteitem':

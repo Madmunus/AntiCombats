@@ -16,8 +16,8 @@ $adb = DbSimple_Generic::connect($database['adb']);
 $adb->query("SET NAMES ? ",$database['db_encoding']);
 $adb->setErrorHandler("databaseErrorHandler");
 
-$login = $_POST['login'];
-$password = $_POST['password'];
+$login = requestVar ('login', '', 2);
+$password = requestVar ('password', '', 2);
 ?>
 <html>
 <head>
@@ -49,18 +49,10 @@ $char_info = $adb -> selectRow ("SELECT `guid`,
                                  FROM `characters` 
                                  WHERE `login` = ?s", $login) or die ("$top Логин $login не найден в базе.$bot");
 $guid = $char_info['guid'];
-$online = $adb -> selectCell ("SELECT `guid` FROM `online` WHERE `guid` = ?d", $guid);
 
 $history = History::setguid($guid);
 
-if (session_is_registered ('guid') || $online)
-{
-  $adb -> query ("DELETE FROM `online` WHERE `guid` = ?d", $guid);
-  unset($_SESSION['guid']);
-  $history -> authorization (0, $char_info['city'], 'wrong_count');
-  die ("$top Двое или больше пользователей пытаются играть с одной машины!<br>Попробуйте войти еще раз!$bot");
-}
-else if (SHA1 ($guid.':'.$password) != $char_info['password'])
+if (SHA1 ($guid.':'.$password) != $char_info['password'])
 {
   $history -> authorization (0, $char_info['city'], 'wrong_password');
   die ("$top Неверный пароль для $login.$bot");
@@ -79,13 +71,12 @@ if (session_is_registered ('guid'))
 else
   $_SESSION['guid'] = $guid;
 
-$adb -> query ("INSERT INTO `online` (`guid`, `login_display`, `ip`, `city`, `room`, `last_time`) 
+$adb -> query ("INSERT IGNORE INTO `online` (`guid`, `login_display`, `ip`, `city`, `room`, `last_time`) 
                 VALUES (?d, ?s, ?s, ?s, ?s, ?d);", $guid ,$login ,$_SERVER['REMOTE_ADDR'] ,$char_info['city'] ,$char_info['room'] ,time ());
 $adb -> query ("UPDATE `characters` SET `last_go` = ?d WHERE `guid` = ?d", time () ,$guid);
-$zayavka_c_m = 1;
-$zayavka_c_o = 1;
-$battle_ref  = 0;
-session_register ('zayavka_c_m', 'zayavka_c_o', 'battle_ref');
+$_SESSION['zayavka_c_m'] = 1;
+$_SESSION['zayavka_c_o'] = 1;
+$_SESSION['battle_ref']  = 0;
 $history -> authorization (1, $char_info['city']);
 ?>
 Авторизация окончена...
