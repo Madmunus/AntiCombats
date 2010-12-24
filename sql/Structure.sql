@@ -1056,19 +1056,6 @@ CREATE TABLE `protocol` (
   KEY `id` (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=14 DEFAULT CHARSET=cp1251;
 
-/*Table structure for table `protocol_adm` */
-
-DROP TABLE IF EXISTS `protocol_adm`;
-
-CREATE TABLE `protocol_adm` (
-  `id` int(4) NOT NULL auto_increment,
-  `date_time` varchar(30) NOT NULL default '',
-  `login` varchar(30) NOT NULL default '',
-  `target` varchar(30) NOT NULL default '',
-  `msg` longtext,
-  PRIMARY KEY  (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=cp1251;
-
 /*Table structure for table `res` */
 
 DROP TABLE IF EXISTS `res`;

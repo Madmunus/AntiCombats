@@ -1,7 +1,7 @@
 <?
 $base_name="localhost";
-$base_user="mangos";
-$base_pass="gamerforever";
+$base_user="";
+$base_pass="";
 $db_name="abk";
 $GSM="2";
 $break = "0";
