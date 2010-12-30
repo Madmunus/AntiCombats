@@ -18,22 +18,28 @@ $adb = DbSimple_Generic::connect($database['adb']);
 $adb->query("SET NAMES ? ",$database['db_encoding']);
 $adb->setErrorHandler("databaseErrorHandler");
 
-$db = $adb -> selectRow ("SELECT * FROM `characters` AS `c` LEFT JOIN `character_stats` AS `s` ON `c`.`guid` = `s`.`guid`  WHERE `c`.`guid` = ?d", $guid) or die ("<script>top.location.href = 'index.php';</script>");
-$lang = $adb -> selectCol ("SELECT `key` AS ARRAY_KEY, `text` FROM `server_language`;");
-
 $equip = Equip::setguid($guid);
 $mail = Mail::setguid($guid);
 $history = History::setguid($guid);
 $error = new Error;
 
+$char_db = $equip -> getChar ('char_db', '*');
+$char_stats = $equip -> getChar ('char_stats', '*');
+$char = array_merge ($char_db, $char_stats);
+
+if (!$char)
+  die ("<script>top.location.href = 'index.php';</script>");
+
+$lang = $adb -> selectCol ("SELECT `key` AS ARRAY_KEY, `text` FROM `server_language`;");
+
 $do = requestVar ('do');
 
-$sex = $db['sex'];
-$mass = $db['mass'];
-$city = $db['city'];
-$room = $db['room'];
-$money = $db['money'];
-$money_euro = $db['money_euro'];
+$sex = $char['sex'];
+$mass = $char['mass'];
+$city = $char['city'];
+$room = $char['room'];
+$money = $char['money'];
+$money_euro = $char['money_euro'];
 
 switch ($do)
 {
@@ -44,7 +50,8 @@ switch ($do)
   case 'showinventory':
     $mail_guid = requestVar ('mail_guid');
     $section = requestVar ('section');
-    switch ($_POST['type'])
+    $type = requestVar ('type');
+    switch ($type)
     {
       default:
       case 'inv':
@@ -77,26 +84,26 @@ switch ($do)
       $i = true;
       foreach ($rows as $item_info)
       {
-        echo $equip -> showItemInventory ($item_info, $_POST['type'], $i, $mail_guid);
+        echo $equip -> showItemInventory ($item_info, $type, $i, $mail_guid);
         $i = !$i;
       }
       die ();
     }
     else
-      die ("<table width='100%' cellspacing='1' cellpadding='2' bgcolor='#A5A5A5'><tr><td bgcolor='#E2E0E0' align='center'>ПУСТО</td></tr></table>");
+      die ("<table width='100%' cellspacing='1' cellpadding='2' bgcolor='#A5A5A5'><tr><td bgcolor='#E2E0E0' align='center'>$lang[empty]</td></tr></table>");
   break;
   case 'sortinventory':
     $type = requestVar ('type');
     $section = requestVar ('section', 1, 7);
-    $sort = ($_POST['num'] == 1) ?' DESC' :'';
-    $items = $adb -> selectCol ("SELECT `c`.`id` AS ARRAY_KEY, `i`.?#
+    $sort = ($_POST['num']) ?' DESC' :'';
+    $items = $adb -> selectCol ("SELECT `c`.`id` AS ARRAY_KEY, `i`.?# 
                                  FROM `character_inventory` AS `c` 
                                  LEFT JOIN `item_template` AS `i` 
                                  ON `c`.`item_template` = `i`.`entry` 
                                  WHERE `c`.`guid` = ?d 
                                    and `c`.`wear` = '0' 
                                    and `c`.`mailed` = '0' 
-                                   and `i`.`section` = ?s
+                                   and `i`.`section` = ?s 
                                  ORDER BY `i`.?#$sort", $type ,$guid ,$data['sections'][$section] ,$type);
     $i = 0;
     foreach ($items as $id => $value)
@@ -107,10 +114,7 @@ switch ($do)
     die ("complete");
   break;
   case 'showshopsection':
-    $room_shop = $adb -> selectCell ("SELECT `shop` FROM `city_rooms` WHERE `city` = ?s and `room` = ?s", $city ,$room);
-    if (!$room_shop)
-      die ("<table width='100%' cellspacing='1' cellpadding='2' bgcolor='#A5A5A5'><tr><td bgcolor='#E2E0E0' align='center'>Это место не является магазином</td></tr></table>");
-    
+    $room_shop = $adb -> selectCell ("SELECT `shop` FROM `city_rooms` WHERE `city` = ?s and `room` = ?s", $city ,$room) or die ("<table width='100%' cellspacing='1' cellpadding='2' bgcolor='#A5A5A5'><tr><td bgcolor='#E2E0E0' align='center'>$lang[shop_no]</td></tr></table>");
     $section_shop = requestVar ('section_shop', '', 7);
     $level_filter = requestVar ('level_filter', '', 7);
     $check_level = ($level_filter > 0 || $level_filter == '0');
@@ -142,7 +146,7 @@ switch ($do)
       die ();
     }
     else
-      die ("<table width='100%' cellspacing='1' cellpadding='2' bgcolor='#A5A5A5'><tr><td bgcolor='#E2E0E0' align='center'>Прилавок магазина пустой</td></tr></table>");
+      die ("<table width='100%' cellspacing='1' cellpadding='2' bgcolor='#A5A5A5'><tr><td bgcolor='#E2E0E0' align='center'>$lang[shop_empty]</td></tr></table>");
   break;
   case 'getshoptitle':
     $section_shop = requestVar ('section_shop');
@@ -186,11 +190,11 @@ switch ($do)
               unset ($bars[$key]);
           }
           asort ($bars);
-          echo "completeA_D";                                                        //0
-          echo $bar."A_D";                                                            //1
-          echo $equip -> showInventoryBar ($bar, $bars[$bar], count ($bars))."A_D";    //2
+          echo "completeA_D";                                                       //0
+          echo $bar."A_D";                                                          //1
+          echo $equip -> showInventoryBar ($bar, $bars[$bar], count ($bars))."A_D"; //2
           echo $c_b_k."A_D";                                                        //3
-          die ($equip -> showInventoryBar ($c_b_k, $bars[$c_b_k], count ($bars)));    //4
+          die ($equip -> showInventoryBar ($c_b_k, $bars[$c_b_k], count ($bars)));  //4
         }
       }
       else
@@ -201,12 +205,8 @@ switch ($do)
   break;
   case 'spoilerbar':
     $bar = requestVar ('bar');
-    $row = $adb -> selectRow ("SELECT ?# FROM `character_bars` WHERE `guid` = ?d", $bar ,$guid);
-    
-    if (!$row[$bar])
-      die ("error");
-    
-    $bar_v = explode ('|', $row[$bar]);
+    $barr = $adb -> selectCell ("SELECT ?# FROM `character_bars` WHERE `guid` = ?d", $bar ,$guid) or die ("error");
+    $bar_v = explode ('|', $barr);
     list ($bar_n, $bar_s) = array_values ($bar_v);
     if ($bar_s == 1)
     {
@@ -235,7 +235,7 @@ switch ($do)
                                         WHERE `guid` = ?d 
                                           and `id` = ?d 
                                           and `wear` = '0' 
-                                          and `mailed` = '0';", $guid ,$item_id) or die ("errorAJAX_DELIMITER213");
+                                          and `mailed` = '0';", $guid ,$item_id) or die ("errorA_D213");
     if ($inc_count_p - $count < 0)
       die ("errorA_D216");
     
@@ -277,7 +277,7 @@ switch ($do)
         if (!$requirement)
           $requirement = "$lang[min_stat]:<br>";
         
-        if ($shape[$key] > $db[$key])
+        if ($shape[$key] > $char[$key])
           $title .= "<font color=\"#FF0000\">&bull; $lang[$key]: $shape[$key]</font><br>";
         else
           $title .= "&bull; $lang[$key]: $shape[$key]<br>";
@@ -325,14 +325,11 @@ switch ($do)
       die ("errorA_D302");
     
     $_SESSION['bankСredit'] = $credit;
-    die ("completeA_D<b>".getMoney ($bank_info['cash'])."</b>кр. <b>".getMoney ($bank_info['euro'])."</b>екр.<a href='javascript:inventoryUnLoginBank ();'><img border='0' valign='bottom' width='13' height='9' title='Закончить работу со счётом' src='img/icon/close_bank.gif'></a>");
+    die ("completeA_D<b>".getMoney ($bank_info['cash'])."</b>кр. <b>".getMoney ($bank_info['euro'])."</b>екр.<a href='javascript:inventoryUnLoginBank ();'><img border='0' valign='bottom' width='13' height='9' title='$lang[credit_exit]' src='img/icon/close_bank.gif'></a>");
   break;
   case 'inventoryunloginbank':
     unset ($_SESSION['bankСredit']);
-    $bank = $adb -> selectCol ("SELECT `id` FROM `character_bank` WHERE `guid` = ?d", $guid);
-    if (!$bank)
-      die ("-");
-    
+    $bank = $adb -> selectCol ("SELECT `id` FROM `character_bank` WHERE `guid` = ?d", $guid) or die ("-");
     foreach ($bank as $num => $bank_id)
     {
       if (empty($credits))
@@ -340,7 +337,7 @@ switch ($do)
       else
         $credits .= ",".$bank_id;
     }
-    die ("<a href=\"javascript:bank_open ('$credits');\" class='nick' style='font-size: 7pt;'>выбрать счёт</a>");
+    die ("<a href=\"javascript:bank_open ('$credits');\" class='nick' style='font-size: 7pt;'>$lang[credit_choose]</a>");
   break;
   case 'worksets':
     $type = requestVar ('type');
@@ -357,7 +354,7 @@ switch ($do)
         $adb -> query ("DELETE FROM `character_sets` WHERE `guid` = ?d and `name` = ?s", $guid ,$name);
         $adb -> query ("INSERT INTO `character_sets` (?#) 
                         VALUES (?a);", array_keys($cur_set), array_values($cur_set)) or die ("errorA_D222");
-        die ("completeA_D<div name='$name' style='display: none;'><img width='200' height='1' src='img/1x1.gif'><br>&nbsp;&nbsp;<img src='img/icon/close2.gif' width='9' height='9' alt='Удалить комплект' onclick=\"if (confirm('Удалить комплект $name?')) {workSets ('delete', '$name');}\" style='cursor: pointer;'> <a href='main.php?action=wear_set&set_name=$name' class='nick'><small>Надеть \"$name\"</small></a></div>");
+        die ("completeA_D<div name='$name' style='display: none;'><img width='200' height='1' src='img/1x1.gif'><br>&nbsp;&nbsp;<img src='img/icon/close2.gif' width='9' height='9' alt='$lang[set_delete]' onclick=\"if (confirm('$lang[set_delete] $name?')) {workSets ('delete', '$name');}\" style='cursor: pointer;'> <a href='main.php?action=wear_set&set_name=$name' class='nick'><small>$lang[equip] \"$name\"</small></a></div>");
       break;
       case 'delete':
         if ($name == '')
@@ -378,10 +375,7 @@ switch ($do)
     
     $buycount = 0;
     $amount = $city.'-'.$room;
-    $room_shop = $adb -> selectCell ("SELECT `shop` FROM `city_rooms` WHERE `city` = ?s and `room` = ?s", $city ,$room);
-    if (!$room_shop)
-      die ("errorA_D403");
-      
+    $room_shop = $adb -> selectCell ("SELECT `shop` FROM `city_rooms` WHERE `city` = ?s and `room` = ?s", $city ,$room) or die ("errorA_D403");
     $dat = $adb -> selectRow ("SELECT `i`.`name`, 
                                       `i`.`mass`, 
                                       `i`.`price`, 

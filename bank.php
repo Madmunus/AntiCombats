@@ -377,14 +377,14 @@ else
       <legend><b>Последние операции</b></legend>
         <table cellpadding="2" cellspacing="0" border="0">
 <?        $rows = $adb -> select ("SELECT `credit2`, 
-                                           `cash`, 
-                                           `euro`, 
-                                           `operation`, 
-                                           `date` 
-                                    FROM `history_bank` 
-                                    WHERE `credit` = ?d 
-                                    ORDER BY `id` DESC 
-                                    LIMIT 0, 10;", $_SESSION['bankСredit']);
+                                          `cash`, 
+                                          `euro`, 
+                                          `operation`, 
+                                          `date` 
+                                   FROM `history_bank` 
+                                   WHERE `credit` = ?d 
+                                   ORDER BY `id` DESC 
+                                   LIMIT 0, 10;", $_SESSION['bankСredit']);
           foreach ($rows as $hist)
           {
             vprintf ("<tr><td><font class='date'>".date ('d.m.y H:i', $hist['date'])."</font> ".$lang['bank_'.$hist['operation']]."</td></tr>", $hist);

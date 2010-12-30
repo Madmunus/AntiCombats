@@ -9,13 +9,13 @@ switch ($do)
 {
   case 'shape':
     echo "<script>$(document).ready(function (){showShapes (1);});</script>";
-    if ($db['next_shape'] && $db['next_shape'] > time ())
-      $error -> Inventory (111, getFormatedTime ($db['next_shape']));
+    if ($char_db['next_shape'] && $char_db['next_shape'] > time ())
+      $error -> Inventory (111, getFormatedTime ($char_db['next_shape']));
     
     echo "<table width='100%' cellspacing='0' cellpadding='0' border='0' style='margin-bottom: -10px;'><tr>";
     echo "<td valign='top' nowrap><input type='submit' id='shape_a' value='Доступные' class='nav' style='background-color: #A9AFC0;' onclick='showShapes (1);'>&nbsp;<input type='submit' id='shape_na' value='Все образы' class='nav' onclick='showShapes (0);'></td>";
     echo "<td width='100%' align='right'><h3>Выбрать образ персонажа \"$login\"</h3></td>";
-    echo "<td valign='top' nowrap><input type='button' class='help' value='Подсказка' id='hint' link='image'>&nbsp;<input type='button' value='Вернуться' id='link' link='inv' class='nav'></td>";
+    echo "<td valign='top' nowrap><input type='button' class='help' value='$lang[hint]' id='hint' link='image'>&nbsp;<input type='button' value='$lang[return]' id='link' link='inv' class='nav'></td>";
     echo "</tr></table>";
     echo "<font color='red' id='error'></font>";
     echo "<div id='shapes' style='width: 100%;'></div>";
@@ -35,10 +35,10 @@ switch ($do)
       if (!$new_mail)
         $error -> Form (509, $do);
       
-      if (SHA1 ($guid.':'.$pass) != $db['password'])
+      if (SHA1 ($guid.':'.$pass) != $char_db['password'])
         $error -> Form (501, $do);
       
-      if ($old_mail != $db['mail'])
+      if ($old_mail != $char_db['mail'])
         $error -> Form (510, $do);
       
       if (!eregi ("^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*$", $new_mail))
@@ -51,7 +51,7 @@ switch ($do)
       $msg .= DATE_NO_SEC." был сменен e-mail, указанный при регистрации персонажа $login он-лайн игры Анти Бойцовский Клуб.\n";
       $msg .= "Новый e-mail: $new_mail\n\n\n\n";
       $msg .= "С уважением, администрация Анти Бойцовского Клуба!";
-      mail ($db['mail'], "Смена e-mail у персонажа $login", $msg, 'From: Администрация АБК <admin@abk.ru>', 'admin@abk.ru');
+      mail ($char_db['mail'], "Смена e-mail у персонажа $login", $msg, 'From: Администрация АБК <admin@abk.ru>', 'admin@abk.ru');
       if ($q)
         $error -> Form (512, $do);
     }
@@ -66,7 +66,7 @@ switch ($do)
       if ($pass && $new_pass && !$new_pass2)
         $error -> Form (500, $do);
       
-      if (SHA1 ($guid.':'.$pass) != $db['password'])
+      if (SHA1 ($guid.':'.$pass) != $char_db['password'])
         $error -> Form (501, $do);
       
       if ($new_pass != $new_pass2)
@@ -85,7 +85,7 @@ switch ($do)
       $msg .= DATE_NO_SEC." был сменен пароль к персонажу $login он-лайн игры Анти Бойцовский Клуб.\n";
       $msg .= "Новый пароль: $new_pass\n\n\n\n";
       $msg .= "С уважением, администрация Анти Бойцовского Клуба!";
-      mail ($db['mail'], "Смена пароля у персонажа $login", $msg, 'From: Администрация АБК <admin@abk.ru>', 'admin@abk.ru');
+      mail ($char_db['mail'], "Смена пароля у персонажа $login", $msg, 'From: Администрация АБК <admin@abk.ru>', 'admin@abk.ru');
       if ($q)
         $error -> Form (504, $do);
     }
@@ -93,7 +93,7 @@ switch ($do)
 <table width="100%" cellspacing="0" cellpadding="0" style="margin-bottom: -15px;">
 <tr>
   <td width="100%" align="right"><h3>Сменить пароль/email для персонажа "<?echo $login;?>"</h3></td>
-  <td valign="top" nowrap><input type="button" class="help" value="Подсказка" id="hint" link="psw">&nbsp;<input type="button" name="edit" value="Вернуться" id="link" link="inv" class="nav"></td>
+  <td valign="top" nowrap><input type="button" class="help" value="<?echo $lang['hint'];?>" id="hint" link="psw">&nbsp;<input type="button" name="edit" value="<?echo $lang['return'];?>" id="link" link="inv" class="nav"></td>
 </tr>
 </table>
 <font color='red' id='error'><?$error -> getFormattedError ($warning, $parameters);?></font>
@@ -183,7 +183,7 @@ switch ($do)
 <table width="100%" cellspacing="0" cellpadding="0" align="center" style="margin-bottom: -15px;">
 <tr>
   <td width="100%"><h3>Анкета персонажа "<?echo $login;?>"</h3></td>
-  <td valign="top"><input type="button" value="Вернуться" id="link" link="inv" class="nav"></td>
+  <td valign="top"><input type="button" value="<?echo $lang['return'];?>" id="link" link="inv" class="nav"></td>
 </tr>
 </table>
 <table width="95%" border="0" align="center" cellpadding="3" cellspacing="1" bgcolor="#B2B2B2">

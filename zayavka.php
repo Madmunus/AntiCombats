@@ -21,6 +21,7 @@ $adb = DbSimple_Generic::connect($database['adb']);
 $adb->query("SET NAMES ? ",$database['db_encoding']);
 $adb->setErrorHandler("databaseErrorHandler");
 
+$equip = Equip::setguid($guid);
 $test = Test::setguid($guid);
 
 $act = htmlspecialchars ($act);

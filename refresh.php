@@ -19,12 +19,13 @@ $adb = DbSimple_Generic::connect($database['adb']);
 $adb->query("SET NAMES ? ",$database['db_encoding']);
 $adb->setErrorHandler("databaseErrorHandler");
 
+$equip = Equip::setguid($guid);
 $test = Test::setguid($guid);
 $info = new Info;
 
 $go = (isset($_GET['go'])) ?1 :0;
 
-$test -> Guid ($guid);
+$test -> Guid ();
 $test -> Zayavka ();
 $test -> Afk ();
 ?>
@@ -37,15 +38,8 @@ $test -> Afk ();
 </head>
 <body topmargin="0" onload="parent.msg.window.scroll(0, 65000);">
 <?
-$db = $adb -> selectRow ("SELECT `login`, 
-                                 `room`, 
-                                 `city`, 
-                                 `battle`, 
-                                 `battle_opponent`, 
-                                 `chat_s` 
-                          FROM `characters` 
-                          WHERE `guid` = ?d", $guid);
-list ($login, $room, $city, $battle, $battle_opponent, $chat_s) = array_values ($db);
+$char_db = $equip -> getChar ('char_db', 'login', 'room', 'city', 'battle', 'battle_opponent', 'chat_s');
+ArrToVar ($char_db);
 
 if ($battle)
 {

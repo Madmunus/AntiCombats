@@ -60,7 +60,7 @@ function increaseItemStat (id, stat)
 	  if (incs[0] == 'complete')
 	  {
       $("#inc_"+id+"_"+stat+"_val").animate({color: '#00ff00'}, 500, function (){$(this).html('+'+incs[1]).animate({color: '#000000'}, 500);});
-      $("#inc_count").animate({color: '#ff0000'}, 500, function (){$(this).html(incs[2]).animate({color: '#000000'}, 500);});
+      $("#inc_count_"+id).animate({color: '#ff0000'}, 500, function (){$(this).html(incs[2]).animate({color: '#000000'}, 500);});
       if (incs[2] == 0)
         $("input[type=image]").each(function (){if ($(this).attr('id') == 'inc_'+id+'_btn') $(this).hide();});
 	  }

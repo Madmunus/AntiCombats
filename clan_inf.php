@@ -14,11 +14,12 @@ $adb = DbSimple_Generic::connect($database['adb']);
 $adb->query("SET NAMES ? ",$database['db_encoding']);
 $adb->setErrorHandler("databaseErrorHandler");
 
+$equip = Equip::setguid(0);
 $info = new info;
 
-$db = $adb -> selectRow ("    SELECT     `name`, 
-                                    `glava`, 
-                                    `name_short` 
+$db = $adb -> selectRow ("SELECT `name`, 
+                                 `glava`, 
+                                 `name_short` 
                             FROM `clan` 
                             WHERE `name_short` = ?s", $clan);
 $top = "Произошла ошибка:<br><br><span class='err'>";

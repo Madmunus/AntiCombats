@@ -25,8 +25,8 @@ $professions = array (
                                     'vit' => 5),  '',                                                            '+15 к Ловкости, +5 к Выносливости'),
   'monk'   => array ('2000', array ('con' => 15, 
                                     'vit' => 5),  '',                                                            '+15 к Интуиции, +5 к Выносливости'),
-  'trade'  => array ('1100',        '', array (   'characters'      => array ('maxmass' => $db['maxmass'] + 20), 
-                                                  'character_stats' => array ('trade' => $stats['trade'] + 40)), '+40 к навыку Торговли, +20 к максимальной нагрузке')
+  'trade'  => array ('1100',        '', array (   'characters'      => array ('maxmass' => $char_db['maxmass'] + 20), 
+                                                  'character_stats' => array ('trade' => $char_stats['trade'] + 40)), '+40 к навыку Торговли, +20 к максимальной нагрузке')
 );
 ?>
 <script type="text/javascript">
@@ -75,10 +75,10 @@ switch ($do)
   case 'reg_prof':
     if (!empty($conf))
     {
-      if ($db['profession'])
+      if ($char_db['profession'])
         die ($error_text['profession']);
       
-      if (!$db['metka'])
+      if (!$char_db['metka'])
         die ($error_text['metka']);
       
       if ($level < 4)
@@ -134,9 +134,9 @@ switch ($do)
 <?
   break;
   case 'fire':
-    if (!$db['profession'])
+    if (!$char_db['profession'])
       die ($error_text['fire']);
-    $prof = $db['profession'];
+    $prof = $char_db['profession'];
     $prof_d = $lang['prof_'.$prof];
     if ($conf == 1)
     {

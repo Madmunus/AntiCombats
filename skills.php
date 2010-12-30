@@ -151,25 +151,25 @@ $(document).ready(function (){
 });
 </script>
 <?
-$travm = $db['travm'];
+$travm = $char_db['travm'];
 $up_text = "";
-if (isset($_POST['save_ability']) && $travm == 0 && $stats['ups'] != $_POST['ups_base'])
+if (isset($_POST['save_ability']) && $travm == 0 && $char_stats['ups'] != $_POST['ups_base'])
 {
-  foreach ($behaviour as $key => $value)
+  foreach ($behaviour as $key => $min_level)
   {
-    if (!isset($_POST[$key.'_base']) || $stats[$key] == $_POST[$key.'_base'] || $level < $value)
+    if (!isset($_POST[$key.'_base']) || $char_stats[$key] == $_POST[$key.'_base'] || $level < $min_level)
       continue;
     
-    if ($equip -> increaseStat ($key, $_POST[$key.'_base'] - $stats[$key]))
+    if ($equip -> increaseStat ($key, $_POST[$key.'_base'] - $char_stats[$key]))
       $up_text .= "&nbsp; &nbsp;Увеличение способности \"<b>$lang[$key]</b>\" произведено удачно<br>";
   }
   $adb -> query ("UPDATE `character_stats` SET `ups` = ?d WHERE `guid` = ?d", $_POST['ups_base'] , $guid);
 }
-else if (isset($_POST['save_skill']) && $travm == 0 && $stats['skills'] != $_POST['skills_base'])
+else if (isset($_POST['save_skill']) && $travm == 0 && $char_stats['skills'] != $_POST['skills_base'])
 {
-  foreach ($mastery as $key => $value)
+  foreach ($mastery as $key => $min_level)
   {
-    if (!isset($_POST[$key.'_base']) || $key == 'phisic' || $stats[$key] == $_POST[$key.'_base'] || $level < $value)
+    if (!isset($_POST[$key.'_base']) || $key == 'phisic' || $char_stats[$key] == $_POST[$key.'_base'] || $level < $min_level)
       continue;
     
     if ($adb -> query ("UPDATE `character_stats` SET ?# = ?d WHERE `guid` = ?d", $key ,$_POST[$key.'_base'] ,$guid))
@@ -180,7 +180,7 @@ else if (isset($_POST['save_skill']) && $travm == 0 && $stats['skills'] != $_POS
 
 $equip -> showStatAddition ();
 
-$stats = $adb -> selectRow ("SELECT * FROM `character_stats` WHERE `guid` = ?d", $guid);
+$char_stats = $equip -> getChar ('char_stats', '*');
 $dis_buttons = "<td><img src='img/minus.gif' class='nonactive' title='уменьшить'>&nbsp;<img src='img/plus.gif' class='nonactive' title='увеличить'></td>";
 ?>
 <img src="img/1x1.gif" width="1" height="5"><br>
@@ -193,7 +193,7 @@ printf ($up_format, $up_text);
     <td>&nbsp; &nbsp;<?echo $info -> character ($guid);?></td>
     <td valign="top" align="right">
       <input type="button" class="nav" value="Обновить" id="refresh">
-      <input type="button" class="nav" value="Вернуться" id="link" link="inv">
+      <input type="button" class="nav" value="<?echo $lang['return'];?>" id="link" link="inv">
     </td>
   </tr>
 </table>
@@ -206,26 +206,26 @@ printf ($up_format, $up_text);
           <table cellSpacing="0">
           <form action="?action=skills" name="SaveAbilityPoints" method="post">
 <?
-            foreach ($behaviour as $key => $value)
+            foreach ($behaviour as $key => $min_level)
             {
-              if ($level < $value)
+              if ($level < $min_level)
                 continue;
               
               echo "<tr>";
-              echo "<td>&bull; $lang[$key]: </td>";
-              echo "<td align='right'><input name='{$key}_base' type='text' readonly value='$stats[$key]' class='show'";
-              echo (in_array($key, array('str', 'dex', 'con', 'int'))) ?" style='color: ".getStatSkillColor ($stats[$key], $added[$key]).";'" :"";
+              echo "<td>&bull; $lang[$key] </td>";
+              echo "<td align='right'><input name='{$key}_base' type='text' readonly value='$char_stats[$key]' class='show'";
+              echo (in_array($key, array('str', 'dex', 'con', 'int'))) ?" style='color: ".getStatSkillColor ($char_stats[$key], $added[$key]).";'" :"";
               echo " onFocus='this.blur();'></td>";
-              echo (in_array($key, array('str', 'dex', 'con', 'int'))) ?"<td>".getBraces ($stats[$key], $added[$key], $key)."&nbsp;</td>" :"<td></td>";
-              echo ($stats['ups'] > 0) ?"<td><img id='minus_$key' src='img/minus.gif' class='nonactive' onclick=\"MakeSkillStep (-1, '$key');\" title='уменьшить' />&nbsp;<img id='plus_$key' src='img/plus.gif' class='skill' onclick=\"MakeSkillStep (1, '$key');\" title='увеличить' /></td>" :"";
+              echo (in_array($key, array('str', 'dex', 'con', 'int'))) ?"<td>".getBraces ($char_stats[$key], $added[$key], $key)."&nbsp;</td>" :"<td></td>";
+              echo ($char_stats['ups'] > 0) ?"<td><img id='minus_$key' src='img/minus.gif' class='nonactive' onclick=\"MakeSkillStep (-1, '$key');\" title='уменьшить' />&nbsp;<img id='plus_$key' src='img/plus.gif' class='skill' onclick=\"MakeSkillStep (1, '$key');\" title='увеличить' /></td>" :"";
               echo "</tr>";
             }
             echo "</table>";
             echo "<input name='save_ability' type='submit' value='сохранить' disabled id='save_button0' class='nonactive'><input type='checkbox' onClick='ChangeButtonState(0)' style='vertical-align: middle;'>";
-            if ($stats['ups'] > 0)
-              echo "<br>&nbsp;Возможных увеличений: <input name='ups_base' type='text' readonly value='$stats[ups]' class='show' style='font-weight: normal; text-align: left;' onFocus='this.blur();' id='up'>";
-            if ($stats['skills'] > 0)
-              echo "<br>&nbsp;Свободных умений: <input type='text' readonly value='$stats[skills]' class='show' style='font-weight: normal; text-align: left;' onFocus='this.blur();' id='skill'>";
+            if ($char_stats['ups'] > 0)
+              echo "<br>&nbsp;Возможных увеличений: <input name='ups_base' type='text' readonly value='$char_stats[ups]' class='show' style='font-weight: normal; text-align: left;' onFocus='this.blur();' id='up'>";
+            if ($char_stats['skills'] > 0)
+              echo "<br>&nbsp;Свободных умений: <input type='text' readonly value='$char_stats[skills]' class='show' style='font-weight: normal; text-align: left;' onFocus='this.blur();' id='skill'>";
 ?>
         </td>
       </tr>
@@ -282,34 +282,34 @@ if ($level > 0)
   <table>
   <form action="?action=skills" name="SaveAbilityPoints" method="post">
 <?
-  echo "<input name='skills_base' type='hidden' value='$stats[skills]'>";
-  echo "<tr><td colspan='3'><b>$lang[weapon]:</b></td></tr>";
+  echo "<input name='skills_base' type='hidden' value='$char_stats[skills]'>";
+  echo "<tr><td colspan='3'><b>$lang[weapon]</b></td></tr>";
   foreach ($weapon as $key)
   {
-    $dif[$key] = $stats[$key] - $added[$key];
+    $dif[$key] = $char_stats[$key] - $added[$key];
     echo "<tr>";
-    echo "<td>&nbsp;&bull; $lang[$key]:</td>";
-    echo "<td width='40' class='skill' align='right'><input name='{$key}_base' type='text' readonly value='$stats[$key]' class='show' style='color: ".getStatSkillColor ($stats[$key], $added[$key]).";' onFocus='this.blur();' /></td>";
-    echo "<td>".getBraces ($stats[$key], $added[$key], $key)."</td>";
-    if ($stats['skills'] > 0 && $dif[$key] < 5)
+    echo "<td>&nbsp;&bull; $lang[$key]</td>";
+    echo "<td width='40' class='skill' align='right'><input name='{$key}_base' type='text' readonly value='$char_stats[$key]' class='show' style='color: ".getStatSkillColor ($char_stats[$key], $added[$key]).";' onFocus='this.blur();' /></td>";
+    echo "<td>".getBraces ($char_stats[$key], $added[$key], $key)."</td>";
+    if ($char_stats['skills'] > 0 && $dif[$key] < 5)
       echo "<td><img id='minus_$key' src='img/minus.gif' class='nonactive' onclick=\"ChangeAbility('$key', -1, $dif[$key], 5)\" title='уменьшить' />&nbsp;<img id='plus_$key' src='img/plus.gif' class='skill' onclick=\"ChangeAbility('$key', 1, $dif[$key], 5)\" title='увеличить' /></td>";
-    else if ($stats['skills'] > 0 && $dif[$key] >= 5)
+    else if ($char_stats['skills'] > 0 && $dif[$key] >= 5)
       echo $dis_buttons;
     echo "</tr>";
   }
 if ($level >= 4)
 {
-  echo "<tr><td colspan='3'><b>$lang[magic]:<b></td></tr>";
+  echo "<tr><td colspan='3'><b>$lang[magic]<b></td></tr>";
   foreach ($magic as $key)
   {
-    $dif[$key] = $stats[$key] - $added[$key];
+    $dif[$key] = $char_stats[$key] - $added[$key];
     echo "<tr>";
-    echo "<td>&nbsp;&bull; $lang[$key]:</td>";
-    echo "<td class='skill' align='right'><input name='{$key}_base' type='text' readonly value='$stats[$key]' class='show' style='color: ".getStatSkillColor ($stats[$key], $added[$key]).";' onFocus='this.blur();' id='{$key}_base' \></td>";
-    echo "<td>".getBraces ($stats[$key], $added[$key], $key)."</td>";
-    if ($stats['skills'] > 0 && $dif[$key] < 10)
+    echo "<td>&nbsp;&bull; $lang[$key]</td>";
+    echo "<td class='skill' align='right'><input name='{$key}_base' type='text' readonly value='$char_stats[$key]' class='show' style='color: ".getStatSkillColor ($char_stats[$key], $added[$key]).";' onFocus='this.blur();' id='{$key}_base' \></td>";
+    echo "<td>".getBraces ($char_stats[$key], $added[$key], $key)."</td>";
+    if ($char_stats['skills'] > 0 && $dif[$key] < 10)
       echo "<td><img id='minus_$key' src='img/minus.gif' class='nonactive' onclick=\"ChangeAbility('$key', -1, $dif[$key], 10)\" title='уменьшить' />&nbsp;<img id='plus_$key' src='img/plus.gif' class='skill' onclick=\"ChangeAbility('$key', 1, $dif[$key], 10)\" title='увеличить' /></td>";
-    else if ($stats['skills'] > 0 && $dif[$key] >= 10)
+    else if ($char_stats['skills'] > 0 && $dif[$key] >= 10)
       echo $dis_buttons;
     echo "</tr>";
   }

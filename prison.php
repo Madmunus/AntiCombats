@@ -9,7 +9,7 @@ $xaos = $adb -> selectCell ("SELECT COUNT(*) FROM `characters` WHERE `prision` !
     <td width="100%" valign="top">
     <center>Тюрьма - место покоя тех, кто был глуп и наивен.</center>
 <?
-if (!$db['prision'])
+if (!$char_db['prision'])
 {
 ?>
 <table width="148" align="right" border="0" cellpadding="0" cellspacing="1" bgcolor="#DEDEDE">
@@ -22,12 +22,12 @@ if (!$db['prision'])
 }
 else
 {
-  $time = getFormatedTime ($db['prision']);
+  $time = getFormatedTime ($char_db['prision']);
   echo "<span class='small'><center><font color='#FF0000'><b>Вам осталось сидеть $time</b><br>";
-  if ($db['prision_reason'])
+  if ($char_db['prision_reason'])
   {
     echo "Причина тюремного заключения:<br>";
-    echo $db['prision_reason'];
+    echo $char_db['prision_reason'];
   }
   echo "</font></center></span>";
 }

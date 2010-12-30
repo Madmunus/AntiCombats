@@ -93,13 +93,13 @@ $(document).ready(function (){
 </script>
       <table border="0" width="100%" bgColor="#d4d2d2" cellpadding="3" cellspacing="0">
         <tr>
-          <td width="25%" align="center" id="section_1"><a href="javascript:showInventory (1, 'mail_to', '<?echo $login_mail;?>');" class="nick"><b>Обмундирование</b></a></td>
-          <td width="25%" align="center" id="section_2"><a href="javascript:showInventory (2, 'mail_to', '<?echo $login_mail;?>');" class="nick"><b>Заклятия</b></a></td>
-          <td width="25%" align="center" id="section_3"><a href="javascript:showInventory (3, 'mail_to', '<?echo $login_mail;?>');" class="nick"><b>Эликсиры</b></a></td>
-          <td width="25%" align="center" id="section_4"><a href="javascript:showInventory (4, 'mail_to', '<?echo $login_mail;?>');" class="nick"><b>Прочее</b></a></td>
+          <td width="25%" align="center" id="section_1"><a href="javascript:showInventory (1, 'mail_to', '<?echo $login_mail;?>');" class="nick"><b><?echo $lang['sec_item'];?></b></a></td>
+          <td width="25%" align="center" id="section_2"><a href="javascript:showInventory (2, 'mail_to', '<?echo $login_mail;?>');" class="nick"><b><?echo $lang['sec_thing'];?></b></a></td>
+          <td width="25%" align="center" id="section_3"><a href="javascript:showInventory (3, 'mail_to', '<?echo $login_mail;?>');" class="nick"><b><?echo $lang['sec_elix'];?></b></a></td>
+          <td width="25%" align="center" id="section_4"><a href="javascript:showInventory (4, 'mail_to', '<?echo $login_mail;?>');" class="nick"><b><?echo $lang['sec_other'];?></b></a></td>
         </tr>
       </table>
-      <div align="center" style="background: #a5a5a5;"><b>Рюкзак: (масса: <?echo "$mass/$maxmass";?>)</div>
+      <div align="center" style="background: #a5a5a5;"><b><?echo $lang['back_pack'];?> (<?echo lowercase ($lang['mass'])." $mass/$maxmass";?>)</div>
       <div id="inventory"></div>
 <?
   }
@@ -178,7 +178,7 @@ ch_l();
                               ORDER BY `m`.`delivery_time`;", $guid ,time ());
     if (count ($rows1) == 0 && count ($rows2) == 0 )
     {
-      echo "<table width='100%' cellspacing='1' cellpadding='2' bgcolor='#A5A5A5'><tr><td bgcolor='#e2e0e0' align='center'>ПУСТО</td></tr></table>";
+      echo "<table width='100%' cellspacing='1' cellpadding='2' bgcolor='#A5A5A5'><tr><td bgcolor='#e2e0e0' align='center'>$lang[empty]</td></tr></table>";
       break;
     }
     
@@ -219,8 +219,8 @@ ch_l();
       <tr>
         <td colspan="2">
           <nobr>
-          Деньги: <?echo getMoney ($money);?> кр.<br>
-          Передач: <?echo $db['transfers'];?><br><br>
+          <?echo "$lang[money] ".getMoney ($money);?> кр.<br>
+          Передач: <?echo $char_db['transfers'];?><br><br>
 <?
 if ($do == 'items') echo "<b>Передать предметы</b><br>";
 else

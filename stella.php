@@ -5,7 +5,7 @@ $dat = $adb -> selectRow ("SELECT * FROM `city_stella_main` WHERE `city` = ?s", 
 $state = $adb -> selectCell ("SELECT `state` FROM `character_info` WHERE `guid` = ?d", $guid);
 $open = ($dat['open']) ?"Голосование открыто" :"Голосование окончено";
 
-if (isset($_POST['vote']) && $level >= $dat['min_level'] && $db['vote'] > 0 && $state == $dat['city'])
+if (isset($_POST['vote']) && $level >= $dat['min_level'] && $char_db['vote'] > 0 && $state == $dat['city'])
 {
   $quest = $adb -> selectCell ("SELECT `answer` FROM `city_stella_question` WHERE `id` = ?d and `question` = ?d", $_POST['stella'] ,$dat['id']);
   $chat -> say ($guid, "Вы выбрали ответ: <b>$quest</b> - спасибо что проголосавали");

@@ -35,34 +35,9 @@ $night = (date ('H') > 20 || date ('H') < 7) ?1 :0;
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
 <tr>
 <td valign="top" style="padding-left: 2px;">
-<table width="100%" border="0" cellspacing="1" cellpadding="0">
-  <tr>
-    <td align="center" valign="top" width="210"><?echo $info -> character ($guid);$equip -> showEquipment ();?></td>
-    <td align="left" valign="top" nowrap style="padding-left: 3px;"><br>
 <?
-foreach ($behaviour as $key => $value)
-  echo ($level >= $value) ?"$lang[$key]: $stats[$key]<br>" :"";
-echo ($stats['ups'] > 0) ?" <a class='nick' href='?action=skills'>+ Способности</a> " :'';
-echo ($stats['skills'] > 0) ?"&bull; <a class='nick' href='?action=skills'><b> Обучение</b></a><br>" :"<br>";
-echo "<br>";
-echo "Опыт: <b>".getExp ($exp)."</b> (".getExp ($next_up).")<br>";
-echo "Уровень: $level<br>";
-echo "Побед: $win<br>";
-echo "Поражений: $lose<br>";
-echo "Ничьих: $draw<br>";
-echo "Деньги: <b>$money</b> кр.";
-echo ($money_euro > 0) ?" <b>$money_euro</b> екр." :'';
-echo ($prof) ?"<br>Профессия: <b>".$lang['prof_'.$prof]."</b>" :'';
-echo ($clan) ?"<br>Клан: $clan" :'';
-$orden_d = $db['orden'];
-$orden_dis = ($orden_d == 1) ?"Паладинский орден - " :(($orden_d == 2) ?"Армада - " :"");
-echo ($orden_d == 1 || $orden_d == 2) ?"<br><strong>$orden_dis$stat_rang</strong><br></small>" :"<br><small>Статус: <strong>$status</strong>";
-$return_status = ((time () - $db['last_return']) >= $db['return_time']) | 0;
+include ("char_map.php");
 ?>
-    </td>
-  </tr>
-  <tr><td colspan="2"><small><?echo $equip -> needItemRepair ();?></small></td></tr>
-</table>
 </td>
 <td align="right" valign="top" style="padding-right: 15px;">
 <img src="img/1x1.gif" width="1" height="5">
@@ -152,5 +127,5 @@ if ($return_status)
   echo "<span class='buttons_on_image' onclick=\"location.href = 'main.php?action=return';\">Возврат</span>&nbsp;";
 ?>
   <span class="buttons_on_image" onclick="window.open('/forum');">Форум</span>&nbsp;
-  <span class="buttons_on_image" onclick="showHelp ('top');">Подсказка</span>&nbsp;
+  <span class="buttons_on_image" onclick="showHelp ('top');"><?echo $lang['hint'];?></span>&nbsp;
 </div>

@@ -43,7 +43,7 @@ if ($section_shop == 'sell')
                               and `c`.`wear` = '0' 
                               and `c`.`mailed` = '0' 
                               and `c`.`guid` = ?d 
-                           ORDER BY `c`.`id` DESC", $guid);
+                           ORDER BY `c`.`last_update` DESC", $guid);
   $i = true;
   foreach ($rows as $item_info)
   {
@@ -76,7 +76,10 @@ else
 <div style="margin-left: 25px; margin-top: 10px;">
 <?
 if ($section_shop == 'sell')
-  echo "<input type='button' value='Купить вещи' id='link' link='none&section_shop=$_COOKIE[section_shop]' class='nav'>";
+{
+  $link = (empty($_COOKIE['section_shop'])) ?$room_info['shop_section'] :$_COOKIE['section_shop'];
+  echo "<input type='button' value='Купить вещи' id='link' link='none&section_shop=$link' class='nav'>";
+}
 else
   echo "<input type='button' value='Продать вещи' id='link' link='none&section_shop=sell' class='nav'>";
 ?>

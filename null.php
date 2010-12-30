@@ -18,27 +18,22 @@ $adb = DbSimple_Generic::connect($database['adb']);
 $adb->query("SET NAMES ? ",$database['db_encoding']);
 $adb->setErrorHandler("databaseErrorHandler");
 
+$equip = Equip::setguid($guid);
 $test = Test::setguid($guid);
 $chat = new Chat;
 
-$test -> Guid ($guid);
+$test -> Guid ();
 
 global $h;
 
-$db = $adb -> selectRow ("SELECT `login`, 
-                                 `room`, 
-                                 `city`, 
-                                 `shut`, 
-                                 `chat_s` 
-                          FROM `characters` 
-                          WHERE `guid` = ?d", $guid);
-list ($login, $room, $city, $shut, $chat_s) = array_values ($db);
+$char_db = $equip -> getChar ('char_db', 'login', 'room', 'city', 'shut', 'chat_s');
+ArrToVar ($char_db);
 
 $commands = $adb -> selectCol ("SELECT `name` FROM `server_commands`;");
 $command_a = false;
 
 if (!$h || $shut || $chat_s == 2) exit ();
-$color = $adb -> selectCell ("SELECT `color` FROM `character_info` WHERE `guid` = ?d", $guid);
+$color = $equip -> getChar ('char_info', 'color');
 
 foreach ($commands as $num => $name)
 {
@@ -53,8 +48,13 @@ if (!$command_a)
   $h = htmlspecialchars ($h);
   $h = str_replace ("\n", "", $h);
   $to = split (']', str_replace (array('to [', 'private ['), "]", $h));
-  $h = preg_replace ("/private \[$to[1]/", "private [", $h, 1);
-  $to = str_replace (", ", ",", $to[1]);
+  if (isset ($to[1]))
+  {
+    $h = preg_replace ("/private \[$to[1]/", "private [", $h, 1);
+    $to = str_replace (", ", ",", $to[1]);
+  }
+  else
+    $to = $to[0];
   
   if (utf8_substr ($h, 0, 4) == 'to [')
     $class = 'to';

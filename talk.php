@@ -17,9 +17,10 @@ $adb = DbSimple_Generic::connect($database['adb']);
 $adb->query("SET NAMES ? ",$database['db_encoding']);
 $adb->setErrorHandler("databaseErrorHandler");
 
+$equip = Equip::setguid($guid);
 $test = Test::setguid($guid);
 
-$test -> Guid ($guid);
+$test -> Guid ();
 
 $h = requestVar ('h');
 $color = requestVar ('color');
@@ -28,13 +29,8 @@ $om = requestVar ('om');
 $sound = requestVar ('sound');
 $phrase = requestVar ('phrase');
 
-$db = $adb -> selectRow ("SELECT `admin_level`, 
-                                 `orden`, 
-                                 `level`, 
-                                 `clan` 
-                          FROM `characters` 
-                          WHERE `guid` = ?d", $guid);
-list ($admin_level, $orden, $level, $clan) = array_values ($db);
+$char_db = $equip -> getChar ('char_db', 'admin_level', 'orden', 'level', 'clan');
+ArrToVar ($char_db);
 ?>
 <html><head>
 <meta http-equiv="Content-type" content="text/html; charset=utf-8" />

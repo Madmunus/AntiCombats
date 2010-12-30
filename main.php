@@ -18,19 +18,19 @@ $adb = DbSimple_Generic::connect($database['adb']);
 $adb->query("SET NAMES ? ",$database['db_encoding']);
 $adb->setErrorHandler("databaseErrorHandler");
 
-$test = Test::setguid($guid);
 $equip = Equip::setguid($guid);
+$test = Test::setguid($guid);
 $mail = Mail::setguid($guid);
 $history = History::setguid($guid);
 $error = new Error;
 $chat = new Chat;
 $info = new Info;
 
-$test -> Guid ($guid);
-$test -> Block ($db['block']);
-$test -> Prision ($db['prision']);
-$test -> Battle ($db['battle']);
-$test -> Shut ($db['shut']);
+$test -> Guid ();
+$test -> Block ($char_db['block']);
+$test -> Prision ($char_db['prision']);
+$test -> Battle ($char_db['battle']);
+$test -> Shut ($char_db['shut']);
 $test -> Travm ();
 $test -> Up ();
 $test -> Items ();
@@ -41,10 +41,11 @@ $test -> WakeUp ();
 $action = requestVar ('action', 'none');
 $do = requestVar ('do');
 $section = requestVar ('section', 1, 7);
-$login_mail = (isset($_GET['login_mail'])) ?htmlspecialchars ($_GET['login_mail']) :((isset($_COOKIE['login_mail']) && $_COOKIE['login_mail'] != $guid && $_COOKIE['login_mail'] != $db['login']) ?$_COOKIE['login_mail'] :"");
+$login_mail = (isset($_GET['login_mail'])) ?htmlspecialchars ($_GET['login_mail']) :((isset($_COOKIE['login_mail']) && $_COOKIE['login_mail'] != $guid && $_COOKIE['login_mail'] != $char_db['login']) ?$_COOKIE['login_mail'] :"");
 $credit = requestVar ('credit');
 $pass = requestVar ('pass');
 $item_id = requestVar ('item_id', 0);
+$item_slot = requestVar ('item_slot');
 $room_go = requestVar ('room_go');
 $stat = requestVar ('stat');
 $warning = requestVar ('warning', 0);
@@ -79,39 +80,39 @@ if (link[link.length - 1] != 'game.php')
 <div id="hint4" class="ahint"></div>
 <input type="hidden" id="x" value="0" style="position: fixed; left: 0px; top: 0px; z-index: 110;" /><input type="hidden" id="y" value="0" style="position: fixed; left: 110px; top: 0px; z-index: 110;" />
 <?
-$db = $adb -> selectRow ("SELECT * FROM `characters` WHERE `guid` = ?d", $guid);
-$stats = $adb -> selectRow ("SELECT * FROM `character_stats` WHERE `guid` = ?d", $guid);
+$char_db = $equip -> getChar ('char_db', '*');
+$char_stats = $equip -> getChar ('char_stats', '*');
 $lang = $adb -> selectCol ("SELECT `key` AS ARRAY_KEY, `text` FROM `server_language`;");
 
-$login = $db['login'];
-$sex = $db['sex'];
+$login = $char_db['login'];
+$sex = $char_db['sex'];
 
-$city = $db['city'];
-$room = $db['room'];
+$city = $char_db['city'];
+$room = $char_db['room'];
 
-$win = $db['win'];
-$lose = $db['lose'];
-$draw = $db['draw'];
+$win = $char_db['win'];
+$lose = $char_db['lose'];
+$draw = $char_db['draw'];
 
-$admin_level = $db['admin_level'];
-$level = $db['level'];
-$exp = $db['exp'];
-$next_up = $db['next_up'];
+$admin_level = $char_db['admin_level'];
+$level = $char_db['level'];
+$exp = $char_db['exp'];
+$next_up = $char_db['next_up'];
 
-$money = $db['money'];
-$money_euro = $db['money_euro'];
-$mass = $db['mass'];
-$maxmass = $db['maxmass'];
+$money = $char_db['money'];
+$money_euro = $char_db['money_euro'];
+$mass = $char_db['mass'];
+$maxmass = $char_db['maxmass'];
 
-$chin = $db['chin'];
-$status = $db['status'];
-$prof = $db['profession'];
-$stat_rang = $db['stat_rang'];
-$name_s = $db['clan_short'];
-$clan  = $db['clan'];
-$orden = $db['orden'];
+$chin = $char_db['chin'];
+$status = $char_db['status'];
+$prof = $char_db['profession'];
+$stat_rang = $char_db['stat_rang'];
+$name_s = $char_db['clan_short'];
+$clan  = $char_db['clan'];
+$orden = $char_db['orden'];
 
-$shut = $db['shut'];
+$shut = $char_db['shut'];
 $date = date ('d.m.y H:i:s', mktime(date ('H') - $GSM));
 
 $equip -> getRoomGoTime ($mtime);
@@ -137,7 +138,7 @@ switch ($action)
     flock ($fp1, 3);
     fclose ($fp1); */
     
-    if ($db['dnd'])
+    if ($char_db['dnd'])
       $adb -> query ("UPDATE `characters` SET `dnd` = '0', `message` = '' WHERE `guid` = ?d", $guid);
     
     $test -> Go ($room_go);
@@ -146,13 +147,13 @@ switch ($action)
     die ("<script>$('#mes', parent.msg.document).html(''); parent.ref.location = 'refresh.php?go'; location.href = 'main.php';</script>");
   break;
   case 'return':
-    if ((time () - $db['last_return']) < $db['return_time'])
+    if ((time () - $char_db['last_return']) < $char_db['return_time'])
       $error -> Map (114);
     
-    if ($db['dnd'])
+    if ($char_db['dnd'])
       $adb -> query ("UPDATE `characters` SET `dnd` = '0', `message` = '' WHERE `guid` = ?d", $guid);
     
-    $adb -> query ("UPDATE `characters` SET `room` = ?s, `last_room` = ?s, `last_return` = ?d WHERE `guid` = ?d", $db['last_room'] ,$room ,time () ,$guid);
+    $adb -> query ("UPDATE `characters` SET `room` = ?s, `last_room` = ?s, `last_return` = ?d WHERE `guid` = ?d", $char_db['last_room'] ,$room ,time () ,$guid);
     die ("<script>$('#mes', parent.msg.document).html(''); parent.ref.location = 'refresh.php?go'; location.href = 'main.php';</script>");
   break;
   case 'admin':
@@ -175,7 +176,7 @@ switch ($action)
     $error -> Inventory (0);
   break;
   case 'unwear_item':
-    $equip -> equipItem ($item_id, -1);
+    $equip -> equipItem ($item_slot, -1);
     $error -> Inventory (0);
   break;
   case 'unwear_full':

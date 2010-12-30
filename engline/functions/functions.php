@@ -13,19 +13,19 @@ class Test extends Error
     return $object;
   }
   /*Проверка существования гайда*/
-  function Guid ($guid)
+  function Guid ()
   {
-    global $adb, $db;
+    global $adb, $equip, $char_db;
     $error = "<script>top.main.location.href = 'index.php';</script>";
     
-    if ($guid == 0 || !is_numeric($guid))
+    if ($this->guid == 0 || !is_numeric($this->guid))
       die ($error);
     
-    $db = $adb -> selectRow ("SELECT `block`, `prision`, `battle`, `shut`, `login`, `admin_level` FROM `characters` WHERE `guid` = ?d", $this->guid);
-    $stats = $adb -> selectCell ("SELECT `guid` FROM `character_stats` WHERE `guid` = ?d", $this->guid);
-    $info = $adb -> selectCell ("SELECT `guid` FROM `character_info` WHERE `guid` = ?d", $this->guid);
+    $char_db = $equip -> getChar ('char_db', 'block', 'prision', 'battle', 'shut', 'login', 'admin_level');
+    $char_stats = $equip -> getChar ('char_stats', 'guid');
+    $char_info = $equip -> getChar ('char_info', 'guid');
     
-    if (!$db || !$stats || !$info)
+    if (!$char_db || !$char_stats || !$char_info)
       die ($error);
   }
   /*Проверка блока персонажа*/
@@ -112,18 +112,13 @@ class Test extends Error
   /*Восстановление здоровья/маны*/
   function Regen ()
   {
-    global $adb;
-    $stats = $adb -> selectRow ("SELECT `hp_cure`, `hp_all`, `hp_regen`, 
-                                        `mp_cure`, `mp_all`, `mp_regen` 
-                                 FROM `character_stats` 
-                                 WHERE `guid` = ?d", $this->guid);
-    list ($cure["hp"], $all["hp"], $regen["hp"], $cure["mp"], $all["mp"], $regen["mp"]) = array_values ($stats);
-    $char = $adb -> selectRow ("SELECT `hp`, `mp` 
-                                FROM `characters` 
-                                WHERE `guid` = ?d", $this->guid);
-    list ($now["hp"], $now["mp"]) = array_values ($char);
+    global $adb, $equip;
+    $char_stats = $equip -> getChar ('char_stats', 'hp_cure', 'hp_all', 'hp_regen', 'mp_cure', 'mp_all', 'mp_regen');
+    list ($cure["hp"], $all["hp"], $regen["hp"], $cure["mp"], $all["mp"], $regen["mp"]) = array_values ($char_stats);
+    $char_db = $equip -> getChar ('char_db', 'hp', 'mp', 'battle');
+    list ($now["hp"], $now["mp"], $battle) = array_values ($char_db);
     
-    if ($adb -> selectCell ("SELECT `battle` FROM `characters` WHERE `guid` = ?d", $this->guid) != 0)
+    if ($battle != 0)
       return;
     
     foreach ($all as $key => $value)
@@ -152,38 +147,28 @@ class Test extends Error
   /*Проверка травм у персонажа*/
   function Travm ()
   {
-    global $adb;
-    $db = $adb -> selectRow ("SELECT `travm`, 
-                                     `travm_old_stat`, 
-                                     `travm_stat` 
-                              FROM `characters` 
-                              WHERE `guid` = ?d", $this->guid);
-    list ($travm, $travm_old_stat, $travm_stat) = array_values ($db);
+    global $adb, $equip;
+    $char_db = $equip -> getChar ('char_db', 'travm', 'travm_old_stat', 'travm_stat');
     
-    if (!$travm)
+    if (!$char_db['travm'])
       return;
     
-    if (intval (($travm - time()) / 60) > 0)
+    if (intval (($char_db['travm'] - time()) / 60) > 0)
       return;
     
     $adb -> query ("UPDATE `characters` SET `travm` = '0' WHERE `guid` = ?d" ,$this->guid);
-    $adb -> query ("UPDATE `character_stats` SET ?# = ?d WHERE `guid` = ?d", $travm_stat ,$travm_old_stat ,$this->guid);
+    $adb -> query ("UPDATE `character_stats` SET ?# = ?d WHERE `guid` = ?d", $char_db['travm_stat'] ,$char_db['travm_old_stat'] ,$this->guid);
   }
   /*Проверка на получение апа/лвла*/
   function Up ()
   {
     global $adb, $history, $equip;
-    $db = $adb -> selectRow ("SELECT `exp`, 
-                                     `next_up`, 
-                                     `level` 
-                              FROM `characters` 
-                              WHERE `guid` = ?d", $this->guid);
-    list ($cur_exp, $cur_up, $cur_level) = array_values ($db);
+    $char_db = $equip -> getChar ('char_db', 'exp', 'next_up', 'level');
     
-    if ($cur_exp < $cur_up)
+    if ($char_db['exp'] < $char_db['next_up'])
       return;
     
-    $next_up_id = $adb -> selectCell ("SELECT `up` FROM `player_exp_for_level` WHERE `exp` = ?d", $cur_up) + 1;
+    $next_up_id = $adb -> selectCell ("SELECT `up` FROM `player_exp_for_level` WHERE `exp` = ?d", $char_db['next_up']) + 1;
     $exp_table = $adb -> selectRow ("SELECT `level`, `exp`, 
                                             `ups`, `skills`, 
                                             `money`, `vit`, 
@@ -201,7 +186,7 @@ class Test extends Error
                     WHERE `guid` = ?d", $next_ups ,$next_skills ,$this->guid);
     $history -> transfers ('Get', "$next_money кр.", $_SERVER['REMOTE_ADDR'], 'Level');
     
-    if ($next_level <= $cur_level)
+    if ($next_level <= $char_db['level'])
       return;
     
     $adb -> query ("UPDATE `characters` 
@@ -227,8 +212,8 @@ class Test extends Error
   /*Проверка участия персонажа в походе*/
   function Move ()
   {
-    global $adb;
-    $speed = $adb -> selectCell ("SELECT `speed` FROM `characters` WHERE `guid` = ?d", $this->guid);
+    global $adb, $equip;
+    $speed = $equip -> getChar ('char_db', 'speed');
     $ld = $adb -> selectRow ("SELECT `time`, 
                                      `destenation`, 
                                      `dest_game`, 
@@ -281,108 +266,83 @@ class Test extends Error
     if (!$room_go)
       $this -> Map (102);
     
-    global $adb;
-    $db = $adb -> selectRow ("SELECT `room`, `city`, 
-                                     `sex`, `level`, 
-                                     `admin_level`, 
-                                     `mass`, `maxmass`, 
-                                     `orden`, `last_go`, 
-                                     `prision` 
-                              FROM `characters` 
-                              WHERE `guid` = ?d", $this->guid);
-    list ($room, $city, $sex, $level, $admin_level, $mass, $maxmass, $orden, $last_go, $prision) = array_values ($db);
-    $time_to_go = $adb -> selectCell ("SELECT `time_to_go` FROM `city_rooms` WHERE `room` = ?s", $room);
+    global $adb, $equip, $char_db;
+    $equip -> getChar ('char_db', 'room', 'city', 'sex', 'level', 'mass', 'maxmass', 'last_go', 'prision');
+    $time_to_go = $adb -> selectCell ("SELECT `time_to_go` FROM `city_rooms` WHERE `room` = ?s", $char_db['room']);
     $room_info = $adb -> selectRow ("SELECT `room`, `from`, 
                                             `min_level`, 
                                             `need_orden`, 
                                             `sex` 
                                      FROM `city_rooms` 
                                      WHERE `room` = ?s 
-                                       and `city` = ?s", $room_go ,$city);
+                                       and `city` = ?s", $room_go ,$char_db['city']);
     if (!$room_info)
       $this -> Map (102);
     
     list ($room_go, $from, $min_level, $need_orden, $need_sex) = array_values ($room_info);
     
-    if ($prision != 0)
+    if ($char_db['prision'] != 0)
       $this -> Map (100);
     
-    if ($mass > $maxmass)
-      $this -> Map (103, "$mass|$maxmass");
+    if ($char_db['mass'] > $char_db['maxmass'])
+      $this -> Map (103, "$char_db[mass]|$char_db[maxmass]");
     
-    if ($level < $min_level)
+    if ($char_db['level'] < $min_level)
       $this -> Map (101, ($min_level - 1));
     
     if ($need_orden)
       $this -> Map (102);
     
-    if ($need_sex && $sex != $need_sex)
+    if ($need_sex && $char_db['sex'] != $need_sex)
     {
       $need_sex = ($need_sex == 'female') ?'женщинам' :'мужчинам';
       $this -> Map (104, $need_sex);
     }
     
-    if (!in_array ($room, explode (',', $from)) && $room != $room_go)
+    if (!in_array ($char_db['room'], explode (',', $from)) && $char_db['room'] != $room_go)
       $this -> Map (102);
     
-    if (($time_to_go - (time () - $last_go)) > 0)
+    if (($time_to_go - (time () - $char_db['last_go'])) > 0)
       $this -> Map (110);
   }
   /*Проверка всех предметов*/
   function Items ()
   {
     global $adb, $equip;
-    $wear = $adb -> selectRow ("SELECT `helmet`, `bracer`, 
-                                       `hand_r`, `armor`, 
-                                       `shirt`, `cloak`, 
-                                       `belt`, `earring`, 
-                                       `amulet`, `ring1`, 
-                                       `ring2`, `ring3`, 
-                                       `gloves`, `hand_l`, 
-                                       `pants`, `boots` 
-                                FROM `character_equip` 
-                                WHERE `guid` = ?d", $this->guid);
-    foreach ($wear as $key => $value)
+    $char_equip = $equip -> getChar ('char_equip', 'helmet', 'bracer', 'hand_r', 'armor', 'shirt', 'cloak', 'belt', 'earring', 'amulet', 'ring1', 'ring2', 'ring3', 'gloves', 'hand_l', 'pants', 'boots');
+    foreach ($char_equip as $key => $value)
     {
       if ($value != 0 && !($equip -> checkItemStats ($value)))
-        $equip -> equipItem ($value, -1);
+        $equip -> equipItem ($key, -1);
     }
-    $rows = $adb -> select ("SELECT `c`.`id`, 
-                                    `c`.`wear`, 
-                                    `c`.`mailed`, 
-                                    `i`.`mass` 
-                             FROM `character_inventory` AS `c` 
-                             LEFT JOIN `item_template` AS `i` 
-                             ON `c`.`item_template` = `i`.`entry` 
-                             WHERE `c`.`guid` = ?d", $this->guid);
-    $mass = $adb -> selectCell ("SELECT `mass` FROM `characters` WHERE `guid` = ?d", $this->guid);
-    $all_mass = 0;
+    $rows = $adb -> select ("SELECT `id`, 
+                                    `wear`, 
+                                    `mailed` 
+                             FROM `character_inventory` 
+                             WHERE `guid` = ?d", $this->guid);
     foreach ($rows as $inventory)
     {
-      if (!$inventory['mailed'] && !$inventory['wear'])
-        $all_mass += $inventory['mass'];
+      list ($item_id, $item_wear, $item_mailed) = array_values ($inventory);
       
-      if ($equip -> checkItemValidity ($inventory['id']))
+      if ($equip -> checkItemValidity ($item_id))
         continue;
       
-      if (!$inventory['wear'])
-        $equip -> deleteItem ($inventory['id']);
-      else if ($inventory['wear'])
+      if (!$item_wear && !$item_mailed)
+        $equip -> deleteItem ($item_id);
+      else if ($item_wear && !$item_mailed)
       {
-        $equip -> equipItem ($inventory['id'], -1);
-        $equip -> deleteItem ($inventory['id']);
+        $slot = $equip -> getItemSlot ($item_id);
+        $equip -> equipItem ($slot, -1);
+        $equip -> deleteItem ($item_id);
       }
     }
-    
-    if ($all_mass != $mass)
-      $adb -> query ("UPDATE `characters` SET `mass` = ?f WHERE `guid` = ?d", $all_mass ,$this->guid);
   }
   /*Проверка доступности комнаты*/
   function Room ()
   {
-    global $adb, $action;
+    global $adb, $action, $equip;
     $actions = array ('none', 'go', 'admin', 'enter', 'exit', '');
-    $room = $adb -> selectCell ("SELECT `room` FROM `characters` WHERE `guid` = ?d", $this->guid);
+    $room = $equip -> getChar ('char_db', 'room');
     
     if ($room == 'mail' && !in_array ($action, $actions))
       $this -> Map (105);
@@ -393,10 +353,10 @@ class Test extends Error
   /*Проверка состояния персонажа*/
   function Afk ()
   {
-    global $adb;
-    $db = $adb -> selectCell ("SELECT `last_time`, `dnd` FROM `characters` WHERE `guid` = ?d", $this->guid);
+    global $adb, $equip;
+    $char_db = $equip -> getChar ('char_db', 'last_time', 'dnd');
     
-    if ((time () - $db['last_time']) >= 300 && !$db['dnd'])
+    if ((time () - $char_db['last_time']) >= 300 && !$char_db['dnd'])
       $adb -> query ("UPDATE `characters` SET `afk` = '1' WHERE `guid` = ?d", $this->guid);
   }
   /*Обновление состояния персонажа*/
@@ -421,6 +381,37 @@ class Equip extends Error
     $object = new Equip;
     $object->guid = $guid;
     return $object;
+  }
+  /*Получение информации о персонаже*/
+  function getChar ()
+  {
+    global $adb;
+    $args = func_get_args();
+    $args_num = func_num_args();
+    
+    if (is_numeric ($args[$args_num-1]))
+    {
+      $guid = $args[$args_num-1];
+      unset ($args[$args_num-1]);
+    }
+    else
+      $guid = $this->guid;
+    
+    switch ($pref = $args[0])
+    {
+      case 'char_db':    $table = 'characters';      break;
+      case 'char_stats': $table = 'character_stats'; break;
+      case 'char_info':  $table = 'character_info';  break;
+      case 'char_equip': $table = 'character_equip'; break;
+    }
+    
+    unset ($args[0]);
+    if ($args[1] == '*')
+      return $adb -> selectRow ("SELECT * FROM ?# WHERE `guid` = ?d", $table ,$guid);
+    else if ($args_num == 2)
+      return $adb -> selectCell ("SELECT ?# FROM ?# WHERE `guid` = ?d", $args ,$table ,$guid);
+    else
+      return $adb -> selectRow ("SELECT ?# FROM ?# WHERE `guid` = ?d", $args ,$table ,$guid);
   }
   /*Вычисление цены покупки предмета*/
   function getBuyValue (&$value)
@@ -456,24 +447,10 @@ class Equip extends Error
                                ON `c`.`item_template` = `i`.`entry` 
                                WHERE `c`.`guid` = ?d
                                  and `c`.`id` = ?d", $this->guid ,$item_id);
-    $stats = $adb -> selectRow ("SELECT `c`.`level`, 
-                                        `c`.`sex`, `c`.`orden`, 
-                                        `s`.`str`, `s`.`dex`, 
-                                        `s`.`con`, `s`.`vit`, 
-                                        `s`.`int`, `s`.`wis`, 
-                                        `s`.`mp_all`, 
-                                        `s`.`sword`, `s`.`axe`, 
-                                        `s`.`fail`, `s`.`knife`, 
-                                        `s`.`staff`, 
-                                        `s`.`fire`, `s`.`water`, 
-                                        `s`.`air`, `s`.`earth`, 
-                                        `s`.`light`, `s`.`gray`, 
-                                        `s`.`dark` 
-                                 FROM `characters` AS `c` 
-                                 LEFT JOIN `character_stats` AS `s` 
-                                 ON `c`.`guid` = `s`.`guid` 
-                                 WHERE `c`.`guid` = ?d", $this->guid);
-    foreach ($stats as $key => $value)
+    $char_db = $this -> getChar ('char_db', 'level', 'sex', 'orden');
+    $char_stats = $this -> getChar ('char_stats', 'str', 'dex', 'con', 'vit', 'int', 'wis', 'mp_all', 'sword', 'axe', 'fail', 'knife', 'staff', 'fire', 'water', 'air', 'earth', 'light', 'gray', 'dark');
+    $char = array_merge ($char_db, $char_stats);
+    foreach ($char as $key => $value)
     {
       if ($key != 'sex' && $key != 'orden' && $value < $dat['min_'.$key])   return false;
       if ($key == 'sex' && $dat['sex'] && $value != $dat['sex'])            return false;
@@ -506,20 +483,15 @@ class Equip extends Error
   function checkHandStatus ($hand)
   {
     global $adb;
-    $wear = $adb -> selectRow ("SELECT `hand_l_free`, `hand_r_free`, 
-                                       `hand_l_type`, 
-                                       `hand_l`, `hand_r` 
-                                FROM `character_equip` 
-                                WHERE `guid` = ?d", $this->guid);
-    list ($hand_l_free, $hand_r_free, $hand_l_type, $hand_l, $hand_r) = array_values($wear);
+    $char_equip = $this -> getChar ('char_equip', 'hand_l_free', 'hand_r_free', 'hand_l_type', 'hand_l', 'hand_r');
     switch ($hand)
     {
       case 'r':
-        if ($hand_r != 0 || ($hand_l_free == 1 & $hand_r_free == 1) || $hand_l_type == 'shield')
+        if ($char_equip['hand_r'] != 0 || ($char_equip['hand_l_free'] == 1 & $char_equip['hand_r_free'] == 1) || $char_equip['hand_l_type'] == 'shield')
           return true;
       break;
       case 'l':
-        if ($hand_l != 0 && $hand_l_type != 'shield')
+        if ($char_equip['hand_l'] != 0 && $char_equip['hand_l_type'] != 'shield')
           return true;
       break;
       default:
@@ -552,66 +524,61 @@ class Equip extends Error
   function showEquipment ($type = '')
   {
     global $adb;
-    $wear = $adb -> selectRow ("SELECT * FROM `character_equip` WHERE `guid` = ?d", $this->guid);
-    $db = $adb -> selectRow ("SELECT `c`.`login`, `c`.`level`, 
-                                     `c`.`shape`, `c`.`block`, 
-                                     `c`.`hp`, `s`.`hp_all`, `s`.`hp_regen`, 
-                                     `c`.`mp`, `s`.`mp_all`, `s`.`mp_regen` 
-                              FROM `characters` AS `c` 
-                              LEFT JOIN `character_stats` AS `s` 
-                              ON `c`.`guid` = `s`.`guid` 
-                              WHERE `c`.`guid` = ?d", $this->guid);
-    list ($login, $level, $shape, $block, $hp, $hp_all, $hp_regen, $mp, $mp_all, $mp_regen) = array_values ($db);
+    $char_equip = $this -> getChar ('char_equip', '*');
+    $char_db = $this -> getChar ('char_db', 'login', 'shape', 'block', 'hp', 'mp');
+    $char_stats = $this -> getChar ('char_stats', 'hp_all', 'hp_regen', 'mp_all', 'mp_regen');
+    $char = array_merge ($char_db, $char_stats);
+    $lang = $adb -> selectCol ("SELECT `key` AS ARRAY_KEY, `text` FROM `server_language`;");
     switch ($type)
     {
       case 'inv':
-        $name = "alt='$login (Перейти в \"Умения\")' id='link' link='skills' style='cursor: pointer;'";
+        $name = "alt='$char[login] (Перейти в \"$lang[abilities]\")' id='link' link='skills' style='cursor: pointer;'";
         $backup = "<img src='img/items/w20.gif' border='0' alt='Пустой правый карман'><img src='img/items/w20.gif' border='0' alt='Пустой карман'><img src='img/items/w20.gif' border='0' alt='Пустой левый карман'><img src='img/items/w21.gif' border='0' alt='Смена оружия'><img src='img/items/w21.gif' border='0' alt='Смена оружия'><img src='img/items/w21.gif' border='0' alt='Смена оружия'>";
       break;
       case 'info':
-        $name = "alt='$login'";
+        $name = "alt='$char[login]'";
         $backup = "<img src='img/items/slot_bottom0.gif' border='0'>";
       break;
       default:
-        $name = "alt='$login (Перейти в \"Инвентарь\")' id='link' link='inv' style='cursor: pointer;'";
+        $name = "alt='$char[login] (Перейти в \"Инвентарь\")' id='link' link='inv' style='cursor: pointer;'";
         $backup = "<img src='img/items/w20.gif' border='0' alt='Пустой правый карман'><img src='img/items/w20.gif' border='0' alt='Пустой карман'><img src='img/items/w20.gif' border='0' alt='Пустой левый карман'><img src='img/items/w21.gif' border='0' alt='Смена оружия'><img src='img/items/w21.gif' border='0' alt='Смена оружия'><img src='img/items/w21.gif' border='0' alt='Смена оружия'>";
       break;
     }
-    $armor = ($wear['cloak']) ?$wear['cloak'] :(($wear['armor']) ?$wear['armor'] :$wear['shirt']);
-    $hand_l_type = (!$wear['hand_l']) ?((!$wear['hand_l_free']) ?"hand_l" :"hand_l_f") :$wear['hand_l_type'];
+    $armor = ($char_equip['cloak']) ?$char_equip['cloak'] :(($char_equip['armor']) ?$char_equip['armor'] :$char_equip['shirt']);
+    $hand_l_type = (!$char_equip['hand_l']) ?((!$char_equip['hand_l_free']) ?"hand_l" :"hand_l_f") :$char_equip['hand_l_type'];
     echo "<table border='0' width='227' class='posit' cellspacing='0' cellpadding='0'>";
     
-    if ($block)
+    if ($char['block'])
       echo "<tr><td colspan='3' align='center'><b><font color='#FF0000'>Персонаж заблокирован!</font></b></td></tr>";
     
     echo "<tr bgColor='#dedede'>"
        . "<td width='60' align='left' valign='top'>"
-       . $this -> showItemEquiped ($wear['helmet'], "helmet")
-       . $this -> showItemEquiped ($wear['bracer'], "bracer")
-       . $this -> showItemEquiped ($wear['hand_r'], $wear['hand_r_type'])
+       . $this -> showItemEquiped ($char_equip['helmet'], "helmet")
+       . $this -> showItemEquiped ($char_equip['bracer'], "bracer")
+       . $this -> showItemEquiped ($char_equip['hand_r'], $char_equip['hand_r_type'])
        . $this -> showItemEquiped ($armor, "armor")
-       . $this -> showItemEquiped ($wear['belt'], "belt")
+       . $this -> showItemEquiped ($char_equip['belt'], "belt")
        . "</td>"
        . "<td width='120' align='center' valign='middle'>"
        . "<table cellspacing='0' cellpadding='0' height='20'>"
        . "<tr><td style='font-size: 9px; position: relative;'><div id='HP'></div><div id='MP'></div></td></tr>"
-       . "</table><img src='img/chars/$shape' $name><br>"
+       . "</table><img src='img/chars/$char[shape]' $name><br>"
        . $backup
        . "</td>"
        . "<td width='60' align='right' valign='top'>"
-       . $this -> showItemEquiped ($wear['earring'], "earring")
-       . $this -> showItemEquiped ($wear['amulet'], "amulet")
-       . $this -> showItemEquiped ($wear['ring1'], "ring")
-       . $this -> showItemEquiped ($wear['ring2'], "ring")
-       . $this -> showItemEquiped ($wear['ring3'], "ring")
-       . $this -> showItemEquiped ($wear['gloves'], "gloves")
-       . $this -> showItemEquiped ($wear['hand_l'], $hand_l_type)
-       . $this -> showItemEquiped ($wear['pants'], "pants")
-       . $this -> showItemEquiped ($wear['boots'], "boots")
+       . $this -> showItemEquiped ($char_equip['earring'], "earring")
+       . $this -> showItemEquiped ($char_equip['amulet'], "amulet")
+       . $this -> showItemEquiped ($char_equip['ring1'], "ring")
+       . $this -> showItemEquiped ($char_equip['ring2'], "ring")
+       . $this -> showItemEquiped ($char_equip['ring3'], "ring")
+       . $this -> showItemEquiped ($char_equip['gloves'], "gloves")
+       . $this -> showItemEquiped ($char_equip['hand_l'], $hand_l_type)
+       . $this -> showItemEquiped ($char_equip['pants'], "pants")
+       . $this -> showItemEquiped ($char_equip['boots'], "boots")
        . "</td></tr></table>"
        . "<script>"
-       . "showHP ($hp, $hp_all, $hp_regen);"
-       . "showMP ($mp, $mp_all, $mp_regen);"
+       . "showHP ($char[hp], $char[hp_all], $char[hp_regen]);"
+       . "showMP ($char[mp], $char[mp_all], $char[mp_regen]);"
        . "</script>";
   }
   /*Перечисление предметов нуждающихся в ремонте*/
@@ -682,11 +649,7 @@ class Equip extends Error
     }
     if ($item_id == 0)
       return "<img src='img/items/w$type.gif' width='$w' height='$h' border='0' alt='".$lang[$type.'_f']."'>";
-    if (!($this -> checkItemStats ($item_id)))
-    {
-      $this -> equipItem ($item_id, -1);
-      return;
-    }
+    
     $dat = $adb -> selectRow ("SELECT `c`.`tear_cur`, `c`.`tear_max`, 
                                       `i`.`min_attack`, `i`.`max_attack`, 
                                       `i`.`name`, `i`.`img`, 
@@ -726,7 +689,8 @@ class Equip extends Error
       if ($value[0] > 0)
         $desc .= "<br>".$lang['def_'.$key].": $value[0]-$value[1] $value[2]";
     }
-    $return_format = ($action == 'inv') ?"<a href='main.php?action=unwear_item&item_id=$item_id'>%s</a>" :"%s";
+    $slot = $this -> getItemSlot ($item_id);
+    $return_format = ($action == 'inv') ?"<a href='main.php?action=unwear_item&item_slot=$slot'>%s</a>" :"%s";
     $return .= "<img src='img/items/$img' width='$w' height='$h' border='0' alt='$desc<br>$lang[durability]: $tear_show'$color>";
     return sprintf ($return_format, $return);
   }
@@ -738,25 +702,13 @@ class Equip extends Error
     $armors = array ('boots' => '_l', 'light_armor' => '_a', 'heavy_armor' => '_a', 'helmet' => '_h', 'pants' => '_b');
     $types = array ('inv', 'sell', 'mail_to', 'mail_in');
     $lang = $adb -> selectCol ("SELECT `key` AS ARRAY_KEY, `text` FROM `server_language`;");
-    $db = $adb -> selectRow ("SELECT `c`.`money`, `c`.`money_euro`, 
-                                     `c`.`level`, `c`.`sex`, 
-                                     `s`.`trade`, 
-                                     `s`.`str`, `s`.`dex`, 
-                                     `s`.`con`, `s`.`vit`, 
-                                     `s`.`int`, `s`.`wis`, 
-                                     `s`.`mp_all`, 
-                                     `s`.`sword`, `s`.`fail`, 
-                                     `s`.`staff`, `s`.`knife`, 
-                                     `s`.`axe`, 
-                                     `s`.`fire`, `s`.`water`, 
-                                     `s`.`air`, `s`.`earth` 
-                              FROM `characters` AS `c` 
-                              LEFT JOIN `character_stats` AS `s` 
-                              ON `c`.`guid` = `s`.`guid` 
-                              WHERE `c`.`guid` = ?d", $this->guid);
-    $money = $db['money'];
-    $money_euro = $db['money_euro'];
-    $trade = $db['trade'];
+    $char_db = $this -> getChar ('char_db', 'money', 'money_euro', 'level', 'sex');
+    $char_stats = $this -> getChar ('char_stats', 'trade', 'str', 'dex', 'con', 'vit', 'int', 'wis', 'mp_all', 'sword', 'axe', 'fail', 'knife', 'staff', 'fire', 'water', 'air', 'earth');
+    $char = array_merge ($char_db, $char_stats);
+    
+    $money = $char['money'];
+    $money_euro = $char['money_euro'];
+    $trade = $char['trade'];
     $entry = $item_info['entry'];
     $name = $item_info['name'];
     $img = $item_info['img'];
@@ -873,9 +825,9 @@ class Equip extends Error
         case 4:    $orden_dis = "Алхимик";              break;
         case 5:    $orden_dis = "Тюремный заключенный"; break;
       }
-      $orden = "<img src='img/orden/align$need_orden.gif' border='0' alt='$lang[min_bent]: <strong>$orden_dis</strong>'>";
+      $orden = "<img src='img/orden/align$need_orden.gif' border='0' alt='$lang[min_bent] <strong>$orden_dis</strong>'>";
     }
-    $return .= "<a href='encicl/object/$url' class='nick' target='_blank'><b>$name</b></a>&nbsp;$orden&nbsp;($lang[mass]: $mass)";
+    $return .= "<a href='encicl/object/$url' class='nick' target='_blank'><b>$name</b></a>&nbsp;$orden&nbsp;($lang[mass] $mass)";
     
     if ($gift == 1)
       $return .= "&nbsp;<img src='img/icon/gift.gif' width='14' height='14' border='0' alt='$lang[gift] $gift_author'>";
@@ -883,11 +835,11 @@ class Equip extends Error
     if ($item_flags & 4)
       $return .= "&nbsp;<img src='img/icon/artefakt.gif' width='16' height='16' border='0' alt='$lang[artefact]'>";
     
-    $return .= "<br><b>$lang[price]: $price_s</b>";
-    $return .= "<br>$lang[durability]: $tear_show";
+    $return .= "<br><b>$lang[price] $price_s</b>";
+    $return .= "<br>$lang[durability] $tear_show";
     
     if (($type == 'inv' | $type == 'sell') && $validity > 0) $return .= "<br>".sprintf ($lang['validity'], date ('d.m.y H:i', $validity), getFormatedTime ($validity));
-    else if ($type == 'shop' && $validity > 0)               $return .= "<br>$lang[val_life]: ".getFormatedTime ($validity * 3600 + time ());
+    else if ($type == 'shop' && $validity > 0)               $return .= "<br>$lang[val_life] ".getFormatedTime ($validity * 3600 + time ());
     
     $val = "";
     $require = "";
@@ -897,19 +849,19 @@ class Equip extends Error
         continue;
       
       if (!$val)
-        $val = "<br><b>$lang[required]:</b>";
+        $val = "<br><b>$lang[required]</b>";
       
-      if ($key != 'sex' && $item_info['min_'.$key] > 0) $require .= ($item_info['min_'.$key] > $db[$key]) ?"<br>&bull; <font color='#FF0000'>$lang[$key]: {$item_info['min_'.$key]}</font>" :"<br>&bull; $lang[$key]: ".$item_info['min_'.$key];
-      else if ($key == 'sex' && $item_info[$key])       $require .= ($item_info[$key] != $db[$key]) ?"<br>&bull; <font color='#FF0000'>$lang[$key]: ".$lang[$item_info[$key]]."</font>" :"<br>&bull; $lang[$key]: ".$lang[$item_info[$key]];
+      if ($key != 'sex' && $item_info['min_'.$key] > 0) $require .= ($item_info['min_'.$key] > $char[$key]) ?"<br>&bull; <font color='#FF0000'>$lang[$key] {$item_info['min_'.$key]}</font>" :"<br>&bull; $lang[$key] ".$item_info['min_'.$key];
+      else if ($key == 'sex' && $item_info[$key])       $require .= ($item_info[$key] != $char[$key]) ?"<br>&bull; <font color='#FF0000'>$lang[$key] ".$lang[$item_info[$key]]."</font>" :"<br>&bull; $lang[$key] ".$lang[$item_info[$key]];
     }
     $return .= $val.$require;
     
     if (($add['str'] != 0 || $add['dex'] != 0 || $add['con'] != 0 || $add['int'] != 0 
         || $def['h'][1] != 0 || $def['a'][1] != 0 || $def['b'][1] != 0 || $def['l'][1] != 0 || $inc_count > 0 
         || (!in_array ($i_type, $weapons) && ($max_attack != 0 || $min_attack != 0))))
-      $val = "<br><b>$lang[act]:</b>";
+      $val = "<br><b>$lang[act]</b>";
     
-    $inc = ($inc_count > 0) ?"<br>&bull; $lang[inc_count]: <span id='inc_count_$item_id'>$inc_count</span>" :"";
+    $inc = ($inc_count > 0) ?"<br>&bull; $lang[inc_count] <span id='inc_count_$item_id'>$inc_count</span>" :"";
     $val = "";
     $modifier = "";
     foreach ($modifiers as $key)
@@ -918,38 +870,38 @@ class Equip extends Error
         continue;
       
       if (!$val)
-        $val = "<br><b>$lang[act]:</b>";
+        $val = "<br><b>$lang[act]</b>";
       
-      if ($item_info[$key] > 0)      $modifier .= "<br>&bull; $lang[$key]: +".$item_info[$key];
-      else if ($item_info[$key] < 0) $modifier .= "<br>&bull; $lang[$key]: ".$item_info[$key];
+      if ($item_info[$key] > 0)      $modifier .= "<br>&bull; $lang[$key] +".$item_info[$key];
+      else if ($item_info[$key] < 0) $modifier .= "<br>&bull; $lang[$key] ".$item_info[$key];
     }
     $return .= $val.$inc.$modifier;
     foreach ($add as $key => $value)
     {
-      if ($value == 0 && $type == 'inv' && $inc_count > 0)    $return .= "<br>&bull; $lang[$key]: <span id='inc_{$item_id}_{$key}_val'>$value</span> ".$this->getIncButton ($item_id, $key);
-      else if ($value > 0 && $type == 'inv' && $inc_count > 0)$return .= "<br>&bull; $lang[$key]: <span id='inc_{$item_id}_{$key}_val'>+$value</span> ".$this->getIncButton ($item_id, $key);
-      else if ($value > 0)                                    $return .= "<br>&bull; $lang[$key]: +$value";
-      else if ($value < 0)                                    $return .= "<br>&bull; $lang[$key]: $value";
+      if ($value == 0 && $type == 'inv' && $inc_count > 0)    $return .= "<br>&bull; $lang[$key] <span id='inc_{$item_id}_{$key}_val'>$value</span> ".$this->getIncButton ($item_id, $key);
+      else if ($value > 0 && $type == 'inv' && $inc_count > 0)$return .= "<br>&bull; $lang[$key] <span id='inc_{$item_id}_{$key}_val'>+$value</span> ".$this->getIncButton ($item_id, $key);
+      else if ($value > 0)                                    $return .= "<br>&bull; $lang[$key] +$value";
+      else if ($value < 0)                                    $return .= "<br>&bull; $lang[$key] $value";
     }
     foreach ($def as $key => $value)
     {
       if ($value[1] > 0)
-        $return .= "<br>&bull; ".$lang['def_'.$key].": $value[0]-$value[1] $value[2]";
+        $return .= "<br>&bull; ".$lang['def_'.$key]." $value[0]-$value[1] $value[2]";
     }
     if (in_array ($i_type, $weapons))
     {
-      $return .= "<br><b>$lang[behaviour]:</b>";
-      $return .= "<br>&bull; $lang[damage]: $min_attack - $max_attack";
+      $return .= "<br><b>$lang[behaviour]</b>";
+      $return .= "<br>&bull; $lang[damage] $min_attack - $max_attack";
       foreach ($w_modifiers as $key)
       {
         if ($item_info[$key.'_h'] != 0)
-          $return .= "<br>&bull; $lang[$key]: ".$item_info[$key.'_h'];
+          $return .= "<br>&bull; $lang[$key] ".$item_info[$key.'_h'];
       }
       
       if ($item_flags & 16) $return .= "<br>&bull; $lang[sec_hand]";
       else if ($hands == 2) $return .= "<br>&bull; $lang[two_hands]";
       
-      $return .= "<br>&bull; $lang[blocks]: ";
+      $return .= "<br>&bull; $lang[blocks] ";
       
       if ($block == 1)      $return .= "+";
       else if ($block == 2) $return .= "++";
@@ -963,10 +915,10 @@ class Equip extends Error
           continue;
         
         if (!$val)
-          $val = "<br><b>$lang[features]:</b>";
+          $val = "<br><b>$lang[features]</b>";
         
         $this -> getFormatedChance ($item_info[$key]);
-        $chance .= "<br>&bull; $lang[$key]: ".$lang[$item_info[$key]];
+        $chance .= "<br>&bull; $lang[$key] ".$lang[$item_info[$key]];
       }
       $return .= $val.$chance;
     }
@@ -980,14 +932,14 @@ class Equip extends Error
           continue;
         
         if (!$val)
-          $val = "<br><b>$lang[features]:</b>";
+          $val = "<br><b>$lang[features]</b>";
         
-        $armor .= "<br>&bull; $lang[$key]: ".$item_info[$key.$armors[$i_type]];
+        $armor .= "<br>&bull; $lang[$key] ".$item_info[$key.$armors[$i_type]];
       }
       $return .= $val.$armor;
     }
     if ($item_info['description'])
-      $return .= "<br><small>$lang[description]:<br>$item_info[description]</small>";
+      $return .= "<br><small>$lang[description]<br>$item_info[description]</small>";
     
     if ($made_in)
       $return .= "<br><small>$lang[made_in] $made_in</small>";
@@ -1026,17 +978,19 @@ class Equip extends Error
     return "<input type='image' id='inc_{$item_id}_btn' src='img/icon/plus.gif' style='border: 0px; vertical-align: bottom;' onclick=\"increaseItemStat ('$item_id', '$stat'); this.blur();\">";
   }
   /*Одеть/Снять предмет*/
-  function equipItem ($item_id, $type = 1, $guid = '')
+  function equipItem ($item, $type = 1, $guid = '')
   {
-    if ($item_id == 0 || !is_numeric($item_id))
+    global $adb;
+    $guid = (!$guid) ?$this->guid :$guid;
+    $item_id = ($type == 1) ?$item :$adb -> selectCell ("SELECT ?# FROM `character_equip` WHERE `guid` = ?d", $item ,$guid);
+    
+    if (!$item_id || $item_id == 0 || !is_numeric($item_id))
       return;
     
-    global $adb;
     $error_id = ($type == 1) ?213 :214;
-    $guid = (!$guid) ?$this->guid :$guid;
     $wear_status = ($type == 1) ?0 :1;
-    $wear = $adb -> selectRow ("SELECT * FROM `character_equip` WHERE `guid` = ?d", $guid);
-    $stats = $adb -> selectRow ("SELECT * FROM `character_stats` WHERE `guid` = ?d", $guid);
+    $char_equip = $this -> getChar ('char_equip', '*', $guid);
+    $char_stats = $this -> getChar ('char_stats', '*', $guid);
     $dat = $adb -> selectRow ("SELECT * 
                                FROM `character_inventory` AS `c` 
                                LEFT JOIN `item_template` AS `i` 
@@ -1050,10 +1004,8 @@ class Equip extends Error
     $i_id = $dat['id'];
     $i_type = ($dat['type'] == 'heavy_armor' || $dat['type'] == 'light_armor') ?"armor" :$dat['type'];
     $i_hands = $dat['hands'];
-    
     if ($type == 1 && !($this -> checkItemStats ($i_id)))
       return;
-    
     if ($type == 1)
     {
       switch ($i_type)
@@ -1065,46 +1017,46 @@ class Equip extends Error
         case 'knife':
           if ($i_hands == 1)
           {
-            if ($wear['hand_r_free'])
+            if ($char_equip['hand_r_free'])
               $slot = "hand_r";
-            else if (!$wear['hand_r_free'] && $wear['hand_l_free'])
+            else if (!$char_equip['hand_r_free'] && $char_equip['hand_l_free'])
             {
               if ($dat['item_flags'] & 16)
                 $slot = "hand_l";
               else
               {
-                $this -> equipItem ($wear['hand_r'], -1);
+                $this -> equipItem ('hand_r', -1);
                 $this -> equipItem ($i_id);
                 return;
               }
             }
-            else if (!$wear['hand_r_free'] && !$wear['hand_l_free'])
+            else if (!$char_equip['hand_r_free'] && !$char_equip['hand_l_free'])
             {
-              $this -> equipItem ($wear['hand_r'], -1);
+              $this -> equipItem ('hand_r', -1);
               $this -> equipItem ($i_id);
               return;
             }
           }
           else if ($i_hands == 2)
           {
-            if ($wear['hand_r_free'] && $wear['hand_l_free'])
+            if ($char_equip['hand_r_free'] && $char_equip['hand_l_free'])
               $slot = "hand_r";
-            else if ($wear['hand_r_free'] && !$wear['hand_l_free'])
+            else if ($char_equip['hand_r_free'] && !$char_equip['hand_l_free'])
             {
-              $this -> equipItem ($wear['hand_l'], -1);
+              $this -> equipItem ('hand_l', -1);
               $this -> equipItem ($i_id);
               return;
             }
-            else if (!$wear['hand_r_free'] && $wear['hand_l_free'])
+            else if (!$char_equip['hand_r_free'] && $char_equip['hand_l_free'])
             {
-              $this -> equipItem ($wear['hand_r'], -1);
+              $this -> equipItem ('hand_r', -1);
               $this -> equipItem ($i_id);
               return;
             }
-            else if (!$wear['hand_r_free'] && !$wear['hand_l_free'])
+            else if (!$char_equip['hand_r_free'] && !$char_equip['hand_l_free'])
             {
-              $this -> equipItem ($wear['hand_r'], -1);
-              $this -> equipItem ($wear['hand_l'], -1);
+              $this -> equipItem ('hand_r', -1);
+              $this -> equipItem ('hand_l', -1);
               $this -> equipItem ($i_id);
               return;
             }
@@ -1112,19 +1064,19 @@ class Equip extends Error
           $w_type = $i_type;
         break;
         case 'shield':
-          if ($wear['hand_l_free'])
+          if ($char_equip['hand_l_free'])
             $slot = "hand_l";
-          else if (!$wear['hand_l_free'] && !$wear['hand_r_free'])
+          else if (!$char_equip['hand_l_free'] && !$char_equip['hand_r_free'])
           {
-            if ($wear['hand_l'])
+            if ($char_equip['hand_l'])
             {
-              $this -> equipItem ($wear['hand_l'], -1);
+              $this -> equipItem ('hand_l', -1);
               $this -> equipItem ($i_id);
               return;
             }
             else
             {
-              $this -> equipItem ($wear['hand_r'], -1);
+              $this -> equipItem ('hand_r', -1);
               $this -> equipItem ($i_id);
               return;
             }
@@ -1132,25 +1084,25 @@ class Equip extends Error
           $w_type = $i_type;
         break;
         case 'ring':
-          if ($wear['ring1'] == 0)
+          if ($char_equip['ring1'] == 0)
             $slot = "ring1";
-          else if ($wear['ring2'] == 0)
+          else if ($char_equip['ring2'] == 0)
             $slot = "ring2";
-          else if ($wear['ring3'] == 0)
+          else if ($char_equip['ring3'] == 0)
             $slot = "ring3";
-          if ($wear['ring1'] != 0 && $wear['ring2'] != 0 && $wear['ring3'] != 0)
+          else if ($char_equip['ring1'] != 0 && $char_equip['ring2'] != 0 && $char_equip['ring3'] != 0)
           {
-            $this -> equipItem ($wear['ring1'], -1);
+            $this -> equipItem ('ring1', -1);
             $this -> equipItem ($i_id);
             return;
           }
         break;
         default:
-          if ($wear[$i_type] == 0)
+          if ($char_equip[$i_type] == 0)
             $slot = $i_type;
-          else if ($wear[$i_type] != 0)
+          else if ($char_equip[$i_type] != 0)
           {
-            $this -> equipItem ($wear[$i_type], -1);
+            $this -> equipItem ($i_type, -1);
             $this -> equipItem ($i_id);
             return;
           }
@@ -1159,32 +1111,14 @@ class Equip extends Error
     }
     else if ($type == -1)
     {
-      switch ($i_type)
+      unset ($char_equip['guid'], $char_equip['hand_r_free'], $char_equip['hand_r_type'], $char_equip['hand_l_free'], $char_equip['hand_l_type']);
+      foreach ($char_equip as $key => $value)
       {
-        case 'sword':
-        case 'axe':
-        case 'fail':
-        case 'staff':
-        case 'knife':
-          if ($i_id == $wear['hand_r'])
-            $slot = "hand_r";
-          else if    ($i_id == $wear['hand_l'])
-            $slot = "hand_l";
-        break;
-        case 'shield':
-          $slot = "hand_l";
-        break;
-        case 'ring':
-          if ($i_id == $wear['ring1'])
-            $slot = "ring1";
-          else if ($i_id == $wear['ring2'])
-            $slot = "ring2";
-          else if ($i_id == $wear['ring3'])
-            $slot = "ring3";
-        break;
-        default:
-          $slot = $i_type;
-        break;
+        if ($i_id == $value)
+        {
+          $slot = $key;
+          break;
+        }
       }
     }
     $new_sql = array ();
@@ -1286,18 +1220,15 @@ class Equip extends Error
     foreach ($new_sql as $key => $value)
     {
       $new_sql[$key] = $value*$type;
-      $new_sql[$key] += $stats[$key];
+      $new_sql[$key] += $char_stats[$key];
     }
     
-    $db = $adb -> selectRow ("SELECT `hp`, 
-                                     `mp` 
-                              FROM `characters` 
-                              WHERE `guid` = ?d", $guid);
+    $char_db = $this -> getChar ('char_db', 'hp', 'mp', $guid);
     if ($dat['add_hp'] != 0)
-      $this -> setTimeToHPMP ($db['hp'], $new_sql['hp_all'], $stats['hp_regen'], 'hp');
+      $this -> setTimeToHPMP ($char_db['hp'], $new_sql['hp_all'], $char_stats['hp_regen'], 'hp');
     
     if ($dat['add_mp'] != 0)
-      $this -> setTimeToHPMP ($db['mp'], $new_sql['mp_all'], $stats['mp_regen'], 'mp');
+      $this -> setTimeToHPMP ($char_db['mp'], $new_sql['mp_all'], $char_stats['mp_regen'], 'mp');
     
     if ($type == 1)
     {
@@ -1366,20 +1297,27 @@ class Equip extends Error
   function unWearAllItems ()
   {
     global $adb;
-    $wear = $adb -> selectRow ("SELECT `helmet`, `bracer`, 
-                                       `hand_r`, `armor`, 
-                                       `belt`, `earring`, 
-                                       `amulet`, `ring1`, 
-                                       `ring2`, `ring3`, 
-                                       `gloves`, `hand_l`, 
-                                       `pants`, `boots` 
-                                FROM `character_equip` 
-                                WHERE `guid` = ?d", $this->guid);
-    foreach ($wear as $key => $value)
+    $char_equip = $this -> getChar ('char_equip', 'helmet', 'bracer', 'hand_r', 'armor', 'shirt', 'cloak', 'belt', 'earring', 'amulet', 'ring1', 'ring2', 'ring3', 'gloves', 'hand_l', 'pants', 'boots');
+    foreach ($char_equip as $key => $value)
     {
       if ($value)
-        $this -> equipItem ($value, -1);
+        $this -> equipItem ($key, -1);
     }
+  }
+  /*Получение слота в который одет предмет*/
+  function getItemSlot ($item_id)
+  {
+    if ($item_id == 0 || !is_numeric($item_id))
+      return;
+    
+    global $adb;
+    $char_equip = $this -> getChar ('char_equip', 'helmet', 'bracer', 'hand_r', 'armor', 'shirt', 'cloak', 'belt', 'earring', 'amulet', 'ring1', 'ring2', 'ring3', 'gloves', 'hand_l', 'pants', 'boots');
+    foreach ($char_equip as $key => $value)
+    {
+      if ($item_id == $value)
+        return $key;
+    }
+    return;
   }
   /*Время востановления здоровья*/
   function setTimeToHPMP ($now, $all, $regen, $type)
@@ -1392,12 +1330,6 @@ class Equip extends Error
     }
     else
     {
-      /* $cure = $adb -> selectCell ("SELECT `cure` FROM `character_stats` WHERE `guid` = ?d", $this->guid);
-      $cure_full = intval (1200 - $cure * 12 / 2);
-      $one = $cure_full / $all;
-      $time = $cure_full - $one * $now;
-      $put_to_base = time () + $time;
-      $add_cure = ($cure < 100) ?0.01 :0; */
       getCureValue ($now, $all, $regen, $cure);
       $adb -> query ("UPDATE `character_stats` SET ?# = ?d WHERE `guid` = ?d", $type.'_cure' ,$cure ,$this->guid);
     }
@@ -1574,33 +1506,21 @@ class Equip extends Error
     if (!$shape)
       return false;
     
-    $db = $adb -> selectRow ("SELECT `c`.`level`, `c`.`sex`, 
-                                     `s`.`str`, `s`.`dex`, 
-                                     `s`.`con`, `s`.`vit`, 
-                                     `s`.`int`, `s`.`wis`, 
-                                     `s`.`sword`, `s`.`fail`, 
-                                     `s`.`staff`, `s`.`knife`, 
-                                     `s`.`axe`, 
-                                     `s`.`fire`, `s`.`water`, 
-                                     `s`.`air`, `s`.`earth`, 
-                                     `s`.`dark`, `s`.`light`, 
-                                     `c`.`next_shape` 
-                              FROM `characters` AS `c` 
-                              LEFT JOIN `character_stats` AS `s` 
-                              ON `c`.`guid` = `s`.`guid` 
-                              WHERE `c`.`guid` = ?d", $this->guid);
-    $sex = ($db['sex'] == "male") ?"m" :"f";
-    $required = array ('str', 'dex', 'con', 'vit', 'fire', 'water', 'air', 'earth', 'dark', 'light', 'int', 'wis', 'level', 'sword', 'axe', 'fail', 'knife');
+    $char_db = $this -> getChar ('char_db', 'level', 'sex', 'next_shape');
+    $char_stats = $this -> getChar ('char_stats', 'str', 'dex', 'con', 'vit', 'int', 'wis', 'sword', 'axe', 'fail', 'knife', 'fire', 'water', 'air', 'earth', 'light', 'dark');
+    $char = array_merge ($char_db, $char_stats);
+    $sex = ($char['sex'] == "male") ?"m" :"f";
     
-    if ($db['next_shape'] && $db['next_shape'] > time ())
-      $this -> Inventory (111, getFormatedTime ($db['next_shape']));
+    if ($char['next_shape'] && $char['next_shape'] > time ())
+      $this -> Inventory (111, getFormatedTime ($char['next_shape']));
     
     if ($shape['sex'] != $sex)
       return false;
     
-    foreach ($required as $key)
+    unset ($char['sex'], $char['next_shape']);
+    foreach ($char as $key => $value)
     {
-      if ($shape[$key] > 0 && $shape[$key] > $db[$key])
+      if ($shape[$key] > 0 && $shape[$key] > $value)
         return false;
     }
     return true;
@@ -1611,14 +1531,9 @@ class Equip extends Error
     global $adb, $behaviour, $mastery;
     $bar = explode ('|', $value);
     $lang = $adb -> selectCol ("SELECT `key` AS ARRAY_KEY, `text` FROM `server_language`;");
-    $stats = $adb -> selectRow ("SELECT * FROM `character_stats` WHERE `guid` = ?d", $this->guid);
-    $wear = $adb -> selectRow ("SELECT `hand_r`, 
-                                       `hand_l`, 
-                                       `hand_r_type`, 
-                                       `hand_l_type` 
-                                FROM `character_equip` 
-                                WHERE `guid` = ?d", $this->guid);
-    list ($hand_r, $hand_l, $hand_r_type, $hand_l_type) = array_values($wear);
+    $char_stats = $this -> getChar ('char_stats', '*');
+    $char_equip = $this -> getChar ('char_equip', 'hand_r', 'hand_l', 'hand_r', 'hand_r_type', 'hand_l_type');
+    list ($hand_r, $hand_l, $hand_r_type, $hand_l_type) = array_values($char_equip);
     $content = '';
     $link_text = '';
     $link = '';
@@ -1630,74 +1545,74 @@ class Equip extends Error
       default:
       case 'stat':       /*Характеристики*/
         $level = $adb -> selectCell ("SELECT `level` FROM `characters` WHERE `guid` = ?d", $this->guid);
-        foreach ($behaviour as $key => $value)
+        foreach ($behaviour as $key => $min_level)
         {
-          $content .= ($key != 'str' && $level >= $value && $stats[$key] > 0) ?"<br>" :"";
-          $content .= ($level >= $value) ?"$lang[$key]: <b>$stats[$key]</b>" :"";
+          $content .= ($key != 'str' && $level >= $min_level && $char_stats[$key] > 0) ?"<br>" :"";
+          $content .= ($level >= $min_level) ?"$lang[$key] <b>$char_stats[$key]</b>" :"";
         }
-        $content .= ($stats['ups'] > 0 || $stats['skills'] > 0) ?"<br>" :"";
-        $content .= ($stats['ups'] > 0) ?"<a class='nick' href='?action=skills'><b><small>+ $lang[ups]</small></b></a> " :"";
-        $content .= ($stats['skills'] > 0) ?"&bull; <a class='nick' href='?action=skills'><b><small> $lang[skills]</small></b></a>" :"";
+        $content .= ($char_stats['ups'] > 0 || $char_stats['skills'] > 0) ?"<br>" :"";
+        $content .= ($char_stats['ups'] > 0) ?"<a class='nick' href='?action=skills'><b><small>+ $lang[ups]</small></b></a> " :"";
+        $content .= ($char_stats['skills'] > 0) ?"&bull; <a class='nick' href='?action=skills'><b><small> $lang[skills]</small></b></a>" :"";
       break;
       case 'mod':        /*Модификаторы*/
-        $wp_min = $stats['wp_min'];
-        $wp_max = $stats['wp_max'];
-        $hand_r_hitmin = $stats['hand_r_hitmin'];
-        $hand_l_hitmin = $stats['hand_l_hitmin'];
-        $hand_r_hitmax = $stats['hand_r_hitmax'];
-        $hand_l_hitmax = $stats['hand_l_hitmax'];
-        $hand_r_critpower = $stats['hand_r_critpower'];
-        $hand_l_critpower = $stats['hand_l_critpower'];
-        $hand_r_crit = $stats['hand_r_crit'];
-        $hand_l_crit = $stats['hand_l_crit'];
-        $hand_r_antiuvorot = $stats['hand_r_antiuvorot'];
-        $hand_l_antiuvorot = $stats['hand_l_antiuvorot'];
-        $mf_critpower = $stats['mf_critpower'];
-        $mf_crit = $stats['mf_crit'];
-        $mf_uvorot = $stats['mf_uvorot'];
-        $mf_anticrit = $stats['mf_anticrit'];
-        $mf_antiuvorot = $stats['mf_antiuvorot'];
-        $mf_contr = $stats['mf_contr'];
-        $mf_parry = $stats['mf_parry'];
-        $mf_blockshield = $stats['mf_blockshield'];
-        $show_r_udar = ($this -> checkHandStatus ('r')) ?($hand_r_hitmin + $wp_min + $stats[$hand_r_type])."-".($hand_r_hitmax + $wp_max + $stats[$hand_r_type]) :"";
-        $show_l_udar = ($this -> checkHandStatus ('l')) ?(($hand_r != 0) ?" / " :"").($hand_l_hitmin + $wp_min + $stats[$hand_l_type])."-".($hand_l_hitmax + $wp_max + $stats[$hand_l_type]) :"";
+        $wp_min = $char_stats['wp_min'];
+        $wp_max = $char_stats['wp_max'];
+        $hand_r_hitmin = $char_stats['hand_r_hitmin'];
+        $hand_l_hitmin = $char_stats['hand_l_hitmin'];
+        $hand_r_hitmax = $char_stats['hand_r_hitmax'];
+        $hand_l_hitmax = $char_stats['hand_l_hitmax'];
+        $hand_r_critpower = $char_stats['hand_r_critpower'];
+        $hand_l_critpower = $char_stats['hand_l_critpower'];
+        $hand_r_crit = $char_stats['hand_r_crit'];
+        $hand_l_crit = $char_stats['hand_l_crit'];
+        $hand_r_antiuvorot = $char_stats['hand_r_antiuvorot'];
+        $hand_l_antiuvorot = $char_stats['hand_l_antiuvorot'];
+        $mf_critpower = $char_stats['mf_critpower'];
+        $mf_crit = $char_stats['mf_crit'];
+        $mf_uvorot = $char_stats['mf_uvorot'];
+        $mf_anticrit = $char_stats['mf_anticrit'];
+        $mf_antiuvorot = $char_stats['mf_antiuvorot'];
+        $mf_contr = $char_stats['mf_contr'];
+        $mf_parry = $char_stats['mf_parry'];
+        $mf_blockshield = $char_stats['mf_blockshield'];
+        $show_r_udar = ($this -> checkHandStatus ('r')) ?($hand_r_hitmin + $wp_min + $char_stats[$hand_r_type])."-".($hand_r_hitmax + $wp_max + $char_stats[$hand_r_type]) :"";
+        $show_l_udar = ($this -> checkHandStatus ('l')) ?(($hand_r != 0) ?" / " :"").($hand_l_hitmin + $wp_min + $char_stats[$hand_l_type])."-".($hand_l_hitmax + $wp_max + $char_stats[$hand_l_type]) :"";
         $show_r_cpower = ($this -> checkHandStatus ('r')) ?$hand_r_critpower + $mf_critpower :"";
         $show_l_cpower = ($this -> checkHandStatus ('l')) ?(($hand_r != 0) ?" / " :"").($hand_l_critpower + $mf_critpower) :"";
         $show_r_crit = ($this -> checkHandStatus ('r')) ?$hand_r_crit + $mf_crit :"";
         $show_l_crit = ($this -> checkHandStatus ('l')) ?(($hand_r != 0) ?" / " :"").($hand_l_crit + $mf_crit) :"";
         $show_r_antiuvorot = ($this -> checkHandStatus ('r')) ?$hand_r_antiuvorot + $mf_antiuvorot :"";
         $show_l_antiuvorot = ($this -> checkHandStatus ('l')) ?(($hand_r != 0) ?" / " :"").($hand_l_antiuvorot + $mf_antiuvorot) :"";
-        $show_r_mastery = ($this -> checkHandStatus ('r')) ?$stats[$hand_r_type] + $stats['hand_r_'.$hand_r_type] :"";
-        $show_l_mastery = ($this -> checkHandStatus ('l')) ?(($hand_r != 0) ?" / " :"").($stats[$hand_l_type] + $stats['hand_l_'.$hand_r_type]) :"";
-        $content .= "$lang[damage]: $show_r_udar$show_l_udar<br>"
-                  . "<span title='$lang[mf_crit_m]'>$lang[mf_crit_i]: $show_r_crit$show_l_crit</span><br>";
-        $content .= ($hand_r_critpower != 0 || $hand_l_critpower != 0 || $mf_critpower != 0) ?"<span title='$lang[mf_critpower_m]'>$lang[mf_critpower_i]: $show_r_cpower$show_l_cpower</span><br>" :"";
-        $content .= "<span title='$lang[mf_anticrit_m]'>$lang[mf_anticrit_i]: $mf_anticrit</span><br>"
-                  . "<span title='$lang[mf_uvorot_m]'>$lang[mf_uvorot_i]: $mf_uvorot</span><br>"
-                  . "<span title='$lang[mf_antiuvorot_m]'>$lang[mf_antiuvorot_i]: $show_r_antiuvorot$show_l_antiuvorot</span><br>"
-                  . "<span title='$lang[mf_contr_m]'>$lang[mf_contr_i]: $mf_contr</span><br>"
-                  . "<span title='$lang[mf_parry_m]'>$lang[mf_parry_i]: $mf_parry</span><br>"
-                  . "<span title='$lang[mf_blockshield_m]'>$lang[mf_blockshield_i]: $mf_blockshield</span><br>";
-        $content .= ($hand_r != 0 || $hand_l != 0) ?"<span title='$lang[mastery_m]'>$lang[mastery]: $show_r_mastery$show_l_mastery</span><br>" :"";
+        $show_r_mastery = ($this -> checkHandStatus ('r')) ?$char_stats[$hand_r_type] + $char_stats['hand_r_'.$hand_r_type] :"";
+        $show_l_mastery = ($this -> checkHandStatus ('l')) ?(($hand_r != 0) ?" / " :"").($char_stats[$hand_l_type] + $char_stats['hand_l_'.$hand_r_type]) :"";
+        $content .= "$lang[damage] $show_r_udar$show_l_udar<br>"
+                  . "<span title='$lang[mf_crit_m]'>$lang[mf_crit_i] $show_r_crit$show_l_crit</span><br>";
+        $content .= ($hand_r_critpower != 0 || $hand_l_critpower != 0 || $mf_critpower != 0) ?"<span title='$lang[mf_critpower_m]'>$lang[mf_critpower_i] $show_r_cpower$show_l_cpower</span><br>" :"";
+        $content .= "<span title='$lang[mf_anticrit_m]'>$lang[mf_anticrit_i] $mf_anticrit</span><br>"
+                  . "<span title='$lang[mf_uvorot_m]'>$lang[mf_uvorot_i] $mf_uvorot</span><br>"
+                  . "<span title='$lang[mf_antiuvorot_m]'>$lang[mf_antiuvorot_i] $show_r_antiuvorot$show_l_antiuvorot</span><br>"
+                  . "<span title='$lang[mf_contr_m]'>$lang[mf_contr_i] $mf_contr</span><br>"
+                  . "<span title='$lang[mf_parry_m]'>$lang[mf_parry_i] $mf_parry</span><br>"
+                  . "<span title='$lang[mf_blockshield_m]'>$lang[mf_blockshield_i] $mf_blockshield</span><br>";
+        $content .= ($hand_r != 0 || $hand_l != 0) ?"<span title='$lang[mastery_m]'>$lang[mastery] $show_r_mastery$show_l_mastery</span><br>" :"";
       break;
       case 'power':      /*Мощность*/
         $mf_damage = array ('sting', 'slash', 'crush', 'sharp');
         $mf_magic = array ('fire', 'water', 'air', 'earth', 'light', 'gray', 'dark');
         foreach ($mf_damage as $key)
         {
-          $show_r[$key] = ($this -> checkHandStatus ('r')) ?$stats['hand_r_'.$key] + $stats['mf_'.$key] :"";
-          $show_l[$key] = ($this -> checkHandStatus ('l')) ?(($hand_r != 0) ?"% / +" :"").($stats['hand_l_'.$key] + $stats['mf_'.$key]) :"";
+          $show_r[$key] = ($this -> checkHandStatus ('r')) ?$char_stats['hand_r_'.$key] + $char_stats['mf_'.$key] :"";
+          $show_l[$key] = ($this -> checkHandStatus ('l')) ?(($hand_r != 0) ?"% / +" :"").($char_stats['hand_l_'.$key] + $char_stats['mf_'.$key]) :"";
         }
         foreach ($mf_damage as $key)
-          $content .= ($stats['mf_'.$key] != 0 || $stats['hand_r_'.$key] != 0 || $stats['hand_l_'.$key] != 0) ?"<span title='".$lang[$key.'_p']."'>".$lang[$key.'_i'].": +$show_r[$key]$show_l[$key]%</span><br>" :"";
+          $content .= ($char_stats['mf_'.$key] != 0 || $char_stats['hand_r_'.$key] != 0 || $char_stats['hand_l_'.$key] != 0) ?"<span title='".$lang[$key.'_p']."'>".$lang[$key.'_i']." +$show_r[$key]$show_l[$key]%</span><br>" :"";
         foreach ($mf_magic as $key)
-          $content .= ($stats['mf_'.$key] != 0) ?"<span title='".$lang[$key.'_p']."'>".$lang[$key.'_i'].": +".$stats['mf_'.$key]."%</span><br>" :"";
+          $content .= ($char_stats['mf_'.$key] != 0) ?"<span title='".$lang[$key.'_p']."'>".$lang[$key.'_i']." +".$char_stats['mf_'.$key]."%</span><br>" :"";
       break;
       case 'def':        /*Защита*/
         $resists = array ('sting', 'slash', 'crush', 'sharp', 'fire', 'water', 'air', 'earth', 'light', 'gray', 'dark');
         foreach ($resists as $key)
-          $content .= "<span title='".$lang[$key.'_d']."'>".$lang[$key.'_i'].": ".$stats['resist_'.$key]."</span><br>";
+          $content .= "<span title='".$lang[$key.'_d']."'>".$lang[$key.'_i']." ".$char_stats['resist_'.$key]."</span><br>";
       break;
       case 'btn':        /*Кнопки*/
         $content .= "&nbsp;<input type='button' value='$lang[unwear_all]' class='btn' id='link' link='unwear_full' style='font-weight: bold;'><br>";
@@ -1718,7 +1633,7 @@ class Equip extends Error
     else
       $return .= "<a href=\"javascript:spoilerBar ('$type');\"><img id='spoiler_$type' width='11' height='9' title='Показать' border='0' src='img/plus.gif' style='cursor: pointer;' /></a>";
     $return .= "</td>";
-    $return .= "<td>&nbsp;</td><td bgcolor='#e2e0e0'><small>&nbsp;<b>".$lang['bar_'.$type].":<b>&nbsp;</small></td>";
+    $return .= "<td>&nbsp;</td><td bgcolor='#e2e0e0'><small>&nbsp;<b>".$lang['bar_'.$type]."<b>&nbsp;</small></td>";
     if ($link_text)
       $return .= "<td>&nbsp;</td><td bgcolor='#e2e0e0'>&nbsp;<a href='$link' class='nick'><small>$link_text</small></a>&nbsp;</td>";
     $return .= "<td align='right' valign='middle' width='100%'>";
@@ -1740,17 +1655,13 @@ class Equip extends Error
   function getRoomGoTime (&$mtime)
   {
     global $adb;
-    $db = $adb -> selectRow ("SELECT `last_go`, 
-                                     `room` 
-                              FROM `characters` 
-                              WHERE `guid` = ?d", $this->guid);
-    list ($last_go, $room) = array_values($db);
-    $time_to_go = $adb -> selectCell ("SELECT `time_to_go` FROM `city_rooms` WHERE `room` = ?s", $room);
+    $char_db = $this -> getChar ('char_db', 'last_go', 'room');
+    $time_to_go = $adb -> selectCell ("SELECT `time_to_go` FROM `city_rooms` WHERE `room` = ?s", $char_db['room']);
     
-    if (!$time_to_go || !$room)
+    if (!$time_to_go || !$char_db['room'])
       return;
     
-    $mtime = ($time_to_go - (time () - $last_go));
+    $mtime = ($time_to_go - (time () - $char_db['last_go']));
   }
   /*Вычитание/прибаление денег у персонажа*/
   function Money ($sum, $type = '', $guid = '')
@@ -1768,7 +1679,7 @@ class Equip extends Error
     switch ($type)
     {
       case 'euro':
-        $money_euro = $adb -> selectCell ("SELECT `money_euro` FROM `characters` WHERE `guid` = ?d", $guid);
+        $money_euro = $this -> getChar ('char_db', 'money_euro');
 
         if (($money_euro = $money_euro - $sum) < 0)
           return false;
@@ -1776,7 +1687,7 @@ class Equip extends Error
         $adb -> query ("UPDATE `characters` SET `money_euro` = ?f WHERE `guid` = ?d", $money_euro ,$guid);
       break;
       default:
-        $money = $adb -> selectCell ("SELECT `money` FROM `characters` WHERE `guid` = ?d", $guid);
+        $money = $this -> getChar ('char_db', 'money');
 
         if (($money = $money - $sum) < 0)
           return false;
@@ -1838,20 +1749,22 @@ class Equip extends Error
                                FROM `character_sets` 
                                WHERE `guid` = ?d 
                                  and `name` = ?s", $this->guid ,$name) or $this -> Inventory (221);
-    $this -> unWearAllItems ();
     foreach ($set as $slot => $item_id)
     {
-      $item = $adb -> selectRow ("SELECT `wear` 
+      $item = $adb -> selectRow ("SELECT `wear`, 
+                                         `mailed` 
                                   FROM `character_inventory` 
                                   WHERE `guid` = ?d 
-                                    and `id` = ?d 
-                                    and `mailed` = '0';", $this->guid ,$item_id);
-      if (!$item)
+                                    and `id` = ?d", $this->guid ,$item_id);
+      if (!$item || $item['mailed'])
         $adb -> query ("UPDATE `character_sets` SET ?# = '0' WHERE `name` = ?s and `guid` = ?d", $slot ,$name ,$this->guid);
       else if ($item['wear'])
         continue;
       else
+      {
+        $this -> equipItem ($slot, -1);
         $this -> equipItem ($item_id);
+      }
     }
     $this -> Inventory (0);
   }
@@ -1908,8 +1821,12 @@ class Mail extends Error
         $this -> Mail (106, 'money');
       
       global $adb, $history, $equip;
-      $mail_to = $adb -> selectCell ("SELECT `guid` FROM `characters` WHERE `guid` = ?d", $mail_to) or $this -> Mail (106, 'items');
-      $transfers = $adb -> selectCell ("SELECT `transfers` FROM `characters` WHERE `guid` = ?d", $this->guid);
+      $mail_to = $equip -> getChar ('char_db', 'guid', $mail_to);
+      
+      if (!$mail_to)
+        $this -> Mail (106, 'items');
+      
+      $transfers = $equip -> getChar ('char_db', 'transfers');
       
       if ($transfers <= 0)
         $this -> Mail (113, 'money');
@@ -1975,8 +1892,12 @@ class Mail extends Error
         $this -> Mail (218);
       
       global $adb, $history, $equip;
-      $mail_to = $adb -> selectCell ("SELECT `guid` FROM `characters` WHERE `guid` = ?d", $mail_to) or $this -> Mail (106, 'items');
-      $transfers = $adb -> selectCell ("SELECT `transfers` FROM `characters` WHERE `guid` = ?d", $this->guid);
+      $mail_to = $equip -> getChar ('char_db', 'guid', $mail_to);
+      
+      if (!$mail_to)
+        $this -> Mail (106, 'items');
+      
+      $transfers = $equip -> getChar ('char_db', 'transfers');
       
       if ($transfers <= 0)
         $this -> Mail (113, 'items');
@@ -2053,36 +1974,26 @@ class Chat
   /*Отправка сообщения в чат*/
   function say ($to, $text, $sender = '')
   {
-    global $adb;
-    $db = $adb -> selectRow ("SELECT `login`, 
-                                     `room`, 
-                                     `city` 
-                              FROM `characters` 
-                              WHERE `guid` = ?d", $to);
-    list ($to, $room, $city) = array_values ($db);
+    global $adb, $equip;
+    $char_db = $equip -> getChar ('char_db', 'login', 'room', 'city', $to);
     
     if ($sender == '')
       $class = "sys";
     else
     {
       $class = "private";
-      $text = "private [$to] $text</font>";
+      $text = "private [$char_db[login]] $text</font>";
     }
     
     $adb -> query ("INSERT INTO `city_chat` (`sender`, `to`, `room`, `msg`, `class`, `date_stamp`, `city`) 
-                    VALUES (?s, ?s, ?s, ?s, ?s, ?d, ?s)", $sender ,$to ,$room ,$text ,$class ,time () ,$city);
+                    VALUES (?s, ?s, ?s, ?s, ?s, ?d, ?s)", $sender ,$char_db['login'] ,$char_db['room'] ,$text ,$class ,time () ,$char_db['city']);
     echo "<script>top.frames.ref.location = 'refresh.php';</script>";
   }
   /*Выполнение комманд в чате*/
   function executeCommand ($name, $message, $guid)
   {
-    global $adb;
-    $db = $adb -> selectRow ("SELECT `login`, 
-                                     `room`, 
-                                     `city` 
-                              FROM `characters` 
-                              WHERE `guid` = ?d", $guid);
-    list ($login, $room, $city) = array_values ($db);
+    global $adb, $equip;
+    $char_db = $equip -> getChar ('char_db', 'login', 'room', 'city', $guid);
     switch ($name)
     {
       case '/afk':
@@ -2107,7 +2018,7 @@ class Chat
             return false;
           
           $adb -> query ("INSERT INTO `city_chat` (`sender`, `to`, `room`, `msg`, `class`, `date_stamp`, `city`) 
-                          VALUES (?s, ?s, ?s, ?s, ?s, ?d, ?s)", $login ,'' ,$room ,$message ,'emotion' ,time () ,$city);
+                          VALUES (?s, ?s, ?s, ?s, ?s, ?d, ?s)", $char_db['login'] ,'' ,$char_db['room'] ,$message ,'emotion' ,time () ,$char_db['city']);
           return true;
         break;
         default:
@@ -2123,69 +2034,39 @@ class Info
   /*Показ дополнительной информации по персонажу*/
   function showInfDetail ($guid)
   {
-    global $adb;
-    $db = $adb -> selectRow ("SELECT `block`, 
-                                     `block_reason`, 
-                                     `shut`, 
-                                     `prision`, 
-                                     `prision_reason`, 
-                                     `travm`, 
-                                     `travm_var`, 
-                                     `travm_stat` 
-                              FROM `characters` 
-                              WHERE `guid` = ?d", $guid);
-    list ($block, $block_reason, $shut, $prision, $prision_reason, $travm, $travm_var, $travm_stat) = array_values ($db);
+    global $adb, $equip;
+    $char_db = $equip -> getChar ('char_db', 'block', 'block_reason', 'shut', 'prision', 'prision_reason', 'travm', 'travm_var', $guid);
     /*Блок*/
-    if ($block && $block_reason)
-      echo "Причина блока :<br><b><font class='private'>$block_reason</font></b><br>";
+    if ($char_db['block'] && $char_db['block_reason'])
+      echo "Причина блока :<br><b><font class='private'>$char_db[block_reason]</font></b><br>";
     /*Молчанка*/
-    if ($shut != 0)
-      echo "<img src='img/icon/sleeps0.gif'><small>На персонажа наложено заклятие молчания. Будет молчать еще ".getFormatedTime($shut)."</small><br>";
+    if ($char_db['shut'] != 0)
+      echo "<img src='img/icon/sleeps0.gif'><small>На персонажа наложено заклятие молчания. Будет молчать еще ".getFormatedTime($char_db['shut'])."</small><br>";
     /*Тюрьма*/
-    if ($prision != 0)
+    if ($char_db['prision'] != 0)
     {
-      echo "<small>Персонаж находиться под стражей еще ".getFormatedTime($prision)."</small><br>";
-      if ($prision_reason != "")
-        echo "Причина тюремного заключения :<br><b><font class='private'>$prision_reason</font></b><br>";
+      echo "<small>Персонаж находиться под стражей еще ".getFormatedTime($char_db['prision'])."</small><br>";
+      if ($char_db['prision_reason'] != "")
+        echo "Причина тюремного заключения :<br><b><font class='private'>$char_db[prision_reason]</font></b><br>";
     }
     /*Травма*/
-    if ($travm != 0)
+    if ($char_db['travm'] != 0)
     {
-      switch ($travm_var)
+      switch ($char_db['travm_var'])
       {
         case 1: $travm_var = "легкая травма";  break;
         case 2: $travm_var = "средняя травма"; break;
         case 3: $travm_var = "тяжелая травма"; break;
       }
-      switch ($travm_stat)
-      {
-        case 'str': $travm_stat = "сила";         break;
-        case 'dex': $travm_stat = "ловкость";     break;
-        case 'con': $travm_stat = "интуиция";     break;
-        case 'vit': $travm_stat = "выносливость"; break;
-      }
-      echo "<img src='img/icon/travma2.gif'><small>У персонажа $travm_var - <b>\"ослабленна характеристика $travm_stat\"</b> еще ".getFormatedTime($travm)."</small>";
+      echo "<img src='img/icon/travma2.gif'><small>У персонажа $travm_var, еще ".getFormatedTime($char_db['travm'])."</small>";
     }
   }
   /*Показ строки персонажа*/
   function character ($guid, $type = 'clan')
   {
-    global $adb;
-    $db = $adb -> selectRow ("SELECT `login`, 
-                                     `level`, 
-                                     `orden`, 
-                                     `clan`, 
-                                     `clan_short`, 
-                                     `block`, 
-                                     `rang`, 
-                                     `shut`, 
-                                     `afk`, 
-                                     `dnd`, 
-                                     `message`, 
-                                     `travm` 
-                              FROM `characters` 
-                              WHERE `guid` = ?d", $guid);
-    list ($login, $level, $orden, $clan_f, $clan_s, $block, $rang, $shut, $afk, $dnd, $message, $travm) = array_values ($db);
+    global $adb, $equip;
+    $char_db = $equip -> getChar ('char_db', 'login', 'level', 'orden', 'clan', 'clan_short', 'block', 'rang', 'shut', 'afk', 'dnd', 'message', 'travm', $guid);
+    list ($login, $level, $orden, $clan_f, $clan_s, $block, $rang, $shut, $afk, $dnd, $message, $travm) = array_values ($char_db);
     switch ($orden)
     {
       case 1:  $orden_img = "<img src='img/orden/pal/$rang.gif' width='12' height='15' border='0' title='Белое братство'>";  break;
@@ -2223,13 +2104,13 @@ class Info
     $online = $adb -> selectCell ("SELECT COUNT(*) FROM `online` WHERE `room` = ?s", $name);
     $room = $adb -> selectRow ("SELECT `name`, `time_to_go` FROM `city_rooms` WHERE `room` = ?s", $name);
     
-    if (!$room)          return "Bug";
+    if (!$room)     return "";
     switch ($type)
     {
       case 'full':  return "<strong>$room[name]</strong><br>Сейчас в комнате: $online";
       case 'map':   return $online;
       case 'mini':  return "Время перехода: $room[time_to_go] сек.<br>Сейчас в комнате: $online";
-      default:      return "";
+      default:      return "Bug";
     }
   }
   /*Вывод списка профессионалов*/
@@ -2348,6 +2229,16 @@ class Error
   }
 }
 
+/*Преобразование массива в переменные*/
+function ArrToVar ($arr, $pref = '')
+{
+  foreach ($arr as $key => $value)
+  {
+    $key = ($pref != '') ?$pref.$key :$key;
+    global ${$key};
+    ${$key} = $value;
+  }
+}
 /*Получение полосы загрузки*/
 function getUpdateBar ()
 {
@@ -2380,10 +2271,10 @@ function getSellValue ($item_info, $text = false)
     return 0;
   
   $price = ($item_info['price_euro'] > 0) ?$item_info['price_euro'] :$item_info['price'];
-  $price_diff = $price*0.35;
-  $tear_max_diff = ($item_info['tear_max'] < $item_info['tear']) ?$price_diff*(1 - $item_info['tear_max']/$item_info['tear']) :0;
-  $tear_diff = ($item_info['tear_cur'] > 0) ?$price_diff*($item_info['tear_cur']/$item_info['tear_max']) :$tear_max_diff;
-  $sell_price = $price*0.75 - $tear_max_diff - $tear_diff;
+  $tmax_diff = ($item_info['tear_max'] < $item_info['tear']) ?$price*0.7*(1 - $item_info['tear_max']/$item_info['tear']) :0;
+  $price_diff = $price*0.7 - $tmax_diff;
+  $tear_diff = ($item_info['tear_cur'] > 0) ?$price_diff*($item_info['tear_cur']/$item_info['tear_max']) :0;
+  $sell_price = $price*0.75 - $tmax_diff - $tear_diff;
   $sell_price = round ($sell_price, 2);
   
   if ($sell_price < 0.01)
@@ -2451,10 +2342,10 @@ function getStatSkillColor ($cur, $add)
                                return "RGB(0, 0, 0)";
 }
 /*Получение разбивки статов*/
-function getBraces ($stat, $added_stat, $type)
+function getBraces ($stat, $added_stat, $type = '')
 {
-  if ($added_stat > 0) return "&nbsp;<small>(<font id='{$type}_inst'>".($stat-$added_stat)."</font>+$added_stat)</small>";
-  if ($added_stat < 0) return "&nbsp;<small>(<font id='{$type}_inst'>".($stat-$added_stat)."</font>$added_stat)</small>";
+  if ($added_stat > 0) return "&nbsp;<small>(<font id='{$type}_inst'>".($stat-$added_stat)."</font> + $added_stat)</small>";
+  if ($added_stat < 0) return "&nbsp;<small>(<font id='{$type}_inst'>".($stat-$added_stat)."</font> - ".abs ($added_stat).")</small>";
 }
 /*UTF-8 размер строки*/
 function utf8_strlen ($s)
@@ -2512,5 +2403,26 @@ function requestVar ($var, $stand = '', $flags = 3)
   if (is_numeric ($stand) && is_numeric ($value)) return ($flags & 8) ?round ($value, 2) :$value;
   else if (!is_numeric ($stand))                  return htmlspecialchars ($value);
   else                                            return $stand;
+}
+/*Преобразование русско-язычной строки в нижний и верхний регистр*/
+define ('UPCASE', 'АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯABCDEFGHIKLMNOPQRSTUVWXYZ');
+define ('LOCASE', 'абвгдеёжзийклмнопрстуфхцчшщъыьэюяabcdefghiklmnopqrstuvwxyz');
+
+function mb_str_split ($str)
+{        
+    preg_match_all ('/.{1}|[^\x00]{1}$/us', $str, $ar);
+    return $ar[0];
+}
+function mb_strtr ($str, $from, $to)
+{
+  return str_replace (mb_str_split($from), mb_str_split($to), $str);
+}
+function lowercase ($arg = '')
+{
+  return mb_strtr ($arg, UPCASE, LOCASE);
+}
+function uppercase ($arg = '')
+{
+  return mb_strtr ($arg, LOCASE, UPCASE);
 }
 ?>

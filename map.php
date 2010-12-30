@@ -37,7 +37,7 @@ switch ($room)
     </h3></td>
     <td width="100%" align="right">
       <input type="button" class="nav" value="Обновить" id="refresh">&nbsp;
-      <input type="button" class="nav" value="Вернуться" id="link" link="none">
+      <input type="button" class="nav" value="<?echo $lang['return'];?>" id="link" link="none">
     </td>
   </tr>
 </table>

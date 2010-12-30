@@ -199,7 +199,7 @@ $(document).ready(function (){
     </td>
     <td align="right">
       <input type="button" class="nav" value="Обновить" id="refresh">
-      <input type="button" class="nav" value="Вернуться" id="link" link="inv">
+      <input type="button" class="nav" value="<?echo $lang['return'];?>" id="link" link="inv">
     </td>
   </tr>
 </table>
@@ -242,10 +242,10 @@ foreach ($_COOKIE as $key => $value)
 </tr>
 <tr>
 <?
-echo "<td>".date ('d.m.y H:i:s', $db['next_shape'])."</td>";
-echo "<td>".date ('d.m.y H:i:s', $db['last_go'])."</td>";
-echo "<td>".date ('d.m.y H:i:s', $db['last_return'])."</td>";
-echo "<td>".date ('d.m.y H:i:s', $db['last_time'])."</td>";
+echo "<td>".date ('d.m.y H:i:s', $char_db['next_shape'])."</td>";
+echo "<td>".date ('d.m.y H:i:s', $char_db['last_go'])."</td>";
+echo "<td>".date ('d.m.y H:i:s', $char_db['last_return'])."</td>";
+echo "<td>".date ('d.m.y H:i:s', $char_db['last_time'])."</td>";
 ?>
 </tr>
 </table>
@@ -295,5 +295,5 @@ foreach ($all_characters as $one_character)
 $("[name=Боёвой]").html('sdfsdf');
 </script>
 <?
-echo $_SESSION['guid'];
+
 ?>

@@ -17,10 +17,12 @@ $adb = DbSimple_Generic::connect($database['adb']);
 $adb->query("SET NAMES ? ",$database['db_encoding']);
 $adb->setErrorHandler("databaseErrorHandler");
 
+$equip = Equip::setguid($guid);
 $test = Test::setguid($guid);
 
-$test -> Guid ($guid);
+$test -> Guid ();
 
+$lang = $adb -> selectCol ("SELECT `key` AS ARRAY_KEY, `text` FROM `server_language`;");
 $mail = $adb -> selectCell ("SELECT COUNT(*) FROM `city_mail_items` WHERE `to` = ?d", $guid) | 0;
 ?>
 <html>
@@ -79,7 +81,7 @@ $(document).ready(function (){
                 <td><img height="11" src="img/mennu112_09.gif" width="1" /></td>
                 <td class="main_text" id="2">Общение</td>
                 <td><img height="11" src="img/mennu112_09.gif" width="1" /></td>
-                <td class="main_text" id="3">Безопасность</td>
+                <td class="main_text" id="3"><?echo $lang['security'];?></td>
                 <td><img height="11" src="img/mennu112_09.gif" width="1" /></td>
                 <td class="main_text" id="4">Персонаж</td>
                 <td><img height="11" src="img/mennu112_09.gif" width="1" /></td>
@@ -122,11 +124,11 @@ $(document).ready(function (){
                   </span>
                   <span id="menu4" class="bottom_text">
                     <a class="menutop" onClick="url ('main.php?action=inv');" href="#">Инвентарь</a>
-                    | <a class="menutop" onClick="url ('main.php?action=skills');" href="#">Умения</a>
+                    | <a class="menutop" onClick="url ('main.php?action=skills');" href="#"><?echo $lang['abilities'];?></a>
                     | <a class="menutop" onClick="url ('zayavka.php');" href="#">Поединки</a>
-                    | <a class="menutop" onclick="url ('main.php?action=form&do=info');" href="#">Анкета</a>
+                    | <a class="menutop" onclick="url ('main.php?action=form&do=info');" href="#"><?echo $lang['security'];?></a>
 <?
-if ($db['admin_level'] > 1)
+if ($char_db['admin_level'] > 1)
     echo "| <a class='menutop' onclick=\"url ('main.php?action=admin');\" href='#'>Админка</a>";
 ?>
                   </span>

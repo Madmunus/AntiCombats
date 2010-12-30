@@ -33,7 +33,7 @@ foreach ($bank as $num => $bank_id)
         <tr><td width="210" align="center"><?echo $info -> character ($guid);$equip -> showEquipment ('inv');?></td></tr>    
 <?
 if ($shut)
-  echo "<tr><td valign='top'><p style='margin-left: 10px;'><small><img src='img/icon/sleep.gif' width='40' height='25'>На персонажа наложено заклятие молчания. Будет молчать еще ".getFormatedTime($shut)."<br></small></p></td></tr>";
+  echo "<tr><td valign='top'><p style='margin-left: 10px;'><small><img src='img/icon/sleep.gif' width='40' height='25'>$lang[shut_desc] ".getFormatedTime($shut)."<br></small></p></td></tr>";
 ?>
       </table>
     </td>
@@ -46,18 +46,18 @@ if ($shut)
                 <td width="5" align="left" valign="top"></td>
                 <td width="225" align="left" valign="top" style="padding-right: 5px; padding-top: 17px;"><small>
 <?
-echo "Опыт: <b>".getExp ($exp)."</b> (".getExp ($next_up).")<br>"
-   . "Бои: &nbsp; <b>$win <img src='img/icon/wins.gif' border='0' title='Побед: $win'> &nbsp; $lose <img src='img/icon/looses.gif' border='0' title='Поражений: $lose'> &nbsp; $draw <img src='img/icon/draw.gif' border='0' title='Ничьих: $draw'></b><br>"
-   . "Деньги: <b>$money</b> кр.<br><br>";
+echo "$lang[exp] <b>".getExp ($exp)."</b> (".getExp ($next_up).")<br>"
+   . "$lang[fights] &nbsp; <b>$win <img src='img/icon/wins.gif' border='0' title='$lang[wins] $win'> &nbsp; $lose <img src='img/icon/looses.gif' border='0' title='$lang[loses] $lose'> &nbsp; $draw <img src='img/icon/draw.gif' border='0' title='$lang[draws] $draw'></b><br>"
+   . "$lang[money] <b>$money</b> кр.<br><br>";
 if ($bank)
 {
-  echo "Банк: <span id='loginbank'>";
+  echo "$lang[bank] <span id='loginbank'>";
   if (empty($_SESSION['bankСredit']))
-    echo "<a href=\"javascript:bank_open ('$credits');\" class='nick' style='font-size: 7pt;'>выбрать счёт</a>";
+    echo "<a href=\"javascript:bank_open ('$credits');\" class='nick' style='font-size: 7pt;'>$lang[credit_choose]</a>";
   else if (!empty($_SESSION['bankСredit']))
   {
     $bank_info = $adb -> selectRow ("SELECT `cash`, `euro` FROM `character_bank` WHERE `id` = ?d", $_SESSION['bankСredit']);
-    echo "<b>".getMoney ($bank_info['cash'])."</b>кр. <b>".getMoney ($bank_info['euro'])."</b>екр.<a href='javascript:inventoryUnLoginBank ();'><img border='0' valign='bottom' width='13' height='9' title='Закончить работу со счётом' src='img/icon/close_bank.gif'></a>";
+    echo "<b>".getMoney ($bank_info['cash'])."</b>кр. <b>".getMoney ($bank_info['euro'])."</b>екр.<a href='javascript:inventoryUnLoginBank ();'><img border='0' valign='bottom' width='13' height='9' title='$lang[credit_exit]' src='img/icon/close_bank.gif'></a>";
   }
   echo "</span>";
 }
@@ -65,12 +65,10 @@ echo "</small>";
 foreach ($bars as $bar => $value)
   echo "<div id='bar_$bar'>".$equip -> showInventoryBar ($bar, $value, count ($bars))."</div>";
 echo "<small>";
-if ($prof)
-  echo "Профессия: <b>".$lang['prof_'.$prof]."</b><br>";
-if ($clan)
-  echo "Клан: <strong><a href='clan_inf.php?clan=$name_s' class='us2' target='_blank' style='font-size: 10px;'>$clan</a> ($chin)</strong><br>";
-$orden_dis = ($orden == 1) ?"Паладинский орден - " :(($orden == 2) ?"Армада - " :"");
-echo ($orden == 1 || $orden == 2) ?"<strong>$orden_dis$stat_rang</strong><br></small>" :"<small>Статус: <strong>$status</strong>";
+echo ($prof) ?"$lang[prof] <b>".$lang['prof_'.$prof]."</b><br>" :"";
+echo ($clan) ?"$lang[clan] <strong><a href='clan_inf.php?clan=$name_s' class='us2' target='_blank' style='font-size: 10px;'>$clan</a> ($chin)</strong><br>" :"";
+$orden_dis = ($orden == 1) ?"$lang[orden_pal] - " :(($orden == 2) ?"$lang[orden_dark] - " :"");
+echo ($orden == 1 || $orden == 2) ?"<strong>$orden_dis$stat_rang</strong><br></small>" :"<small>$lang[status] <strong>$status</strong>";
 ?>
                  </small></td>
                 <td align="center" valign="top">
@@ -78,24 +76,24 @@ echo ($orden == 1 || $orden == 2) ?"<strong>$orden_dis$stat_rang</strong><br></s
                     <tr>
                       <td background="im/menu-but.gif" height="25" align="right" valign="middle">
                         <font color='red' id='error'><?$error -> getFormattedError ($warning, $parameters);?></font>
-                        <input type="button" class="nav" value="Образ" title="Выбрать образ персонажа" id="link" link="form&do=shape">
-                        <input type="button" class="nav" value="Умения" id="link" link="skills">
-                        <input type="button" class="nav" value="Анкета" title="Анкета" id="link" link="form&do=info">
-                        <input type="button" class="nav" value="Безопасность" title="Сменить пароль/email" title="Сменить пароль/email" style="font-weight: bold;" id="link" link="form&do=passandmail">
-                        <input type="button" class="help" value="Подсказка" id="hint" link="invent">
-                        <input type="button" class="nav" value="Вернуться" id="link" link="none">
+                        <input type="button" class="nav" value="<?echo $lang['shape'];?>" title="<?echo $lang['shape_choose'];?>" id="link" link="form&do=shape">
+                        <input type="button" class="nav" value="<?echo $lang['abilities'];?>" id="link" link="skills">
+                        <input type="button" class="nav" value="<?echo $lang['form'];?>" title="<?echo $lang['form'];?>" id="link" link="form&do=info">
+                        <input type="button" class="nav" value="<?echo $lang['security'];?>" title="<?echo $lang['change_pass_mail'];?>" style="font-weight: bold;" id="link" link="form&do=passandmail">
+                        <input type="button" class="help" value="<?echo $lang['hint'];?>" id="hint" link="invent">
+                        <input type="button" class="nav" value="<?echo $lang['return'];?>" id="link" link="none">
                       </td>
                     </tr>
                   </table>
                   <table border="0" width="100%" bgColor="#d4d2d2" cellpadding="3" cellspacing="0">
                     <tr>
-                      <td width="25%" align="center" id="section_1" bgcolor="#<?echo ($section == 1) ?"a5a5a5" :"d4d2d2";?>"><a href="javascript:showInventory (1, 'inv');" class="nick"><b>Обмундирование</b></a></td>
-                      <td width="25%" align="center" id="section_2" bgcolor="#<?echo ($section == 2) ?"a5a5a5" :"d4d2d2";?>"><a href="javascript:showInventory (2, 'inv');" class="nick"><b>Заклятия</b></a></td>
-                      <td width="25%" align="center" id="section_3" bgcolor="#<?echo ($section == 3) ?"a5a5a5" :"d4d2d2";?>"><a href="javascript:showInventory (3, 'inv');" class="nick"><b>Эликсиры</b></a></td>
-                      <td width="25%" align="center" id="section_4" bgcolor="#<?echo ($section == 4) ?"a5a5a5" :"d4d2d2";?>"><a href="javascript:showInventory (4, 'inv');" class="nick"><b>Прочее</b></a></td>
+                      <td width="25%" align="center" id="section_1" bgcolor="#<?echo ($section == 1) ?"a5a5a5" :"d4d2d2";?>"><a href="javascript:showInventory (1, 'inv');" class="nick"><b><?echo $lang['sec_item'];?></b></a></td>
+                      <td width="25%" align="center" id="section_2" bgcolor="#<?echo ($section == 2) ?"a5a5a5" :"d4d2d2";?>"><a href="javascript:showInventory (2, 'inv');" class="nick"><b><?echo $lang['sec_thing'];?></b></a></td>
+                      <td width="25%" align="center" id="section_3" bgcolor="#<?echo ($section == 3) ?"a5a5a5" :"d4d2d2";?>"><a href="javascript:showInventory (3, 'inv');" class="nick"><b><?echo $lang['sec_elix'];?></b></a></td>
+                      <td width="25%" align="center" id="section_4" bgcolor="#<?echo ($section == 4) ?"a5a5a5" :"d4d2d2";?>"><a href="javascript:showInventory (4, 'inv');" class="nick"><b><?echo $lang['sec_other'];?></b></a></td>
                     </tr>
                   </table>
-                  <div align="center" style="background: #a5a5a5;"><b>Рюкзак: (масса: <?echo "<span id='mass'>$mass</span>/$maxmass";?>, предметов: <span id="count_items"><?echo $countitems;?></span>)</div>
+                  <div align="center" style="background: #a5a5a5;"><b><?echo $lang['back_pack'];?> (<?echo lowercase ($lang['mass'])." <span id='mass'>$mass</span>/$maxmass";?>, <?echo $lang['count_items'];?> <span id="count_items"><?echo $countitems;?></span>)</div>
                   <div id="inventory">
 <?
     $rows = $adb -> select ("SELECT * 
@@ -117,16 +115,16 @@ echo ($orden == 1 || $orden == 2) ?"<strong>$orden_dis$stat_rang</strong><br></s
       }
     }
     else
-      echo "<table width='100%' cellspacing='1' cellpadding='2' bgcolor='#a5a5a5'><tr><td bgcolor='#e2e0e0' align='center'>ПУСТО</td></tr></table>";
+      echo "<table width='100%' cellspacing='1' cellpadding='2' bgcolor='#a5a5a5'><tr><td bgcolor='#e2e0e0' align='center'>$lang[empty]</td></tr></table>";
 ?>
                   </div>
                   <table border="0" width="100%" bgColor="#a5a5a5" cellpadding="3" cellspacing="0">
                   <td align="left">
-                    Выровнять по 
-                    <input type="button" class="nav" value="названию" id="sort_name" name="1" onclick="sortInventory ('name');">
-                    <input type="button" class="nav" value="цене" id="sort_price" name="1" onclick="sortInventory ('price');">
-                    <input type="button" class="nav" value="типу" id="sort_type" name="1" onclick="sortInventory ('type');">
-                  <td align="right"><input type="button" value="Выбросить хлам"></td>
+                    <?echo $lang['sort_by'];?> 
+                    <input type="button" class="nav" value="<?echo $lang['sort_name'];?>" id="sort_name" name="1" onclick="sortInventory ('name');">
+                    <input type="button" class="nav" value="<?echo $lang['sort_price'];?>" id="sort_price" name="1" onclick="sortInventory ('price');">
+                    <input type="button" class="nav" value="<?echo $lang['sort_type'];?>" id="sort_type" name="1" onclick="sortInventory ('type');">
+                  <td align="right"><input type="button" value="<?echo $lang['drop_trash'];?>"></td>
                   </table>
 <?
 /*
