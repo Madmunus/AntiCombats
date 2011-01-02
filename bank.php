@@ -56,129 +56,129 @@ switch ($do)
     $pass1 = requestVar ('pass1');
     $pass2 = requestVar ('pass2');
     if ($money < 3)
-      $error -> Map (323, 3);
+      $char->error->Map (323, 3);
     
     if ($pass1 == '')
-      $error -> Map (301);
+      $char->error->Map (301);
     
     if ($pass2 == '')
-      $error -> Map (324);
+      $char->error->Map (324);
     
     if ($pass1 != $pass2)
-      $error -> Map (300);
+      $char->error->Map (300);
     
-    $adb -> query ("INSERT INTO `character_bank` (`id`, `guid`, `password`) 
-                    VALUES (?d, ?d, ?s);", $id ,$guid ,SHA1 ($id.':'.$pass1));
-    $history -> bank ($id, '', '', '', 1);
+    $adb->query ("INSERT INTO `character_bank` (`id`, `guid`, `password`) 
+                  VALUES (?d, ?d, ?s);", $id ,$guid ,SHA1 ($id.':'.$pass1));
+    $char->history->bank ($id, '', '', '', 1);
     
-    if (!($equip -> Money (3)))
-      $error -> Map (107);
+    if (!($char->Money (3)))
+      $char->error->Map (107);
     
-    $error -> Map (318, $id);
+    $char->error->Map (318, $id);
   break;
   case 'login':
-    $error -> Map ($equip -> loginBank ($id, $pass));
+    $char->error->Map ($char->bank->Login ($id, $pass));
   break;
   case 'check':
     if (empty($_SESSION['bankСredit']))
-      $error -> Map (0);
+      $char->error->Map (0);
     
-    $credit = $adb -> selectRow ("SELECT `id`, 
-                                         `cash`, 
-                                         `euro` 
-                                  FROM `character_bank` 
-                                  WHERE `id` = ?d 
-                                    and `guid` = ?d", $_SESSION['bankСredit'] ,$guid) or $error -> Map (322);
+    $credit = $adb->selectRow ("SELECT `id`, 
+                                       `cash`, 
+                                       `euro` 
+                                FROM `character_bank` 
+                                WHERE `id` = ?d 
+                                  and `guid` = ?d", $_SESSION['bankСredit'] ,$guid) or $char->error->Map (322);
     list ($id, $cash, $euro) = array_values($credit);
     if (isset($_POST['add_kredit']))
     {
       $add_sum = requestVar ('add_sum', 0, 11);
       
-      if (!($equip -> Money ($add_sum)))
-        $error -> Map (107);
+      if (!($char->Money ($add_sum)))
+        $char->error->Map (107);
       
-      $equip -> MoneyBank (-$add_sum, $id);
-      $history -> bank ($id, '', $add_sum, '', 2);
-      $error -> Map (319, "$add_sum|$id");
+      $char->bank->bMoney (-$add_sum, $id);
+      $char->history->bank ($id, '', $add_sum, '', 2);
+      $char->error->Map (319, "$add_sum|$id");
     }
     else if (isset($_POST['get_kredit']))
     {
       $get_sum = requestVar ('get_sum', 0, 11);
-      $equip -> MoneyBank ($get_sum, $id);
-      $equip -> Money (-$get_sum);
-      $history -> bank ($id, '', $get_sum, '', 3);
-      $error -> Map (320, "$get_sum|$id");
+      $char->bank->bMoney ($get_sum, $id);
+      $char->Money (-$get_sum);
+      $char->history->bank ($id, '', $get_sum, '', 3);
+      $char->error->Map (320, "$get_sum|$id");
     }
     else if (isset($_POST['transfer_kredit']))
     {
       $trf_sum = requestVar ('transfer_sum', 0, 11);
       if ($level < 8)
-        $error -> Map (306);
+        $char->error->Map (306);
       
       if ($id == $id2)
-        $error -> Map (307);
+        $char->error->Map (307);
       
       if ($trf_sum < 1)
-        $error -> Map (309);
+        $char->error->Map (309);
       
-      $credit2_guid = $adb -> selectCell ("SELECT `guid` FROM `character_bank` WHERE `id` = ?d", $id2) or $error -> Map (303);
-      $equip -> MoneyBank ($trf_sum, $id);
+      $credit2_guid = $adb->selectCell ("SELECT `guid` FROM `character_bank` WHERE `id` = ?d", $id2) or $char->error->Map (303);
+      $char->bank->bMoney ($trf_sum, $id);
       $trfed_sum = round ($trf_sum * 0.97, 2);
-      $equip -> MoneyBank (-$trfed_sum, $id2, '', $credit2_guid);
-      $history -> bank ($id, $id2, $trfed_sum, '', 4);
-      $history -> bank ($id2, $id, $trfed_sum, '', 5);
-      $to_owner = $info -> character ($credit2_guid, 'name');
-      $error -> Map (321, "$trfed_sum|$to_owner|$id2|$id");
+      $char->bank->bMoney (-$trfed_sum, $id2, '', $credit2_guid);
+      $char->history->bank ($id, $id2, $trfed_sum, '', 4);
+      $char->history->bank ($id2, $id, $trfed_sum, '', 5);
+      $to_owner = $char->info->character ('name', $credit2_guid);
+      $char->error->Map (321, "$trfed_sum|$to_owner|$id2|$id");
     }
     else if (isset($_POST['convert_ekredit']))
     {
       $convert_sum = requestVar ('convert_sum', 0, 11);
       if ($convert_sum == 0 || !is_numeric($convert_sum))
-        $error -> Map (327);
+        $char->error->Map (327);
       
       if ($euro < $convert_sum)
-        $error -> Map (310, $convert_sum);
+        $char->error->Map (310, $convert_sum);
       
       $converted_sum = $convert_sum * 30;
-      $equip -> MoneyBank ($convert_sum, $id, 'euro');
-      $equip -> MoneyBank (-$converted_sum, $id);
-      $history -> bank ($id, '', $converted_sum, $convert_sum, 6);
-      $error -> Map (308, "$convert_sum|$id|$converted_sum");
+      $char->bank->bMoney ($convert_sum, $id, 'euro');
+      $char->bank->bMoney (-$converted_sum, $id);
+      $char->history->bank ($id, '', $converted_sum, $convert_sum, 6);
+      $char->error->Map (308, "$convert_sum|$id|$converted_sum");
     }
     else if (isset($_POST['change_psw']))
     {
       $new_psw = requestVar ('new_psw');
       $new_psw2 = requestVar ('new_psw2');
       if ($new_psw == "")
-        $error -> Map (315);
+        $char->error->Map (315);
       
       if ($new_psw2 == "")
-        $error -> Map (316);
+        $char->error->Map (316);
       
       if ($new_psw != $new_psw2)
-        $error -> Map (317);
+        $char->error->Map (317);
       
-      $to_credit = $adb -> query ("UPDATE `character_bank` SET `password` = ?s WHERE `id` = ?d", SHA1 ($id.':'.$new_psw) ,$id) or $error -> Map (312);
-      $error -> Map (311);
+      $to_credit = $adb->query ("UPDATE `character_bank` SET `password` = ?s WHERE `id` = ?d", SHA1 ($id.':'.$new_psw) ,$id) or $char->error->Map (312);
+      $char->error->Map (311);
     }
     else if (isset($_POST['save_notepad']))
     {
       $notepad = requestVar ('notepad');
       $notepad = str_replace ("\n", "<br>", $notepad);
-      $to_credit = $adb -> query ("UPDATE `character_info` SET `bank_note` = ?s WHERE `guid` = ?d", $notepad ,$guid) or $error -> Map (314);
-      $error -> Map (313);
+      $to_credit = $adb->query ("UPDATE `character_info` SET `bank_note` = ?s WHERE `guid` = ?d", $notepad ,$guid) or $char->error->Map (314);
+      $char->error->Map (313);
     }
-    $error -> Map (0);
+    $char->error->Map (0);
   break;
   case 'logout':
-    $equip -> unloginBank ();
-    $error -> Map (0);
+    $char->bank->unLogin ();
+    $char->error->Map (0);
   break;
   case 'delete':
-    $del1 = $adb -> query ("DELETE FROM `character_bank` WHERE `id` = ?d", $_SESSION['bankСredit']);
-    $del2 = $adb -> query ("DELETE FROM `history_bank` WHERE `credit` = ?d", $_SESSION['bankСredit']);
+    $del1 = $adb->query ("DELETE FROM `character_bank` WHERE `id` = ?d", $_SESSION['bankСredit']);
+    $del2 = $adb->query ("DELETE FROM `history_bank` WHERE `credit` = ?d", $_SESSION['bankСredit']);
     unset ($_SESSION['bankСredit']);
-    $error -> Map (0);
+    $char->error->Map (0);
   break;
 }
 ?>
@@ -190,20 +190,20 @@ switch ($do)
     <table width="148" border="0" cellpadding="0" cellspacing="1" bgcolor="#DEDEDE">
       <tr>
         <td bgcolor="#D3D3D3"><img src="img/links.gif" width="9" height="7" /></td>
-        <td bgcolor="#D3D3D3" nowrap><a href="main.php?action=go&room_go=fairstreet" class="passage" alt="<?echo $info -> roomOnline ('fairstreet', 'mini');?>">Страшилкина улица</a></td>
+        <td bgcolor="#D3D3D3" nowrap><a href="main.php?action=go&room_go=fairstreet" class="passage" alt="<?echo $char->info->roomOnline ('fairstreet', 'mini');?>">Страшилкина улица</a></td>
       </tr>
     </table>
   </td>
 </tr>
 </table>
-<font color='red' id='error'><?$error -> getFormattedError ($warning, $parameters);?></font>
+<font color='red' id='error'><?$char->error->getFormattedError ($warning, $parameters);?></font>
 <?
 if (empty($_SESSION['bankСredit']))
 {
   $deist = requestVar ('deist');
   if ($deist != "new")
   {
-    $rows = $adb -> selectCol ("SELECT `id` FROM `character_bank` WHERE `guid` = ?d", $guid);
+    $rows = $adb->selectCol ("SELECT `id` FROM `character_bank` WHERE `guid` = ?d", $guid);
 ?>
 <br>
 Мы предоставляем следующие услуги:
@@ -250,9 +250,9 @@ if (empty($_SESSION['bankСredit']))
   else
   {
     if ($money < 3)
-      $error -> Map (323, 3);
+      $char->error->Map (323, 3);
     
-    $maxid = ($adb -> selectCell ("SELECT MAX(`id`) FROM `character_bank`;")) + 1;
+    $maxid = ($adb->selectCell ("SELECT MAX(`id`) FROM `character_bank`;")) + 1;
 ?>
 <h4>Открытие счета</h4>
 Запишите номер вашего счета: <b><?echo $maxid;?></b><br>
@@ -271,13 +271,13 @@ if (empty($_SESSION['bankСredit']))
 }
 else
 {
-  $bank_info = $adb -> selectRow ("SELECT `id`, 
-                                          `cash`, 
-                                          `euro` 
-                                   FROM `character_bank` 
-                                   WHERE `id` = ?d", $_SESSION['bankСredit']);
+  $bank_info = $adb->selectRow ("SELECT `id`, 
+                                        `cash`, 
+                                        `euro` 
+                                 FROM `character_bank` 
+                                 WHERE `id` = ?d", $_SESSION['bankСredit']);
   list ($id, $cash, $euro) = array_values ($bank_info);
-  $note = $adb -> selectCell ("SELECT `bank_note` FROM `character_info` WHERE `guid` = ?d", $guid);
+  $note = $adb->selectCell ("SELECT `bank_note` FROM `character_info` WHERE `guid` = ?d", $guid);
   $note = str_replace (array("<br>", '\&quot;', "\'"), array("\n", '"', "'"), $note);
   $m_dis = ($money == 0) ?" disabled" :"";
   $g_dis = ($cash == 0) ?" disabled" :"";
@@ -376,15 +376,15 @@ else
     <fieldset>
       <legend><b>Последние операции</b></legend>
         <table cellpadding="2" cellspacing="0" border="0">
-<?        $rows = $adb -> select ("SELECT `credit2`, 
-                                          `cash`, 
-                                          `euro`, 
-                                          `operation`, 
-                                          `date` 
-                                   FROM `history_bank` 
-                                   WHERE `credit` = ?d 
-                                   ORDER BY `id` DESC 
-                                   LIMIT 0, 10;", $_SESSION['bankСredit']);
+<?        $rows = $adb->select ("SELECT `credit2`, 
+                                        `cash`, 
+                                        `euro`, 
+                                        `operation`, 
+                                        `date` 
+                                 FROM `history_bank` 
+                                 WHERE `credit` = ?d 
+                                 ORDER BY `id` DESC 
+                                 LIMIT 0, 10;", $_SESSION['bankСredit']);
           foreach ($rows as $hist)
           {
             vprintf ("<tr><td><font class='date'>".date ('d.m.y H:i', $hist['date'])."</font> ".$lang['bank_'.$hist['operation']]."</td></tr>", $hist);

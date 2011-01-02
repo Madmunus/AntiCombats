@@ -35,7 +35,7 @@ $adb->setErrorHandler("databaseErrorHandler");
             <h3><p class="news">Новости</p></h3>
             <table width="73%" border="0" cellPadding="0" cellSpacing="0" align="center">
 <?
-$rows = $adb -> select ("SELECT * FROM `news` ORDER BY `id` DESC;");
+$rows = $adb->select ("SELECT * FROM `news` ORDER BY `id` DESC;");
 foreach ($rows as $news)
 {
   echo "<tr><td height='19'>"

@@ -1,7 +1,7 @@
 <?
 defined('AntiBK') or die ("Доступ запрещен!");
 
-$xaos = $adb -> selectCell ("SELECT COUNT(*) FROM `characters` WHERE `prision` != '0';");
+$xaos = $adb->selectCell ("SELECT COUNT(*) FROM `characters` WHERE `prision` != '0';");
 ?>
 <table>
   <tr>
@@ -15,7 +15,7 @@ if (!$char_db['prision'])
 <table width="148" align="right" border="0" cellpadding="0" cellspacing="1" bgcolor="#DEDEDE">
   <tr>
     <td bgcolor="#D3D3D3"><img src="img/links.gif" width="9" height="7"/></td>
-    <td bgcolor="#D3D3D3" nowrap><a href="main.php?action=go&room_go=centplosh" class="passage" alt="<?echo $info -> roomOnline ('centplosh', 'mini');?>">Центральная Площадь</a></td>
+    <td bgcolor="#D3D3D3" nowrap><a href="main.php?action=go&room_go=centplosh" class="passage" alt="<?echo $char->info->roomOnline ('centplosh', 'mini');?>">Центральная Площадь</a></td>
   </tr>
 </table>
 <?

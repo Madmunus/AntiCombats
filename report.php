@@ -6,7 +6,7 @@ $split = split ('\.', $date);
 $first_time  = mktime (0, 0, 0, $split[0], 01, $split[1]);
 $second_time = mktime (0, 0, 0, $split[0], date ("t", $first_time), $split[1]);
 
-$rows = $adb -> select ("SELECT `action`, 
+$rows = $adb->select ("SELECT `action`, 
                                 `date`, 
                                 `ip`, 
                                 `comment` 
@@ -40,7 +40,7 @@ foreach ($rows as $auth)
 {
   list ($action, $date_a, $ip, $comment) = array_values ($auth);
   $date_a = date ('d.m.y H:i', $date_a);
-  $city = $adb -> selectCell ("SELECT `name` FROM `server_cities` WHERE `city` = ?s", $city);
+  $city = $adb->selectCell ("SELECT `name` FROM `server_cities` WHERE `city` = ?s", $city);
   
   if (!$reports)
     $reports = "<h4>$city</h4>";

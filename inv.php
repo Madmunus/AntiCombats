@@ -5,7 +5,7 @@ $bar = requestVar ('bar');
 ?>
 <script src="scripts/inventory.js" type="text/javascript"></script>
 <?
-$bars = $adb -> selectRow ("SELECT `stat`, `mod`, `power`, `def`, `btn`, `set` FROM `character_bars` WHERE `guid` = ?d", $guid) or die ("<script>top.location.href = 'index.php';</script>");
+$bars = $adb->selectRow ("SELECT `stat`, `mod`, `power`, `def`, `btn`, `set` FROM `character_bars` WHERE `guid` = ?d", $guid) or die ("<script>top.location.href = 'index.php';</script>");
 foreach ($bars as $key => $value)
 {
   if ($value == 0)
@@ -13,11 +13,11 @@ foreach ($bars as $key => $value)
 }
 asort ($bars);
 
-$countitems = $adb -> selectCell ("SELECT COUNT(*) FROM `character_inventory` WHERE `guid` = ?d and `wear` = '0' and `mailed` = '0';", $guid) | 0;
+$countitems = $adb->selectCell ("SELECT COUNT(*) FROM `character_inventory` WHERE `guid` = ?d and `wear` = '0' and `mailed` = '0';", $guid) | 0;
 
 $money = getMoney ($money);
 
-$bank = $adb -> selectCol ("SELECT `id` FROM `character_bank` WHERE `guid` = ?d", $guid);
+$bank = $adb->selectCol ("SELECT `id` FROM `character_bank` WHERE `guid` = ?d", $guid);
 foreach ($bank as $num => $bank_id)
 {
   if (empty($credits))
@@ -30,7 +30,7 @@ foreach ($bank as $num => $bank_id)
   <tr>
     <td width="210" align="center" valign="top">
       <table border="0" cellspacing="0" cellpadding="0">
-        <tr><td width="210" align="center"><?echo $info -> character ($guid);$equip -> showEquipment ('inv');?></td></tr>    
+        <tr><td width="210" align="center"><?echo $char->info->character ();$char->equip->showEquipment ('inv');?></td></tr>    
 <?
 if ($shut)
   echo "<tr><td valign='top'><p style='margin-left: 10px;'><small><img src='img/icon/sleep.gif' width='40' height='25'>$lang[shut_desc] ".getFormatedTime($shut)."<br></small></p></td></tr>";
@@ -56,14 +56,14 @@ if ($bank)
     echo "<a href=\"javascript:bank_open ('$credits');\" class='nick' style='font-size: 7pt;'>$lang[credit_choose]</a>";
   else if (!empty($_SESSION['bankСredit']))
   {
-    $bank_info = $adb -> selectRow ("SELECT `cash`, `euro` FROM `character_bank` WHERE `id` = ?d", $_SESSION['bankСredit']);
+    $bank_info = $adb->selectRow ("SELECT `cash`, `euro` FROM `character_bank` WHERE `id` = ?d", $_SESSION['bankСredit']);
     echo "<b>".getMoney ($bank_info['cash'])."</b>кр. <b>".getMoney ($bank_info['euro'])."</b>екр.<a href='javascript:inventoryUnLoginBank ();'><img border='0' valign='bottom' width='13' height='9' title='$lang[credit_exit]' src='img/icon/close_bank.gif'></a>";
   }
   echo "</span>";
 }
 echo "</small>";
 foreach ($bars as $bar => $value)
-  echo "<div id='bar_$bar'>".$equip -> showInventoryBar ($bar, $value, count ($bars))."</div>";
+  echo "<div id='bar_$bar'>".$char->showInventoryBar ($bar, $value, count ($bars))."</div>";
 echo "<small>";
 echo ($prof) ?"$lang[prof] <b>".$lang['prof_'.$prof]."</b><br>" :"";
 echo ($clan) ?"$lang[clan] <strong><a href='clan_inf.php?clan=$name_s' class='us2' target='_blank' style='font-size: 10px;'>$clan</a> ($chin)</strong><br>" :"";
@@ -75,7 +75,7 @@ echo ($orden == 1 || $orden == 2) ?"<strong>$orden_dis$stat_rang</strong><br></s
                   <table width="100%" border="0" cellspacing="0" cellpadding="0">
                     <tr>
                       <td background="im/menu-but.gif" height="25" align="right" valign="middle">
-                        <font color='red' id='error'><?$error -> getFormattedError ($warning, $parameters);?></font>
+                        <font color='red' id='error'><?$char->error->getFormattedError ($warning, $parameters);?></font>
                         <input type="button" class="nav" value="<?echo $lang['shape'];?>" title="<?echo $lang['shape_choose'];?>" id="link" link="form&do=shape">
                         <input type="button" class="nav" value="<?echo $lang['abilities'];?>" id="link" link="skills">
                         <input type="button" class="nav" value="<?echo $lang['form'];?>" title="<?echo $lang['form'];?>" id="link" link="form&do=info">
@@ -96,21 +96,21 @@ echo ($orden == 1 || $orden == 2) ?"<strong>$orden_dis$stat_rang</strong><br></s
                   <div align="center" style="background: #a5a5a5;"><b><?echo $lang['back_pack'];?> (<?echo lowercase ($lang['mass'])." <span id='mass'>$mass</span>/$maxmass";?>, <?echo $lang['count_items'];?> <span id="count_items"><?echo $countitems;?></span>)</div>
                   <div id="inventory">
 <?
-    $rows = $adb -> select ("SELECT * 
-                             FROM `character_inventory` AS `c` 
-                             LEFT JOIN `item_template` AS `i` 
-                             ON `c`.`item_template` = `i`.`entry` 
-                             WHERE `i`.`section` = ?s 
-                               and `c`.`guid` = ?d 
-                               and `c`.`wear` = '0' 
-                               and `c`.`mailed` = '0' 
-                             ORDER BY `c`.`last_update` DESC", $data['sections'][$section] ,$guid);
+    $rows = $adb->select ("SELECT * 
+                           FROM `character_inventory` AS `c` 
+                           LEFT JOIN `item_template` AS `i` 
+                           ON `c`.`item_template` = `i`.`entry` 
+                           WHERE `i`.`section` = ?s 
+                             and `c`.`guid` = ?d 
+                             and `c`.`wear` = '0' 
+                             and `c`.`mailed` = '0' 
+                           ORDER BY `c`.`last_update` DESC", $data['sections'][$section] ,$guid);
     if (count($rows) > 0)
     {
       $i = 1;
       foreach ($rows as $item_info)
       {
-        echo $equip -> showItemInventory ($item_info, 'inv', $i);
+        echo $char->equip->showItemInventory ($item_info, 'inv', $i);
         $i = !$i;
       }
     }
@@ -129,7 +129,7 @@ echo ($orden == 1 || $orden == 2) ?"<strong>$orden_dis$stat_rang</strong><br></s
 <?
 /*
     case 'thing':
-        $rows = $adb -> select ("    SSELECT *
+        $rows = $adb->select ("    SELECT *
                                     FROM `character_inventory` AS `c` 
                                     LEFT JOIN `item_template` AS `i` 
                                     ON `c`.`item_template` = `i`.`entry` 
@@ -143,7 +143,7 @@ echo ($orden == 1 || $orden == 2) ?"<strong>$orden_dis$stat_rang</strong><br></s
                 case 'wood':
                     $obj_id = $dat['object_id'];
                     $item_id = $dat['id'];
-                    $obj_data = $adb -> selectRow ("SELECT * FROM `wood` WHERE `id` = ?d", $obj_id);
+                    $obj_data = $adb->selectRow ("SELECT * FROM `wood` WHERE `id` = ?d", $obj_id);
                     $name = $obj_data['name'];
                     $img = $obj_data['img'];
                     $mass = $obj_data['mass'];
@@ -163,7 +163,7 @@ echo ($orden == 1 || $orden == 2) ?"<strong>$orden_dis$stat_rang</strong><br></s
                     $item_id = $dat['id'];
                     $wear = $dat['wear'];
                     $gift_author = $dat['gift_author'];
-                    $obj_data = $adb -> selectRow ("SELECT * FROM `medal` WHERE `id` = ?d", $obj_id);
+                    $obj_data = $adb->selectRow ("SELECT * FROM `medal` WHERE `id` = ?d", $obj_id);
                     $name = $obj_data['name'];
                     $img = $obj_data['img'];
                     $msg = $obj_data['msg'];
@@ -195,7 +195,7 @@ echo ($orden == 1 || $orden == 2) ?"<strong>$orden_dis$stat_rang</strong><br></s
                     $book_name = $dat['book_name'];
                     $iznos = $dat['iznos'];
                     $iznos_all = $dat['tear_max'];
-                    $obj_data = $adb -> selectRow ("SELECT * FROM `book` WHERE `id` = ?d", $obj_id);
+                    $obj_data = $adb->selectRow ("SELECT * FROM `book` WHERE `id` = ?d", $obj_id);
                     $name = $obj_data['name'];
                     $img = $obj_data['img'];
                     $min_i = $obj_data['min_int'];
@@ -240,7 +240,7 @@ echo ($orden == 1 || $orden == 2) ?"<strong>$orden_dis$stat_rang</strong><br></s
                     $gift_author = $dat['gift_author'];
                     $iznos = $dat['iznos'];
                     $iznos_all = $dat['tear_max'];
-                    $obj_data = $adb -> selectRow ("SELECT * FROM `scroll` WHERE `id` = ?d", $obj_id);
+                    $obj_data = $adb->selectRow ("SELECT * FROM `scroll` WHERE `id` = ?d", $obj_id);
                     $name = $obj_data['name'];
                     $img = $obj_data['img'];
                     $min_i = $obj_data['min_int'];

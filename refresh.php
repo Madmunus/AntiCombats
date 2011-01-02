@@ -19,15 +19,13 @@ $adb = DbSimple_Generic::connect($database['adb']);
 $adb->query("SET NAMES ? ",$database['db_encoding']);
 $adb->setErrorHandler("databaseErrorHandler");
 
-$equip = Equip::setguid($guid);
-$test = Test::setguid($guid);
-$info = new Info;
+$char = Char::initialization($guid, $adb);
 
 $go = (isset($_GET['go'])) ?1 :0;
 
-$test -> Guid ();
-$test -> Zayavka ();
-$test -> Afk ();
+$char->test->Guid ();
+$char->test->Zayavka ();
+$char->test->Afk ();
 ?>
 <html>
 <head>
@@ -38,7 +36,7 @@ $test -> Afk ();
 </head>
 <body topmargin="0" onload="parent.msg.window.scroll(0, 65000);">
 <?
-$char_db = $equip -> getChar ('char_db', 'login', 'room', 'city', 'battle', 'battle_opponent', 'chat_s');
+$char_db = $char->getChar ('char_db', 'login', 'room', 'city', 'battle', 'battle_opponent', 'chat_s');
 ArrToVar ($char_db);
 
 if ($battle)
@@ -62,15 +60,15 @@ if ($chat_s != 2)
   else if (empty($last))
     $last = $_SESSION['last'] = time ();
 
-  $rows = $adb -> select ("SELECT `msg`, 
-                                  `sender`, 
-                                  `to`, 
-                                  `class`, 
-                                  `date_stamp` 
-                           FROM `city_chat` 
-                           WHERE `date_stamp` > ?d 
-                             and `room` = ?s 
-                             and `city` = ?s", $last ,$room ,$city);
+  $rows = $adb->select ("SELECT `msg`, 
+                                `sender`, 
+                                `to`, 
+                                `class`, 
+                                `date_stamp` 
+                         FROM `city_chat` 
+                         WHERE `date_stamp` > ?d 
+                           and `room` = ?s 
+                           and `city` = ?s", $last ,$room ,$city);
   foreach ($rows as $message)
   {
     list ($msg, $sender, $to, $class, $_SESSION['last']) = array_values ($message);
@@ -165,33 +163,33 @@ else if ($chat_s == 2)
 
 /*================Генерация списка чатовцев================*/
 /*---------------------Проверки ip-------------------------*/
-$ip = $adb -> selectCell ("SELECT `ip` FROM `online` WHERE `guid` = ?d", $guid) or die ("<script>top.main.location.href = 'main.php?action=exit';</script>");
+$ip = $adb->selectCell ("SELECT `ip` FROM `online` WHERE `guid` = ?d", $guid) or die ("<script>top.main.location.href = 'main.php?action=exit';</script>");
 if ($ip != $_SERVER['REMOTE_ADDR'])
   die ("<script>top.main.location.href = 'main.php?action=exit';</script>");
 
 /*------------------Обновление онлайн----------------------*/
-$search = $adb -> selectCell ("SELECT `guid` FROM `online` WHERE `guid` = ?d", $guid);
+$search = $adb->selectCell ("SELECT `guid` FROM `online` WHERE `guid` = ?d", $guid);
 if ($search)
-  $adb -> query ("UPDATE `online` SET `room` = ?s WHERE `guid` = ?d", $room ,$guid);
+  $adb->query ("UPDATE `online` SET `room` = ?s WHERE `guid` = ?d", $room ,$guid);
 /*---------------------Очистка чата------------------------*/
-$seek = $adb -> selectCell ("SELECT COUNT(*) FROM `city_chat` WHERE `city` = ?s and `room` = ?s", $city ,$room);
+$seek = $adb->selectCell ("SELECT COUNT(*) FROM `city_chat` WHERE `city` = ?s and `room` = ?s", $city ,$room);
 if ($seek > 1000)
 {
-  $adb -> query ("DELETE FROM `city_chat` WHERE `city` = ?s and `room` = ?s", $city ,$room);
-  $adb -> query ("ALTER TABLE `city_chat` AUTO_INCREMENT = 1;");
+  $adb->query ("DELETE FROM `city_chat` WHERE `city` = ?s and `room` = ?s", $city ,$room);
+  $adb->query ("ALTER TABLE `city_chat` AUTO_INCREMENT = 1;");
 }
 /*-------------------Создание списка-----------------------*/
-$room_online = $adb -> selectCell ("SELECT COUNT(*) FROM `online` WHERE `city` = ?s and `room` = ?s", $city ,$room);
-$room_name = $adb -> selectCell ("SELECT `name` FROM `city_rooms` WHERE `city` = ?s and `room` = ?s", $city ,$room);
+$room_online = $adb->selectCell ("SELECT COUNT(*) FROM `online` WHERE `city` = ?s and `room` = ?s", $city ,$room);
+$room_name = $adb->selectCell ("SELECT `name` FROM `city_rooms` WHERE `city` = ?s and `room` = ?s", $city ,$room);
 $user_list = "<br><center><input type='button' class='nav' value='Обновить' onclick='top.ref.location.reload();'></center><font style='color: #8f0000; font-size: 10pt; font-weight: bold;'>$room_name ($room_online)</font><br>";
 
-$rows = $adb -> selectCol ("SELECT `guid` 
+$rows = $adb->selectCol ("SELECT `guid` 
                             FROM `online` 
                             WHERE `city` = ?s 
                               and `room` = ?s 
                             ORDER by `login_display`", $city ,$room);
 foreach ($rows as $num => $list_guid)
-  $user_list .= $info -> character ($list_guid, 'online');
+  $user_list .= $char->info->character ('online', $list_guid);
 /*=========================================================*/
 $time = round (microtime(true) - $time, 2);
 ?>

@@ -41,7 +41,7 @@ a:hover   {color: #7e7765; text-decoration: underline;}
 <?
 if (!empty($login))
 {
-  $db = $adb -> selectRow ("SELECT `mail` 
+  $db = $adb->selectRow ("SELECT `mail` 
                             FROM `characters` 
                             WHERE `login` = ?s", $login);
   if (!$db)

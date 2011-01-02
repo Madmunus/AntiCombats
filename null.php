@@ -18,28 +18,26 @@ $adb = DbSimple_Generic::connect($database['adb']);
 $adb->query("SET NAMES ? ",$database['db_encoding']);
 $adb->setErrorHandler("databaseErrorHandler");
 
-$equip = Equip::setguid($guid);
-$test = Test::setguid($guid);
-$chat = new Chat;
+$char = Char::initialization($guid, $adb);
 
-$test -> Guid ();
+$char->test->Guid ();
 
 global $h;
 
-$char_db = $equip -> getChar ('char_db', 'login', 'room', 'city', 'shut', 'chat_s');
+$char_db = $char->getChar ('char_db', 'login', 'room', 'city', 'shut', 'chat_s');
 ArrToVar ($char_db);
 
-$commands = $adb -> selectCol ("SELECT `name` FROM `server_commands`;");
+$commands = $adb->selectCol ("SELECT `name` FROM `server_commands`;");
 $command_a = false;
 
 if (!$h || $shut || $chat_s == 2) exit ();
-$color = $equip -> getChar ('char_info', 'color');
+$color = $char->getChar ('char_info', 'color');
 
 foreach ($commands as $num => $name)
 {
   if (utf8_substr ($h, 0, utf8_strlen($name)) == $name)
   {
-    $command_a = $chat -> executeCommand ($name, $h, $guid);
+    $command_a = $char->chat->executeCommand ($name, $h, $guid);
     break;
   }
 }
@@ -63,9 +61,9 @@ if (!$command_a)
   else
     $class = 'all';
   
-  $adb -> query ("UPDATE `characters` SET `afk` = '0' WHERE `guid` = ?d", $guid);
-  $adb -> query ("INSERT INTO `city_chat` (`sender`, `to`, `room`, `msg`, `class`, `date_stamp`, `city`) 
-                  VALUES (?s, ?s, ?s, ?s, ?s, ?d, ?s)", $login ,$to ,$room ,"<font color=$color>$h</font>" ,$class ,time () ,$city);
+  $adb->query ("UPDATE `characters` SET `afk` = '0' WHERE `guid` = ?d", $guid);
+  $adb->query ("INSERT INTO `city_chat` (`sender`, `to`, `room`, `msg`, `class`, `date_stamp`, `city`) 
+                VALUES (?s, ?s, ?s, ?s, ?s, ?d, ?s)", $login ,$to ,$room ,"<font color=$color>$h</font>" ,$class ,time () ,$city);
 }
 ?>
 <script type="text/javascript">

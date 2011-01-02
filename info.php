@@ -23,21 +23,19 @@ $log = (isset($_GET['log']) && !preg_match('//u', $_GET['log'])) ?iconv("CP1251"
 $top = "Произошла ошибка:<br><br>";
 $bot = "<br><br><a href='javascript: window.history.go(-1);'>Назад</a><hr>";
 
-$guid = $adb -> selectCell ("SELECT `guid` FROM `characters` WHERE `login` = ?s", $log) or die ("$top Указанный персонаж не найден.$bot");
+$guid = $adb->selectCell ("SELECT `guid` FROM `characters` WHERE `login` = ?s", $log) or die ("$top Указанный персонаж не найден.$bot");
 
-$equip = Equip::setguid($guid);
-$test = Test::setguid($guid);
-$info = new Info;
+$char = Char::initialization($guid, $adb);
 
-$test -> Guid ();
-$test -> Prision ($char_db['prision']);
-$test -> Shut ($char_db['shut']);
-$test -> Travm ();
-$test -> Regen ();
+$char->test->Guid ();
+$char->test->Prision ();
+$char->test->Shut ();
+$char->test->Travm ();
+$char->test->Regen ();
 
-$char_db = $equip -> getChar ('char_db', '*');
-$char_stats = $equip -> getChar ('char_stats', 'str', 'dex', 'con', 'vit', 'int', 'wis', 'spi');
-$char_info = $equip -> getChar ('char_info', 'name', 'icq', 'hide_icq', 'url', 'town', 'deviz', 'hobie', 'state', 'date');
+$char_db = $char->getChar ('char_db', '*');
+$char_stats = $char->getChar ('char_stats', 'str', 'dex', 'con', 'vit', 'int', 'wis', 'spi');
+$char_info = $char->getChar ('char_info', 'name', 'icq', 'hide_icq', 'url', 'town', 'deviz', 'hobie', 'state', 'date');
 
 if (!$char_stats)
   die ("$top Информация о характеристиках персонажа не найдена.$bot");
@@ -46,17 +44,17 @@ if (!$char_info)
 ArrToVar ($char_db);
 ArrToVar ($char_info);
 
-$lang = $adb -> selectCol ("SELECT `key` AS ARRAY_KEY, `text` FROM `server_language`;");
+$lang = $adb->selectCol ("SELECT `key` AS ARRAY_KEY, `text` FROM `server_language`;");
 
 $sex = ($sex == 'male') ?"Мужской" :"Женский";
 $orden_dis = ($orden == 1) ?"Орден Паладинов - " :(($orden == 2) ?"Армада - " :"");
 $date = ($admin_level > 0) ?"До начала времен" :date ('d.m.y H:i', $date);
-$state = ($admin_level > 0) ?"Этого никто не знает" :$adb -> selectCell ("SELECT `name` FROM `server_cities` WHERE `city` = ?s", $state);
-$room = $adb -> selectCell ("SELECT `name` FROM `city_rooms` WHERE `room` = ?s", $room);
-$city = $adb -> selectCell ("SELECT `name` FROM `server_cities` WHERE `city` = ?s", $city);
-$online = $adb -> selectCell ("SELECT COUNT(*) FROM `online` WHERE `guid` = ?d", $guid);
+$state = ($admin_level > 0) ?"Этого никто не знает" :$adb->selectCell ("SELECT `name` FROM `server_cities` WHERE `city` = ?s", $state);
+$room = $adb->selectCell ("SELECT `name` FROM `city_rooms` WHERE `room` = ?s", $room);
+$city = $adb->selectCell ("SELECT `name` FROM `server_cities` WHERE `city` = ?s", $city);
+$online = $adb->selectCell ("SELECT COUNT(*) FROM `online` WHERE `guid` = ?d", $guid);
 
-$equip -> showStatAddition ('info');
+$char->showStatAddition ('info');
 ?>
 <html>
 <head>
@@ -72,8 +70,8 @@ $equip -> showStatAddition ('info');
 <table width="100%" border="0" cellpadding="1" cellspacing="2">
 <tr valign="top">
   <td align="center" width="227" style="padding-right: 10px;">
-<?  echo $info -> character ($guid, 'info')."<div style='height: 9px;'></div>";
-    $equip -> showEquipment ('info');
+<?  echo $char->info->character ('info', $guid)."<div style='height: 9px;'></div>";
+    $char->equip->showEquipment ('info');
     echo "<strong>$city</strong><br>";
     echo ($online) ?"<small>Персонаж сейчас находится в клубе.<br>\"<strong>$room</strong>\"</small>" :(($admin_level > 0) ?"<small>Персонаж не в клубе</small>" :"<small>Персонаж не в клубе, но был тут:<br>".date ('d.m.y H:i', $last_time)." <img src='img/clok3_2.png' alt='Время сервера' border='0'><br> (".getFormatedTime ($last_time)." назад)</small>");
 ?>
@@ -118,7 +116,7 @@ $equip -> showStatAddition ('info');
       }
       echo "<img src='img/dealer_$d_i.gif' width='35' height='24' alt='$d_d<br>Персонаж имеет право продавать услуги Анти Бойцовского Клуба.' border='0'>";
     }
-$info -> showInfDetail ($guid);
+$char->info->showInfDetail ($guid);
 ?>
   </td>
   <td align="center" valign="top"><br><br>
@@ -136,7 +134,7 @@ if ($admin_level < 1)
   <tr>
     <td align="left" valign="top">
 <?
-$rows = $adb -> select ("SELECT `c`.`id`, 
+$rows = $adb->select ("SELECT `c`.`id`, 
                                 `c`.`gift_author` 
                          FROM `character_inventory` AS `c` 
                          LEFT JOIN `item_template` AS `i` 
@@ -149,7 +147,7 @@ foreach ($rows as $dat_t)
 {
   $item_id = $dat_t['id'];
   $gift_author = $dat_t['gift_author'];
-  $obj_data = $adb -> selectRow ("SELECT `name`, 
+  $obj_data = $adb->selectRow ("SELECT `name`, 
                                          `img`, 
                                          `msg` 
                                   FROM `medal` 

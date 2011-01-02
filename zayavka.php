@@ -21,8 +21,8 @@ $adb = DbSimple_Generic::connect($database['adb']);
 $adb->query("SET NAMES ? ",$database['db_encoding']);
 $adb->setErrorHandler("databaseErrorHandler");
 
-$equip = Equip::setguid($guid);
-$test = Test::setguid($guid);
+$equip = Equip::setGuidDB($guid, $adb);
+$test = Test::setGuidDB($guid, $adb);
 
 $act = htmlspecialchars ($act);
 $boy = htmlspecialchars ($boy);
@@ -36,8 +36,8 @@ $otkaz = htmlspecialchars ($otkaz);
 $id = htmlspecialchars ($id);
 $denie = htmlspecialchars ($denie);
 
-$login = $adb -> _performEscape ($login);
-$db = $adb -> selectrow ("SELECT * FROM `characters` WHERE `login` = $login;");
+$login = $adb->_performEscape ($login);
+$db = $adb->selectrow ("SELECT * FROM `characters` WHERE `login` = $login;");
 $login = $db['login'];
 $orden_d = $db['orden'];
 $clan_s = $db['clan_short'];
@@ -64,7 +64,7 @@ $test -> Battle ();
 </head>
 <body bgColor="#e2e0e0" leftMargin="5" topMargin="5" marginheight="5" marginwidth="5">
 <?
-$look_m = $adb -> selectCell ("SELECT `login` FROM `miners` WHERE `login` = '$login';");
+$look_m = $adb->selectCell ("SELECT `login` FROM `miners` WHERE `login` = '$login';");
 if ($look_m['login'] == $login)
     die ("Вы добываете ресурсы. Вы не можете передвигаться сейчас.");
 $cure_hp = $db['cure_hp'];
@@ -78,7 +78,7 @@ if ($db['battle'] == 0)
         $percent_hp = floor ((100 * $time_to_cure) / 1200);
         $percent = 100 - $percent_hp;
         $hp[0] = floor (($hhh * $percent) / 100);
-        $q = $adb -> query ("    UPDATE `characters` 
+        $q = $adb->query ("    UPDATE `characters` 
                                 SET `hp` = '$hp[0]' 
                                 WHERE `login` = '$login';
                             ");
@@ -86,7 +86,7 @@ if ($db['battle'] == 0)
     else
     {
         $hp[0] = $db['hp_all'];
-        $q = $adb -> query ("    UPDATE `characters` 
+        $q = $adb->query ("    UPDATE `characters` 
                                 SET `hp` = '$hp[0]', 
                                     `cure_hp` = '0' 
                                 WHERE `login` = '$login';
@@ -94,41 +94,41 @@ if ($db['battle'] == 0)
         $time_to_cure_f = 0;
     }
 }
-$md1 = $adb -> select ("SELECT `battle_id` FROM `team1` WHERE `player` = '$login';");
+$md1 = $adb->select ("SELECT `battle_id` FROM `team1` WHERE `player` = '$login';");
 $countrows = count ($md1);
 
 for ($i = 0; $i < $countrows; $i++)
 {
     $m = $md1[$i]['battle_id'];
-    $opponent = $adb -> selectCell ("SELECT `player` FROM `team2` WHERE `battle_id` = '$m';");
+    $opponent = $adb->selectCell ("SELECT `player` FROM `team2` WHERE `battle_id` = '$m';");
     $pl1 = str_replace (" ", "%20", $opponent);
     $t = 1;
 }
-$md2 = $adb -> select ("SELECT `battle_id` FROM `team2` WHERE `player` = '$login';");
+$md2 = $adb->select ("SELECT `battle_id` FROM `team2` WHERE `player` = '$login';");
 $countrows = count ($md2);
 
 for ($i = 0; $i < $countrows; $i++)
 {
     $m = $md2[$i]['battle_id'];
-    $opponent = $adb -> selectCell ("SELECT `player` FROM `team1` WHERE `battle_id` = '$m';");
+    $opponent = $adb->selectCell ("SELECT `player` FROM `team1` WHERE `battle_id` = '$m';");
     $pl1 = str_replace (" ", "%20", $opponent);
     $t = 2;
 }
 
-$dat = $adb -> select ("SELECT * FROM `zayavka`;");
+$dat = $adb->select ("SELECT * FROM `zayavka`;");
 $countrows = count ($dat);
 
 for ($i = 0; $i < $countrows; $i++)
 {
     $cr = $dat[$i]['creator'];
-    $player = $adb -> selectCell ("SELECT `login` FROM `characters` WHERE `id` = '$cr';");
-    $search = $adb -> selectCell ("SELECT `login` FROM `online` WHERE `login` = '$player';");
+    $player = $adb->selectCell ("SELECT `login` FROM `characters` WHERE `id` = '$cr';");
+    $search = $adb->selectCell ("SELECT `login` FROM `online` WHERE `login` = '$player';");
     $online = ($search) ?1 :0;
     if ($online == 0)
     {
-        $del = $adb -> query ("DELETE FROM `zayavka` WHERE `creator` = '$cr';");
-        $del1 = $adb -> query ("DELETE FROM `team1` WHERE `battle_id` = '$cr';");
-        $del2 = $adb -> query ("DELETE FROM `team2` WHERE `battle_id` = '$cr';");
+        $del = $adb->query ("DELETE FROM `zayavka` WHERE `creator` = '$cr';");
+        $del1 = $adb->query ("DELETE FROM `team1` WHERE `battle_id` = '$cr';");
+        $del2 = $adb->query ("DELETE FROM `team2` WHERE `battle_id` = '$cr';");
     }
     if ($m == $dat[$i]['creator'] && $dat[$i]['status'] == 1)
         $zayavka_status = "awaiting";
@@ -198,8 +198,8 @@ switch ($act)
             echo "<a href=\"history.back(-1);\" class='us2'>назад</a>";
             die ();
         }
-        $st1 = $adb -> selectCell ("SELECT `player` FROM `team1` WHERE `player` = '$login';");
-        $st2 = $adb -> selectCell ("SELECT `player` FROM `team2` WHERE `player` = '$login';");
+        $st1 = $adb->selectCell ("SELECT `player` FROM `team1` WHERE `player` = '$login';");
+        $st2 = $adb->selectCell ("SELECT `player` FROM `team2` WHERE `player` = '$login';");
         if ($st1 || $st2)
         {
             echo "Вы не можете принять эту заявку! Сначала отзовите свою!<br>";
@@ -212,11 +212,11 @@ switch ($act)
         $date = date ("d.m.y H:i");
         $time = date("H:i");
         $mine_id = $db['id'];
-        $query = $adb -> query ("    INSERT INTO `zayavka` (status,type,date,timeout,creator) 
+        $query = $adb->query ("    INSERT INTO `zayavka` (status,type,date,timeout,creator) 
                                     VALUES ('1', '$battle_type', '$time', '$timeout', '$mine_id');");
-        $query = $adb -> query ("    INSERT INTO `team1` (player,ip,battle_id,hitted,over) 
+        $query = $adb->query ("    INSERT INTO `team1` (player,ip,battle_id,hitted,over) 
                                     VALUES ('$login', '$ip', '$mine_id', '0', '0')");
-        $query = $adb -> query ("    UPDATE `characters` 
+        $query = $adb->query ("    UPDATE `characters` 
                                     SET `zayavka` = '1' 
                                     WHERE `login` = '$login';
                                 ");
@@ -232,34 +232,34 @@ switch ($act)
             echo "<a href=\"history.back(-1);\" class='us2'>Назад</a>";
             die();
         }
-        $st1 = $adb -> selectCell ("SELECT `player` FROM `team1` WHERE `player` = '$login';");
-        $st2 = $adb -> selectCell ("SELECT `player` FROM `team2` WHERE `player` = '$login';");
+        $st1 = $adb->selectCell ("SELECT `player` FROM `team1` WHERE `player` = '$login';");
+        $st2 = $adb->selectCell ("SELECT `player` FROM `team2` WHERE `player` = '$login';");
         if ($st1 || $st2)
         {
             echo "Вы не можете принять этот вызов! Сначала отзовите свою!<br>";
             echo "<a href='zayavka.php?boy=phisic' class='us2'>Вернуться</a>";
             die ();
         }
-        $q = $adb -> selectCell ("SELECT `creator` FROM `zayavka` WHERE `creator` = '$id';");
+        $q = $adb->selectCell ("SELECT `creator` FROM `zayavka` WHERE `creator` = '$id';");
         if(empty($ip))
             $ip = ($_SERVER['HTTP_X_FORWARDED_FOR']) ?$_SERVER['HTTP_X_FORWARDED_FOR'] :$_SERVER['REMOTE_ADDR'] ;
         if($q)
         {
             $zayavka_c_o = 0;
             session_register ('zayavka_c_o');
-            $d2 = $adb -> selectCell ("SELECT `player` FROM `team2` WHERE `battle_id` = '$id';");
-            $d = $adb -> selectCell ("SELECT `player` FROM `team1` WHERE `battle_id` = '$id';");
+            $d2 = $adb->selectCell ("SELECT `player` FROM `team2` WHERE `battle_id` = '$id';");
+            $d = $adb->selectCell ("SELECT `player` FROM `team1` WHERE `battle_id` = '$id';");
             if ($d2 == '' || empty($d2))
             {
-                $q = $adb -> query ("    INSERT INTO `team2` (player,ip,battle_id,hitted,over) 
+                $q = $adb->query ("    INSERT INTO `team2` (player,ip,battle_id,hitted,over) 
                                         VALUES ('$login', '$ip', '$id', '0', '0');");
-                $s = $adb -> query ("    UPDATE `zayavka` 
+                $s = $adb->query ("    UPDATE `zayavka` 
                                         SET `status` = '2' 
                                         WHERE `creator` = '$id';
                                     ");
                 if ($q)
                 {
-                    $s11 = $adb -> query ("    UPDATE `characters` 
+                    $s11 = $adb->query ("    UPDATE `characters` 
                                             SET `zayavka` = '1' 
                                             WHERE `login` = '$d';
                                             ");
@@ -270,17 +270,17 @@ switch ($act)
     break;
 /*отозвать заявку*/
     case 'recall':
-        $s = $adb -> selectCell ("SELECT `battle_id` FROM `team1` WHERE `player` = '$login';");
+        $s = $adb->selectCell ("SELECT `battle_id` FROM `team1` WHERE `player` = '$login';");
         if ($s)
         {
-            $dd = $adb -> selectCell ("SELECT `status` FROM `zayavka` WHERE `creator` = '$cr';");
+            $dd = $adb->selectCell ("SELECT `status` FROM `zayavka` WHERE `creator` = '$cr';");
             if ($dd != 2)
             {
-                $query = $adb -> query ("DELETE FROM `zayavka` WHERE `creator` = '$s';");
-                $s2 = $adb -> query ("DELETE FROM `team1` WHERE `battle_id` = '$s';");
+                $query = $adb->query ("DELETE FROM `zayavka` WHERE `creator` = '$s';");
+                $s2 = $adb->query ("DELETE FROM `team1` WHERE `battle_id` = '$s';");
                 if ($query)
                 {
-                    $s11 = $adb -> query ("    UPDATE `characters` 
+                    $s11 = $adb->query ("    UPDATE `characters` 
                                             SET `zayavka` = '0' 
                                             WHERE `login` = '$login';
                                             ");
@@ -291,22 +291,22 @@ switch ($act)
     break;
 /*отозвать свою заявку*/
     case 'recallbattle':
-        $q = $adb -> selectCell ("SELECT `battle_id` FROM `team2` WHERE `player` = '$login';");
+        $q = $adb->selectCell ("SELECT `battle_id` FROM `team2` WHERE `player` = '$login';");
         if ($q)
         {
             $cr = $q;
-            $dd = $adb -> selectCell ("SELECT `status` FROM `zayavka` WHERE `creator` = '$cr';");
+            $dd = $adb->selectCell ("SELECT `status` FROM `zayavka` WHERE `creator` = '$cr';");
             if ($dd != 3)
             {
-                $query = $adb -> query ("    UPDATE `zayavka` 
+                $query = $adb->query ("    UPDATE `zayavka` 
                                             SET `status` = '1' 
                                             WHERE `creator` = '$cr';
                                         ");
-                $ssd = $adb -> query ("DELETE FROM `team2` WHERE `battle_id` = '$cr';");
+                $ssd = $adb->query ("DELETE FROM `team2` WHERE `battle_id` = '$cr';");
                 if ($query)
                 {
-                    $p = $adb -> selectCell ("SELECT `player` FROM `team1` WHERE `battle_id` = '$cr';");
-                    $s11 = $adb -> query ("    UPDATE `characters` 
+                    $p = $adb->selectCell ("SELECT `player` FROM `team1` WHERE `battle_id` = '$cr';");
+                    $s11 = $adb->query ("    UPDATE `characters` 
                                             SET `zayavka` = '0' 
                                             WHERE `login` = '$p';
                                             ");
@@ -319,19 +319,19 @@ switch ($act)
     case 'confirm':
         if ($denie)
         {
-            $s = $adb -> selectCell ("SELECT `battle_id` FROM `team1` WHERE `player` = '$login';");
+            $s = $adb->selectCell ("SELECT `battle_id` FROM `team1` WHERE `player` = '$login';");
             if ($S)
             {
-                $query = $adb -> query ("    UPDATE `zayavka` 
+                $query = $adb->query ("    UPDATE `zayavka` 
                                             SET `status` = '1' 
                                             WHERE `creator` = '$s';
                                         ");
-                $op = $adb -> selectCell ("SELECT `player` FROM `team2` WHERE `battle_id` = '$s';");
-                $s2 = $adb -> query ("DELETE FROM `team2` WHERE `battle_id` = '$s';");
+                $op = $adb->selectCell ("SELECT `player` FROM `team2` WHERE `battle_id` = '$s';");
+                $s2 = $adb->query ("DELETE FROM `team2` WHERE `battle_id` = '$s';");
                 if ($query)
                 {
                     $_SESSION['zayavka_c_m'] = 0;
-                    $s11 = $adb -> query ("    UPDATE `characters` 
+                    $s11 = $adb->query ("    UPDATE `characters` 
                                             SET `zayavka` = '0' 
                                             WHERE `login` = '$op';
                                             ");
@@ -341,28 +341,28 @@ switch ($act)
         }
         if ($accept)
         {
-            $data = $adb -> selectrow ("SELECT * FROM `team1` WHERE `player` = '$login';");
+            $data = $adb->selectrow ("SELECT * FROM `team1` WHERE `player` = '$login';");
             if ($data)
             {
                 $tt = $data['type'];
                 $cr = $data['battle_id'];
-                $zz = $adb -> selectCell ("SELECT `player` FROM `team2` WHERE `battle_id` = '$cr';");
+                $zz = $adb->selectCell ("SELECT `player` FROM `team2` WHERE `battle_id` = '$cr';");
                 if ($zz)
                 {
-                    $q = $adb -> query ("    INSERT INTO `battles` (type,status,creator_id) 
+                    $q = $adb->query ("    INSERT INTO `battles` (type,status,creator_id) 
                                             VALUES('$tt', 'during', '$cr');");
                     if ($q)
                     {
-                        $op = $adb -> selectCell ("SELECT `player` FROM `team2` WHERE `battle_id` = '$cr';");
-                        $sql_rm = $adb -> query ("    UPDATE `zayavka` 
+                        $op = $adb->selectCell ("SELECT `player` FROM `team2` WHERE `battle_id` = '$cr';");
+                        $sql_rm = $adb->query ("    UPDATE `zayavka` 
                                                     SET `status` = '3' 
                                                     WHERE `creator` = '$cr';
                                                     ");
-                        $s1 = $adb -> query ("    UPDATE `characters` 
+                        $s1 = $adb->query ("    UPDATE `characters` 
                                                 SET `zayavka` = '2' 
                                                 WHERE `login` = '$login';
                                                 ");
-                        $s11 = $adb -> query ("    UPDATE `characters` 
+                        $s11 = $adb->query ("    UPDATE `characters` 
                                                 SET `zayavka` = '2' 
                                                 WHERE `login` = '$op';
                                                 ");
@@ -432,7 +432,7 @@ else if ($zayavka_status == "awaiting")
 }
 else if ($zayavka_status == "confirm_mine")
 {
-    $op_level = $adb -> selectCell ("SELECT `level` FROM `characters` WHERE `login` = '$opponent';");
+    $op_level = $adb->selectCell ("SELECT `level` FROM `characters` WHERE `login` = '$opponent';");
 ?>
 <table border="0" width="100%" cellpadding="0" cellspacing="0">
     <tr>
@@ -458,7 +458,7 @@ else if ($zayavka_status == "confirm_mine")
 }
 else if ($zayavka_status == "confirm_opp")
 {
-    $op_level = $adb -> selectCell ("SELECT `level` FROM `characters` WHERE `login` = '$opponent';");
+    $op_level = $adb->selectCell ("SELECT `level` FROM `characters` WHERE `login` = '$opponent';");
 ?>
 <table border="0" width="100%" cellpadding="0" cellspacing="0">
     <tr>
@@ -481,7 +481,7 @@ else if ($zayavka_status == "confirm_opp")
 <?
 }
 echo "<form name='prinatie' action='zayavka.php?boy=phisic&act=a' method='POST'><br>";
-$data_p = $adb -> select ("SELECT * FROM `zayavka` WHERE `type` = '1' or `type` = '2' ORDER BY `date` DESC;");
+$data_p = $adb->select ("SELECT * FROM `zayavka` WHERE `type` = '1' or `type` = '2' ORDER BY `date` DESC;");
 $countrows = count ($data_p);
 if ($countrows != 0)
     echo "<input type='submit' value='Принять вызов'><br>";
@@ -495,19 +495,19 @@ for ($i = 0; $i < $countrows; $i++)
         $battle_type = $data_p[$i]['type'];
         $id = $data_p[$i]['creator'];
 
-        $t1 = $adb -> select ("SELECT `player` FROM `team1` WHERE `battle_id` = '$creator';");
+        $t1 = $adb->select ("SELECT `player` FROM `team1` WHERE `battle_id` = '$creator';");
         for ($h = 0; $h < $countrows; $h++)
         {
             $p1 = $t1[$h]['player'];
-            $p1_lev = $adb -> selectCell ("SELECT `level` FROM `characters` WHERE `login` = '$p1';");
+            $p1_lev = $adb->selectCell ("SELECT `level` FROM `characters` WHERE `login` = '$p1';");
             $pl1 = str_replace (" ", "%20", $p1);
         }
 
-        $t2 = $adb -> select ("SELECT `player` FROM `team2` WHERE `battle_id` = '$creator';");
+        $t2 = $adb->select ("SELECT `player` FROM `team2` WHERE `battle_id` = '$creator';");
         for ($h = 0; $h < $countrows; $h++)
         {
             $p2 = $td2['player'];
-            $p2_lev = $adb -> selectCell ("SELECT `level` FROM `characters` WHERE `login` = '$p2';");
+            $p2_lev = $adb->selectCell ("SELECT `level` FROM `characters` WHERE `login` = '$p2';");
             $pl12 = str_replace (" ", "%20", $p2);
         }
 

@@ -17,13 +17,13 @@ $adb = DbSimple_Generic::connect($database['adb']);
 $adb->query("SET NAMES ? ",$database['db_encoding']);
 $adb->setErrorHandler("databaseErrorHandler");
 
-$equip = Equip::setguid($guid);
-$test = Test::setguid($guid);
+$char = Char::initialization($guid, $adb);
 
-$test -> Guid ();
+$char->test->Guid ();
 
-$lang = $adb -> selectCol ("SELECT `key` AS ARRAY_KEY, `text` FROM `server_language`;");
-$mail = $adb -> selectCell ("SELECT COUNT(*) FROM `city_mail_items` WHERE `to` = ?d", $guid) | 0;
+$lang = $adb->selectCol ("SELECT `key` AS ARRAY_KEY, `text` FROM `server_language`;");
+$mail = $adb->selectCell ("SELECT COUNT(*) FROM `city_mail_items` WHERE `to` = ?d", $guid) | 0;
+$admin_level = $char->getChar ('char_db', 'admin_level');
 ?>
 <html>
 <head>
@@ -126,9 +126,9 @@ $(document).ready(function (){
                     <a class="menutop" onClick="url ('main.php?action=inv');" href="#">Инвентарь</a>
                     | <a class="menutop" onClick="url ('main.php?action=skills');" href="#"><?echo $lang['abilities'];?></a>
                     | <a class="menutop" onClick="url ('zayavka.php');" href="#">Поединки</a>
-                    | <a class="menutop" onclick="url ('main.php?action=form&do=info');" href="#"><?echo $lang['security'];?></a>
+                    | <a class="menutop" onclick="url ('main.php?action=form&do=info');" href="#"><?echo $lang['form'];?></a>
 <?
-if ($char_db['admin_level'] > 1)
+if ($admin_level > 1)
     echo "| <a class='menutop' onclick=\"url ('main.php?action=admin');\" href='#'>Админка</a>";
 ?>
                   </span>

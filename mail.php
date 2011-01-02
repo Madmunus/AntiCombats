@@ -7,23 +7,23 @@ $send_sum = requestVar ('send_sum', 0);
 <?
 $section = $data['sections'][$section];
 
-$mail_recieve = $adb -> selectCell ("SELECT COUNT(*) FROM `city_mail_items` WHERE `to` = ?d", $guid) | 0;
+$mail_recieve = $adb->selectCell ("SELECT COUNT(*) FROM `city_mail_items` WHERE `to` = ?d", $guid) | 0;
 switch ($do)
 {
   case 'send_item':
-    $mail -> sendItem ($mail_to, $item_id);
+    $char->mail->sendItem ($mail_to, $item_id);
   break;
   case 'get_item':
   case 'return_item':
-    $mail -> ItemMail ($item_id, $do);
+    $char->mail->ItemMail ($item_id, $do);
   break;
   case 'get_money':
   case 'return_money':
-    $mail -> Money ($mail_id, $do);
+    $char->mail->getMoney ($mail_id, $do);
   break;
   case 'check':
     if (isset($_POST['send_money']))
-      $mail -> sendMoney ($mail_to, $send_sum);
+      $char->mail->sendMoney ($mail_to, $send_sum);
   break;
 }
 ?>
@@ -33,10 +33,10 @@ switch ($do)
     <table width="100%" cellspacing="0" cellpadding="4" bgcolor="#d2d2d2">
     <tr>
       <td class="pH3">&nbsp; &nbsp; Почтовое отделение<?echo (isset($lang['mail_'.$do])) ?$lang['mail_'.$do] :"";?></td>
-      <td align="right" valign="top"><?echo $info -> character ($guid);?></td>
+      <td align="right" valign="top"><?echo $char->info->character ();?></td>
     </tr>
     </table>
-    <font color='red' id='error'><?$error -> getFormattedError ($warning, $parameters);?></font>
+    <font color='red' id='error'><?$char->error->getFormattedError ($warning, $parameters);?></font>
 <?
 if ($warning)
   echo "<br>";
@@ -63,17 +63,17 @@ switch ($do)
   case 'items':
     if ($login_mail)
     {
-      $mail_info = $adb -> selectRow ("SELECT `guid`, 
-                                              `login`, 
-                                              `city` 
-                                       FROM `characters` 
-                                       WHERE `login` = ?s or `guid` = ?s", $login_mail ,$login_mail) or $error -> Map (203, $login_mail);
+      $mail_info = $adb->selectRow ("SELECT `guid`, 
+                                            `login`, 
+                                            `city` 
+                                     FROM `characters` 
+                                     WHERE `login` = ?s or `guid` = ?s", $login_mail ,$login_mail) or $char->error->Map (203, $login_mail);
       $login_mail = $mail_info['guid'];
       
       if ($login_mail == $guid)
-        $error -> Map (218);
+        $char->error->Map (218);
 ?>
-      К кому передавать: <?echo $info -> character ($login_mail, 'mail');?> &nbsp;<input type="button" value="Сменить" onclick="findlogin ('Почтовые услуги', 'main.php', 'login_mail', '', '', '<input type=hidden value=items name=do>', 0); return false;" class="nav"><br>
+      К кому передавать: <?echo $char->info->character ('mail', $login_mail);?> &nbsp;<input type="button" value="Сменить" onclick="findlogin ('Почтовые услуги', 'main.php', 'login_mail', '', '', '<input type=hidden value=items name=do>', 0); return false;" class="nav"><br>
 <?
       if ($city == $mail_info['city'])
         echo "Находится в этом городе";
@@ -109,17 +109,17 @@ $(document).ready(function (){
   case 'money':
     if ($login_mail)
     {
-      $mail_info = $adb -> selectRow ("SELECT `guid`, 
-                                              `login`, 
-                                              `city` 
-                                       FROM `characters` 
-                                       WHERE `login` = ?s or `guid` = ?d", $login_mail ,$login_mail) or $error -> Map (203, $login_mail);
+      $mail_info = $adb->selectRow ("SELECT `guid`, 
+                                            `login`, 
+                                            `city` 
+                                     FROM `characters` 
+                                     WHERE `login` = ?s or `guid` = ?d", $login_mail ,$login_mail) or $char->error->Map (203, $login_mail);
       $login_mail = $mail_info['guid'];
       
       if ($login_mail == $guid)
-        $error -> Map (218);
+        $char->error->Map (218);
 ?>
-      К кому передавать: <?echo $info -> character ($login_mail, 'mail');?> &nbsp;<input type="button" value="Сменить" onclick="findlogin ('Почтовые услуги', 'main.php', 'login_mail', '', '', '<input type=hidden value=money name=do>', 0); return false;" class="nav"><br>
+      К кому передавать: <?echo $char->info->character ('mail', $login_mail);?> &nbsp;<input type="button" value="Сменить" onclick="findlogin ('Почтовые услуги', 'main.php', 'login_mail', '', '', '<input type=hidden value=money name=do>', 0); return false;" class="nav"><br>
 <?
       if ($city == $mail_info['city'])
         echo "Находится в этом городе";
@@ -158,24 +158,24 @@ ch_l();
   case 'report':
   break;
   case 'get_mail':
-    $rows1 = $adb -> select ("SELECT * 
-                              FROM `city_mail_items` AS `m` 
-                              LEFT JOIN `character_inventory` AS `c` 
-                              ON `m`.`item_id` = `c`.`id` 
-                              LEFT JOIN `item_template` AS `i` 
-                              ON `c`.`item_template` = `i`.`entry` 
-                              WHERE `m`.`to` = ?d 
-                                and `m`.`delivery_time` < ?d 
-                                and `c`.`mailed` = '1' 
-                              ORDER BY `m`.`delivery_time`;", $guid ,time ());
-    $rows2 = $adb -> select ("SELECT * 
-                              FROM `city_mail_items` AS `m` 
-                              LEFT JOIN `item_template` AS `i` 
-                              ON `m`.`item_id` = `i`.`entry` 
-                              WHERE `m`.`to` = ?d 
-                                and `m`.`delivery_time` < ?d 
-                                and `m`.`item_id` = '1000' 
-                              ORDER BY `m`.`delivery_time`;", $guid ,time ());
+    $rows1 = $adb->select ("SELECT * 
+                            FROM `city_mail_items` AS `m` 
+                            LEFT JOIN `character_inventory` AS `c` 
+                            ON `m`.`item_id` = `c`.`id` 
+                            LEFT JOIN `item_template` AS `i` 
+                            ON `c`.`item_template` = `i`.`entry` 
+                            WHERE `m`.`to` = ?d 
+                              and `m`.`delivery_time` < ?d 
+                              and `c`.`mailed` = '1' 
+                            ORDER BY `m`.`delivery_time`;", $guid ,time ());
+    $rows2 = $adb->select ("SELECT * 
+                            FROM `city_mail_items` AS `m` 
+                            LEFT JOIN `item_template` AS `i` 
+                            ON `m`.`item_id` = `i`.`entry` 
+                            WHERE `m`.`to` = ?d 
+                              and `m`.`delivery_time` < ?d 
+                              and `m`.`item_id` = '1000' 
+                            ORDER BY `m`.`delivery_time`;", $guid ,time ());
     if (count ($rows1) == 0 && count ($rows2) == 0 )
     {
       echo "<table width='100%' cellspacing='1' cellpadding='2' bgcolor='#A5A5A5'><tr><td bgcolor='#e2e0e0' align='center'>$lang[empty]</td></tr></table>";
@@ -185,14 +185,14 @@ ch_l();
     $i = 1;
     foreach ($rows2 as $money_info)
     {
-      echo $equip -> showItemInventory ($money_info, 'money_in', $i);
+      echo $char->equip->showItemInventory ($money_info, 'money_in', $i);
       $i = !$i;
     }
     
     $i = 1;
     foreach ($rows1 as $item_info)
     {
-      echo $equip -> showItemInventory ($item_info, 'mail_in', $i);
+      echo $char->equip->showItemInventory ($item_info, 'mail_in', $i);
       $i = !$i;
     }
   break;
@@ -207,11 +207,11 @@ ch_l();
           <table width="148" border="0" cellpadding="0" cellspacing="1" bgcolor="#DEDEDE">
             <tr>
               <td bgcolor="#D3D3D3"><img src="img/links.gif" width="9" height="7" /></td>
-              <td bgcolor="#D3D3D3" nowrap><a href="main.php?action=go&room_go=centplosh" class="passage" alt="<?echo $info -> roomOnline ('centplosh', 'mini');?>">Центральная Площадь</a></td>
+              <td bgcolor="#D3D3D3" nowrap><a href="main.php?action=go&room_go=centplosh" class="passage" alt="<?echo $char->info->roomOnline ('centplosh', 'mini');?>">Центральная Площадь</a></td>
             </tr>
             <tr>
               <td bgcolor="#D3D3D3"><img src="img/links.gif" width="9" height="7" /></td>
-              <td bgcolor="#D3D3D3" nowrap><a href="main.php?action=go&room_go=centplosh" class="passage" alt="<?echo $info -> roomOnline ('Филиал Аукциона', 'mini');?>">Филиал Аукциона</a></td>
+              <td bgcolor="#D3D3D3" nowrap><a href="main.php?action=go&room_go=centplosh" class="passage" alt="<?echo $char->info->roomOnline ('Филиал Аукциона', 'mini');?>">Филиал Аукциона</a></td>
             </tr>
           </table>
         </td>

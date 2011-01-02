@@ -18,25 +18,19 @@ $adb = DbSimple_Generic::connect($database['adb']);
 $adb->query("SET NAMES ? ",$database['db_encoding']);
 $adb->setErrorHandler("databaseErrorHandler");
 
-$equip = Equip::setguid($guid);
-$test = Test::setguid($guid);
-$mail = Mail::setguid($guid);
-$history = History::setguid($guid);
-$error = new Error;
-$chat = new Chat;
-$info = new Info;
+$char = Char::initialization($guid, $adb);
 
-$test -> Guid ();
-$test -> Block ($char_db['block']);
-$test -> Prision ($char_db['prision']);
-$test -> Battle ($char_db['battle']);
-$test -> Shut ($char_db['shut']);
-$test -> Travm ();
-$test -> Up ();
-$test -> Items ();
-$test -> Regen ();
-$test -> Room ();
-$test -> WakeUp ();
+$char->test->Guid ();
+$char->test->Block ();
+$char->test->Prision ();
+$char->test->Battle ();
+$char->test->Shut ();
+$char->test->Travm ();
+$char->test->Up ();
+$char->test->Items ();
+$char->test->Regen ();
+$char->test->Room ();
+$char->test->WakeUp ();
 
 $action = requestVar ('action', 'none');
 $do = requestVar ('do');
@@ -80,9 +74,9 @@ if (link[link.length - 1] != 'game.php')
 <div id="hint4" class="ahint"></div>
 <input type="hidden" id="x" value="0" style="position: fixed; left: 0px; top: 0px; z-index: 110;" /><input type="hidden" id="y" value="0" style="position: fixed; left: 110px; top: 0px; z-index: 110;" />
 <?
-$char_db = $equip -> getChar ('char_db', '*');
-$char_stats = $equip -> getChar ('char_stats', '*');
-$lang = $adb -> selectCol ("SELECT `key` AS ARRAY_KEY, `text` FROM `server_language`;");
+$char_db = $char->getChar ('char_db', '*');
+$char_stats = $char->getChar ('char_stats', '*');
+$lang = $adb->selectCol ("SELECT `key` AS ARRAY_KEY, `text` FROM `server_language`;");
 
 $login = $char_db['login'];
 $sex = $char_db['sex'];
@@ -115,7 +109,7 @@ $orden = $char_db['orden'];
 $shut = $char_db['shut'];
 $date = date ('d.m.y H:i:s', mktime(date ('H') - $GSM));
 
-$equip -> getRoomGoTime ($mtime);
+$char->equip->getRoomGoTime ($mtime);
 echo "<input type='hidden' id='time_to_go' value='$mtime' />";
 
 switch ($action)
@@ -139,25 +133,25 @@ switch ($action)
     fclose ($fp1); */
     
     if ($char_db['dnd'])
-      $adb -> query ("UPDATE `characters` SET `dnd` = '0', `message` = '' WHERE `guid` = ?d", $guid);
+      $adb->query ("UPDATE `characters` SET `dnd` = '0', `message` = '' WHERE `guid` = ?d", $guid);
     
-    $test -> Go ($room_go);
+    $char->test->Go ($room_go);
     
-    $adb -> query ("UPDATE `characters` SET `room` = ?s, `last_go` = ?d, `last_room` = ?s WHERE `guid` = ?d", $room_go ,time () ,$room ,$guid);
+    $adb->query ("UPDATE `characters` SET `room` = ?s, `last_go` = ?d, `last_room` = ?s WHERE `guid` = ?d", $room_go ,time () ,$room ,$guid);
     die ("<script>$('#mes', parent.msg.document).html(''); parent.ref.location = 'refresh.php?go'; location.href = 'main.php';</script>");
   break;
   case 'return':
     if ((time () - $char_db['last_return']) < $char_db['return_time'])
-      $error -> Map (114);
+      $char->error->Map (114);
     
     if ($char_db['dnd'])
-      $adb -> query ("UPDATE `characters` SET `dnd` = '0', `message` = '' WHERE `guid` = ?d", $guid);
+      $adb->query ("UPDATE `characters` SET `dnd` = '0', `message` = '' WHERE `guid` = ?d", $guid);
     
-    $adb -> query ("UPDATE `characters` SET `room` = ?s, `last_room` = ?s, `last_return` = ?d WHERE `guid` = ?d", $char_db['last_room'] ,$room ,time () ,$guid);
+    $adb->query ("UPDATE `characters` SET `room` = ?s, `last_room` = ?s, `last_return` = ?d WHERE `guid` = ?d", $char_db['last_room'] ,$room ,time () ,$guid);
     die ("<script>$('#mes', parent.msg.document).html(''); parent.ref.location = 'refresh.php?go'; location.href = 'main.php';</script>");
   break;
   case 'admin':
-    if ($adb -> selectCell ("SELECT `admin_level` FROM `characters` WHERE `guid` = ?d", $guid) > 1)
+    if ($admin_level > 1)
       include ("adminbar.php");
     else
       die ("<script>location.href = 'main.php';</script>");
@@ -172,19 +166,19 @@ switch ($action)
     include ("skills.php");
   break;
   case 'wear_item':
-    $equip -> equipItem ($item_id);
-    $error -> Inventory (0);
+    $char->equip->equipItem ($item_id);
+    $char->error->Inventory (0);
   break;
   case 'unwear_item':
-    $equip -> equipItem ($item_slot, -1);
-    $error -> Inventory (0);
+    $char->equip->equipItem ($item_slot, -1);
+    $char->error->Inventory (0);
   break;
   case 'unwear_full':
-    $equip -> unWearAllItems ();
-    $error -> Inventory (0);
+    $char->equip->unWearAllItems ();
+    $char->error->Inventory (0);
   break;
   case 'wear_set':
-    $equip -> equipSet ($set_name);
+    $char->equip->equipSet ($set_name);
   break;
   case 'unwear_thing':
     unwear_t ($guid, $item_id);
@@ -214,14 +208,14 @@ switch ($action)
     include ("map.php");
   break;
   case 'gift':
-    $item_info = $adb -> selectCell ("SELECT `id` FROM `character_inventory` WHERE `guid` = ?d and `id` = ?d and `wear` = '0' and `mailed` = '0';", $guid ,$item_id) or $error -> Inventory (213);
-    $res = $adb -> selectRow ("SELECT `object_type`, 
-                                      `object_id` 
-                               FROM `character_inventory` 
-                               WHERE `id` = ?d", $item_id);
+    $item_info = $adb->selectCell ("SELECT `id` FROM `character_inventory` WHERE `guid` = ?d and `id` = ?d and `wear` = '0' and `mailed` = '0';", $guid ,$item_id) or $char->error->Inventory (213);
+    $res = $adb->selectRow ("SELECT `object_type`, 
+                                    `object_id` 
+                             FROM `character_inventory` 
+                             WHERE `id` = ?d", $item_id);
     $obj_type = $res['object_type'];
     $obj_id = $res['object_id'];
-    $name = $adb -> selectCell ("SELECT `name` FROM `$obj_type` WHERE `id` = ?d", $obj_id);
+    $name = $adb->selectCell ("SELECT `name` FROM `$obj_type` WHERE `id` = ?d", $obj_id);
 ?>
 <script>
     if (confirm ('Вы уверены что хотите подарить "<?echo $name;?>" персонажу <?echo $to;?>?'))
@@ -235,14 +229,14 @@ switch ($action)
     gift ($guid, $item_id, $to);
   break;
   case 'give':
-    $item_info = $adb -> selectCell ("SELECT `id` FROM `character_inventory` WHERE `guid` = ?d and `id` = ?d and `wear` = '0' and `mailed` = '0';", $guid ,$item_id) or $error -> Inventory (213);
-    $res = $adb -> selectRow ("SELECT `object_type`, 
-                                      `object_id` 
-                               FROM `character_inventory` 
-                               WHERE `id` = ?d", $item_id);
+    $item_info = $adb->selectCell ("SELECT `id` FROM `character_inventory` WHERE `guid` = ?d and `id` = ?d and `wear` = '0' and `mailed` = '0';", $guid ,$item_id) or $char->error->Inventory (213);
+    $res = $adb->selectRow ("SELECT `object_type`, 
+                                    `object_id` 
+                             FROM `character_inventory` 
+                             WHERE `id` = ?d", $item_id);
     $obj_type = $res['object_type'];
     $obj_id = $res['object_id'];
-    $name = $adb -> selectCell ("SELECT `name` FROM `$obj_type` WHERE `id` = ?d", $obj_id);
+    $name = $adb->selectCell ("SELECT `name` FROM `$obj_type` WHERE `id` = ?d", $obj_id);
 ?>
 <script>
     if (confirm ('Вы уверены что хотите передать "<?echo $name;?>" персонажу <?echo $to;?>?'))
@@ -259,27 +253,27 @@ switch ($action)
     if (empty($target))    include ("giveName.php");
     else
     {
-      $adb -> query ("UPDATE `character_inventory` 
-                      SET `book_name` = ?s 
-                      WHERE `id` = ?d", $target ,$book);
+      $adb->query ("UPDATE `character_inventory` 
+                    SET `book_name` = ?s 
+                    WHERE `id` = ?d", $target ,$book);
       echo "Заглавие успешно записано в книгу.";
     }
   break;
   case 'enter':
     if (!isset($_SESSION['ENTERED']))
     {
-      $id = $adb -> selectCell ("SELECT `id` FROM `history_auth` WHERE `guid` = ?d ORDER BY `id` DESC", $guid) - 1;
-      $auth = $adb -> selectRow ("SELECT `ip`, `date` FROM `history_auth` WHERE `guid` = ?d and `id` = ?d", $guid ,$id);
+      $id = $adb->selectCell ("SELECT `id` FROM `history_auth` WHERE `guid` = ?d ORDER BY `id` DESC", $guid) - 1;
+      $auth = $adb->selectRow ("SELECT `ip`, `date` FROM `history_auth` WHERE `guid` = ?d and `id` = ?d", $guid ,$id);
       $_SESSION['ENTERED'] = 1;
       unset ($_SESSION['bankСredit']);
       if ($id && $auth && $auth['ip'] != $_SERVER['REMOTE_ADDR'])
-        $chat -> say ($guid, date ('d.m.y H:i', $auth['date'])." <font color='red'><b>ВНИМАНИЕ!</b></font> В предыдущий раз этим персонажем заходили с другого компьютера.");
+        $char->chat->say ($guid, date ('d.m.y H:i', $auth['date'])." <font color='red'><b>ВНИМАНИЕ!</b></font> В предыдущий раз этим персонажем заходили с другого компьютера.");
     }
     include ("room_detect.php");
   break;
   case 'exit':
-    $adb -> query ("DELETE FROM `online` WHERE `guid` = ?d", $guid);
-    $adb -> query ("UPDATE `characters` SET `last_time` = ?d WHERE `guid` = ?d", time () ,$guid);
+    $adb->query ("DELETE FROM `online` WHERE `guid` = ?d", $guid);
+    $adb->query ("UPDATE `characters` SET `last_time` = ?d WHERE `guid` = ?d", time () ,$guid);
     unset ($_SESSION['guid'], $_SESSION['bankСredit'], $_SESSION['ENTERED']);
     die ("<script>top.location.href = 'index.php';</script>");
   break;

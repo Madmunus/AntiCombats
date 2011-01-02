@@ -15,8 +15,7 @@ $adb = DbSimple_Generic::connect($database['adb']);
 $adb->query("SET NAMES ? ",$database['db_encoding']);
 $adb->setErrorHandler("databaseErrorHandler");
 
-$equip = Equip::setguid(0);
-$info = new info;
+$char = Char::initialization(0, $adb);
 ?>
 <html>
 <head>
@@ -57,13 +56,13 @@ $info = new info;
                     </tr>
                   </table>
 <?//
-$players = $adb -> select ("SELECT `guid`, 
-                                   `login`, 
-                                   `exp` 
-                            FROM `characters` 
-                            WHERE `admin_level` = '0' 
-                            ORDER BY `exp` DESC
-                            LIMIT 200;");
+$players = $adb->select ("SELECT `guid`, 
+                                 `login`, 
+                                 `exp` 
+                          FROM `characters` 
+                          WHERE `admin_level` = '0' 
+                          ORDER BY `exp` DESC
+                          LIMIT 200;");
 echo "<table width='100%' border='0' cellpadding='0' cellspacing='1' align='center'>";
 echo "<tr bgcolor='#ECDFAA'>";
 echo "<td align='left' width='2%'><b>№</b></td>";
@@ -75,7 +74,7 @@ for ($i = 0; $i < count ($players); $i++)
   $bg = (!($i % 2 === 0) || $i == 1) ?" bgcolor='#ECDFAA'" :"";
   echo "<tr$bg>";
   echo "<td align='right'>".($i + 1).".</td>";
-  echo "<td>".$info -> character ($players[$i]['guid'])."</td>";
+  echo "<td>".$char->info->character ('clan', $players[$i]['guid'])."</td>";
   echo "<td align='right'><b>".getExp ($players[$i]['exp'])."</b></td>";
   echo "</tr>";
 }

@@ -40,26 +40,26 @@ $bot = "</span><br><br><a href='javascript: window.history.go(-1);' class='us2'>
 if (empty($login) || empty($password))
     die ("$top Вы не ввели логин либо пароль.$bot");
 
-$char_info = $adb -> selectRow ("SELECT `guid`, 
-                                        `password`, 
-                                        `city`, 
-                                        `block`, 
-                                        `room`, 
-                                        `city` 
-                                 FROM `characters` 
-                                 WHERE `login` = ?s", $login) or die ("$top Логин $login не найден в базе.$bot");
+$char_info = $adb->selectRow ("SELECT `guid`, 
+                                      `password`, 
+                                      `city`, 
+                                      `block`, 
+                                      `room`, 
+                                      `city` 
+                               FROM `characters` 
+                               WHERE `login` = ?s", $login) or die ("$top Логин $login не найден в базе.$bot");
 $guid = $char_info['guid'];
 
-$history = History::setguid($guid);
+$char = Char::initialization($guid, $adb);
 
 if (SHA1 ($guid.':'.$password) != $char_info['password'])
 {
-  $history -> authorization (0, $char_info['city'], 'wrong_password');
+  $char->history->authorization (0, $char_info['city'], 'wrong_password');
   die ("$top Неверный пароль для $login.$bot");
 }
 else if ($char_info['block'])
 {
-  $history -> authorization (0, $char_info['city'], 'blocked');
+  $char->history->authorization (0, $char_info['city'], 'blocked');
   die ("$top Внимание!!! Персонаж $login заблокирован!$bot");
 }
 
@@ -71,13 +71,13 @@ if (session_is_registered ('guid'))
 else
   $_SESSION['guid'] = $guid;
 
-$adb -> query ("INSERT IGNORE INTO `online` (`guid`, `login_display`, `ip`, `city`, `room`, `last_time`) 
+$adb->query ("INSERT IGNORE INTO `online` (`guid`, `login_display`, `ip`, `city`, `room`, `last_time`) 
                 VALUES (?d, ?s, ?s, ?s, ?s, ?d);", $guid ,$login ,$_SERVER['REMOTE_ADDR'] ,$char_info['city'] ,$char_info['room'] ,time ());
-$adb -> query ("UPDATE `characters` SET `last_go` = ?d WHERE `guid` = ?d", time () ,$guid);
+$adb->query ("UPDATE `characters` SET `last_go` = ?d WHERE `guid` = ?d", time () ,$guid);
 $_SESSION['zayavka_c_m'] = 1;
 $_SESSION['zayavka_c_o'] = 1;
 $_SESSION['battle_ref']  = 0;
-$history -> authorization (1, $char_info['city']);
+$char->history->authorization (1, $char_info['city']);
 ?>
 Авторизация окончена...
 <script type="text/javascript">location.href = 'game.php';</script>

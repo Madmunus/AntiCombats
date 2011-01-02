@@ -395,31 +395,31 @@ echo "<script type='text/javascript'>$regfail</script>";
           $birthday = $_POST['birth_day'].".".$_POST['birth_month'].".".$_POST['birth_year'];
           $shape = ($sex == "male") ?"m/1.gif" :"f/1.gif";
           unset ($_SESSION['reg_login'], $_SESSION['reg_password'], $_SESSION['reg_email']);
-          if ($adb -> selectCell ("SELECT COUNT(*) FROM `characters` WHERE `login` = ?s", $reg_login) == 0)
+          if ($adb->selectCell ("SELECT COUNT(*) FROM `characters` WHERE `login` = ?s", $reg_login) == 0)
           {
-            $guid = ($adb -> selectCell ("SELECT MAX(`guid`) FROM `characters`;")) + 1;
+            $guid = ($adb->selectCell ("SELECT MAX(`guid`) FROM `characters`;")) + 1;
             $password = SHA1 ($guid.':'.$password);
-            $history = History::setguid($guid);
+            $history = History::setGuidDB($guid);
             // Основная база
-            $adb -> query ("INSERT INTO `characters` (`guid`, `login`, `login_sec`, `password`, `mail`, `sex`, `city`, `shape`, `reg_ip`) 
+            $adb->query ("INSERT INTO `characters` (`guid`, `login`, `login_sec`, `password`, `mail`, `sex`, `city`, `shape`, `reg_ip`) 
                             VALUES (?d, ?s, ?s, ?s, ?s, ?s, ?s, ?s, ?s);", $guid ,$reg_login ,$reg_login ,$password ,$email ,$sex ,$city ,$shape ,$_SERVER['REMOTE_ADDR']);
             // Характеристики
-            $adb -> query ("INSERT INTO `character_stats` (`guid`) 
+            $adb->query ("INSERT INTO `character_stats` (`guid`) 
                             VALUES (?d);", $guid);
             // Дополнительные характеристики
-            $adb -> query ("INSERT INTO `character_stats_plus` (`guid`) 
+            $adb->query ("INSERT INTO `character_stats_plus` (`guid`) 
                             VALUES (?d);", $guid);
             // Дополнительная информация
-            $adb -> query ("INSERT INTO `character_info` (`guid`, `name`, `icq`, `hide_icq`, `town`, `birthday`, `color`, `deviz`, `state`, `date`) 
+            $adb->query ("INSERT INTO `character_info` (`guid`, `name`, `icq`, `hide_icq`, `town`, `birthday`, `color`, `deviz`, `state`, `date`) 
                             VALUES (?d, ?s, ?d, ?d, ?s, ?s, ?s, ?s, ?s, ?d);", $guid ,$name ,$icq ,$hide_icq ,$town ,$birthday ,$color ,$deviz ,$city ,time ());
             // Создание инвентаря
-            $adb -> query ("INSERT INTO `character_equip` (`guid`) 
+            $adb->query ("INSERT INTO `character_equip` (`guid`) 
                             VALUES (?d);", $guid);
             // Создание баров
-            $adb -> query ("INSERT INTO `character_bars` (`guid`) 
+            $adb->query ("INSERT INTO `character_bars` (`guid`) 
                             VALUES (?d);", $guid);
             // Предметы
-            $adb -> query ("INSERT INTO `character_inventory` (`guid`, `item_template`, `tear_max`, `made_in`, `last_update`) 
+            $adb->query ("INSERT INTO `character_inventory` (`guid`, `item_template`, `tear_max`, `made_in`, `last_update`) 
                             VALUES (?d, '920', '20', ?s, ?d);", $guid ,$city ,time ());
             echo "Регистрация персонажа $reg_login, прошла успешно!<br>Авторизируйтесь с <a href='index.php' class='us2'>главной страницы</a>.";
             $history -> authorization (2, $city);

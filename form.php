@@ -10,7 +10,7 @@ switch ($do)
   case 'shape':
     echo "<script>$(document).ready(function (){showShapes (1);});</script>";
     if ($char_db['next_shape'] && $char_db['next_shape'] > time ())
-      $error -> Inventory (111, getFormatedTime ($char_db['next_shape']));
+      $char->error->Inventory (111, getFormatedTime ($char_db['next_shape']));
     
     echo "<table width='100%' cellspacing='0' cellpadding='0' border='0' style='margin-bottom: -10px;'><tr>";
     echo "<td valign='top' nowrap><input type='submit' id='shape_a' value='Доступные' class='nav' style='background-color: #A9AFC0;' onclick='showShapes (1);'>&nbsp;<input type='submit' id='shape_na' value='Все образы' class='nav' onclick='showShapes (0);'></td>";
@@ -27,33 +27,33 @@ switch ($do)
       $new_mail = requestVar ('new_mail');
       
       if (!$pass)
-        $error -> Form (507, $do);
+        $char->error->Form (507, $do);
       
       if (!$old_mail)
-        $error -> Form (508, $do);
+        $char->error->Form (508, $do);
       
       if (!$new_mail)
-        $error -> Form (509, $do);
+        $char->error->Form (509, $do);
       
       if (SHA1 ($guid.':'.$pass) != $char_db['password'])
-        $error -> Form (501, $do);
+        $char->error->Form (501, $do);
       
       if ($old_mail != $char_db['mail'])
-        $error -> Form (510, $do);
+        $char->error->Form (510, $do);
       
       if (!eregi ("^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*$", $new_mail))
-        $error -> Form (511, $do);
+        $char->error->Form (511, $do);
       
-      $q = $adb -> query ("UPDATE `characters` 
-                           SET `mail` = ?s 
-                           WHERE `guid` = ?d", $new_mail ,$guid);
+      $q = $adb->query ("UPDATE `characters` 
+                         SET `mail` = ?s 
+                         WHERE `guid` = ?d", $new_mail ,$guid);
       $msg = "Здравствуйте!\n";
       $msg .= DATE_NO_SEC." был сменен e-mail, указанный при регистрации персонажа $login он-лайн игры Анти Бойцовский Клуб.\n";
       $msg .= "Новый e-mail: $new_mail\n\n\n\n";
       $msg .= "С уважением, администрация Анти Бойцовского Клуба!";
       mail ($char_db['mail'], "Смена e-mail у персонажа $login", $msg, 'From: Администрация АБК <admin@abk.ru>', 'admin@abk.ru');
       if ($q)
-        $error -> Form (512, $do);
+        $char->error->Form (512, $do);
     }
     else if (isset($_POST['changePass']))
     {
@@ -61,33 +61,33 @@ switch ($do)
       $new_pass2 = requestVar ('new_pass2');
       
       if (!$pass || ($pass && !$new_pass))
-        $error -> Form (0, $do);
+        $char->error->Form (0, $do);
       
       if ($pass && $new_pass && !$new_pass2)
-        $error -> Form (500, $do);
+        $char->error->Form (500, $do);
       
       if (SHA1 ($guid.':'.$pass) != $char_db['password'])
-        $error -> Form (501, $do);
+        $char->error->Form (501, $do);
       
       if ($new_pass != $new_pass2)
-        $error -> Form (502, $do);
+        $char->error->Form (502, $do);
       
       if (utf8_strlen ($new_pass) < 6 || utf8_strlen ($new_pass) > 30)
-        $error -> Form (503, $do);
+        $char->error->Form (503, $do);
       
       if (!ereg ("[a-zA-Zа-яА-Я0-9]$", $new_pass))
-        $error -> Form (506, $do);
+        $char->error->Form (506, $do);
       
-      $q = $adb -> query ("UPDATE `characters` 
-                           SET `password` = ?s 
-                           WHERE `guid` = ?d", SHA1 ($guid.':'.$new_pass) ,$guid);
+      $q = $adb->query ("UPDATE `characters` 
+                         SET `password` = ?s 
+                         WHERE `guid` = ?d", SHA1 ($guid.':'.$new_pass) ,$guid);
       $msg = "Здраствуйте!\n";
       $msg .= DATE_NO_SEC." был сменен пароль к персонажу $login он-лайн игры Анти Бойцовский Клуб.\n";
       $msg .= "Новый пароль: $new_pass\n\n\n\n";
       $msg .= "С уважением, администрация Анти Бойцовского Клуба!";
       mail ($char_db['mail'], "Смена пароля у персонажа $login", $msg, 'From: Администрация АБК <admin@abk.ru>', 'admin@abk.ru');
       if ($q)
-        $error -> Form (504, $do);
+        $char->error->Form (504, $do);
     }
 ?>
 <table width="100%" cellspacing="0" cellpadding="0" style="margin-bottom: -15px;">
@@ -96,7 +96,7 @@ switch ($do)
   <td valign="top" nowrap><input type="button" class="help" value="<?echo $lang['hint'];?>" id="hint" link="psw">&nbsp;<input type="button" name="edit" value="<?echo $lang['return'];?>" id="link" link="inv" class="nav"></td>
 </tr>
 </table>
-<font color='red' id='error'><?$error -> getFormattedError ($warning, $parameters);?></font>
+<font color='red' id='error'><?$char->error->getFormattedError ($warning, $parameters);?></font>
 <br>
 Чем выше уровень вашего персонажа, тем больше к нему внимание со стороны хакеров, взломщиков и аферистов. Чтобы однажды не оказаться в ситуации, когда вы уже не сможете зайти под своим персонажем, которого развивали (которым жили!) месяцами, потому что пароль сменили, email сменили, все предметы/вещи/кредиты... все что нажито непосильным трудом... ушли в неизвестном направлении, необходимо соблюдать элементарные меры предосторожности. А именно:<br>
 1. Никогда, ни под каким предлогом, никому не говорите свой пароль. Ни паладинам, ни администрации не нужно знать ваш пароль.<br>
@@ -148,32 +148,23 @@ switch ($do)
         $warning = "Слишком большой размер поля \"Хобби, увлечения\". Максимальный размер: 2500 символов.";
       else
       {
-        $q = $adb -> query ("UPDATE `character_info` 
-                             SET `name` = ?s, 
-                                 `icq` = ?s, 
-                                 `hide_icq` = ?d, 
-                                 `url` = ?s, 
-                                 `town` = ?s, 
-                                 `color` = ?s, 
-                                 `deviz` = ?s, 
-                                 `hobie` = ?s 
-                             WHERE `guid` = ?d", $name ,$icq ,$hide_icq ,$url ,$town ,$color ,$deviz ,$hobie ,$guid);
+        $q = $adb->query ("UPDATE `character_info` 
+                           SET `name` = ?s, 
+                               `icq` = ?s, 
+                               `hide_icq` = ?d, 
+                               `url` = ?s, 
+                               `town` = ?s, 
+                               `color` = ?s, 
+                               `deviz` = ?s, 
+                               `hobie` = ?s 
+                           WHERE `guid` = ?d", $name ,$icq ,$hide_icq ,$url ,$town ,$color ,$deviz ,$hobie ,$guid);
         if ($q)
           $warning = "Сохранено удачно.";
       }
     }
-    $form = $adb -> selectRow ("SELECT `name`, 
-                                       `icq`, 
-                                       `hide_icq`, 
-                                       `town`, 
-                                       `color`, 
-                                       `deviz`, 
-                                       `hobie`, 
-                                       `url` 
-                                FROM `character_info` 
-                                WHERE `guid` = ?d", $guid);
-    list ($s_name, $s_icq, $s_hide_icq, $s_town, $s_color, $s_deviz, $s_hob, $s_url) = array_values ($form);
-    $s_hob = str_replace (array("<br>", '\&quot;', "\'"), array("\n", '"', "'"), $s_hob);
+    $char_info = $char->getChar ('char_info', 'name', 'icq', 'hide_icq', 'url', 'town', 'color', 'deviz', 'hobie');
+    ArrToVar ($char_info, 's_');
+    $s_hobie = str_replace (array("<br>", '\&quot;', "\'"), array("\n", '"', "'"), $s_hobie);
     $s_url = (!empty($s_url)) ?$s_url :"http://";
     $s_hide_icq = ($s_hide_icq) ?" checked" :"";
     
@@ -214,7 +205,7 @@ switch ($do)
 </tr>
 <tr class="anketabg"><td>Домашняя страница:</td><td><input value="<?echo $s_url;?>" name="url" size="35" maxlength="60" /></td></tr>
 <tr class="anketabg"><td>Девиз:</td><td><input value="<?echo $s_deviz;?>" name="deviz" size="60" maxlength="160" /></td></tr>
-<tr class="anketabg"><td colspan="2" align="left">Увлечения / хобби <small>(не более 60 слов)</small><br><textarea name="hobie" cols="60" rows="7" style="width: 100%;"><? echo $s_hob;?></textarea></td></tr>
+<tr class="anketabg"><td colspan="2" align="left">Увлечения / хобби <small>(не более 60 слов)</small><br><textarea name="hobie" cols="60" rows="7" style="width: 100%;"><? echo $s_hobie;?></textarea></td></tr>
 <tr class="anketabg">
   <td>Цвет сообщений в чате:</td>
   <td><select size="1" name="color" class="anketa">

@@ -191,6 +191,7 @@ $(document).ready(function (){
   });
 });
 </script>
+<font color='red' id='error'><?$char->error->getFormattedError ($warning, $parameters);?></font>
 <table width="100%">
   <tr>
     <td align="left">
@@ -256,7 +257,7 @@ echo "<td>".date ('d.m.y H:i:s', $char_db['last_time'])."</td>";
 </div>
 <div id="charactersc" name="content" style="display: none;">
 <?
-$all_characters = $adb -> select ("SELECT * FROM `characters` ORDER BY `guid` LIMIT 10;");
+$all_characters = $adb->select ("SELECT * FROM `characters` ORDER BY `guid` LIMIT 10;");
 ?>
 <font color='red'>Персонажи:</font>
 <table border="1" cellspacing="0" cellpadding="0" width="100%">

@@ -68,8 +68,8 @@ switch ($do)
 {
   default:
   case 'profession':
-    $allprof = $adb -> selectCell ("SELECT COUNT(*) FROM `characters` WHERE `profession` != '';");
-    $city = $adb -> selectCell ("SELECT `name` FROM `server_cities` WHERE `city` = ?s", $city);
+    $allprof = $adb->selectCell ("SELECT COUNT(*) FROM `characters` WHERE `profession` != '';");
+    $city = $adb->selectCell ("SELECT `name` FROM `server_cities` WHERE `city` = ?s", $city);
     echo "&nbsp; &nbsp;Добро пожаловать в Академию города <b>$city</b>. Здесь Вы сможете выбрать себе профессию. Вы можете иметь только одну профессию одновременно. Для того чтобы сменить профессию, Вам необходимо уволиться со старой и выбрать новую профессию. Подробнее о выборе профессии и увольнении читайте в разделах \"Получить проффесию\" и \"Уволиться\" соответственно.<br><br>Кол-во профессионалов: $allprof чел.";
   break;
   case 'reg_prof':
@@ -94,16 +94,16 @@ switch ($do)
         if (is_array($update[1]))
         {
           foreach ($update[1] as $stat => $value)
-            $equip -> increaseStat ($stat, $value);
+            $char->increaseStat ($stat, $value);
         }
         
         if (is_array($update[2]))
         {
           foreach ($update[2] as $database => $stats)
-            $adb -> query ("UPDATE ?# SET ?a WHERE `guid` = ?d", $database ,$stats ,$guid);
+            $adb->query ("UPDATE ?# SET ?a WHERE `guid` = ?d", $database ,$stats ,$guid);
         }
         
-        $adb -> query ("UPDATE `characters` SET `profession` = ?s WHERE `guid` = ?d", $prof ,$guid);
+        $adb->query ("UPDATE `characters` SET `profession` = ?s WHERE `guid` = ?d", $prof ,$guid);
         die ("Вы получили профессию <b>".$lang['prof_'.$prof]."</b>$bot");
       }
     }
@@ -154,19 +154,19 @@ switch ($do)
         if (is_array($update[1]))
         {
           foreach ($update[1] as $stat => $value)
-            $equip -> increaseStat ($stat, -$value);
+            $char->increaseStat ($stat, -$value);
         }
         
         if ($prof == 'trade')
         {
-          $adb -> query ("UPDATE `characters` SET `maxmass` = `maxmass` - 20 WHERE `guid` = ?d", $guid);
-          $adb -> query ("UPDATE `character_stats` SET `trade` = `trade` - 40 WHERE `guid` = ?d", $guid);
+          $adb->query ("UPDATE `characters` SET `maxmass` = `maxmass` - 20 WHERE `guid` = ?d", $guid);
+          $adb->query ("UPDATE `character_stats` SET `trade` = `trade` - 40 WHERE `guid` = ?d", $guid);
         }
         
-        $adb -> query ("UPDATE `characters` 
-                        SET `profession` = '', 
-                            `money` = `money` - 100 
-                        WHERE `guid` = ?d", $guid);
+        $adb->query ("UPDATE `characters` 
+                      SET `profession` = '', 
+                          `money` = `money` - 100 
+                      WHERE `guid` = ?d", $guid);
         die ("Вы уволились с профессии <b>$prof_d</b>.$bot");
       }
       else
@@ -181,7 +181,7 @@ switch ($do)
     $i = 1;
     foreach ($professions as $key => $value)
     {
-      echo "<a href='#' class='us2' id='$i'>".$lang['prof_'.$key].":</a><font id='s$i' class='prof_best'>".$info -> showArch ($key)."</font><br>";
+      echo "<a href='#' class='us2' id='$i'>".$lang['prof_'.$key].":</a><font id='s$i' class='prof_best'>".$char->info->showArch ($key)."</font><br>";
       $i++;
     }
   break;

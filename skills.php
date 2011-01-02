@@ -160,10 +160,10 @@ if (isset($_POST['save_ability']) && $travm == 0 && $char_stats['ups'] != $_POST
     if (!isset($_POST[$key.'_base']) || $char_stats[$key] == $_POST[$key.'_base'] || $level < $min_level)
       continue;
     
-    if ($equip -> increaseStat ($key, $_POST[$key.'_base'] - $char_stats[$key]))
+    if ($char->increaseStat ($key, $_POST[$key.'_base'] - $char_stats[$key]))
       $up_text .= "&nbsp; &nbsp;Увеличение способности \"<b>$lang[$key]</b>\" произведено удачно<br>";
   }
-  $adb -> query ("UPDATE `character_stats` SET `ups` = ?d WHERE `guid` = ?d", $_POST['ups_base'] , $guid);
+  $adb->query ("UPDATE `character_stats` SET `ups` = ?d WHERE `guid` = ?d", $_POST['ups_base'] , $guid);
 }
 else if (isset($_POST['save_skill']) && $travm == 0 && $char_stats['skills'] != $_POST['skills_base'])
 {
@@ -172,15 +172,15 @@ else if (isset($_POST['save_skill']) && $travm == 0 && $char_stats['skills'] != 
     if (!isset($_POST[$key.'_base']) || $key == 'phisic' || $char_stats[$key] == $_POST[$key.'_base'] || $level < $min_level)
       continue;
     
-    if ($adb -> query ("UPDATE `character_stats` SET ?# = ?d WHERE `guid` = ?d", $key ,$_POST[$key.'_base'] ,$guid))
+    if ($adb->query ("UPDATE `character_stats` SET ?# = ?d WHERE `guid` = ?d", $key ,$_POST[$key.'_base'] ,$guid))
       $up_text .= "&nbsp; &nbsp;Увеличение способности \"<b>$lang[$key]</b>\" произведено удачно<br>";
   }
-  $adb -> query ("UPDATE `character_stats` SET `skills` = ?d WHERE `guid` = ?d", $_POST['skills_base'] , $guid);
+  $adb->query ("UPDATE `character_stats` SET `skills` = ?d WHERE `guid` = ?d", $_POST['skills_base'] , $guid);
 }
 
-$equip -> showStatAddition ();
+$char->showStatAddition ();
 
-$char_stats = $equip -> getChar ('char_stats', '*');
+$char_stats = $char->getChar ('char_stats', '*');
 $dis_buttons = "<td><img src='img/minus.gif' class='nonactive' title='уменьшить'>&nbsp;<img src='img/plus.gif' class='nonactive' title='увеличить'></td>";
 ?>
 <img src="img/1x1.gif" width="1" height="5"><br>
@@ -190,7 +190,7 @@ printf ($up_format, $up_text);
 ?>
 <table width="100%">
   <tr>
-    <td>&nbsp; &nbsp;<?echo $info -> character ($guid);?></td>
+    <td>&nbsp; &nbsp;<?echo $char->info->character ($guid);?></td>
     <td valign="top" align="right">
       <input type="button" class="nav" value="Обновить" id="refresh">
       <input type="button" class="nav" value="<?echo $lang['return'];?>" id="link" link="inv">

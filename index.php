@@ -14,12 +14,12 @@ $adb = DbSimple_Generic::connect($database['adb']);
 $adb->query("SET NAMES ? ",$database['db_encoding']);
 $adb->setErrorHandler("databaseErrorHandler");
 
-$server = $adb -> selectRow ("SELECT * FROM `server_info`;");
+$server = $adb->selectRow ("SELECT * FROM `server_info`;");
 
 if (date ('d.m.y', $server['last_transfer']) != date ('d.m.y'))
 {
-  $adb -> query ("UPDATE `characters` SET `transfers` = '200';");
-  $adb -> query ("UPDATE `server_info` SET `last_transfer` = ?d", time ());
+  $adb->query ("UPDATE `characters` SET `transfers` = '200';");
+  $adb->query ("UPDATE `server_info` SET `last_transfer` = ?d", time ());
 }
 ?>
 <html>

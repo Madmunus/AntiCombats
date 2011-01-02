@@ -1,7 +1,7 @@
 <?
 defined('AntiBK') or die ("Доступ запрещен!");
 
-$room_info = $adb -> selectRow ("SELECT `shop`, `shop_section` FROM `city_rooms` WHERE `city` = ?s and `room` = ?s", $city ,$room);
+$room_info = $adb->selectRow ("SELECT `shop`, `shop_section` FROM `city_rooms` WHERE `city` = ?s and `room` = ?s", $city ,$room);
 $section_shop = requestVar ('section_shop', '', 7);
 $section_shop = (array_key_exists ($section_shop, $data['sections_shop'])) ?$section_shop :$room_info['shop_section'];
 ?>
@@ -11,7 +11,7 @@ $section_shop = (array_key_exists ($section_shop, $data['sections_shop'])) ?$sec
 <tr>
 <td valign='top'>
 <center><h3>Магазин</h3></center>
-  <font color='red' id='error'><?$error -> getFormattedError ($warning, $parameters);?></font>
+  <font color='red' id='error'><?$char->error->getFormattedError ($warning, $parameters);?></font>
   <table border='0' width='100%' cellpadding='0' cellspacing='0' bgcolor='#A5A5A5' style='margin-left: 2.5px;'>
     <tr><td align='center'><b>Отдел "<span id="shop_title"><?echo $lang[$data['sections_shop'][$section_shop][1]].$lang['shop_'.$section_shop];?></span>"</b>
 <?    if ($section_shop == 'sell') echo "<br>Здесь вы можете продать свои вещи, за жалкие гроши...<br>У вас в наличии:";?>
@@ -35,19 +35,19 @@ $section_shop = (array_key_exists ($section_shop, $data['sections_shop'])) ?$sec
 $check_level = ($level_filter > 0 || $level_filter == '0');
 if ($section_shop == 'sell')
 {
-  $rows = $adb -> select ("SELECT * 
-                           FROM `character_inventory` AS `c` 
-                           LEFT JOIN `item_template` AS `i` 
-                           ON `c`.`item_template` = `i`.`entry` 
-                           WHERE (`i`.`item_flags` & '1') 
-                              and `c`.`wear` = '0' 
-                              and `c`.`mailed` = '0' 
-                              and `c`.`guid` = ?d 
-                           ORDER BY `c`.`last_update` DESC", $guid);
+  $rows = $adb->select ("SELECT * 
+                         FROM `character_inventory` AS `c` 
+                         LEFT JOIN `item_template` AS `i` 
+                         ON `c`.`item_template` = `i`.`entry` 
+                         WHERE (`i`.`item_flags` & '1') 
+                            and `c`.`wear` = '0' 
+                            and `c`.`mailed` = '0' 
+                            and `c`.`guid` = ?d 
+                         ORDER BY `c`.`last_update` DESC", $guid);
   $i = true;
   foreach ($rows as $item_info)
   {
-    echo $equip -> showItemInventory ($item_info, 'sell', $i);
+    echo $char->equip->showItemInventory ($item_info, 'sell', $i);
     $i = !$i;
   }
   if (!count($rows))
@@ -63,7 +63,7 @@ else
   <table width="148" align='right' border="0" cellpadding="0" cellspacing="1" bgcolor="#DEDEDE">
     <tr>
       <td bgcolor="#D3D3D3"><img src="img/links.gif" width="9" height="7" /></td>
-      <td bgcolor="#D3D3D3" nowrap><a href="?action=go&room_go=centplosh" class="passage" alt="<?echo $info -> roomOnline ('centplosh', 'mini');?>">Центральная Площадь</a></td>
+      <td bgcolor="#D3D3D3" nowrap><a href="?action=go&room_go=centplosh" class="passage" alt="<?echo $char->info->roomOnline ('centplosh', 'mini');?>">Центральная Площадь</a></td>
     </tr>
   </table><br><br>
   <div align='right'><small>
