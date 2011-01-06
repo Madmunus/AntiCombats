@@ -112,12 +112,12 @@ function spoilerBar (bar)
 	$.post('ajax.php', 'do=spoilerbar&bar='+bar, function (data){
 	  if (data == 'hide')
 	  {
-	    $("#spoiler_"+bar).attr({'src': "img/plus.gif", 'title': "Показать"});
+	    $("#spoiler_"+bar).attr({'src': "img/plus.gif", 'alt': "Показать"});
       $("#"+bar+"c").slideUp("slow");
 	  }
 	  else if (data == 'show')
 	  {
-      $("#spoiler_"+bar).attr({'src': "img/minus.gif", 'title': "Скрыть"});
+      $("#spoiler_"+bar).attr({'src': "img/minus.gif", 'alt': "Скрыть"});
       $("#"+bar+"c").slideDown("slow");
 	  }
 	});

@@ -1,18 +1,17 @@
 <?
 session_start ();
-error_reporting (E_ALL);
 ini_set ('display_errors', true);
 ini_set ('html_errors', false);
 ini_set ('error_reporting', E_ALL);
 
 define ('AntiBK', true);
 
-$guid = (empty($_SESSION['guid'])) ?0 :$_SESSION['guid'];
-
 include ("engline/config.php");
 include ("engline/dbsimple/Generic.php");
 include ("engline/data/data.php");
 include ("engline/functions/functions.php");
+
+$guid = getGuid ();
 
 $adb = DbSimple_Generic::connect($database['adb']);
 $adb->query("SET NAMES ? ",$database['db_encoding']);
@@ -76,7 +75,7 @@ if (link[link.length - 1] != 'game.php')
 <?
 $char_db = $char->getChar ('char_db', '*');
 $char_stats = $char->getChar ('char_stats', '*');
-$lang = $adb->selectCol ("SELECT `key` AS ARRAY_KEY, `text` FROM `server_language`;");
+$lang = $char->getLang ();
 
 $login = $char_db['login'];
 $sex = $char_db['sex'];
@@ -109,7 +108,7 @@ $orden = $char_db['orden'];
 $shut = $char_db['shut'];
 $date = date ('d.m.y H:i:s', mktime(date ('H') - $GSM));
 
-$char->equip->getRoomGoTime ($mtime);
+$char->city->getRoomGoTime ($mtime);
 echo "<input type='hidden' id='time_to_go' value='$mtime' />";
 
 switch ($action)
@@ -160,7 +159,7 @@ switch ($action)
     include ("orden.php");
   break;
   case 'inv':
-    include ("inv.php");
+    include ("inventory.php");
   break;
   case 'skills':
     include ("skills.php");
@@ -274,7 +273,7 @@ switch ($action)
   case 'exit':
     $adb->query ("DELETE FROM `online` WHERE `guid` = ?d", $guid);
     $adb->query ("UPDATE `characters` SET `last_time` = ?d WHERE `guid` = ?d", time () ,$guid);
-    unset ($_SESSION['guid'], $_SESSION['bankСredit'], $_SESSION['ENTERED']);
+    unset ($_SESSION['guid'], $_SESSION['bankСredit'], $_SESSION['ENTERED'], $_SESSION['last']);
     die ("<script>top.location.href = 'index.php';</script>");
   break;
   default:

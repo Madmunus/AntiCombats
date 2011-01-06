@@ -1,28 +1,23 @@
 <?
 session_start();
-error_reporting (E_ALL);
 ini_set ('display_errors', true);
 ini_set ('html_errors', false);
 ini_set ('error_reporting', E_ALL);
 
 define ('AntiBK', true);
 
-if (empty($_SESSION['guid']))
-	die ("<script>top.location.href = 'index.php';</script>");
-else
-  $guid = $_SESSION['guid'];
-
 include ("engline/config.php");
 include ("engline/dbsimple/Generic.php");
 include ("engline/data/data.php");
 include ("engline/functions/functions.php");
 
+$guid = getGuid ();
+
 $adb = DbSimple_Generic::connect($database['adb']);
 $adb->query("SET NAMES ? ",$database['db_encoding']);
 $adb->setErrorHandler("databaseErrorHandler");
 
-$equip = Equip::setGuidDB($guid, $adb);
-$test = Test::setGuidDB($guid, $adb);
+$char = Char::initialization($guid, $adb);
 
 $act = htmlspecialchars ($act);
 $boy = htmlspecialchars ($boy);

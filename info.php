@@ -1,5 +1,4 @@
 <?php
-error_reporting (E_ALL);
 ini_set ('display_errors', true);
 ini_set ('html_errors', false);
 ini_set ('error_reporting', E_ALL);
@@ -27,7 +26,7 @@ $guid = $adb->selectCell ("SELECT `guid` FROM `characters` WHERE `login` = ?s", 
 
 $char = Char::initialization($guid, $adb);
 
-$char->test->Guid ();
+$char->test->Guid ('game');
 $char->test->Prision ();
 $char->test->Shut ();
 $char->test->Travm ();
@@ -44,13 +43,13 @@ if (!$char_info)
 ArrToVar ($char_db);
 ArrToVar ($char_info);
 
-$lang = $adb->selectCol ("SELECT `key` AS ARRAY_KEY, `text` FROM `server_language`;");
+$lang = $char->getLang ();
 
 $sex = ($sex == 'male') ?"Мужской" :"Женский";
 $orden_dis = ($orden == 1) ?"Орден Паладинов - " :(($orden == 2) ?"Армада - " :"");
 $date = ($admin_level > 0) ?"До начала времен" :date ('d.m.y H:i', $date);
 $state = ($admin_level > 0) ?"Этого никто не знает" :$adb->selectCell ("SELECT `name` FROM `server_cities` WHERE `city` = ?s", $state);
-$room = $adb->selectCell ("SELECT `name` FROM `city_rooms` WHERE `room` = ?s", $room);
+$room = $char->city->getRoom ($room, $city, 'name');
 $city = $adb->selectCell ("SELECT `name` FROM `server_cities` WHERE `city` = ?s", $city);
 $online = $adb->selectCell ("SELECT COUNT(*) FROM `online` WHERE `guid` = ?d", $guid);
 

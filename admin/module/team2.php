@@ -7,7 +7,7 @@ include "conf.php" ;
 $connect = @mysql_connect($base_name,$base_user,$base_pass)or die ("Не возможно подключиться к Базе данных")  ;
 
            $db = @mysql_select_db($db_name,$connect) or die ("Невозможно выбрать Базу данных");
-           $sql = "SELECT id, login  FROM  users  ";         //ORDER BY id
+           $sql = "SELECT id, login  FROM  characters  ";         //ORDER BY id
            $result = @mysql_query($sql,$connect) or die ("Невозможно выполнить запрос");
            while ($row = mysql_fetch_array($result));
 

@@ -1,5 +1,7 @@
 <?
 defined('AntiBK') or die ("Доступ запрещен!");
+
+$char->test->Admin ();
 ?>
 <script type="text/javascript">
 function SHA1 (msg)
@@ -199,6 +201,7 @@ $(document).ready(function (){
       <input type="button" class="nav" value="Персонажи" id="characters" name="changetype">
     </td>
     <td align="right">
+      <input type="button" class="nav" value="Админ панель" onclick="top.location.href = 'admin/index.php'">
       <input type="button" class="nav" value="Обновить" id="refresh">
       <input type="button" class="nav" value="<?echo $lang['return'];?>" id="link" link="inv">
     </td>
@@ -293,7 +296,7 @@ foreach ($all_characters as $one_character)
 </div>
 <div name="Боёвой"></div>
 <script>
-$("[name=Боёвой]").html('sdfsdf');
+
 </script>
 <?
 

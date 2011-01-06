@@ -1,7 +1,7 @@
 <?
 defined('AntiBK') or die ("Доступ запрещен!");
 
-$rows = $adb -> select ("SELECT * FROM `admin_menu` ORDER BY `id`;");
+$rows = $adb->select ("SELECT * FROM `admin_menu` ORDER BY `id`;");
 ?>
 <div>
 Данная документация ещё не доработана, но всё же хотелось бы рассказать об основных функциях и фишках Админ Центра , что же приступим :).<br>
@@ -14,9 +14,9 @@ $rows = $adb -> select ("SELECT * FROM `admin_menu` ORDER BY `id`;");
 <?
 foreach ($rows as $menu)
 {
-	echo "{$menu['name']}<br>";
-	if (in_array ($menu['href'], array('doc', 'coder', 'travm', 'team2')))
-		echo "<hr>";
+    echo "$menu[name]<br>";
+    if (in_array ($menu['href'], array('doc', 'coder', 'travm', 'team2')))
+        echo "<hr>";
 }
 ?>
 <br>

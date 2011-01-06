@@ -1,20 +1,20 @@
 <?
 if (!empty($name))
 {
-	//$w0="INSERT INTO merit(muj,jena,svid_m,svid_j,templer,log) VALUES ($muj,$jena,$svid_m,$svid_j,$templer,$log)";
-	$wo = "UPDATE merit set muj = '$muj' jena = '$jena' svid_m = '$svid_m' svid_j = '$svid_j' templer = 'templer' log = 'log' ";
-	$res=mysql_query($w0);
-	if ($res)
-	{
-		print "<center>";
-		print "complite";
-		print "<a href=?act=orden&ord=1&spell=18 class=us2>back</a>";
-	}
-	else
-	{
-		print "failed";
-		echo mysql_error();
-	}
+    //$w0="INSERT INTO merit(muj,jena,svid_m,svid_j,templer,log) VALUES ($muj,$jena,$svid_m,$svid_j,$templer,$log)";
+    $wo = "UPDATE merit set muj = '$muj' jena = '$jena' svid_m = '$svid_m' svid_j = '$svid_j' templer = 'templer' log = 'log' ";
+    $res=mysql_query($w0);
+    if ($res)
+    {
+        print "<center>";
+        print "complite";
+        print "<a href=?act=orden&ord=1&spell=18 class=us2>back</a>";
+    }
+    else
+    {
+        print "failed";
+        echo mysql_error();
+    }
 }
 else
 {

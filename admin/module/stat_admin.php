@@ -15,14 +15,14 @@ $state = (isset($_POST['state'])) ?$_POST['state'] :"";
 <input type="submit" name="submit" value="Далее"></form>
 <?
 if (isset($_POST['r_login']) && $r_login == '')
-	echo "Вы не ввели Логин.";
+    echo "Вы не ввели Логин.";
 else if ($r_login != '')
 {
-	$sql = $adb -> query ("	UPDATE `users` 
-							SET `status` = '$status', 
-								`state` = '$state' 
-							WHERE `login` = '$login';
-							");
-	echo "Статус и подданство успешно изменены.";
+    $sql = $adb->query ("    UPDATE `characters` 
+                            SET `status` = '$status', 
+                                `state` = '$state' 
+                            WHERE `login` = '$login';
+                            ");
+    echo "Статус и подданство успешно изменены.";
 }
 ?>

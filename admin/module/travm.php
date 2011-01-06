@@ -10,13 +10,13 @@ $r_login = (isset($_POST['r_login'])) ?$_POST['r_login'] :"";
 <?
 if (isset($_POST['r_login']))
 {
-	$data = $adb -> selectRow ("SELECT `travm_old_stat`, `travm_stat` FROM `users` WHERE `login` = '$r_login';") or die ("Персонаж не найден!");
-	$o_stat = $data['travm_old_stat'];
-	$t_stat = $data['travm_stat'];
-	$sql = $adb -> query ("	UPDATE `users` 
-							SET `$t_stat` = '$o_stat', 
-								`travm` = '0' 
-							WHERE `login` = '$who';
-							");
+    $data = $adb->selectRow ("SELECT `travm_old_stat`, `travm_stat` FROM `characters` WHERE `login` = '$r_login';") or die ("Персонаж не найден!");
+    $o_stat = $data['travm_old_stat'];
+    $t_stat = $data['travm_stat'];
+    $sql = $adb->query ("    UPDATE `characters` 
+                            SET `$t_stat` = '$o_stat', 
+                                `travm` = '0' 
+                            WHERE `login` = '$who';
+                            ");
 }
 ?>

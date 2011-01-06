@@ -10,8 +10,9 @@ var id = 'oMenu';
 function cMenu ()
 {
   $('#'+id).css('visibility', "hidden");
-  top.talk.document.talker.phrase.focus();
+  $('#phrase', top.talk.document).focus();
 }
+
 $(document).ready(function (){
   $('span').live("contextmenu",function (e){
     var x, y, login, login2, i1, i2;
@@ -38,8 +39,7 @@ $(document).ready(function (){
     var image = $(this).attr('src');
     image = image.split("/");
     image = image[image.length - 1].replace('.gif', '');
-    top.talk.document.talker.phrase.value += ' :'+image+': ';
-    top.talk.document.talker.phrase.focus();
+    $('#phrase', top.talk.document).val($('#phrase', top.talk.document).val() +' :'+image+': ').focus();
   });
 });
 </script>

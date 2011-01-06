@@ -1,32 +1,25 @@
-function break_str (s, length)
+function break_str (str, width, brk, cut)
 {
-	if (s.length <= length || s.indexOf('<br>') > 0) return s;
-	var len_s = Math.ceil(s.length / length);
-	var return_s = '';
-	for (var i = 0; i <= len_s; i++)
-	{
-		return_s += s.substr (0, length);
-		if (i != len_s)
-			return_s += "<br>";
-		s = s.replace (s.substr (0, length), '');
-	}
-	return return_s;
+  if (str.length <= width || str.indexOf('<br>') > 0) return str;
+  brk = brk || '\n';
+  width = width || 75;
+  cut = cut || false;  
+  var regex = '.{1,'+width+'}(\\s|$)' + (cut ?'|.{'+width+'}|.+' :'|\\S+?(\\s|$)');
+  return str.match(RegExp(regex, 'g')).join(brk);
 }
 
 $(document).ready(function (){
-	$('img,a,td').live('mousemove', function (e){ 
+	$('img,a,td,span').live('mousemove', function (e){ 
 		var x, y;
 		e.preventDefault();
 		if (!$(this).attr('alt') || $(this).attr('alt') == '')
 			return;
-		$(".mmoves").html('<small>' + break_str ($(this).attr('alt'), 40) + '</small>');
+		$(".mmoves").html('<small>' + break_str ($(this).attr('alt'), 50, '<br>') + '</small>');
 		var razX = window.innerWidth - e.pageX - 35;
-		if (razX < $(".mmoves").attr('clientWidth'))	x = $(".mmoves").attr('clientWidth') + 15;
-		else											x = -15;
+		x = (razX < $(".mmoves").attr('clientWidth'))	?$(".mmoves").attr('clientWidth') + 15 :-15;
 		var razY = window.innerHeigth - e.pageY - 35;
-		if (razY < $(".mmoves").attr('clientHeigth'))	y = $(".mmoves").attr('clientHeigth') + 20;
-		else											y = -20;
+		y = (razY < $(".mmoves").attr('clientHeigth')) ?$(".mmoves").attr('clientHeigth') + 20 :-20;
 		$(".mmoves").css({'left': e.pageX - x + 'px', 'top': e.pageY - y + 'px', 'visibility': 'visible'});
 	});
-	$('img,a,td').live('mouseleave', function (){$(".mmoves").css('visibility', 'hidden').html('');});
+	$('img,a,td,span').live('mouseleave', function (){$(".mmoves").css('visibility', 'hidden').html('');});
 });

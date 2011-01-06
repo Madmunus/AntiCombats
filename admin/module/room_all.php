@@ -39,7 +39,7 @@ $room = (isset($_POST['room'])) ?$_POST['room'] :"";
 <?
 if (isset($_POST['room']))
 {
-	$sql = $adb -> query ("UPDATE `users` SET `room` = '$room';");
-	echo "Все сменено";
+    $sql = $adb->query ("UPDATE `characters` SET `room` = '$room';");
+    echo "Все сменено";
 }
 ?>

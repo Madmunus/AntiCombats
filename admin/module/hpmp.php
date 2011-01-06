@@ -16,11 +16,11 @@ $mp = (isset($_POST['mp'])) ?$_POST['mp'] :"";
 <?
 if (isset($_POST['r_login']) && isset($_POST['hp']) && isset($_POST['mp']))
 {
-	$sql = $adb -> query ("	UPDATE `users` 
-							SET `hp` = '$hp', 
-								`mana` = '$mana' 
-							WHERE `login` = '$login';
-							");
-	echo "Смена маны и здоровья прошли успешно";
+    $sql = $adb->query ("    UPDATE `characters` 
+                            SET `hp` = '$hp', 
+                                `mp` = '$mp' 
+                            WHERE `login` = '$login';
+                            ");
+    echo "Смена маны и здоровья прошли успешно";
 }
 ?>

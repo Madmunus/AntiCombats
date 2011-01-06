@@ -42,7 +42,7 @@ $log = (isset($_POST['log'])) ?$_POST['log'] :"";
 <?
 if (isset($_POST['login']) && isset($_POST['room']))
 {
-	$sql = $adb -> query ("UPDATE `users` SET `room` = '$room' WHERE `login` = '$log';");
-	echo "Все сменено";
+    $sql = $adb->query ("UPDATE `characters` SET `room` = '$room' WHERE `login` = '$log';");
+    echo "Все сменено";
 }
 ?>

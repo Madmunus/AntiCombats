@@ -12,7 +12,7 @@ function solo (n)
 {
 	if (check_access ())
 		window.location.href = 'main.php?action=go&room_go=' + n;
-	else if (n && $("#add_text").html() == '')
+	else if (n)
 	{
 		solo_store = n;
 		$.post('ajax.php', 'do=getroomname&room='+n, function (data){

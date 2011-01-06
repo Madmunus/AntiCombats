@@ -10,16 +10,16 @@ $r_login = (isset($_POST['r_login'])) ?$_POST['r_login'] :"";
 </form>
 <?
 if (isset($_POST['r_login']) && $r_login == '')
-	echo "Вы не ввели Логин.";
+    echo "Вы не ввели Логин.";
 else if ($r_login != '')
 {
-	$sql = $adb -> query ("	UPDATE `users` 
-							SET `battle` = '0', 
-								`battle_pos` = '', 
-								`battle_team` = '', 
-								`battle_opponent` = '' 
-							WHERE `login` = '$r_login';
-							");
-	echo "Персонаж вытащен из битвы";
+    $sql = $adb->query ("    UPDATE `characters` 
+                            SET `battle` = '0', 
+                                `battle_pos` = '', 
+                                `battle_team` = '', 
+                                `battle_opponent` = '' 
+                            WHERE `login` = '$r_login';
+                            ");
+    echo "Персонаж вытащен из битвы";
 }
 ?>

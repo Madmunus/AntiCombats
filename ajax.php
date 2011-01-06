@@ -1,18 +1,17 @@
 <?
 session_start ();
-error_reporting (E_ALL);
 ini_set ('display_errors', true);
 ini_set ('html_errors', false);
 ini_set ('error_reporting', E_ALL);
 
 define ('AntiBK', true);
 
-$guid = (empty($_SESSION['guid'])) ?0 :$_SESSION['guid'];
-
 include ("engline/config.php");
 include ("engline/dbsimple/Generic.php");
 include ("engline/data/data.php");
 include ("engline/functions/functions.php");
+
+$guid = getGuid ('game');
 
 $adb = DbSimple_Generic::connect($database['adb']);
 $adb->query("SET NAMES ? ",$database['db_encoding']);
@@ -20,23 +19,25 @@ $adb->setErrorHandler("databaseErrorHandler");
 
 $char = Char::initialization($guid, $adb);
 
+$char->test->Guid ('game');
+
 $char_db = $char->getChar ('char_db', '*');
 $char_stats = $char->getChar ('char_stats', '*');
 $char_feat = array_merge ($char_db, $char_stats);
 
-if (!$char_feat)
-  die ("<script>top.location.href = 'index.php';</script>");
-
-$lang = $adb->selectCol ("SELECT `key` AS ARRAY_KEY, `text` FROM `server_language`;");
+$lang = $char->getLang ();
 
 $do = requestVar ('do');
 
+$login = $char_feat['login'];
 $sex = $char_feat['sex'];
 $mass = $char_feat['mass'];
 $city = $char_feat['city'];
 $room = $char_feat['room'];
 $money = $char_feat['money'];
 $money_euro = $char_feat['money_euro'];
+$shut = $char_feat['shut'];
+$chat_s = $char_feat['chat_s'];
 
 switch ($do)
 {
@@ -111,7 +112,7 @@ switch ($do)
     die ("complete");
   break;
   case 'showshopsection':
-    $room_shop = $adb->selectCell ("SELECT `shop` FROM `city_rooms` WHERE `city` = ?s and `room` = ?s", $city ,$room) or die ("<table width='100%' cellspacing='1' cellpadding='2' bgcolor='#A5A5A5'><tr><td bgcolor='#E2E0E0' align='center'>$lang[shop_no]</td></tr></table>");
+    $room_shop = $char->city->getRoom ($room, $city, 'shop') or die ("<table width='100%' cellspacing='1' cellpadding='2' bgcolor='#A5A5A5'><tr><td bgcolor='#E2E0E0' align='center'>$lang[shop_no]</td></tr></table>");
     $section_shop = requestVar ('section_shop', '', 7);
     $level_filter = requestVar ('level_filter', '', 7);
     $check_level = ($level_filter > 0 || $level_filter == '0');
@@ -131,7 +132,7 @@ switch ($do)
                            ORDER BY `min_level`;", $section_shop ,$city.'-'.$room,
                            (($check_level) ?$level_filter :DBSIMPLE_SKIP),
                            (($name_filter) ?escapeLike ($name_filter) :DBSIMPLE_SKIP),
-                           (($room == 'shop') ?4 :DBSIMPLE_SKIP));
+                           (($room != 'shop') ?4 :DBSIMPLE_SKIP));
     if (count($rows) > 0)
     {
       $i = true;
@@ -151,7 +152,7 @@ switch ($do)
   break;
   case 'getroomname':
     $room = requestVar ('room');
-    $name = $adb->selectCell ("SELECT `name` FROM `city_rooms` WHERE `city` = ?s and `room` = ?s", $city ,$room);
+    $name = $char->city->getRoom ($room, $city, 'name');
     die ($name);
   break;
   case 'switchbars':
@@ -226,7 +227,6 @@ switch ($do)
     if ($item_id == 0 || !is_numeric($item_id))
       die ("errorA_D213");
     
-    global $adb, $lang;
     $inc_count_p = $adb->selectCell ("SELECT `inc_count_p` 
                                       FROM `character_inventory` 
                                       WHERE `guid` = ?d 
@@ -272,12 +272,9 @@ switch ($do)
           continue;
         
         if (!$requirement)
-          $requirement = "$lang[min_stat]:<br>";
+          $requirement = "$lang[min_stat]<br>";
         
-        if ($shape[$key] > $char_feat[$key])
-          $title .= "<font color=\"#FF0000\">&bull; $lang[$key]: $shape[$key]</font><br>";
-        else
-          $title .= "&bull; $lang[$key]: $shape[$key]<br>";
+        $title .= (compare ($shape[$key], $char_feat[$key], "&bull; $lang[$key] $shape[$key]"))."<br>";
       }
       if ($availabled)
       {
@@ -350,7 +347,7 @@ switch ($do)
         unset($cur_set['hand_r_free'], $cur_set['hand_r_type'], $cur_set['hand_l_free'], $cur_set['hand_l_type']);
         $adb->query ("DELETE FROM `character_sets` WHERE `guid` = ?d and `name` = ?s", $guid ,$name);
         $adb->query ("INSERT INTO `character_sets` (?#) 
-                        VALUES (?a);", array_keys($cur_set), array_values($cur_set)) or die ("errorA_D222");
+                      VALUES (?a);", array_keys($cur_set), array_values($cur_set)) or die ("errorA_D222");
         die ("completeA_D<div name='$name' style='display: none;'><img width='200' height='1' src='img/1x1.gif'><br>&nbsp;&nbsp;<img src='img/icon/close2.gif' width='9' height='9' alt='$lang[set_delete]' onclick=\"if (confirm('$lang[set_delete] $name?')) {workSets ('delete', '$name');}\" style='cursor: pointer;'> <a href='main.php?action=wear_set&set_name=$name' class='nick'><small>$lang[equip] \"$name\"</small></a></div>");
       break;
       case 'delete':
@@ -372,7 +369,7 @@ switch ($do)
     
     $buycount = 0;
     $amount = $city.'-'.$room;
-    $room_shop = $adb->selectCell ("SELECT `shop` FROM `city_rooms` WHERE `city` = ?s and `room` = ?s", $city ,$room) or die ("errorA_D403");
+    $room_shop = $char->city->getRoom ($room, $city, 'shop') or die ("errorA_D403");
     $dat = $adb->selectRow ("SELECT `i`.`name`, 
                                     `i`.`mass`, 
                                     `i`.`price`, 
@@ -402,7 +399,7 @@ switch ($do)
       $adb->query ("UPDATE `characters` SET `mass` = ?f WHERE `guid` = ?d", $mass ,$guid);
       //$adb->query ("UPDATE `character_stats` SET `trade` = `trade` + '0.01' WHERE `guid` = ?d", $guid);
       $adb->query ("INSERT INTO `character_inventory` (`guid`, `item_template`, `tear_max`, `inc_count_p`, `made_in`, `date`, `last_update`) 
-                      VALUES (?d, ?d, ?f, ?d, ?s, ?d, ?d)", $guid ,$item_entry ,$tear ,$inc_count ,$city ,$time ,time ());
+                    VALUES (?d, ?d, ?f, ?d, ?s, ?d, ?d)", $guid ,$item_entry ,$tear ,$inc_count ,$city ,$time ,time ());
       $adb->query ("UPDATE `item_amount` SET ?# = ?# - '1' WHERE `entry` = ?d", $amount ,$amount ,$item_entry);
       if ($price > 0)
         $char->history->transfers ('Buy', "$name ($price кр)", $_SERVER['REMOTE_ADDR'], $room);
@@ -508,6 +505,78 @@ switch ($do)
         die ("completeA_D".$mass."A_D".$i."A_D".$item_entry);
       break;
     }
+  break;
+  case 'increasestat':
+    $stat = requestVar ('stat');
+    $travm = $char_feat['travm'];
+    $s_stat = str_replace (':', '', $lang[$stat]);
+    if ($char_stats['ups'] > 0 && $travm == 0 && $char_feat['level'] >= $behaviour[$stat])
+    {
+      if ($char->increaseStat ($stat, 1))
+        $adb->query ("UPDATE `character_stats` SET `ups` = `ups` - '1' WHERE `guid` = ?d", $guid);
+      die ("completeA_D200A_D$s_stat");
+    }
+    else
+      die ("errorA_D199A_D$s_stat");
+  break;
+  case 'increaseskill':
+    $stat = requestVar ('stat');
+    $travm = $char_feat['travm'];
+    $weapon = array ('sword', 'fail', 'staff', 'knife', 'axe');
+    $magic = array ('fire', 'water', 'air', 'earth', 'light', 'gray', 'dark');
+    $char->showStatAddition ();
+    $s_stat = str_replace (':', '', $lang[$stat]);
+    if ($char_stats['skills'] > 0 && $travm == 0 && $char_feat['level'] >= $mastery[$stat] && ((in_array ($stat, $weapon) & ($char_feat[$stat] - $added[$stat]) < 5) || (in_array ($stat, $magic) & ($char_feat[$stat] - $added[$stat]) < 10)))
+    {
+      if ($adb->query ("UPDATE `character_stats` SET ?# = ?# + '1' WHERE `guid` = ?d", $stat ,$stat ,$guid))
+        $adb->query ("UPDATE `character_stats` SET `skills` = `skills` - '1' WHERE `guid` = ?d", $guid);
+      die ("completeA_D200A_D$s_stat");
+    }
+    else
+      die ("errorA_D199A_D$s_stat");
+  break;
+  case 'sendmessage':
+    $h = requestVar ('h');
+    
+    $commands = $adb->selectCol ("SELECT `name` FROM `server_commands`;");
+    $command = false;
+
+    if (!$h || $shut || $chat_s == 2)
+      die ('none');
+    
+    $color = $char->getChar ('char_info', 'color');
+
+    foreach ($commands as $num => $name)
+    {
+      if (utf8_substr ($h, 0, utf8_strlen($name)) == $name)
+      {
+        $command = $char->chat->executeCommand ($name, $h, $guid);
+        die ('complete');
+      }
+    }
+    //$h = htmlspecialchars ($h);
+    $h = str_replace ("\n", "", $h);
+    $to = split (']', str_replace (array('to [', 'private ['), "]", $h));
+    
+    if (isset ($to[1]))
+    {
+      $h = preg_replace ("/private \[$to[1]/", "private [", $h, 1);
+      $to = str_replace (", ", ",", $to[1]);
+    }
+    else
+      $to = $to[0];
+    
+    if (utf8_substr ($h, 0, 4) == 'to [')
+      $class = 'to';
+    else if (utf8_substr ($h, 0, 9) == 'private [')
+      $class = 'private';
+    else
+      $class = 'all';
+    
+    $adb->query ("UPDATE `characters` SET `afk` = '0' WHERE `guid` = ?d", $guid);
+    $adb->query ("INSERT INTO `city_chat` (`sender`, `to`, `room`, `msg`, `class`, `date_stamp`, `city`) 
+                  VALUES (?s, ?s, ?s, ?s, ?s, ?d, ?s)", $login ,$to ,$room ,"<font color=$color>$h</font>" ,$class ,time () ,$city);
+    die ('complete');
   break;
 }
 ?>

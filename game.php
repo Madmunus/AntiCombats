@@ -30,7 +30,7 @@ function AddTo (login, bPrivate)
     frames.main.document.all(c).focus();
     return;
   }
-  var txt = talk.document.talker.phrase.value;
+  var txt = $('#phrase', talk.document).val();
   var txtreg = txt;
   var to = '';
   var private = '';
@@ -104,13 +104,12 @@ function AddTo (login, bPrivate)
         txt = (( bPrivate ) ?'private ['+login+'] ' :'to ['+login+'] ') + txt;
     }
   }
-  talk.document.talker.phrase.value = txt;
-  talk.document.talker.phrase.focus();
+  $('#phrase', talk.document).val(txt).focus();
 }
 
 function AddToPrivate (login)
 {
-  var s = talk.document.talker.phrase.value;
+  var s = $('#phrase', talk.document).val();
   var reg2 = new RegExp ("private(\\s*)\\[(.*?)\\]", "");
   var cs = s.replace (reg2, "private$1[,$2,]");
   var slogin = login.replace (/([\^.*{}$%?\[\]+|\/\(\)])/g, "\\$1");
@@ -139,8 +138,12 @@ function AddToPrivate (login)
     s = 'private ['+login+str+']' + space + s;
   else
     s = 'private ['+str+']' + space + s;
-  talk.document.talker.phrase.value = s;
-  talk.document.talker.phrase.focus();
+  $('#phrase', talk.document).val(s).focus();
+}
+
+function url (url)
+{
+  $('[name=menu]').attr('src', 'main.php?action='+url);
 }
 
 $(document).ready(function (){
@@ -150,7 +153,6 @@ $(document).ready(function (){
   $('[name=user]').attr('src', 'users.php');
   $('[name=talk]').attr('src', 'talk.php');
   $('[name=ref]').attr('src', 'refresh.php');
-  $('[name=null]').attr('src', 'null.php');
 });
 </script>
 </head>
@@ -170,6 +172,5 @@ $(document).ready(function (){
     </frameset>
     <frame name="talk" src="" scrolling="no" noresize />
     <frame src="bottom.html" target="_top" scrolling="no" noresize frameborder="0" border="0" framespacing="0" marginwidth="0" marginheight="0" />
-    <frame name="null" src="" scrolling="no" noresize />
   </frameset>
 </html>

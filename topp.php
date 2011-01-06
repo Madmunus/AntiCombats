@@ -1,17 +1,16 @@
 <?
 session_start ();
-error_reporting (E_ALL);
 ini_set ('display_errors', true);
 ini_set ('html_errors', false);
 ini_set ('error_reporting', E_ALL);
 
 define ('AntiBK', true);
 
-$guid = (empty($_SESSION['guid'])) ?0 :$_SESSION['guid'];
-
 include ("engline/config.php");
 include ("engline/dbsimple/Generic.php");
 include ("engline/functions/functions.php");
+
+$guid = getGuid ();
 
 $adb = DbSimple_Generic::connect($database['adb']);
 $adb->query("SET NAMES ? ",$database['db_encoding']);
@@ -21,7 +20,7 @@ $char = Char::initialization($guid, $adb);
 
 $char->test->Guid ();
 
-$lang = $adb->selectCol ("SELECT `key` AS ARRAY_KEY, `text` FROM `server_language`;");
+$lang = $char->getLang ();
 $mail = $adb->selectCell ("SELECT COUNT(*) FROM `city_mail_items` WHERE `to` = ?d", $guid) | 0;
 $admin_level = $char->getChar ('char_db', 'admin_level');
 ?>
@@ -35,7 +34,7 @@ var mail = <?echo $mail;?>;
 
 function url (url)
 {
-  top.main.location.href = url;
+  top.main.location.href = "main.php?action="+url;
 }
 
 $(document).ready(function (){
@@ -46,7 +45,7 @@ $(document).ready(function (){
     if ($(this).attr('id') == 5)
     {
       if (confirm("Вы уверены что хотите выйти из игры?"))
-          url ('main.php?action=exit');
+        url ('exit');
     }
     else
     {
@@ -57,9 +56,7 @@ $(document).ready(function (){
       $('#menu'+cur_Id).css({'visibility': 'visible', 'position': 'relative'});
     }
   });
-  $('input[type=button], input[type=radio], input[type=submit], a').live('click', function (){
-    $(this).blur();
-  });
+  $('input, a').live('click', function (){$(this).blur();});
   if (mail)
     $('#mailspan').html("<img src='img/icon/mail"+mail+".gif' title='Получена почта' width='24' height='15'>");
 });
@@ -117,19 +114,19 @@ $(document).ready(function (){
                     | <a class="menutop" href="stat.php" target="_blank">Рейтинг</a>
                   </span>
                   <span id="menu3" class="bottom_text">
-                    <a class="menutop" onclick="url ('main.php?action=report');" href="#">Отчеты</a>
+                    <a class="menutop" onclick="url ('report');" href="#">Отчеты</a>
                     | <a class="menutop" href="encicl/FAQ/afer.html" target="_blank">Правила</a>
-                    | <a class="menutop" onclick="url ('main.php?action=form&do=passandmail');" href="#">Настройки</a>
-                    | <a class="menutop" onclick="url ('main.php?action=form&do=passandmail');" href="#">Смена пароля</a>
+                    | <a class="menutop" onclick="url ('form&do=passandmail');" href="#">Настройки</a>
+                    | <a class="menutop" onclick="url ('form&do=passandmail');" href="#">Смена пароля</a>
                   </span>
                   <span id="menu4" class="bottom_text">
-                    <a class="menutop" onClick="url ('main.php?action=inv');" href="#">Инвентарь</a>
-                    | <a class="menutop" onClick="url ('main.php?action=skills');" href="#"><?echo $lang['abilities'];?></a>
-                    | <a class="menutop" onClick="url ('zayavka.php');" href="#">Поединки</a>
-                    | <a class="menutop" onclick="url ('main.php?action=form&do=info');" href="#"><?echo $lang['form'];?></a>
+                    <a class="menutop" onClick="url ('inv');" href="#">Инвентарь</a>
+                    | <a class="menutop" onClick="url ('skills');" href="#"><?echo $lang['abilities'];?></a>
+                    | <a class="menutop" onClick="url ('zayavka');" href="#">Поединки</a>
+                    | <a class="menutop" onclick="url ('form&do=info');" href="#"><?echo $lang['form'];?></a>
 <?
-if ($admin_level > 1)
-    echo "| <a class='menutop' onclick=\"url ('main.php?action=admin');\" href='#'>Админка</a>";
+if ($admin_level > 0)
+    echo "| <a class='menutop' onclick=\"url ('admin');\" href='#'>Админка</a>";
 ?>
                   </span>
                 </td>

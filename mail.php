@@ -207,11 +207,11 @@ ch_l();
           <table width="148" border="0" cellpadding="0" cellspacing="1" bgcolor="#DEDEDE">
             <tr>
               <td bgcolor="#D3D3D3"><img src="img/links.gif" width="9" height="7" /></td>
-              <td bgcolor="#D3D3D3" nowrap><a href="main.php?action=go&room_go=centplosh" class="passage" alt="<?echo $char->info->roomOnline ('centplosh', 'mini');?>">Центральная Площадь</a></td>
+              <td bgcolor="#D3D3D3" nowrap><a href="main.php?action=go&room_go=centplosh" class="passage" alt="<?echo $char->city->getRoomOnline ('centplosh', 'mini');?>">Центральная Площадь</a></td>
             </tr>
             <tr>
               <td bgcolor="#D3D3D3"><img src="img/links.gif" width="9" height="7" /></td>
-              <td bgcolor="#D3D3D3" nowrap><a href="main.php?action=go&room_go=centplosh" class="passage" alt="<?echo $char->info->roomOnline ('Филиал Аукциона', 'mini');?>">Филиал Аукциона</a></td>
+              <td bgcolor="#D3D3D3" nowrap><a href="main.php?action=go&room_go=centplosh" class="passage" alt="<?echo $char->city->getRoomOnline ('Филиал Аукциона', 'mini');?>">Филиал Аукциона</a></td>
             </tr>
           </table>
         </td>

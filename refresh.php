@@ -2,18 +2,17 @@
 $time = microtime (true);
 
 session_start ();
-error_reporting (E_ALL);
 ini_set ('display_errors', true);
 ini_set ('html_errors', false);
 ini_set ('error_reporting', E_ALL);
 
 define ('AntiBK', true);
 
-$guid = (empty($_SESSION['guid'])) ?0 :$_SESSION['guid'];
-
 include ("engline/config.php");
 include ("engline/dbsimple/Generic.php");
 include ("engline/functions/functions.php");
+
+$guid = getGuid ();
 
 $adb = DbSimple_Generic::connect($database['adb']);
 $adb->query("SET NAMES ? ",$database['db_encoding']);
@@ -55,10 +54,8 @@ $send = "";
 if ($chat_s != 2)
 {
   $last = (isset($_SESSION['last'])) ?$_SESSION['last'] :0;
-  if (!isset($_SESSION['ENTERED']) || $go)
-    $last = time () - 300;
-  else if (empty($last))
-    $last = $_SESSION['last'] = time ();
+  if ($go || !$last)
+    $last = $_SESSION['last'] = time () - 300;
 
   $rows = $adb->select ("SELECT `msg`, 
                                 `sender`, 
@@ -180,7 +177,7 @@ if ($seek > 1000)
 }
 /*-------------------Создание списка-----------------------*/
 $room_online = $adb->selectCell ("SELECT COUNT(*) FROM `online` WHERE `city` = ?s and `room` = ?s", $city ,$room);
-$room_name = $adb->selectCell ("SELECT `name` FROM `city_rooms` WHERE `city` = ?s and `room` = ?s", $city ,$room);
+$room_name = $char->city->getRoom ($room, $city, 'name');
 $user_list = "<br><center><input type='button' class='nav' value='Обновить' onclick='top.ref.location.reload();'></center><font style='color: #8f0000; font-size: 10pt; font-weight: bold;'>$room_name ($room_online)</font><br>";
 
 $rows = $adb->selectCol ("SELECT `guid` 

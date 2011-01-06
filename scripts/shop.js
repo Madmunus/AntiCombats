@@ -5,6 +5,7 @@ function showShopSection (section_shop)
   var name_filter = $("input[name=name_filter]").val();
   $("#loadbar").show();
   $.post('ajax.php', 'do=showshopsection&section_shop='+section_shop+'&level_filter='+level_filter+'&name_filter='+name_filter, function (data){
+    $('html, body').animate({scrollTop: 0}, 500);
     if (data)
       $("#section").fadeOut('10000', function (){$(this).html(data).fadeIn('10000'); $("#loadbar").hide();});
   });

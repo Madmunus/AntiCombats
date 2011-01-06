@@ -12,15 +12,15 @@ echo "<form method='post' action=''>"
    . "<input type='submit' name='submit' value='Перебросить'></form>";
 
 if (isset($_POST['r_login']) && $r_login == '')
-	echo "Вы не ввели Логин.";
+    echo "Вы не ввели Логин.";
 else if (isset($_POST['r_login_new']) && $r_login_new == '')
-	echo "Вы не ввели Новый Логин.";
+    echo "Вы не ввели Новый Логин.";
 else if ($r_login != '' && $r_login_new != '')
 {
-	$sql = $adb -> query ("	UPDATE `inv` 
-							SET `owner` = '$r_login_new' 
-							WHERE `owner` = '$r_login';
-							");
-	echo "Вещи были переброшены.";
+    $sql = $adb->query ("    UPDATE `inv` 
+                            SET `owner` = '$r_login_new' 
+                            WHERE `owner` = '$r_login';
+                            ");
+    echo "Вещи были переброшены.";
 }
 ?>

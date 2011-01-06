@@ -12,15 +12,15 @@ $metka = (isset($_POST['metka'])) ?$_POST['metka'] :"";
 <input type="submit" name="submit" value="Далее"></form>
 <?
 if (isset($_POST['r_login']) && $r_login == '')
-	echo "Вы не ввели Логин.";
+    echo "Вы не ввели Логин.";
 else if (isset($_POST['metka']) && $metka == '')
-	echo "Вы не ввели Метку.";
+    echo "Вы не ввели Метку.";
 else if ($r_login != '' && $metka != '')
 {
-	$sql = $adb -> query ("	UPDATE `users` 
-							SET `metka` = '$metka' 
-							WHERE `login` = '$r_login';
-							");
-	echo "Персонаж проверен.";
+    $sql = $adb->query ("    UPDATE `characters` 
+                            SET `metka` = '$metka' 
+                            WHERE `login` = '$r_login';
+                            ");
+    echo "Персонаж проверен.";
 }
 ?>

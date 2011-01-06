@@ -52,14 +52,13 @@ a:hover 		{color: #dcdcdc;}
 .date2		{font-family: Courier; font-size: 8pt; text-decoration:none; font-weight:normal; color: #007000; background-color: #00FFAA;}
 select,
 textarea,
-input		{border: solid 1pt #B0B0B0; font-family: MS Sans Serif; font-size: 10px; color: #191970; margin-bottom: 2px; margin-top: 1px;}
-.m 			{background: #99CCCC; text-align: center;}
-.s 			{background: #BBDDDD; text-align: center;}
-.active		{cursor: pointer;}
-.nonactive	{opacity: 0.5; cursor: default;}
-.show 		{border: 0px; background-color: #dedede; font-weight: bold; width: 40px; text-align: right; font-size: 10pt; font-family: Verdana; margin: 0px; padding: 0px; cursor: default; color: black;}
-img.skill	{border: 0px; cursor: pointer;}
-td.skill	{font-weight: bold;}
+input		     {border: solid 1pt #B0B0B0; font-family: MS Sans Serif; font-size: 10px; color: #191970; margin-bottom: 2px; margin-top: 1px;}
+.m 			     {background: #99CCCC; text-align: center;}
+.s 			     {background: #BBDDDD; text-align: center;}
+.active		 {cursor: pointer;}
+.nonactive {opacity: 0.5; cursor: default;}
+img.skill	 {border: 0px; cursor: pointer;}
+td.skill       {font-weight: bold;}
 
 .ahint		{font-family: MS Sans Serif; font-size: 8px; text-decoration: none; color: #000080; z-index: 99; position: absolute; display: none;}
 #hint2		{width: 140px; background-color: #FFF6DD;}
@@ -94,3 +93,4 @@ a.dis_passage:hover	{opacity: 0.5; color: gray; text-shadow: 0.1em 0.1em white;}
 #help		{z-index: 110; position: fixed; width: 700px; height: 300px; border-bottom: 3px double #ffffff; border-left: 3px double #ffffff; border-right: 3px double #ffffff; border-top: 2px groove #ffffff; -moz-border-radius: 5px; padding: 5px; display: none; overflow-y: auto; background-color: #D5D5D5;}
 #help_bg	{width: 100%; height: 100%; z-index: 109; position: fixed; background-color: #000000; opacity: 0.5; display: none;}
 .but_close	{cursor: pointer; position: absolute; top: 0px; right: 0px;}
+.loadbar	{width: 40px; height: 5px; padding-right: 10px; display: none;}

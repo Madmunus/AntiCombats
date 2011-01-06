@@ -1,7 +1,7 @@
 <?
 defined('AntiBK') or die ("Доступ запрещен!");
 
-$room_info = $adb->selectRow ("SELECT `shop`, `shop_section` FROM `city_rooms` WHERE `city` = ?s and `room` = ?s", $city ,$room);
+$room_info = $char->city->getRoom ($room, $city, 'shop', 'shop_section');
 $section_shop = requestVar ('section_shop', '', 7);
 $section_shop = (array_key_exists ($section_shop, $data['sections_shop'])) ?$section_shop :$room_info['shop_section'];
 ?>
@@ -63,7 +63,7 @@ else
   <table width="148" align='right' border="0" cellpadding="0" cellspacing="1" bgcolor="#DEDEDE">
     <tr>
       <td bgcolor="#D3D3D3"><img src="img/links.gif" width="9" height="7" /></td>
-      <td bgcolor="#D3D3D3" nowrap><a href="?action=go&room_go=centplosh" class="passage" alt="<?echo $char->info->roomOnline ('centplosh', 'mini');?>">Центральная Площадь</a></td>
+      <td bgcolor="#D3D3D3" nowrap><a href="?action=go&room_go=centplosh" class="passage" alt="<?echo $char->city->getRoomOnline ('centplosh', 'mini');?>">Центральная Площадь</a></td>
     </tr>
   </table><br><br>
   <div align='right'><small>

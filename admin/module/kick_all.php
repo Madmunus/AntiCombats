@@ -13,12 +13,12 @@ $answer = (isset($_POST['answer'])) ?$_POST['answer'] :"";
 <?
 if ($answer == 'yes')
 {
-	$sql = $adb -> query ("	UPDATE `users` 
-							SET `battle` = '0', 
-								`battle_pos` = '', 
-								`battle_team` = '', 
-								`battle_opponent` = '';
-							");
-	echo "Все персонажи вытащены из битвы.";
+    $sql = $adb->query ("    UPDATE `characters` 
+                            SET `battle` = '0', 
+                                `battle_pos` = '', 
+                                `battle_team` = '', 
+                                `battle_opponent` = '';
+                            ");
+    echo "Все персонажи вытащены из битвы.";
 }
 ?>
