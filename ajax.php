@@ -191,7 +191,7 @@ switch ($do)
               unset ($bars[$key]);
           }
           asort ($bars);
-          returnAjax ('complete', $bar, $char->showInventoryBar ($bar, $bars[$bar], count ($bars)), $c_b_k, ($char->showInventoryBar ($c_b_k, $bars[$c_b_k], count ($bars))))
+          returnAjax ('complete', $bar, $char->showInventoryBar ($bar, $bars[$bar], count ($bars)), $c_b_k, ($char->showInventoryBar ($c_b_k, $bars[$c_b_k], count ($bars))));
         }
       }
       else
