@@ -201,7 +201,7 @@ $(document).ready(function (){
       <input type="button" class="nav" value="Персонажи" id="characters" name="changetype">
     </td>
     <td align="right">
-      <input type="button" class="nav" value="Админ панель" onclick="top.location.href = 'admin/index.php'">
+      <input type="button" class="nav" value="Админ панель" onclick="window.open('admin/index.php', '', 'menubar=no,status=no');">
       <input type="button" class="nav" value="Обновить" id="refresh">
       <input type="button" class="nav" value="<?echo $lang['return'];?>" id="link" link="inv">
     </td>
@@ -299,5 +299,7 @@ foreach ($all_characters as $one_character)
 
 </script>
 <?
-
+$var = array ('dasd', '3123', 'wetfg');
+$var1 = implode ('A_D', $var);
+echo $var1;
 ?>

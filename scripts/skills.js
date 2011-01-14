@@ -6,7 +6,7 @@ function increaseStat (stat)
 {
   $("#loadbar").show();
 	$.post('ajax.php', 'do=increasestat&stat='+stat, function (data){
-    var stats = data.split('A_D');
+    var stats = exploder (data);
 	  if (stats[0] == 'complete')
     {
       var base = parseInt($("#base_"+stat).html()) + 1;
@@ -39,7 +39,7 @@ function increaseSkill (stat, max)
 {
   $("#loadbar").show();
 	$.post('ajax.php', 'do=increaseskill&stat='+stat, function (data){
-    var stats = data.split('A_D');
+    var stats = exploder (data);
 	  if (stats[0] == 'complete')
     {
       var base = parseInt($("#base_"+stat).html()) + 1;

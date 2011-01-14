@@ -671,7 +671,7 @@ class Test extends Char
     }
   }
   /*Проверка правельности перехода*/
-  function Go ($room_go)
+  function Go ($room_go, $return = false)
   {
     if (!$room_go)
       $this->char->error->Map (102);
@@ -703,7 +703,7 @@ class Test extends Char
     if (!in_array ($char_db['room'], explode (',', $from)) && $char_db['room'] != $room_go)
       $this->char->error->Map (102);
     
-    if (($time_to_go - (time () - $char_db['last_go'])) > 0)
+    if (($time_to_go - (time () - $char_db['last_go'])) > 0 && !$return)
       $this->char->error->Map (110);
   }
   /*Проверка всех предметов*/
@@ -756,7 +756,7 @@ class Test extends Char
     $char_db = $this->getChar ('char_db', 'last_time', 'dnd');
     
     if ((time () - $char_db['last_time']) >= 300 && !$char_db['dnd'])
-      $this->db->query ("UPDATE `characters` SET `afk` = '1' WHERE `guid` = ?d", $this->guid);
+      $this->db->query ("UPDATE `characters` SET `afk` = '1', `message` = 'away from keyboard' WHERE `guid` = ?d", $this->guid);
   }
   /*Обновление состояния персонажа*/
   function WakeUp ()
@@ -1152,11 +1152,11 @@ class Equip extends Char
     $tear_show = compare ($tear_cur, $tear_max * 0.90, "$tear_cur/$tear_max");
     $required = array ('dex', 'con', 'int', 'level', 'fire', 'water', 'air', 'earth', 'sword', 'axe', 'fail', 'knife', 'staff', 'vit', 'str', 'mp_all', 'wis', 'sex');
     $modifiers = array ('mf_critpower', 'mf_anticrit', 'mf_antiuvorot', 'mf_piercearmor', 'mf_crit', 'mf_parry', 'mf_blockshield', 'mf_uvorot', 'mf_contr', 'repres_all_magic',
-                        'repres_fire', 'repres_water', 'repres_air', 'repres_earth', 'mf_all_magic', 'mf_fire', 'mf_water', 'mf_air', 'mf_earth', 'mf_all_damage',
-                        'mf_sting', 'mf_slash', 'mf_crush', 'mf_sharp', 'all_magic', 'fire', 'water', 'air', 'earth', 'light', 'gray', 'dark', 'all_mastery',
-                        'sword', 'axe', 'fail', 'knife', 'staff', 'shot', 'resist_all_magic', 'resist_fire', 'resist_water', 'resist_air', 'resist_earth',
-                        'resist_light', 'resist_gray', 'resist_dark', 'resist_all_damage', 'resist_sting', 'resist_slash', 'resist_crush', 'resist_sharp', 'add_hp',
-                        'add_mp', 'mpcons', 'mpreco', 'hpreco', 'add_attack_min', 'add_attack_max');
+                        'repres_fire', 'repres_water', 'repres_air', 'repres_earth', 'mf_all_magic', 'mf_fire', 'mf_water', 'mf_air', 'mf_earth', 'mf_light', 'mf_gray', 
+                        'mf_dark', 'mf_all_damage', 'mf_sting', 'mf_slash', 'mf_crush', 'mf_sharp', 'all_magic', 'fire', 'water', 'air', 'earth', 'light', 'gray', 
+                        'dark', 'all_mastery', 'sword', 'axe', 'fail', 'knife', 'staff', 'shot', 'resist_all_magic', 'resist_fire', 'resist_water', 'resist_air', 
+                        'resist_earth', 'resist_light', 'resist_gray', 'resist_dark', 'resist_all_damage', 'resist_sting', 'resist_slash', 'resist_crush', 'resist_sharp', 
+                        'add_hp', 'add_mp', 'mpcons', 'mpreco', 'hpreco', 'add_attack_min', 'add_attack_max');
     $w_modifiers = array ('mf_antiuvorot', 'mf_crit', 'mf_critpower', 'mf_sting', 'mf_slash', 'mf_crush', 'mf_sharp', 'sword', 'axe', 'fail', 'knife', 'mf_piercearmor');
     $chances = array ('chance_sting', 'chance_slash', 'chance_crush', 'chance_sharp', 'chance_fire', 'chance_water', 'chance_air', 'chance_earth', 'chance_light', 'chance_dark');
     $features = array ('resist_all_damage', 'resist_sting', 'resist_slash', 'resist_crush', 'resist_sharp');
@@ -2162,13 +2162,13 @@ class Info extends Char
     $afk = ($afk) ?"<font title='$message'><b>afk</b></font>&nbsp;" :(($dnd && $message) ?"<font title='$message'><b>dnd</b></font>&nbsp;" :'');
     switch ($type)
     {
-      case 'online': return "&nbsp;<a href=javascript:top.AddToPrivate('$login_link',true);><img border='0' src='img/lock.gif' title='Приватное сообщение'></a>&nbsp;&nbsp;$afk$orden_img$clan<a href=javascript:top.AddTo('$login_link'); class='nick'><b>$login</b></a>[$level]$login_info$mol$travm<br>";
+      case 'online': return "&nbsp;<a href=javascript:top.AddToPrivate('$login_link',true);><img border='0' src='img/lock.gif' title='Приват'></a>&nbsp;&nbsp;$afk$orden_img$clan<a href=javascript:top.AddTo('$login_link'); class='nick'><b>$login</b></a>[$level]$login_info$mol$travm<br>";
       case 'mults':  return "$orden_img$clan<b>$login</b> [$level]$login_info $banned <br>";
       case 'clan':   return "$orden_img$clan<b>$login</b> [$level]$login_info";
       case 'turn':   return $orden_img;
       case 'name':   return $login;
       case 'news':   return "$orden_img$clan<font class='header'>$login</font> [$level]$login_info";
-      case 'info':   return "<img src='img/icon/lock3.gif' border='0'onclick=window.opener.to('$login'); style='cursor: pointer;'> $orden_img$clan<b>$login</b> [$level]$login_info";
+      case 'info':   return "<img src='img/icon/lock3.gif' border='0' onclick=window.opener.top.AddToPrivate('$login',true); style='cursor: pointer;'> $orden_img$clan<b>$login</b> [$level]$login_info";
       case 'mail':   return "<font color='red'>$login</font> $login_info";
       default:       return "";
     }
@@ -2495,6 +2495,13 @@ function uppercase ($arg = '')
 {
   return mb_strtr ($arg, LOCASE, UPCASE);
 }
+/*Возврат значения ajax запроса*/
+function returnAjax ()
+{
+  $args = func_get_args();
+  $str = implode ('A_D', $args);
+  die ($str);
+}
 /*Получение место перехода*/
 function getError ($type, $loc = '')
 {
@@ -2502,6 +2509,7 @@ function getError ($type, $loc = '')
   {
     case 'main':  return "<script>top.location.href = '{$loc}index.php';</script>";
     case 'game':  return "<script>location.href = '{$loc}index.php';</script>";
+    case 'ajax':  return "ajax_error";
   }
 }
 /*Получение guid персонажа*/

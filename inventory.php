@@ -1,7 +1,5 @@
 <?
 defined('AntiBK') or die ("Доступ запрещен!");
-
-$bar = requestVar ('bar');
 ?>
 <script src="scripts/inventory.js" type="text/javascript"></script>
 <?

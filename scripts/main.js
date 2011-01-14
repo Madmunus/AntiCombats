@@ -43,8 +43,8 @@ function showHelp (link)
 	$.post('encicl/help/'+link+'.html', function (data){
 	  if (data)
 	  {
-		$("#help").html(data).css({left: ($(document).width() - 700)/2, top: 100}).before("<div id='help_bg' onclick='hideHelp ();'></div>").fadeIn('10000');
-		$("#help_bg").fadeIn('10000');
+      $("#help").html(data).css({left: ($(document).width() - 700)/2, top: 100}).before("<div id='help_bg' onclick='hideHelp ();'></div>").fadeIn('10000');
+      $("#help_bg").fadeIn('10000');
 	  }
 	});
 }
@@ -69,15 +69,16 @@ function showShapes (available)
 	}
 	  
 	$.post('ajax.php', 'do=showshapes&available='+available, function (data){
-	  if (data)
-	    $("#shapes").fadeOut('10000', function (){$(this).html(data).fadeIn('10000');});
+    var shapes = exploder (data);
+	  if (shapes[0] == 'complete')
+	    $("#shapes").fadeOut('10000', function (){$(this).html(shapes[1]).fadeIn('10000');});
 	});
 }
 
 function chooseShape (shape)
 {
 	$.post('ajax.php', 'do=chooseshape&shape='+shape, function (data){
-	  var shapes = data.split('A_D');
+	  var shapes = exploder (data);
 	  if (shapes[0] == 'complete')
 	    location.href = 'main.php?action=inv';
 	  else if (shapes[0] == 'error')
@@ -179,11 +180,6 @@ function setMPlocal ()
 					"</tr></table>");
 	if (TimerOnMP != -1)
 		TimerOnMP = setTimeout ('setMPlocal()', delay * 1000);
-}
-
-function getRandomInt (min, max)
-{
-  return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 var broken = new Array ();

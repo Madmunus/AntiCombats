@@ -6,8 +6,9 @@ function showShopSection (section_shop)
   $("#loadbar").show();
   $.post('ajax.php', 'do=showshopsection&section_shop='+section_shop+'&level_filter='+level_filter+'&name_filter='+name_filter, function (data){
     $('html, body').animate({scrollTop: 0}, 500);
-    if (data)
-      $("#section").fadeOut('10000', function (){$(this).html(data).fadeIn('10000'); $("#loadbar").hide();});
+    var section = exploder (data);
+    if (section[0] == 'complete')
+      $("#section").fadeOut('10000', function (){$(this).html(section[1]).fadeIn('10000'); $("#loadbar").hide();});
   });
 }
 
@@ -20,8 +21,9 @@ function shopSection (section_shop)
     $("#section_shop_"+section_shop).css('backgroundColor', '#C7C7C7');
     setCookie ('section_shop', section_shop, getTimePlusHour ());
     $.post('ajax.php', 'do=getshoptitle&section_shop='+section_shop, function (data){
-      if (data)
-        $("#shop_title").html(data);
+      var title = exploder (data);
+      if (title[0] == 'complete')
+        $("#shop_title").html(title[1]);
     });
   }
   section_shop = getCookie ('section_shop');
@@ -34,10 +36,8 @@ function buyItem (entry)
   $.post('ajax.php', 'do=buyitem&entry='+entry+'&count='+count, function (data){
     closehint3 ();
     $('html, body').animate({scrollTop: 0}, 500);
-    var item = data.split('A_D');
-    if (item[0] == 'error')
-      showError (item[1], item[2]);
-    else if (item[0] == 'complete')
+    var item = exploder (data);
+    if (item[0] == 'complete')
     {
       if (item[3] == 400)
         $("#money").fadeOut('10000', function (){$(this).html(item[1]).fadeIn('10000');});
@@ -46,16 +46,16 @@ function buyItem (entry)
       $("#mass").fadeOut('10000', function (){$(this).html(item[2]).fadeIn('10000');});
       showError (item[3], item[4]);
     }
+    else if (item[0] == 'error')
+      showError (item[1], item[2]);
   });
 }
 
 function sellItem (id)
 {
   $.post('ajax.php', 'do=sellitem&id='+id, function (data){
-    var item = data.split('A_D');
-    if (item[0] == 'error')
-      showError (item[1], item[2]);
-    else if (item[0] == 'complete')
+    var item = exploder (data);
+    if (item[0] == 'complete')
     {
       if (item[3] == 404)
         $("#money").fadeOut('10000', function (){$(this).html(item[1]).fadeIn('10000');});
@@ -65,6 +65,8 @@ function sellItem (id)
       $("#mass").fadeOut('10000', function (){$(this).html(item[2]).fadeIn('10000');});
       showError (item[3], item[4]);
     }
+    else if (item[0] == 'error')
+      showError (item[1], item[2]);
   });
 }
 

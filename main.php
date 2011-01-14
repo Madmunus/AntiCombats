@@ -54,8 +54,9 @@ setCookie ('login_mail', $login_mail,  time () + 3600);
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta http-equiv="Content-Language" content="ru">
 <link rel="StyleSheet" href="styles/style.css" type="text/css">
-<script src="scripts/jquery-1.4.3.js" type="text/javascript"></script>
+<script src="scripts/jquery-1.4.4.js" type="text/javascript"></script>
 <script src="scripts/jquery.color.js" type="text/javascript"></script>
+<script src="scripts/scripts.js" type="text/javascript"></script>
 <script src="scripts/cookies.js" type="text/javascript"></script>
 <script src="scripts/main.js" type="text/javascript"></script>
 <script src="scripts/show.js" type="text/javascript"></script>
@@ -137,7 +138,9 @@ switch ($action)
     $char->test->Go ($room_go);
     
     $adb->query ("UPDATE `characters` SET `room` = ?s, `last_go` = ?d, `last_room` = ?s WHERE `guid` = ?d", $room_go ,time () ,$room ,$guid);
-    die ("<script>$('#mes', parent.msg.document).html(''); parent.ref.location = 'refresh.php?go'; location.href = 'main.php';</script>");
+    $adb->query ("UPDATE `online` SET `room` = ?s WHERE `guid` = ?d", $room_go ,$guid);
+    echo "<script>$('#mes', parent.msg.document).html(''); parent.ref.location = 'refresh.php?go'; parent.user.updateUsers();</script>";
+    $char->error->Map (0);
   break;
   case 'return':
     if ((time () - $char_db['last_return']) < $char_db['return_time'])
@@ -146,14 +149,18 @@ switch ($action)
     if ($char_db['dnd'])
       $adb->query ("UPDATE `characters` SET `dnd` = '0', `message` = '' WHERE `guid` = ?d", $guid);
     
+    $char->test->Go ($char_db['last_room'], true);
+    
     $adb->query ("UPDATE `characters` SET `room` = ?s, `last_room` = ?s, `last_return` = ?d WHERE `guid` = ?d", $char_db['last_room'] ,$room ,time () ,$guid);
-    die ("<script>$('#mes', parent.msg.document).html(''); parent.ref.location = 'refresh.php?go'; location.href = 'main.php';</script>");
+    $adb->query ("UPDATE `online` SET `room` = ?s WHERE `guid` = ?d", $char_db['last_room'] ,$guid);
+    echo "<script>$('#mes', parent.msg.document).html(''); parent.ref.location = 'refresh.php?go'; parent.user.updateUsers();</script>";
+    $char->error->Map (0);
   break;
   case 'admin':
     if ($admin_level > 1)
       include ("adminbar.php");
     else
-      die ("<script>location.href = 'main.php';</script>");
+      $char->error->Map (0);
   break;
   case 'orden':
     include ("orden.php");

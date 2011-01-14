@@ -1,6 +1,4 @@
 <?
-$time = microtime (true);
-
 session_start ();
 ini_set ('display_errors', true);
 ini_set ('html_errors', false);
@@ -31,7 +29,8 @@ $char->test->Afk ();
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta http-equiv="Refresh" content="10; url=refresh.php">
 <link rel="StyleSheet" href="styles/style.css" type="text/css">
-<script src="scripts/jquery-1.4.3.js" type="text/javascript"></script>
+<script src="scripts/jquery-1.4.4.js" type="text/javascript"></script>
+<script src="scripts/scripts.js" type="text/javascript"></script>
 </head>
 <body topmargin="0" onload="parent.msg.window.scroll(0, 65000);">
 <?
@@ -40,7 +39,7 @@ ArrToVar ($char_db);
 
 if ($battle)
 {
-  echo "<script>parent.msg.document.getElementById('mes').innerHTML += '$_SESSION[battle_ref]<br>'</script>";
+  echo "<script>$('#mes', parent.msg.document).append('$_SESSION[battle_ref]<br>');</script>";
   if ($battle_opponent && !$_SESSION['battle_ref'])
   {
     //print "<script>top.main.location.reload()</script>";
@@ -150,7 +149,7 @@ if ($chat_s != 2)
 ?>
 <script type="text/javascript">
 var mes_class = "<?echo $class;?>";
-$('#mes', parent.msg.document).html($('#mes', parent.msg.document).html() + "<?echo $send;?>");
+$('#mes', parent.msg.document).append("<?echo $send;?>");
 </script>
 <?
   }
@@ -158,40 +157,10 @@ $('#mes', parent.msg.document).html($('#mes', parent.msg.document).html() + "<?e
 else if ($chat_s == 2)
   $_SESSION['last'] = time ();
 
-/*================Генерация списка чатовцев================*/
 /*---------------------Проверки ip-------------------------*/
 $ip = $adb->selectCell ("SELECT `ip` FROM `online` WHERE `guid` = ?d", $guid) or die ("<script>top.main.location.href = 'main.php?action=exit';</script>");
 if ($ip != $_SERVER['REMOTE_ADDR'])
   die ("<script>top.main.location.href = 'main.php?action=exit';</script>");
-
-/*------------------Обновление онлайн----------------------*/
-$search = $adb->selectCell ("SELECT `guid` FROM `online` WHERE `guid` = ?d", $guid);
-if ($search)
-  $adb->query ("UPDATE `online` SET `room` = ?s WHERE `guid` = ?d", $room ,$guid);
-/*---------------------Очистка чата------------------------*/
-$seek = $adb->selectCell ("SELECT COUNT(*) FROM `city_chat` WHERE `city` = ?s and `room` = ?s", $city ,$room);
-if ($seek > 1000)
-{
-  $adb->query ("DELETE FROM `city_chat` WHERE `city` = ?s and `room` = ?s", $city ,$room);
-  $adb->query ("ALTER TABLE `city_chat` AUTO_INCREMENT = 1;");
-}
-/*-------------------Создание списка-----------------------*/
-$room_online = $adb->selectCell ("SELECT COUNT(*) FROM `online` WHERE `city` = ?s and `room` = ?s", $city ,$room);
-$room_name = $char->city->getRoom ($room, $city, 'name');
-$user_list = "<br><center><input type='button' class='nav' value='Обновить' onclick='top.ref.location.reload();'></center><font style='color: #8f0000; font-size: 10pt; font-weight: bold;'>$room_name ($room_online)</font><br>";
-
-$rows = $adb->selectCol ("SELECT `guid` 
-                            FROM `online` 
-                            WHERE `city` = ?s 
-                              and `room` = ?s 
-                            ORDER by `login_display`", $city ,$room);
-foreach ($rows as $num => $list_guid)
-  $user_list .= $char->info->character ('online', $list_guid);
-/*=========================================================*/
-$time = round (microtime(true) - $time, 2);
 ?>
-<script type="text/javascript">
-$('#user_list', parent.user.document).html("<?echo $user_list."<br>Загружено за: ".$time." сек.";?>");
-</script>
 </body>
 </html>

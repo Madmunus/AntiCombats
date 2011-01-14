@@ -27,7 +27,8 @@ $name = $adb->selectCell ("SELECT `name` FROM `admin_menu` WHERE `href` = ?s", $
 ?>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<script src="../scripts/jquery-1.4.3.js" type="text/javascript"></script>
+<script src="../scripts/jquery-1.4.4.js" type="text/javascript"></script>
+<script src="../scripts/scripts.js" type="text/javascript"></script>
 <script src="../scripts/show.js" type="text/javascript"></script>
 <link rel="stylesheet" type="text/css" href="css.css">
 </head>

@@ -34,10 +34,10 @@ $vote = $adb->selectCell ("SELECT `vote` FROM `characters` WHERE `guid` = ?d", $
 <form name="vote" method="post">
 <?
 $rows = $adb->select ("SELECT `id`, 
-                                `answer`, 
-                                `count` 
-                         FROM `city_stella_question` 
-                         WHERE `question` = ?d ORDER BY `id`", $dat['id']);
+                              `answer`, 
+                              `count` 
+                       FROM `city_stella_question` 
+                       WHERE `question` = ?d ORDER BY `id`", $dat['id']);
 $count = $adb->selectCell ("SELECT SUM(count) FROM `city_stella_question` WHERE `question` = ?d ORDER BY `id`", $dat['id']);
 echo "<fieldset><legend><b>$dat[question]</b></legend>";
 if ($vote > 0 && $level > $dat['min_level'] && $state == $dat['city'])

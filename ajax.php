@@ -11,7 +11,7 @@ include ("engline/dbsimple/Generic.php");
 include ("engline/data/data.php");
 include ("engline/functions/functions.php");
 
-$guid = getGuid ('game');
+$guid = getGuid ('ajax');
 
 $adb = DbSimple_Generic::connect($database['adb']);
 $adb->query("SET NAMES ? ",$database['db_encoding']);
@@ -19,7 +19,7 @@ $adb->setErrorHandler("databaseErrorHandler");
 
 $char = Char::initialization($guid, $adb);
 
-$char->test->Guid ('game');
+$char->test->Guid ('ajax');
 
 $char_db = $char->getChar ('char_db', '*');
 $char_stats = $char->getChar ('char_stats', '*');
@@ -79,16 +79,17 @@ switch ($do)
     }
     if (count($rows) > 0)
     {
+      $inventory = '';
       $i = true;
       foreach ($rows as $item_info)
       {
-        echo $char->equip->showItemInventory ($item_info, $type, $i, $mail_guid);
+        $inventory .= $char->equip->showItemInventory ($item_info, $type, $i, $mail_guid);
         $i = !$i;
       }
-      die ();
+      returnAjax ('complete', $inventory);
     }
     else
-      die ("<table width='100%' cellspacing='1' cellpadding='2' bgcolor='#A5A5A5'><tr><td bgcolor='#E2E0E0' align='center'>$lang[empty]</td></tr></table>");
+      returnAjax ('complete', "<table width='100%' cellspacing='1' cellpadding='2' bgcolor='#A5A5A5'><tr><td bgcolor='#E2E0E0' align='center'>$lang[empty]</td></tr></table>");
   break;
   case 'sortinventory':
     $type = requestVar ('type');
@@ -112,7 +113,7 @@ switch ($do)
     die ("complete");
   break;
   case 'showshopsection':
-    $room_shop = $char->city->getRoom ($room, $city, 'shop') or die ("<table width='100%' cellspacing='1' cellpadding='2' bgcolor='#A5A5A5'><tr><td bgcolor='#E2E0E0' align='center'>$lang[shop_no]</td></tr></table>");
+    $room_shop = $char->city->getRoom ($room, $city, 'shop') or returnAjax ('complete', "<table width='100%' cellspacing='1' cellpadding='2' bgcolor='#A5A5A5'><tr><td bgcolor='#E2E0E0' align='center'>$lang[shop_no]</td></tr></table>");
     $section_shop = requestVar ('section_shop', '', 7);
     $level_filter = requestVar ('level_filter', '', 7);
     $check_level = ($level_filter > 0 || $level_filter == '0');
@@ -135,25 +136,27 @@ switch ($do)
                            (($room != 'shop') ?4 :DBSIMPLE_SKIP));
     if (count($rows) > 0)
     {
+      $section = '';
       $i = true;
       foreach ($rows as $item_info)
       {
-        echo $char->equip->showItemInventory ($item_info, 'shop', $i);
+        $section .= $char->equip->showItemInventory ($item_info, 'shop', $i);
         $i = !$i;
       }
-      die ();
+      returnAjax ('complete', $section);
     }
     else
-      die ("<table width='100%' cellspacing='1' cellpadding='2' bgcolor='#A5A5A5'><tr><td bgcolor='#E2E0E0' align='center'>$lang[shop_empty]</td></tr></table>");
+      returnAjax ('complete', "<table width='100%' cellspacing='1' cellpadding='2' bgcolor='#A5A5A5'><tr><td bgcolor='#E2E0E0' align='center'>$lang[shop_empty]</td></tr></table>");
   break;
   case 'getshoptitle':
     $section_shop = requestVar ('section_shop');
-    die ($lang[$data['sections_shop'][$section_shop][1]].$lang['shop_'.$section_shop]);
+    returnAjax ('complete', $lang[$data['sections_shop'][$section_shop][1]].$lang['shop_'.$section_shop]);
   break;
   case 'getroomname':
     $room = requestVar ('room');
     $name = $char->city->getRoom ($room, $city, 'name');
-    die ($name);
+    $name = "Вы перейдете в: <strong>$name</strong> (<a href='#' class='nick' onclick='return clear_solo ();'>отмена</a>)";
+    returnAjax ('complete', $name);
   break;
   case 'switchbars':
     $bar = requestVar ('bar');
@@ -188,11 +191,7 @@ switch ($do)
               unset ($bars[$key]);
           }
           asort ($bars);
-          echo "completeA_D";                                                           //0
-          echo $bar."A_D";                                                              //1
-          echo $char->showInventoryBar ($bar, $bars[$bar], count ($bars))."A_D"; //2
-          echo $c_b_k."A_D";                                                            //3
-          die ($char->showInventoryBar ($c_b_k, $bars[$c_b_k], count ($bars)));  //4
+          returnAjax ('complete', $bar, $char->showInventoryBar ($bar, $bars[$bar], count ($bars)), $c_b_k, ($char->showInventoryBar ($c_b_k, $bars[$c_b_k], count ($bars))))
         }
       }
       else
@@ -225,16 +224,16 @@ switch ($do)
     $count = requestVar ('count', 1);
     
     if ($item_id == 0 || !is_numeric($item_id))
-      die ("errorA_D213");
+      returnAjax ('error', 213);
     
     $inc_count_p = $adb->selectCell ("SELECT `inc_count_p` 
                                       FROM `character_inventory` 
                                       WHERE `guid` = ?d 
                                         and `id` = ?d 
                                         and `wear` = '0' 
-                                        and `mailed` = '0';", $guid ,$item_id) or die ("errorA_D213");
+                                        and `mailed` = '0';", $guid ,$item_id) or returnAjax ('error', 213);
     if ($inc_count_p - $count < 0)
-      die ("errorA_D216");
+      returnAjax ('error', 216);
     
     switch ($stat)
     {
@@ -248,9 +247,9 @@ switch ($do)
                                 WHERE `guid` = ?d 
                                   and `id` = ?d", 'inc_'.$stat ,'inc_'.$stat ,$count ,$count ,time () ,$guid ,$item_id);
                   $inc = $adb->selectRow ("SELECT ?#, `inc_count_p` FROM `character_inventory` WHERE `guid` = ?d and `id` = ?d", 'inc_'.$stat ,$guid ,$item_id);
-                  die ("completeA_D".$inc['inc_'.$stat]."A_D".$inc['inc_count_p']);
+                  returnAjax ('complete', $inc['inc_'.$stat], $inc['inc_count_p']);
         break;
-        default:  die ("errorA_D219");
+        default:  returnAjax ('error', 219);
         break;
     }
   break;
@@ -291,13 +290,13 @@ switch ($do)
         $return .= "</tr><tr>";
     }
     $return .= "</tr></table>";
-    die ($return);
+    returnAjax ('complete', $return);
   break;
   case 'chooseshape':
     $shape = requestVar ('shape', 0);
     
     if (!$shape || !($char->checkShape ($shape)))
-      die ("errorA_D215");
+      returnAjax ('error', 215);
     
     $shape = ($sex == "male") ?"m/$shape.gif" :"f/$shape.gif";
     $adb->query ("UPDATE `characters` SET `shape` = ?s, `next_shape` = ?d WHERE `guid` = ?d", $shape ,time () + 86400 ,$guid);
@@ -311,19 +310,19 @@ switch ($do)
                                           `cash`, 
                                           `euro` 
                                    FROM `character_bank` 
-                                   WHERE `id` = ?d", $credit) or die ("errorA_D303");
+                                   WHERE `id` = ?d", $credit) or returnAjax ('error', 303);
     if ($guid != $bank_info['guid'])
-      die ("errorA_D322");
+      returnAjax ('error', 322);
     
     if (SHA1 ($credit.':'.$pass) != $bank_info['password'])
-      die ("errorA_D302");
+      returnAjax ('error', 302);
     
     $_SESSION['bankСredit'] = $credit;
-    die ("completeA_D<b>".getMoney ($bank_info['cash'])."</b>кр. <b>".getMoney ($bank_info['euro'])."</b>екр.<a href='javascript:inventoryUnLoginBank ();'><img border='0' valign='bottom' width='13' height='9' title='$lang[credit_exit]' src='img/icon/close_bank.gif'></a>");
+    returnAjax ('complete', "<b>".getMoney ($bank_info['cash'])."</b>кр. <b>".getMoney ($bank_info['euro'])."</b>екр.<a href='javascript:inventoryUnLoginBank ();'><img border='0' valign='bottom' width='13' height='9' title='$lang[credit_exit]' src='img/icon/close_bank.gif'></a>");
   break;
   case 'inventoryunloginbank':
     unset ($_SESSION['bankСredit']);
-    $bank = $adb->selectCol ("SELECT `id` FROM `character_bank` WHERE `guid` = ?d", $guid) or die ("-");
+    $bank = $adb->selectCol ("SELECT `id` FROM `character_bank` WHERE `guid` = ?d", $guid) or die ("error");
     foreach ($bank as $num => $bank_id)
     {
       if (empty($credits))
@@ -331,7 +330,7 @@ switch ($do)
       else
         $credits .= ",".$bank_id;
     }
-    die ("<a href=\"javascript:bank_open ('$credits');\" class='nick' style='font-size: 7pt;'>$lang[credit_choose]</a>");
+    returnAjax ('complete', "<a href=\"javascript:bank_open ('$credits');\" class='nick' style='font-size: 7pt;'>$lang[credit_choose]</a>");
   break;
   case 'worksets':
     $type = requestVar ('type');
@@ -340,7 +339,7 @@ switch ($do)
     {
       case 'create':
         if ($name == '')
-          die("errorA_D222");
+          returnAjax ('error', 222);
         
         $cur_set = $adb->selectRow ("SELECT * FROM `character_equip` WHERE `guid` = ?d", $guid);
         $cur_set['name'] = $name;
@@ -348,13 +347,13 @@ switch ($do)
         $adb->query ("DELETE FROM `character_sets` WHERE `guid` = ?d and `name` = ?s", $guid ,$name);
         $adb->query ("INSERT INTO `character_sets` (?#) 
                       VALUES (?a);", array_keys($cur_set), array_values($cur_set)) or die ("errorA_D222");
-        die ("completeA_D<div name='$name' style='display: none;'><img width='200' height='1' src='img/1x1.gif'><br>&nbsp;&nbsp;<img src='img/icon/close2.gif' width='9' height='9' alt='$lang[set_delete]' onclick=\"if (confirm('$lang[set_delete] $name?')) {workSets ('delete', '$name');}\" style='cursor: pointer;'> <a href='main.php?action=wear_set&set_name=$name' class='nick'><small>$lang[equip] \"$name\"</small></a></div>");
+        returnAjax ('complete', "<div name='$name' style='display: none;'><img width='200' height='1' src='img/1x1.gif'><br>&nbsp;&nbsp;<img src='img/icon/close2.gif' width='9' height='9' alt='$lang[set_delete]' onclick=\"if (confirm('$lang[set_delete] $name?')) {workSets ('delete', '$name');}\" style='cursor: pointer;'> <a href='main.php?action=wear_set&set_name=$name' class='nick'><small>$lang[equip] \"$name\"</small></a></div>");
       break;
       case 'delete':
         if ($name == '')
-          die ("errorA_D221");
+          returnAjax ('error', 221);
         
-        $set = $adb->selectRow ("SELECT * FROM `character_sets` WHERE `guid` = ?d and `name` = ?s", $guid ,$name) or die ("errorA_D221");
+        $set = $adb->selectRow ("SELECT * FROM `character_sets` WHERE `guid` = ?d and `name` = ?s", $guid ,$name) or returnAjax ('error', 221);
         $adb->query ("DELETE FROM `character_sets` WHERE `guid` = ?d and `name` = ?s", $guid ,$name);
         die ("complete");
       break;
@@ -365,11 +364,11 @@ switch ($do)
     $count = requestVar ('count', 1);
     
     if ($item_entry == 0 || !is_numeric($item_entry))
-      die ("errorA_D403");
+      returnAjax ('error', 403);
     
     $buycount = 0;
     $amount = $city.'-'.$room;
-    $room_shop = $char->city->getRoom ($room, $city, 'shop') or die ("errorA_D403");
+    $room_shop = $char->city->getRoom ($room, $city, 'shop') or returnAjax ('error', 403);
     $dat = $adb->selectRow ("SELECT `i`.`name`, 
                                     `i`.`mass`, 
                                     `i`.`price`, 
@@ -381,7 +380,7 @@ switch ($do)
                              LEFT JOIN `item_amount` AS `a` 
                              ON `i`.`entry` = `a`.`entry` 
                              WHERE `i`.`entry` = ?d 
-                               and `a`.?# > '0';", $item_entry ,$amount) or die ("errorA_D403");
+                               and `a`.?# > '0';", $item_entry ,$amount) or returnAjax ('error', 403);
     list ($name, $i_mass, $price, $price_euro, $tear, $inc_count, $validity) = array_values ($dat);
     
     for ($i = 1; $i <= $count; $i++)
@@ -408,11 +407,11 @@ switch ($do)
       $buycount++;
     }
     if ($buycount != 0 && $price > 0)
-      die ("completeA_D".$money."A_D".$mass."A_D400A_D$name|".($price*$buycount)."|$buycount");
+      returnAjax ('complete', $money, $mass, 400, "$name|".($price*$buycount)."|$buycount");
     else if ($buycount != 0 && $price_euro > 0)
-      die ("completeA_D".$money_euro."A_D".$mass."A_D401A_D$name|".($price_euro*$buycount)."|$buycount");
+      returnAjax ('complete', $money_euro, $mass, 401, "$name|".($price_euro*$buycount)."|$buycount");
     else
-      die ("errorA_D107");
+      returnAjax ('error', 107);
   break;
   case 'sellitem':
     $item_id = requestVar ('id', 0);
@@ -433,7 +432,7 @@ switch ($do)
                                 and `c`.`id` = ?d 
                                 and `c`.`guid` = ?d 
                                 and `c`.`wear` = '0' 
-                                and `c`.`mailed` = '0';", $item_id ,$guid) or die ("errorA_D213");
+                                and `c`.`mailed` = '0';", $item_id ,$guid) or returnAjax ('error', 213);
     list ($name, $i_mass, $price, $price_euro, $tear_cur, $tear_max, $tear) = array_values ($dat);
     $sell_price = getSellValue ($dat);
     $mass = $mass - $i_mass;
@@ -444,7 +443,7 @@ switch ($do)
       $money = $money + $sell_price;
       $adb->query ("DELETE FROM `character_inventory` WHERE `id` = ?d and `guid` = ?d", $item_id ,$guid);
       $char->history->transfers ('Sell', "$name ($sell_price кр)", $_SERVER['REMOTE_ADDR'], 'Shop');
-      die ("completeA_D".$money."A_D".$mass."A_D404A_D$name|$sell_price");
+      returnAjax ('complete', $money, $mass, 404, "$name|$sell_price");
     }
     else if ($price_euro > 0)
     {
@@ -452,7 +451,7 @@ switch ($do)
       $money_euro = $money_euro + $sell_price_euro;
       $adb->query ("DELETE FROM `character_inventory` WHERE `id` = ?d and `guid` = ?d", $item_id ,$guid);
       $char->history->transfers ('Sell', "$name ($sell_price екр)", $_SERVER['REMOTE_ADDR'], 'Shop');
-      die ("completeA_D".$money_euro."A_D".$mass."A_D405A_D$name|$sell_price");
+      returnAjax ('complete', $money_euro, $mass, 405, "$name|$sell_price");
     }
   break;
   case 'deleteitem':
@@ -460,7 +459,7 @@ switch ($do)
     $dropall = requestVar ('dropall', 0);
     
     if ($item_id == 0 || !is_numeric($item_id))
-      die ("errorA_D213");
+      returnAjax ('error', 213);
     
     switch ($dropall)
     {
@@ -474,15 +473,15 @@ switch ($do)
                                  WHERE `c`.`guid` = ?d 
                                    and `c`.`id` = ?d 
                                    and `c`.`wear` = '0' 
-                                   and `c`.`mailed` = '0';", $guid ,$item_id) or die ("errorA_D213");
+                                   and `c`.`mailed` = '0';", $guid ,$item_id) or returnAjax ('error', 213);
         $mass = $mass - $dat['mass'];
         $adb->query ("UPDATE `characters` SET `mass` = ?f WHERE `guid` = ?d", $mass ,$guid);
         $adb->query ("DELETE FROM `character_inventory` WHERE `id` = ?d and `guid` = ?d", $item_id ,$guid);
         $char->history->transfers ('Throw out', $dat['name'], $_SERVER['REMOTE_ADDR'], 'Dump');
-        die ("completeA_D".$mass."A_D1");
+        returnAjax ('complete', $mass, 1);
       break;
       case 1:
-        $item_entry = $adb->selectCell ("SELECT `item_template` FROM `character_inventory` WHERE `guid` = ?d and `id` = ?d and `wear` = '0' and `mailed` = '0';", $guid ,$item_id) or die ("errorA_D213");
+        $item_entry = $adb->selectCell ("SELECT `item_template` FROM `character_inventory` WHERE `guid` = ?d and `id` = ?d and `wear` = '0' and `mailed` = '0';", $guid ,$item_id) or returnAjax ('error', 213);
         $dat = $adb->select ("SELECT `c`.`id`, 
                                      `i`.`name`, 
                                      `i`.`mass` 
@@ -492,7 +491,7 @@ switch ($do)
                               WHERE `c`.`guid` = ?d 
                                 and `c`.`item_template` = ?d 
                                 and `c`.`wear` = '0' 
-                                and `c`.`mailed` = '0';", $guid ,$item_entry) or die ("errorA_D213");
+                                and `c`.`mailed` = '0';", $guid ,$item_entry) or returnAjax ('error', 213);
         $i = 0;
         foreach ($dat as $item_info)
         {
@@ -502,7 +501,7 @@ switch ($do)
           $char->history->transfers ('Throw out', $item_info['name'], $_SERVER['REMOTE_ADDR'], 'Dump');
           $i++;
         }
-        die ("completeA_D".$mass."A_D".$i."A_D".$item_entry);
+        returnAjax ('complete', $mass, $i, $item_entry);
       break;
     }
   break;
@@ -514,10 +513,10 @@ switch ($do)
     {
       if ($char->increaseStat ($stat, 1))
         $adb->query ("UPDATE `character_stats` SET `ups` = `ups` - '1' WHERE `guid` = ?d", $guid);
-      die ("completeA_D200A_D$s_stat");
+      returnAjax ('complete', 200, $s_stat);
     }
     else
-      die ("errorA_D199A_D$s_stat");
+      returnAjax ('error', 199, $s_stat);
   break;
   case 'increaseskill':
     $stat = requestVar ('stat');
@@ -530,53 +529,10 @@ switch ($do)
     {
       if ($adb->query ("UPDATE `character_stats` SET ?# = ?# + '1' WHERE `guid` = ?d", $stat ,$stat ,$guid))
         $adb->query ("UPDATE `character_stats` SET `skills` = `skills` - '1' WHERE `guid` = ?d", $guid);
-      die ("completeA_D200A_D$s_stat");
+      returnAjax ('complete', 200, $s_stat);
     }
     else
-      die ("errorA_D199A_D$s_stat");
-  break;
-  case 'sendmessage':
-    $h = requestVar ('h');
-    
-    $commands = $adb->selectCol ("SELECT `name` FROM `server_commands`;");
-    $command = false;
-
-    if (!$h || $shut || $chat_s == 2)
-      die ('none');
-    
-    $color = $char->getChar ('char_info', 'color');
-
-    foreach ($commands as $num => $name)
-    {
-      if (utf8_substr ($h, 0, utf8_strlen($name)) == $name)
-      {
-        $command = $char->chat->executeCommand ($name, $h, $guid);
-        die ('complete');
-      }
-    }
-    //$h = htmlspecialchars ($h);
-    $h = str_replace ("\n", "", $h);
-    $to = split (']', str_replace (array('to [', 'private ['), "]", $h));
-    
-    if (isset ($to[1]))
-    {
-      $h = preg_replace ("/private \[$to[1]/", "private [", $h, 1);
-      $to = str_replace (", ", ",", $to[1]);
-    }
-    else
-      $to = $to[0];
-    
-    if (utf8_substr ($h, 0, 4) == 'to [')
-      $class = 'to';
-    else if (utf8_substr ($h, 0, 9) == 'private [')
-      $class = 'private';
-    else
-      $class = 'all';
-    
-    $adb->query ("UPDATE `characters` SET `afk` = '0' WHERE `guid` = ?d", $guid);
-    $adb->query ("INSERT INTO `city_chat` (`sender`, `to`, `room`, `msg`, `class`, `date_stamp`, `city`) 
-                  VALUES (?s, ?s, ?s, ?s, ?s, ?d, ?s)", $login ,$to ,$room ,"<font color=$color>$h</font>" ,$class ,time () ,$city);
-    die ('complete');
+      returnAjax ('error', 199, $s_stat);
   break;
 }
 ?>

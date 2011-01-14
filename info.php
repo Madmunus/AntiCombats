@@ -61,7 +61,8 @@ $char->showStatAddition ('info');
 <title>Анти Бойцовский Клуб - Информация о <?echo $login;?></title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <link rel="StyleSheet" href="styles/style.css" type="text/css">
-<script src="scripts/jquery-1.4.3.js" type="text/javascript"></script>
+<script src="scripts/jquery-1.4.4.js" type="text/javascript"></script>
+<script src="scripts/scripts.js" type="text/javascript"></script>
 <script src="scripts/main.js" type="text/javascript"></script>
 <script src="scripts/show.js" type="text/javascript"></script>
 </head>
@@ -134,23 +135,23 @@ if ($admin_level < 1)
     <td align="left" valign="top">
 <?
 $rows = $adb->select ("SELECT `c`.`id`, 
-                                `c`.`gift_author` 
-                         FROM `character_inventory` AS `c` 
-                         LEFT JOIN `item_template` AS `i` 
-                         ON `c`.`item_template` = `i`.`entry` 
-                         WHERE `c`.`guid` = ?d 
-                           and `i`.`section` = 'thing' 
-                           and `i`.`type` = 'medal' 
-                           and `c`.`wear` = '0'", $guid);
+                              `c`.`gift_author` 
+                       FROM `character_inventory` AS `c` 
+                       LEFT JOIN `item_template` AS `i` 
+                       ON `c`.`item_template` = `i`.`entry` 
+                       WHERE `c`.`guid` = ?d 
+                         and `i`.`section` = 'thing' 
+                         and `i`.`type` = 'medal' 
+                         and `c`.`wear` = '0'", $guid);
 foreach ($rows as $dat_t)
 {
   $item_id = $dat_t['id'];
   $gift_author = $dat_t['gift_author'];
   $obj_data = $adb->selectRow ("SELECT `name`, 
-                                         `img`, 
-                                         `msg` 
-                                  FROM `medal` 
-                                  WHERE `id` = ?d", $item_id);
+                                       `img`, 
+                                       `msg` 
+                                FROM `medal` 
+                                WHERE `id` = ?d", $item_id);
   list ($g_name, $img, $msg) = array_values ($obj_data);
   echo "<img src='$img' alt='$g_name<br>$msg<br>от $gift_author'>&nbsp";
 }

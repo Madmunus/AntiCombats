@@ -24,7 +24,8 @@ $step = requestVar ('step');
 <title>Анти Бойцовский Клуб</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link href="styles/main.css" rel="stylesheet" type="text/css" />
-<script src="scripts/jquery-1.4.3.js" type="text/javascript"></script>
+<script src="scripts/jquery-1.4.4.js" type="text/javascript"></script>
+<script src="scripts/scripts.js" type="text/javascript"></script>
 <script type="text/javascript">
 var n, error = '';
 var regfail = new Array ();
@@ -83,7 +84,7 @@ $(document).ready(function (){
       error = 'Запрещено использование трех и более одинаковых символов подряд';
     else
     {
-      $.post('regajax.php', 'do=checklogin&login='+login, function (data){
+      $.post('ajax_reg.php', 'do=checklogin&login='+login, function (data){
         if (data == 'free')
           $('form[name=regstep1]').die().submit();
         else if (data == 'occupy')

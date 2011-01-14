@@ -16,8 +16,9 @@ function solo (n)
 	{
 		solo_store = n;
 		$.post('ajax.php', 'do=getroomname&room='+n, function (data){
-		  if (data)
-			$("#add_text").fadeOut('10000', function (){$("#add_text").html('Вы перейдете в: <strong>' + data + '</strong> (<a href="#" class="nick" onclick="return clear_solo ();">отмена</a>)').fadeIn('10000');});
+      var room = exploder (data);
+		  if (room[0] == 'complete')
+        $("#add_text").fadeOut('10000', function (){$("#add_text").html(room[1]).fadeIn('10000');});
 		});
 		ch_counter_color ('red');
 	}

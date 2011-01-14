@@ -11,7 +11,7 @@ include ("../engline/dbsimple/Generic.php");
 include ("../engline/data/data.php");
 include ("../engline/functions/functions.php");
 
-$guid = getGuid ('game', '../');
+$guid = getGuid ('ajax', '../');
 
 $adb = DbSimple_Generic::connect($database['adb']);
 $adb->query("SET NAMES ? ",$database['db_encoding']);
@@ -19,8 +19,8 @@ $adb->setErrorHandler("databaseErrorHandler");
 
 $char = Char::initialization($guid, $adb);
 
-$char->test->Guid ('game', '../');
-$char->test->Admin ('game', '../');
+$char->test->Guid ('ajax', '../');
+$char->test->Admin ('ajax', '../');
 
 $do = requestVar ('do');
 
@@ -54,12 +54,12 @@ switch ($do)
     {
       switch ($field)
       {
-        case 'min_level':        $return .= "</tr><tr><td colspan='8' class='header'>Требования:<hr></td></tr><tr>";     $i = 0; break;
+        case 'min_dex':          $return .= "</tr><tr><td colspan='8' class='header'>Требования:<hr></td></tr><tr>";     $i = 0; break;
         case 'add_str':          $return .= "</tr><tr><td colspan='8' class='header'>Характеристики:<hr></td></tr><tr>"; $i = 0; break;
         case 'def_h_min':        $return .= "</tr><tr><td colspan='8' class='header'>Защита:<hr></td></tr><tr>";         $i = 0; break;
         case 'resist_all_magic': $return .= "</tr><tr><td colspan='8' class='header'>Резисты:<hr></td></tr><tr>";        $i = 0; break;
         case 'mf_all_damage':    $return .= "</tr><tr><td colspan='8' class='header'>Мф удара:<hr></td></tr><tr>";       $i = 0; break;
-        case 'mf_crit':          $return .= "</tr><tr><td colspan='8' class='header'>Мф усиления:<hr></td></tr><tr>";    $i = 0; break;
+        case 'mf_anticrit':      $return .= "</tr><tr><td colspan='8' class='header'>Мф усиления:<hr></td></tr><tr>";    $i = 0; break;
         case 'all_magic':        $return .= "</tr><tr><td colspan='8' class='header'>Умения:<hr></td></tr><tr>";         $i = 0; break;
         case 'min_attack':       $return .= "</tr><tr><td colspan='8' class='header'>Урон:<hr></td></tr><tr>";           $i = 0; break;
         case 'repres_all_magic': $return .= "</tr><tr><td colspan='8' class='header'>Подавления:<hr></td></tr><tr>";     $i = 0; break;
@@ -90,7 +90,11 @@ switch ($do)
       $sql[$f[0]] = $f[1];
     }
     if ($adb->query ("INSERT INTO `item_template` (?#) VALUES (?a);",array_keys($sql), array_values($sql)))
+    {
+      $entry = $adb->selectCell ("SELECT MAX(`entry`) FROM `item_template`;");
+      $adb->query ("INSERT INTO `item_amount` (`entry`) VALUES (?d);", $entry);
       die('complete');
+    }
   break;
 }
 ?>

@@ -20,19 +20,20 @@ $char = Char::initialization($guid, $adb);
 
 $char->test->Guid ();
 
-$char_db = $char->getChar ('char_db', 'admin_level', 'orden', 'level', 'clan');
+$char_db = $char->getChar ('char_db', 'admin_level', 'orden', 'level', 'clan', 'chat_filter', 'chat_sys', 'chat_update');
 ArrToVar ($char_db);
 ?>
 <html><head>
 <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="styles/main.css" />
-<script src="scripts/jquery-1.4.3.js" type="text/javascript"></script>
+<script src="scripts/jquery-1.4.4.js" type="text/javascript"></script>
+<script src="scripts/scripts.js" type="text/javascript"></script>
 <script type="text/javascript">
 var chat = new Array ();
-chat['filter'] = false;
-chat['sys'] = false;
-chat['slow'] = false;
-chat['translit'] = false;
+chat['filter'] = (<?echo $char_db['chat_filter'];?>) ?false :true;
+chat['sys'] = (<?echo $char_db['chat_sys'];?>) ?false :true;
+chat['slow'] = (<?echo $char_db['chat_update'];?> != 10) ?false :true;
+chat['translit'] = true;
 
 function changeButtonState (button)
 {
@@ -41,24 +42,21 @@ function changeButtonState (button)
   switch (button)
   {
     case 'filter':
-      title = (chat[button]) ?'(выключено) Показывать в чате только сообщения адресованные мне' :'(включено) Показывать в чате только сообщения адресованные мне';
       src = (chat[button]) ?'img/b_filter_off.gif' :'img/b_filter_on.gif';
     break;
     case 'sys':
-      title = (chat[button]) ?'(выключено) Показывать в чате системные сообщения' :'(включено) Показывать в чате системные сообщения';
       src = (chat[button]) ?'img/b_sys_off.gif' :'img/b_sys_on.gif';
     break;
     case 'slow':
-      title = (chat[button]) ?'(выключено) Медленное обновление чата (раз в минуту)' :'(включено) Медленное обновление чата (раз в минуту)';
       src = (chat[button]) ?'img/b_slow_off.gif' :'img/b_slow_on.gif';
     break;
     case 'translit':
-      title = (chat[button]) ?'(выключено) Преобразовывать транслит в русский текст' :'(включено) Преобразовывать транслит в русский текст';
       src = (chat[button]) ?'img/b_translit_off.gif' :'img/b_translit_on.gif';
     break;
   }
   chat[button] = !chat[button];
-  $('#'+button).attr({'title': title, 'src': src});
+  $('#'+button).attr('src', src);
+  talk ();
 }
 
 function subm ()
@@ -66,12 +64,14 @@ function subm ()
   var message = $("#phrase").val();
   if (chat['translit'])
     message = translate (message);
-  $.post('ajax.php', 'do=sendmessage&h='+message, function (data){
+  $.post('ajax_talk.php', 'do=sendmessage&h='+message, function (data){
 	  if (data == 'complete')
     {
       top.ref.document.location.reload();
       $("#phrase").val('').focus();
     }
+    else if (data == 'ajax_error')
+      top.location.href = 'index.php';
     else
       $("#phrase").val('').focus();
 	});
@@ -152,22 +152,20 @@ function talk ()
 }
 
 $(document).ready(function (){
+  for (var i in chat)
+    changeButtonState (i);
   rslength ();
   $('#filter').live('click', function (){
     changeButtonState ('filter');
-    talk ();
   });
   $('#slow').live('click', function (){
     changeButtonState ('slow');
-    talk ();
   });
   $('#sys').live('click', function (){
     changeButtonState ('sys');
-    talk ();
   });
   $('#translit').live('click', function (){
     changeButtonState ('translit');
-    talk ();
   });
   $('#phrase').keydown(function (event){
     if (event.keyCode == '13')
@@ -186,10 +184,10 @@ $(document).ready(function (){
       <img src="img/b_ok.gif" width="30" height="30" title="Отправить сообщение" style="cursor: pointer;" onclick="subm ();" />
       <img src="img/1x1.gif" width="8" height="1" />
       <img width="30" height="30" style="cursor: pointer;" src="img/b_clear.gif" title="Очистить строку ввода/Чат" onclick="clean ();" />
-      <img width="30" height="30" style="cursor: pointer;" src="img/b_filter_off.gif" id="filter" title="(выключено) Показывать в чате только сообщения адресованные мне" />
-      <img width="30" height="30" style="cursor: pointer;" src="img/b_sys_off.gif" id="sys" title="(выключено) Показывать в чате системные сообщения" />
-      <img width="30" height="30" style="cursor: pointer;" src="img/b_slow_off.gif" id="slow" title="(выключено) Медленное обновление чата (раз в минуту)" />
-      <img width="30" height="30" style="cursor: pointer;" src="img/b_translit_off.gif" id="translit" title="(выключено) Преобразовывать транслит в русский текст (правила перевода см. в энциклопедии)" />
+      <img width="30" height="30" style="cursor: pointer;" src="img/b_filter_off.gif" id="filter" title="Показывать в чате только сообщения адресованные мне" />
+      <img width="30" height="30" style="cursor: pointer;" src="img/b_sys_off.gif" id="sys" title="Показывать в чате системные сообщения" />
+      <img width="30" height="30" style="cursor: pointer;" src="img/b_slow_off.gif" id="slow" title="Медленное обновление чата (раз в минуту)" />
+      <img width="30" height="30" style="cursor: pointer;" src="img/b_translit_off.gif" id="translit" title="Преобразовывать транслит в русский текст (правила перевода см. в энциклопедии)" />
       <img width="30" height="30" src="img/b_sound_off.gif" id="b_sound" title="Не работает" />
       <object><embed src="img/Sound2.swf" quality="high" scale="noscale" wmode="transparent" width="1" height="1" id="Sound" align="middle" allowScriptAccess="always" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" /></object>
       <img width="30" height="30" style="cursor: pointer;" src="img/b_smile.gif" title="Смайлики" onclick="smiles ();" />

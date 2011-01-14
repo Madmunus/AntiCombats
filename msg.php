@@ -3,7 +3,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta http-equiv="Content-Language" content="ru">
 <link rel="stylesheet" type="text/css" href="styles/msg.css">
-<script src="scripts/jquery-1.4.3.js" type="text/javascript"></script>
+<script src="scripts/jquery-1.4.4.js" type="text/javascript"></script>
+<script src="scripts/scripts.js" type="text/javascript"></script>
 <script type="text/javascript">
 var id = 'oMenu';
 
