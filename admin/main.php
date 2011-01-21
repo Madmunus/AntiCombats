@@ -22,17 +22,16 @@ $char = Char::initialization($guid, $adb);
 $char->test->Guid ('main', '../');
 $char->test->Admin ('main', '../');
 
-$act = requestVar ('act');
+$act = requestVar ('act', 'none');
 $name = $adb->selectCell ("SELECT `name` FROM `admin_menu` WHERE `href` = ?s", $act);
 ?>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<script src="../scripts/jquery-1.4.4.js" type="text/javascript"></script>
-<script src="../scripts/scripts.js" type="text/javascript"></script>
+<script src="../scripts/jquery.js" type="text/javascript"></script>
 <script src="../scripts/show.js" type="text/javascript"></script>
 <link rel="stylesheet" type="text/css" href="css.css">
 </head>
-<script>window.parent.document.getElementById('info').innerHTML = 'Информация: <?echo $name;?>';</script>
+<script>$('#info', parent.document).html('Информация: <?echo $name;?>');</script>
 <?
 switch ($act)
 {
@@ -59,7 +58,7 @@ switch ($act)
     case 'new':
     case 'stat_admin': include ("module/$act.php");
     break;
-    case 'phpinfo':    echo "<script>window.parent.document.getElementById('info').innerHTML = 'Информация: Phpinfo';</script>";
+    case 'phpinfo':    echo "<script>$('#info', parent.document).html('Информация: Phpinfo');</script>";
                        phpinfo ();
     break;
     case 'exit':

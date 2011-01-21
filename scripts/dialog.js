@@ -145,7 +145,6 @@ function crtmagic (mtype, title, body, noclose)
 	return s;
 }
 
-// Закрывает окно ввода логина
 function closehint3 ()
 {
 	$('#hint3').fadeOut('fast', function (){$(this).html('');});

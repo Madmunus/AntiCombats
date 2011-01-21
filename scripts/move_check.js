@@ -1,6 +1,6 @@
 var solo_store, progressTimer;
-var progressEnd = 32;							// set to number of progress <span>'s.
-var progressColor = '#00CC00';					// set to progress bar color
+var progressEnd = 32;							              // set to number of progress <span>'s.
+var progressColor = '#00CC00';					        // set to progress bar color
 var mtime = parseInt ($('#time_to_go').val());	// set time to next step (seconds)
 if (!mtime || mtime <= 0)
 	mtime = 0;
@@ -16,9 +16,8 @@ function solo (n)
 	{
 		solo_store = n;
 		$.post('ajax.php', 'do=getroomname&room='+n, function (data){
-      var room = exploder (data);
-		  if (room[0] == 'complete')
-        $("#add_text").fadeOut('10000', function (){$("#add_text").html(room[1]).fadeIn('10000');});
+      var room = top.exploder(data);
+      $("#add_text").fadeOut('10000', function (){$("#add_text").html(room[0]).fadeIn('10000');});
 		});
 		ch_counter_color ('red');
 	}

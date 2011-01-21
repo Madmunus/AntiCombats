@@ -24,7 +24,7 @@ $step = requestVar ('step');
 <title>Анти Бойцовский Клуб</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link href="styles/main.css" rel="stylesheet" type="text/css" />
-<script src="scripts/jquery-1.4.4.js" type="text/javascript"></script>
+<script src="scripts/jquery.js" type="text/javascript"></script>
 <script src="scripts/scripts.js" type="text/javascript"></script>
 <script type="text/javascript">
 var n, error = '';

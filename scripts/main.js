@@ -69,16 +69,16 @@ function showShapes (available)
 	}
 	  
 	$.post('ajax.php', 'do=showshapes&available='+available, function (data){
-    var shapes = exploder (data);
-	  if (shapes[0] == 'complete')
-	    $("#shapes").fadeOut('10000', function (){$(this).html(shapes[1]).fadeIn('10000');});
+    var shapes = top.exploder(data);
+	  if (shapes)
+	    $("#shapes").fadeOut('10000', function (){$(this).html(shapes[0]).fadeIn('10000');});
 	});
 }
 
 function chooseShape (shape)
 {
 	$.post('ajax.php', 'do=chooseshape&shape='+shape, function (data){
-	  var shapes = exploder (data);
+	  var shapes = top.exploder(data);
 	  if (shapes[0] == 'complete')
 	    location.href = 'main.php?action=inv';
 	  else if (shapes[0] == 'error')
@@ -212,7 +212,7 @@ $(document).ready(function (){
       $(this).attr('src', 'i/clearg.gif');
   });
   $('#link').live('click', function (){
-    location.href = 'main.php?action='+$(this).attr('link');
+    top.linkAction($(this).attr('link'));
   });
   $('#hint').live('click', function (){
     showHelp ($(this).attr('link'));

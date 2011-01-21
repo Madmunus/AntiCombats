@@ -6,9 +6,8 @@ function showShopSection (section_shop)
   $("#loadbar").show();
   $.post('ajax.php', 'do=showshopsection&section_shop='+section_shop+'&level_filter='+level_filter+'&name_filter='+name_filter, function (data){
     $('html, body').animate({scrollTop: 0}, 500);
-    var section = exploder (data);
-    if (section[0] == 'complete')
-      $("#section").fadeOut('10000', function (){$(this).html(section[1]).fadeIn('10000'); $("#loadbar").hide();});
+    var section = top.exploder(data);
+    $("#section").fadeOut('10000', function (){$(this).html(section[0]).fadeIn('10000'); $("#loadbar").hide();});
   });
 }
 
@@ -21,9 +20,8 @@ function shopSection (section_shop)
     $("#section_shop_"+section_shop).css('backgroundColor', '#C7C7C7');
     setCookie ('section_shop', section_shop, getTimePlusHour ());
     $.post('ajax.php', 'do=getshoptitle&section_shop='+section_shop, function (data){
-      var title = exploder (data);
-      if (title[0] == 'complete')
-        $("#shop_title").html(title[1]);
+      var title = top.exploder(data);
+      $("#shop_title").html(title[0]);
     });
   }
   section_shop = getCookie ('section_shop');
@@ -36,7 +34,7 @@ function buyItem (entry)
   $.post('ajax.php', 'do=buyitem&entry='+entry+'&count='+count, function (data){
     closehint3 ();
     $('html, body').animate({scrollTop: 0}, 500);
-    var item = exploder (data);
+    var item = top.exploder(data);
     if (item[0] == 'complete')
     {
       if (item[3] == 400)
@@ -54,7 +52,7 @@ function buyItem (entry)
 function sellItem (id)
 {
   $.post('ajax.php', 'do=sellitem&id='+id, function (data){
-    var item = exploder (data);
+    var item = top.exploder(data);
     if (item[0] == 'complete')
     {
       if (item[3] == 404)

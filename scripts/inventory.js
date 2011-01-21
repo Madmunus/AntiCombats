@@ -28,9 +28,8 @@ function showInventory (section, type, mail_guid)
 	$("#section_"+section).attr('bgcolor', '#a5a5a5');
 	setCookie ('section', section, getTimePlusHour ());
 	$.post('ajax.php', 'do=showinventory&section='+section+'&type='+type+'&mail_guid='+mail_guid, function (data){
-    var inventory = exploder (data);
-	  if (inventory[0] == 'complete')
-	    $("#inventory").fadeOut('10000', function (){$(this).html(inventory[1]).fadeIn('10000');});
+    var inventory = top.exploder(data);
+	  $("#inventory").fadeOut('10000', function (){$(this).html(inventory[0]).fadeIn('10000');});
 	});
 }
 
@@ -40,15 +39,15 @@ function sortInventory (type)
   $('html, body').animate({scrollTop: 0}, 500);
 	var num = $("#sort_"+type).attr('name');
 	$.post('ajax.php', 'do=sortinventory&type='+type+'&num='+num, function (data){
-    var sort = exploder (data);
+    var sort = top.exploder(data);
 	  if (sort[0] == 'complete')
 	  {
 	    var section = getCookie ('section');
       num = (num == 1) ?0 :1;
       $.post('ajax.php', 'do=showinventory&section='+section+'&type=inv', function (data){
-        var inventory = exploder (data);
-        if (inventory[0] == 'complete')
-          $("#inventory").fadeOut('10000', function (){$(this).html(inventory[1]).fadeIn('10000');});
+        var inventory = top.exploder(data);
+        if (inventory)
+          $("#inventory").fadeOut('10000', function (){$(this).html(inventory[0]).fadeIn('10000');});
       });
       $("#sort_"+type).attr('name', num);
 	  }
@@ -59,7 +58,7 @@ function increaseItemStat (id, stat)
 {
 	clearError ();
 	$.post('ajax.php', 'do=increaseitemstat&id='+id+'&stat='+stat, function (data){
-	  var incs = exploder (data);
+	  var incs = top.exploder(data);
 	  if (incs[0] == 'complete')
 	  {
       $("#inc_"+id+"_"+stat+"_val").animate({color: '#00ff00'}, 500, function (){$(this).html('+'+incs[1]).animate({color: '#000000'}, 500);});
@@ -79,7 +78,7 @@ function inventoryLoginBank ()
 	var pass = $("input[name=pass]").val();
 	$.post('ajax.php', 'do=inventoryloginbank&credit='+credit+'&pass='+pass, function (data){
 	  closehint3 ();
-	  var bank = exploder (data);
+	  var bank = top.exploder(data);
 	  if (bank[0] == 'complete')
 	    $("#loginbank").fadeOut('10000', function (){$(this).html(bank[1]).fadeIn('10000');});
 	  else if (bank[0] == 'error')
@@ -91,9 +90,8 @@ function inventoryUnLoginBank ()
 {
 	clearError ();
 	$.post('ajax.php', 'do=inventoryunloginbank', function (data){
-    var unlogin = exploder (data);
-	  if (unlogin[0] == 'complete')
-	    $("#loginbank").fadeOut('10000', function (){$(this).html(unlogin[1]).fadeIn('10000');});
+    var unlogin = top.exploder(data);
+	  $("#loginbank").fadeOut('10000', function (){$(this).html(unlogin[0]).fadeIn('10000');});
 	});
 }
 
@@ -101,7 +99,7 @@ function switchBars (type, bar)
 {
 	clearError ();
 	$.post('ajax.php', 'do=switchbars&bar='+bar+'&type='+type, function (data){
-	  var bars = exploder (data);
+	  var bars = top.exploder(data);
 	  if (bars[0] == 'complete')
 	  {
       $("#bar_"+bars[1]).fadeOut('10000', function (){$(this).html(bars[4]).fadeIn('10000').attr('id', 'bar_')});
@@ -114,7 +112,7 @@ function spoilerBar (bar)
 {
 	clearError ();
 	$.post('ajax.php', 'do=spoilerbar&bar='+bar, function (data){
-    var bars = exploder (data);
+    var bars = top.exploder(data);
 	  if (bars[0] == 'hide')
 	  {
 	    $("#spoiler_"+bar).attr({'src': "img/plus.gif", 'alt': "Показать"});
@@ -134,7 +132,7 @@ function workSets (type, name)
 	if (!name)
 	  name = $("input[name=set_name]").val();
 	$.post('ajax.php', 'do=worksets&type='+type+'&name='+name, function (data){
-	  var set = exploder (data);
+	  var set = top.exploder(data);
 	  if (type == 'create' && set[0] == 'complete')
 	  {
 	    closehint3 ();
@@ -155,7 +153,7 @@ function deleteItem (id)
   var dropall = ($('input[name=dropall]').is(':checked')) ?1 :0;
 	$.post('ajax.php', 'do=deleteitem&id='+id+'&dropall='+dropall, function (data){
     closehint3 ();
-	  var item = exploder (data);
+	  var item = top.exploder(data);
 	  if (item[0] == 'complete')
 	  {
       var count_items = parseInt($("#count_items").html()) - item[2];

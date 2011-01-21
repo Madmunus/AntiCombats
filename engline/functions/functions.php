@@ -45,7 +45,7 @@ class Char
     else
       $guid = $this->guid;
     
-    switch ($pref = $args[0])
+    switch ($args[0])
     {
       case 'char_db':    $table = 'characters';      break;
       case 'char_stats': $table = 'character_stats'; break;
@@ -753,7 +753,10 @@ class Test extends Char
   /*Проверка состояния персонажа*/
   function Afk ()
   {
-    $char_db = $this->getChar ('char_db', 'last_time', 'dnd');
+    $char_db = $this->getChar ('char_db', 'last_time', 'dnd', 'afk');
+    
+    if ($char_db['afk'])
+      return;
     
     if ((time () - $char_db['last_time']) >= 300 && !$char_db['dnd'])
       $this->db->query ("UPDATE `characters` SET `afk` = '1', `message` = 'away from keyboard' WHERE `guid` = ?d", $this->guid);
@@ -761,11 +764,11 @@ class Test extends Char
   /*Обновление состояния персонажа*/
   function WakeUp ()
   {
-    $afk = $this->getChar ('char_db', 'afk');
+    $char_db = $this->getChar ('char_db', 'afk', 'message');
     $this->db->query ("UPDATE `characters` SET `last_time` = ?d WHERE `guid` = ?d", time () ,$this->guid);
     $this->db->query ("UPDATE `online` SET `last_time` = ?d WHERE `guid` = ?d", time () ,$this->guid);
 
-    if ($afk)
+    if ($char_db['afk'] && $char_db['message'] == 'away from keyboard')
       $this->db->query ("UPDATE `characters` SET `afk` = '0', `message` = '' WHERE `guid` = ?d", $this->guid);
   }
 }
@@ -2057,33 +2060,37 @@ class Chat extends Char
     
     $this->db->query ("INSERT INTO `city_chat` (`sender`, `to`, `room`, `msg`, `class`, `date_stamp`, `city`) 
                        VALUES (?s, ?s, ?s, ?s, ?s, ?d, ?s)", $sender ,$char_db['login'] ,$char_db['room'] ,$text ,$class ,time () ,$char_db['city']);
-    echo "<script>top.frames.ref.location = 'refresh.php';</script>";
+    echo "<script>top.msg.updateMessages();</script>";
   }
   /*Выполнение комманд в чате*/
   function executeCommand ($name, $message, $guid)
   {
-    $char_db = $this->getChar ('char_db', 'login', 'room', 'city', $guid);
+    $char_db = $this->getChar ('char_db', 'afk', 'login', 'room', 'city', $guid);
     switch ($name)
     {
       case '/afk':
         $message = str_replace ('/afk', '', $message);
-        $message = ($message != '') ?preg_replace ("/ /", "", $message, 1) :'';
+        
+        if (isset($message[0]) && $message[0] != ' ')
+          return false;
+        
+        $message = (isset($message[1])) ?preg_replace ("/ /", "", $message, 1) :'away from keyboard';
         $this->db->query ("UPDATE `characters` SET `afk` = '1', `dnd` = '0', `message` = ?s WHERE `guid` = ?d", $message ,$guid);
         return true;
       break;
-      case '/dnd ':
-        $message = str_replace ('/dnd ', '', $message);
+      case '/dnd':
+        $message = str_replace ('/dnd', '', $message);
         
-        if ($message == '')
+        if ($message == '' || (isset($message[0]) && $message[0] != ' ') || !isset($message[1]))
           return false;
         
         $this->db->query ("UPDATE `characters` SET `afk` = '0', `dnd` = '1', `message` = ?s WHERE `guid` = ?d", $message ,$guid);
         return true;
       break;
-        case '/e ':
-          $message = str_replace ('/e ', '', $message);
+        case '/e':
+          $message = str_replace ('/e', '', $message);
           
-          if ($message == '')
+          if ($message == '' || (isset($message[0]) && $message[0] != ' ') || !isset($message[1]))
             return false;
           
           $this->db->query ("INSERT INTO `city_chat` (`sender`, `to`, `room`, `msg`, `class`, `date_stamp`, `city`) 

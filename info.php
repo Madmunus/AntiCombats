@@ -61,7 +61,7 @@ $char->showStatAddition ('info');
 <title>Анти Бойцовский Клуб - Информация о <?echo $login;?></title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <link rel="StyleSheet" href="styles/style.css" type="text/css">
-<script src="scripts/jquery-1.4.4.js" type="text/javascript"></script>
+<script src="scripts/jquery.js" type="text/javascript"></script>
 <script src="scripts/scripts.js" type="text/javascript"></script>
 <script src="scripts/main.js" type="text/javascript"></script>
 <script src="scripts/show.js" type="text/javascript"></script>

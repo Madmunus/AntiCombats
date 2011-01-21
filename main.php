@@ -54,9 +54,8 @@ setCookie ('login_mail', $login_mail,  time () + 3600);
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta http-equiv="Content-Language" content="ru">
 <link rel="StyleSheet" href="styles/style.css" type="text/css">
-<script src="scripts/jquery-1.4.4.js" type="text/javascript"></script>
+<script src="scripts/jquery.js" type="text/javascript"></script>
 <script src="scripts/jquery.color.js" type="text/javascript"></script>
-<script src="scripts/scripts.js" type="text/javascript"></script>
 <script src="scripts/cookies.js" type="text/javascript"></script>
 <script src="scripts/main.js" type="text/javascript"></script>
 <script src="scripts/show.js" type="text/javascript"></script>
@@ -266,11 +265,10 @@ switch ($action)
     }
   break;
   case 'enter':
-    if (!isset($_SESSION['ENTERED']))
+    if (!isset($_SESSION['last']))
     {
       $id = $adb->selectCell ("SELECT `id` FROM `history_auth` WHERE `guid` = ?d ORDER BY `id` DESC", $guid) - 1;
       $auth = $adb->selectRow ("SELECT `ip`, `date` FROM `history_auth` WHERE `guid` = ?d and `id` = ?d", $guid ,$id);
-      $_SESSION['ENTERED'] = 1;
       unset ($_SESSION['bankСredit']);
       if ($id && $auth && $auth['ip'] != $_SERVER['REMOTE_ADDR'])
         $char->chat->say ($guid, date ('d.m.y H:i', $auth['date'])." <font color='red'><b>ВНИМАНИЕ!</b></font> В предыдущий раз этим персонажем заходили с другого компьютера.");
@@ -280,7 +278,7 @@ switch ($action)
   case 'exit':
     $adb->query ("DELETE FROM `online` WHERE `guid` = ?d", $guid);
     $adb->query ("UPDATE `characters` SET `last_time` = ?d WHERE `guid` = ?d", time () ,$guid);
-    unset ($_SESSION['guid'], $_SESSION['bankСredit'], $_SESSION['ENTERED'], $_SESSION['last']);
+    unset ($_SESSION['guid'], $_SESSION['bankСredit'], $_SESSION['last']);
     die ("<script>top.location.href = 'index.php';</script>");
   break;
   default:

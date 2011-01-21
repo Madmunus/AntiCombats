@@ -260,7 +260,7 @@ echo "<td>".date ('d.m.y H:i:s', $char_db['last_time'])."</td>";
 </div>
 <div id="charactersc" name="content" style="display: none;">
 <?
-$all_characters = $adb->select ("SELECT * FROM `characters` ORDER BY `guid` LIMIT 10;");
+$all_characters = $adb->select ("SELECT * FROM `characters` ORDER BY `guid`;");
 ?>
 <font color='red'>Персонажи:</font>
 <table border="1" cellspacing="0" cellpadding="0" width="100%">
@@ -294,12 +294,12 @@ foreach ($all_characters as $one_character)
 ?>
 </tr></table>
 </div>
-<div name="Боёвой"></div>
+<div id="id1">fff</div>
+<span id="id2">fff</span><br>
 <script>
-
+document.write($('#id1').width()+'<br>');
+document.write($('#id2').width());
 </script>
 <?
-$var = array ('dasd', '3123', 'wetfg');
-$var1 = implode ('A_D', $var);
-echo $var1;
+
 ?>

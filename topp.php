@@ -28,15 +28,9 @@ $admin_level = $char->getChar ('char_db', 'admin_level');
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <link href="styles/topp.css" rel="stylesheet" type="text/css">
-<script src="scripts/jquery-1.4.4.js" type="text/javascript"></script>
-<script src="scripts/scripts.js" type="text/javascript"></script>
+<script src="scripts/jquery.js" type="text/javascript"></script>
 <script type="text/javascript">
 var mail = <?echo $mail;?>;
-
-function url (url)
-{
-  top.main.location.href = "main.php?action="+url;
-}
 
 $(document).ready(function (){
   $('#4').css({'background-color': '#404040', 'color': '#FFFFFF'});
@@ -46,7 +40,7 @@ $(document).ready(function (){
     if ($(this).attr('id') == 5)
     {
       if (confirm("Вы уверены что хотите выйти из игры?"))
-        url ('exit');
+        top.linkAction('exit');
     }
     else
     {
@@ -103,31 +97,31 @@ $(document).ready(function (){
               <tr>
                 <td class="menutop" nowrap align="right" width="100%">
                   <span id="menu1" class="bottom_text">
-                    <a class="menutop" href="encicl/index.html" target="_blank">Библиотека</a>
+                      <a class="menutop" href="encicl/index.html" target="_blank">Библиотека</a>
                     | <a class="menutop" href="encicl/faq/" target="_blank">FAQ</a>
                     | <a class="menutop" href="encicl/law.html" target="_blank">Законы</a>
                     | <a class="menutop" href="encicl/TOS_RU_encicl.html" target="_blank">Соглашения</a>
                     | <a class="menutop" href="encicl/FAQ/afer.html" target="_blank">Правила безопасности</a>
                   </span>
                   <span id="menu2" class="bottom_text">
-                    <a class="menutop" href="news.php" target="_blank">Новости</a>
+                      <a class="menutop" href="news.php" target="_blank">Новости</a>
                     | <a class="menutop" href="forum" target="_blank">Форум</a>
                     | <a class="menutop" href="stat.php" target="_blank">Рейтинг</a>
                   </span>
                   <span id="menu3" class="bottom_text">
-                    <a class="menutop" onclick="url ('report');" href="#">Отчеты</a>
+                      <a class="menutop" onclick="top.linkAction('report');" href="#">Отчеты</a>
                     | <a class="menutop" href="encicl/FAQ/afer.html" target="_blank">Правила</a>
-                    | <a class="menutop" onclick="url ('form&do=passandmail');" href="#">Настройки</a>
-                    | <a class="menutop" onclick="url ('form&do=passandmail');" href="#">Смена пароля</a>
+                    | <a class="menutop" onclick="top.linkAction('form&do=passandmail');" href="#">Настройки</a>
+                    | <a class="menutop" onclick="top.linkAction('form&do=passandmail');" href="#">Смена пароля</a>
                   </span>
                   <span id="menu4" class="bottom_text">
-                    <a class="menutop" onClick="url ('inv');" href="#">Инвентарь</a>
-                    | <a class="menutop" onClick="url ('skills');" href="#"><?echo $lang['abilities'];?></a>
-                    | <a class="menutop" onClick="url ('zayavka');" href="#">Поединки</a>
-                    | <a class="menutop" onclick="url ('form&do=info');" href="#"><?echo $lang['form'];?></a>
+                      <a class="menutop" onClick="top.linkAction('inv');" href="#">Инвентарь</a>
+                    | <a class="menutop" onClick="top.linkAction('skills');" href="#"><?echo $lang['abilities'];?></a>
+                    | <a class="menutop" onClick="top.linkAction('zayavka');" href="#">Поединки</a>
+                    | <a class="menutop" onclick="top.linkAction('form&do=info');" href="#"><?echo $lang['form'];?></a>
 <?
 if ($admin_level > 0)
-    echo "| <a class='menutop' onclick=\"url ('admin');\" href='#'>Админка</a>";
+    echo "| <a class='menutop' onclick=\"top.linkAction('admin');\" href='#'>Админка</a>";
 ?>
                   </span>
                 </td>

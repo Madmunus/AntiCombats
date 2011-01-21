@@ -27,8 +27,6 @@ $char_feat = array_merge ($char_db, $char_stats);
 
 $lang = $char->getLang ();
 
-$do = requestVar ('do');
-
 $login = $char_feat['login'];
 $sex = $char_feat['sex'];
 $mass = $char_feat['mass'];
@@ -37,8 +35,8 @@ $room = $char_feat['room'];
 $money = $char_feat['money'];
 $money_euro = $char_feat['money_euro'];
 $shut = $char_feat['shut'];
-$chat_s = $char_feat['chat_s'];
 
+$do = requestVar ('do');
 switch ($do)
 {
   case 'geterror':
@@ -86,10 +84,10 @@ switch ($do)
         $inventory .= $char->equip->showItemInventory ($item_info, $type, $i, $mail_guid);
         $i = !$i;
       }
-      returnAjax ('complete', $inventory);
+      returnAjax ($inventory);
     }
     else
-      returnAjax ('complete', "<table width='100%' cellspacing='1' cellpadding='2' bgcolor='#A5A5A5'><tr><td bgcolor='#E2E0E0' align='center'>$lang[empty]</td></tr></table>");
+      returnAjax ("<table width='100%' cellspacing='1' cellpadding='2' bgcolor='#A5A5A5'><tr><td bgcolor='#E2E0E0' align='center'>$lang[empty]</td></tr></table>");
   break;
   case 'sortinventory':
     $type = requestVar ('type');
@@ -110,10 +108,10 @@ switch ($do)
       $q1 = $adb->query ("UPDATE `character_inventory` SET `last_update` = ?d WHERE `guid` = ?d and `id` = ?d", time () + $i ,$guid ,$id);
       $i++;
     }
-    die ("complete");
+    returnAjax ('complete');
   break;
   case 'showshopsection':
-    $room_shop = $char->city->getRoom ($room, $city, 'shop') or returnAjax ('complete', "<table width='100%' cellspacing='1' cellpadding='2' bgcolor='#A5A5A5'><tr><td bgcolor='#E2E0E0' align='center'>$lang[shop_no]</td></tr></table>");
+    $room_shop = $char->city->getRoom ($room, $city, 'shop') or returnAjax ("<table width='100%' cellspacing='1' cellpadding='2' bgcolor='#A5A5A5'><tr><td bgcolor='#E2E0E0' align='center'>$lang[shop_no]</td></tr></table>");
     $section_shop = requestVar ('section_shop', '', 7);
     $level_filter = requestVar ('level_filter', '', 7);
     $check_level = ($level_filter > 0 || $level_filter == '0');
@@ -143,20 +141,20 @@ switch ($do)
         $section .= $char->equip->showItemInventory ($item_info, 'shop', $i);
         $i = !$i;
       }
-      returnAjax ('complete', $section);
+      returnAjax ($section);
     }
     else
-      returnAjax ('complete', "<table width='100%' cellspacing='1' cellpadding='2' bgcolor='#A5A5A5'><tr><td bgcolor='#E2E0E0' align='center'>$lang[shop_empty]</td></tr></table>");
+      returnAjax ("<table width='100%' cellspacing='1' cellpadding='2' bgcolor='#A5A5A5'><tr><td bgcolor='#E2E0E0' align='center'>$lang[shop_empty]</td></tr></table>");
   break;
   case 'getshoptitle':
     $section_shop = requestVar ('section_shop');
-    returnAjax ('complete', $lang[$data['sections_shop'][$section_shop][1]].$lang['shop_'.$section_shop]);
+    returnAjax ($lang[$data['sections_shop'][$section_shop][1]].$lang['shop_'.$section_shop]);
   break;
   case 'getroomname':
     $room = requestVar ('room');
     $name = $char->city->getRoom ($room, $city, 'name');
     $name = "Вы перейдете в: <strong>$name</strong> (<a href='#' class='nick' onclick='return clear_solo ();'>отмена</a>)";
-    returnAjax ('complete', $name);
+    returnAjax ($name);
   break;
   case 'switchbars':
     $bar = requestVar ('bar');
@@ -195,27 +193,27 @@ switch ($do)
         }
       }
       else
-        die ("error");
+        returnAjax ('error');
     }
     else
-      die ("error");
+      returnAjax ('error');
   break;
   case 'spoilerbar':
     $bar = requestVar ('bar');
-    $barr = $adb->selectCell ("SELECT ?# FROM `character_bars` WHERE `guid` = ?d", $bar ,$guid) or die ("error");
+    $barr = $adb->selectCell ("SELECT ?# FROM `character_bars` WHERE `guid` = ?d", $bar ,$guid) or returnAjax ('error');
     $bar_v = explode ('|', $barr);
     list ($bar_n, $bar_s) = array_values ($bar_v);
     if ($bar_s == 1)
     {
       $bar_s = 0;
       $adb->query ("UPDATE `character_bars` SET ?# = ?s WHERE `guid` = ?d", $bar ,$bar_n."|".$bar_s ,$guid);
-      die ("hide");
+      returnAjax ('hide');
     }
     else if ($bar_s == 0)
     {
       $bar_s = 1;
       $adb->query ("UPDATE `character_bars` SET ?# = ?s WHERE `guid` = ?d", $bar ,$bar_n."|".$bar_s ,$guid);
-      die ("show");
+      returnAjax ('show');
     }
   break;
   case 'increaseitemstat':
@@ -290,7 +288,7 @@ switch ($do)
         $return .= "</tr><tr>";
     }
     $return .= "</tr></table>";
-    returnAjax ('complete', $return);
+    returnAjax ($return);
   break;
   case 'chooseshape':
     $shape = requestVar ('shape', 0);
@@ -300,7 +298,7 @@ switch ($do)
     
     $shape = ($sex == "male") ?"m/$shape.gif" :"f/$shape.gif";
     $adb->query ("UPDATE `characters` SET `shape` = ?s, `next_shape` = ?d WHERE `guid` = ?d", $shape ,time () + 86400 ,$guid);
-    die ("complete");
+    returnAjax ('complete');
   break;
   case 'inventoryloginbank':
     $credit = requestVar ('credit', 0);
@@ -330,7 +328,7 @@ switch ($do)
       else
         $credits .= ",".$bank_id;
     }
-    returnAjax ('complete', "<a href=\"javascript:bank_open ('$credits');\" class='nick' style='font-size: 7pt;'>$lang[credit_choose]</a>");
+    returnAjax ("<a href=\"javascript:bank_open ('$credits');\" class='nick' style='font-size: 7pt;'>$lang[credit_choose]</a>");
   break;
   case 'worksets':
     $type = requestVar ('type');
@@ -355,7 +353,7 @@ switch ($do)
         
         $set = $adb->selectRow ("SELECT * FROM `character_sets` WHERE `guid` = ?d and `name` = ?s", $guid ,$name) or returnAjax ('error', 221);
         $adb->query ("DELETE FROM `character_sets` WHERE `guid` = ?d and `name` = ?s", $guid ,$name);
-        die ("complete");
+        returnAjax ('complete');
       break;
     }
   break;
@@ -417,7 +415,7 @@ switch ($do)
     $item_id = requestVar ('id', 0);
     
     if ($item_id == 0 || !is_numeric($item_id))
-      die ("errorA_D213");
+      returnAjax ('error', 213);
     
     $dat = $adb->selectRow ("SELECT `i`.`name`, 
                                     `i`.`mass`, 
