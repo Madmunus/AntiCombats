@@ -139,7 +139,7 @@ switch ($action)
     
     $adb->query ("UPDATE `characters` SET `room` = ?s, `last_go` = ?d, `last_room` = ?s WHERE `guid` = ?d", $room_go ,time () ,$room ,$guid);
     $adb->query ("UPDATE `online` SET `room` = ?s WHERE `guid` = ?d", $room_go ,$guid);
-    echo "<script>$('#mes', parent.msg.document).html(''); parent.ref.location = 'refresh.php?go'; parent.user.updateUsers();</script>";
+    echo "<script>top.cleanChat(); parent.user.updateUsers(); parent.msg.updateMessagesGo();</script>";
     $char->error->Map (0);
   break;
   case 'return':
@@ -153,7 +153,7 @@ switch ($action)
     
     $adb->query ("UPDATE `characters` SET `room` = ?s, `last_room` = ?s, `last_return` = ?d WHERE `guid` = ?d", $char_db['last_room'] ,$room ,time () ,$guid);
     $adb->query ("UPDATE `online` SET `room` = ?s WHERE `guid` = ?d", $char_db['last_room'] ,$guid);
-    echo "<script>$('#mes', parent.msg.document).html(''); parent.ref.location = 'refresh.php?go'; parent.user.updateUsers();</script>";
+    echo "<script>top.cleanChat(); parent.user.updateUsers(); parent.msg.updateMessagesGo();</script>";
     $char->error->Map (0);
   break;
   case 'admin':

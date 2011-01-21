@@ -1,17 +1,65 @@
+<?
+session_start ();
+ini_set ('display_errors', true);
+ini_set ('html_errors', false);
+ini_set ('error_reporting', E_ALL);
+
+define ('AntiBK', true);
+
+include ("engline/config.php");
+include ("engline/dbsimple/Generic.php");
+include ("engline/functions/functions.php");
+
+$guid = getGuid ();
+
+$adb = DbSimple_Generic::connect($database['adb']);
+$adb->query("SET NAMES ? ",$database['db_encoding']);
+$adb->setErrorHandler("databaseErrorHandler");
+
+$char = Char::initialization($guid, $adb);
+
+$char->test->Guid ();
+?>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta http-equiv="Content-Language" content="ru">
 <link rel="stylesheet" type="text/css" href="styles/msg.css">
-<script src="scripts/jquery-1.4.4.js" type="text/javascript"></script>
-<script src="scripts/scripts.js" type="text/javascript"></script>
+<script src="scripts/jquery.js" type="text/javascript"></script>
 <script type="text/javascript">
+var TimerMessage = -1;
 var id = 'oMenu';
 
 function cMenu ()
 {
   $('#'+id).css('visibility', "hidden");
   $('#phrase', top.talk.document).focus();
+}
+
+function updateMessagesGo ()
+{
+  $.post('ajax_msg.php', 'do=refreshmessage&go=1', function (data){
+    var messages = top.exploder(data);
+    if (TimerMessage)
+      clearTimeout(TimerMessage);
+    
+    $('#mes').append(messages[0]);
+    window.scroll(0, 65000);
+    TimerMessage = setTimeout ('updateMessages()', messages[1]*1000);
+	});
+}
+
+function updateMessages ()
+{
+  $.post('ajax_msg.php', 'do=refreshmessage', function (data){
+    var messages = top.exploder(data);
+    if (TimerMessage)
+      clearTimeout(TimerMessage);
+    
+    $('#mes').append(messages[0]);
+    window.scroll(0, 65000);
+    TimerMessage = setTimeout ('updateMessages()', messages[1]*1000);
+	});
 }
 
 $(document).ready(function (){
@@ -42,6 +90,7 @@ $(document).ready(function (){
     image = image[image.length - 1].replace('.gif', '');
     $('#phrase', top.talk.document).val($('#phrase', top.talk.document).val() +' :'+image+': ').focus();
   });
+  updateMessages ();
 });
 </script>
 </head>

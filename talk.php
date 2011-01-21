@@ -25,55 +25,33 @@ ArrToVar ($char_db);
 ?>
 <html><head>
 <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
-<link rel="stylesheet" type="text/css" href="styles/main.css" />
-<script src="scripts/jquery-1.4.4.js" type="text/javascript"></script>
-<script src="scripts/scripts.js" type="text/javascript"></script>
+<link rel="StyleSheet" href="styles/talk.css" type="text/css">
+<script src="scripts/jquery.js" type="text/javascript"></script>
 <script type="text/javascript">
 var chat = new Array ();
 chat['filter'] = (<?echo $char_db['chat_filter'];?>) ?false :true;
 chat['sys'] = (<?echo $char_db['chat_sys'];?>) ?false :true;
 chat['slow'] = (<?echo $char_db['chat_update'];?> != 10) ?false :true;
 chat['translit'] = true;
+var full_length = 0;
 
 function changeButtonState (button)
 {
-  var title = '';
-  var src = '';
-  switch (button)
-  {
-    case 'filter':
-      src = (chat[button]) ?'img/b_filter_off.gif' :'img/b_filter_on.gif';
-    break;
-    case 'sys':
-      src = (chat[button]) ?'img/b_sys_off.gif' :'img/b_sys_on.gif';
-    break;
-    case 'slow':
-      src = (chat[button]) ?'img/b_slow_off.gif' :'img/b_slow_on.gif';
-    break;
-    case 'translit':
-      src = (chat[button]) ?'img/b_translit_off.gif' :'img/b_translit_on.gif';
-    break;
-  }
+  var src = (chat[button]) ?'img/talk/b_'+button+'_off.gif' :'img/talk/b_'+button+'_on.gif';
   chat[button] = !chat[button];
   $('#'+button).attr('src', src);
   talk ();
 }
 
-function subm ()
+function sendMessage ()
 {
   var message = $("#phrase").val();
   if (chat['translit'])
     message = translate (message);
   $.post('ajax_talk.php', 'do=sendmessage&h='+message, function (data){
-	  if (data == 'complete')
-    {
-      top.ref.document.location.reload();
-      $("#phrase").val('').focus();
-    }
-    else if (data == 'ajax_error')
-      top.location.href = 'index.php';
-    else
-      $("#phrase").val('').focus();
+    var result = top.exploder(data);
+    top.msg.updateMessages();
+    $("#phrase").val('').focus();
 	});
 }
 
@@ -90,13 +68,12 @@ function convert (str)
 
 function rslength () // изменяет размер строки ввода текста
 {
-  var size = document.body.clientWidth - (4*30)-31-59-285-55;
+  var size = Math.ceil($('body').width() - full_length - (2*30)-5);
   
-  if (size < 100)
-    size = 100;
+  if (size < 300)
+    size = 300;
   
-  $("#phrase").attr('size', size / 5.5);
-  $('#T2').attr('width', size - 50);
+  $("#phrase").css('width', size);
 }
 
 function translate (str) // translates latin to russian
@@ -124,26 +101,20 @@ function clean ()
   if ($("#phrase").val() != '')
     $("#phrase").val('').focus();
   else if (confirm('Очистить окно чата?'))
-    parent.msg.document.getElementById('mes').innerHTML = '';
+    top.cleanChat();
 }
 
 function smiles ()
 {
   var x = window.innerWidth + 120;
   var y = window.innerHeight + 460;
-  var sFeatures = "dialogHeight:700px;dialogWidth:500px;dialogLeft:"+x+"px;dialogTop:"+y+"px;help:no;status:no;unadorned:yes;maximize:no;";
-  window.showModalDialog("smiles.html", "Смайлы", sFeatures);
-}
-
-function url (url)
-{
-  top.main.location.href = "main.php?action="+url;
+  window.showModalDialog("smiles.html", "Смайлы", "dialogHeight:700px;dialogWidth:500px;dialogLeft:"+x+"px;dialogTop:"+y+"px;help:no;status:no;unadorned:yes;maximize:no;");
 }
 
 function quit ()
 {
   if (confirm("Вы уверены что хотите выйти из игры?"))
-    url ('exit');
+    top.linkAction('exit');
 }
 
 function talk ()
@@ -154,56 +125,51 @@ function talk ()
 $(document).ready(function (){
   for (var i in chat)
     changeButtonState (i);
+  full_length = $('#T1').width() + $('#T3').width() + $('#T4').width() + $('#T5').width() + $('#T6').width() + $('#T7').width();
   rslength ();
-  $('#filter').live('click', function (){
-    changeButtonState ('filter');
-  });
-  $('#slow').live('click', function (){
-    changeButtonState ('slow');
-  });
-  $('#sys').live('click', function (){
-    changeButtonState ('sys');
-  });
-  $('#translit').live('click', function (){
-    changeButtonState ('translit');
+  $('.button').live('click', function (){
+    if (id = $(this).attr('id'))
+      changeButtonState (id);
   });
   $('#phrase').keydown(function (event){
     if (event.keyCode == '13')
-      subm ();
+      sendMessage();
   });
-}).resize(function (){rslength ();});
+});
+$(window).resize(function (){rslength ();});
 </script>
 </head>
-<body leftmargin="0" topmargin="0" marginheight="0" marginwidth="0" bgcolor="#E6E6E6" onFocus="talk ();">
-<table width="100%" height="30" cellspacing="0" cellpadding="0">
-  <tr valign="top" style="background: url(img/beg_chat_03.gif) top repeat-x;">
-    <td width="9"><img src="img/bkf_l_r1_02.gif" width="9" height="30"></td>
-    <td width="30"><img src="img/b_chat.gif" width="30" height="30" title="Чат" /></td>
-    <td valign="middle" height="40" id="T2" valign="top"><input type="normal" id="phrase" maxlength="240" size="130" style="margin-top: -8px;" /></td>
-    <td nowrap height="30">
-      <img src="img/b_ok.gif" width="30" height="30" title="Отправить сообщение" style="cursor: pointer;" onclick="subm ();" />
-      <img src="img/1x1.gif" width="8" height="1" />
-      <img width="30" height="30" style="cursor: pointer;" src="img/b_clear.gif" title="Очистить строку ввода/Чат" onclick="clean ();" />
-      <img width="30" height="30" style="cursor: pointer;" src="img/b_filter_off.gif" id="filter" title="Показывать в чате только сообщения адресованные мне" />
-      <img width="30" height="30" style="cursor: pointer;" src="img/b_sys_off.gif" id="sys" title="Показывать в чате системные сообщения" />
-      <img width="30" height="30" style="cursor: pointer;" src="img/b_slow_off.gif" id="slow" title="Медленное обновление чата (раз в минуту)" />
-      <img width="30" height="30" style="cursor: pointer;" src="img/b_translit_off.gif" id="translit" title="Преобразовывать транслит в русский текст (правила перевода см. в энциклопедии)" />
-      <img width="30" height="30" src="img/b_sound_off.gif" id="b_sound" title="Не работает" />
-      <object><embed src="img/Sound2.swf" quality="high" scale="noscale" wmode="transparent" width="1" height="1" id="Sound" align="middle" allowScriptAccess="always" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" /></object>
-      <img width="30" height="30" style="cursor: pointer;" src="img/b_smile.gif" title="Смайлики" onclick="smiles ();" />
-    </td>
-    <td width="16" background="img/b_bg2.gif"><img src="img/beg_chat_05.gif" width="16" height="30" /></td>
-    <td align="right" nowrap style="background: url(img/b_bg2.gif) repeat-x;" height="30">
-      <img src="img/a_inv.gif" width="30" height="30" title="Настройки/Инвентарь" style="cursor: pointer;" onClick="url ('inv&section=1');" />
-      <?if($level >= 4){?><img src="img/a_trf.gif" width="30" height="30" title="Передать предметы/кредиты" style="cursor: pointer;" onClick="url ('perevod');" /><?}?>
-      <?if($orden == 1){?><img src="img/a_pal.gif" width="30" height="30" title="Власть" style="cursor: pointer;" onClick="url ('orden');" /><?}?>
-      <?if($orden == 2){?><img src="img/a_drk.gif" width="30" height="30" title="Власть" style="cursor: pointer;" onClick="url ('orden');" /><?}?>
-      <?if($clan){?><img src="img/a_kln.gif" width="30" height="30" title="Клан" style="cursor: pointer;" onClick="url ('clan');" /><?}?>
-      <img src="img/a_ext.gif" width="30" height="30" title="Выход из игры" style="cursor: pointer;" onClick="quit ();" />
-    </td>
-    <td width="70" valign="middle" background="img/b_bg2.gif" height="30"><object><embed src="img/clock.swf?hours=<?echo date('H');?>&minutes=<?echo date('i');?>&sec=<?echo date('s');?>" width="70" type="application/x-shockwave-flash" style="margin-top: -6px; height: 100%;" /></object></td>
-    <td width="9" valign="middle" background="img/b_bg2.gif"><img src="img/bkf_l_r1_06.gif" width="9" height="40" /></td>
-  </tr>
+<body bgcolor="#E6E6E6" onFocus="talk ();">
+<table border="0" cellspacing="0" cellpadding="0" width="100%" height="30">
+<tr>
+<td id="T1"><img src="img/1x1.gif" width="9" /></td>
+<td id="T2">
+  <img src="img/talk/b_chat.gif" title="Чат" />
+  <input type="text" id="phrase" maxlength="240" size="100" />
+  <img class="button" src="img/talk/b_ok.gif" title="Отправить сообщение" onclick="sendMessage();" />
+<td id="T3"><img src="img/1x1.gif" width="8" /></td>
+<td id="T4">
+  <img class="button" src="img/talk/b_clear.gif" title="Очистить строку ввода/Чат" onclick="clean ();" />
+  <img class="button" src="img/talk/b_filter_off.gif" id="filter" title="Показывать в чате только сообщения адресованные мне" />
+  <img class="button" src="img/talk/b_sys_off.gif" id="sys" title="Показывать в чате системные сообщения" />
+  <img class="button" src="img/talk/b_slow_off.gif" id="slow" title="Медленное обновление чата (раз в минуту)" />
+  <img class="button" src="img/talk/b_translit_off.gif" id="translit" title="Преобразовывать транслит в русский текст (правила перевода см. в энциклопедии)" />
+  <img class="button" src="img/talk/b_sound_off.gif" id="b_sound" title="Не работает" />
+  <object><embed width="1" height="1" src="img/talk/Sound2.swf" quality="high" scale="noscale" wmode="transparent" id="sound" align="middle" allowScriptAccess="always" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" /></object>
+  <img class="button" src="img/talk/b_smile.gif" title="Смайлики" onclick="smiles ();" />
+</td>
+<td id="T5"><img src="img/1x1.gif" width="16" /></td>
+<td id="T6">
+  <img class="button" src="img/talk/a_inv.gif" title="Настройки/Инвентарь" onClick="top.linkAction('inv');" />
+  <?if($level >= 4){?><img class="button" src="img/talk/a_trf.gif" title="Передать предметы/кредиты" onClick="top.linkAction('perevod');" /><?}?>
+  <?if($orden == 1){?><img class="button" src="img/talk/a_pal.gif" title="Власть" onClick="top.linkAction('orden');" /><?}?>
+  <?if($orden == 2){?><img class="button" src="img/talk/a_drk.gif" title="Власть" onClick="top.linkAction('orden');" /><?}?>
+  <?if($clan){?><img class="button" src="img/talk/a_kln.gif" title="Клан" onClick="top.linkAction('clan');" /><?}?>
+  <img class="button" src="img/talk/a_ext.gif" title="Выход из игры" onClick="quit ();" />
+  <object><embed width="70" height="30" src="img/talk/clock.swf?hours=<?echo date('H');?>&minutes=<?echo date('i');?>&sec=<?echo date('s');?>" type="application/x-shockwave-flash" /></object>
+</td>
+<td id="T7"><img src="img/1x1.gif" width="9" /></td>
+</tr>
 </table>
 </body>
 </html>

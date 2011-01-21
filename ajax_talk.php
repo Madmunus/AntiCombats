@@ -33,7 +33,6 @@ $login = $char_feat['login'];
 $city = $char_feat['city'];
 $room = $char_feat['room'];
 $shut = $char_feat['shut'];
-$chat_s = $char_feat['chat_s'];
 
 switch ($do)
 {
@@ -43,19 +42,20 @@ switch ($do)
     $commands = $adb->selectCol ("SELECT `name` FROM `server_commands`;");
     $command = false;
 
-    if (!$h || $shut || $chat_s == 2)
-      die ('none');
+    if (!$h || $shut)
+      returnAjax ('none');
     
     $color = $char->getChar ('char_info', 'color');
-
-    foreach ($commands as $num => $name)
+    
+    if ($h[0] == '/')
     {
-      if (utf8_substr ($h, 0, utf8_strlen($name)) == $name)
+      foreach ($commands as $num => $name)
       {
-        $command = $char->chat->executeCommand ($name, $h, $guid);
-        die ('complete');
+        if (utf8_substr ($h, 0, utf8_strlen($name)) == $name && $command = $char->chat->executeCommand ($name, $h, $guid))
+          returnAjax ('complete');
       }
     }
+    
     $h = str_replace ("\n", "", $h);
     $to = split (']', str_replace (array('to [', 'private ['), "]", $h));
     
@@ -75,9 +75,9 @@ switch ($do)
       $class = 'all';
     
     $adb->query ("UPDATE `characters` SET `afk` = '0' WHERE `guid` = ?d", $guid);
-    $adb->query ("INSERT INTO `city_chat` (`sender`, `to`, `room`, `msg`, `class`, `date_stamp`, `city`) 
-                  VALUES (?s, ?s, ?s, ?s, ?s, ?d, ?s)", $login ,$to ,$room ,"<font color=$color>$h</font>" ,$class ,time () ,$city);
-    die ('complete');
+    if ($adb->query ("INSERT INTO `city_chat` (`sender`, `to`, `room`, `msg`, `class`, `date_stamp`, `city`) 
+                      VALUES (?s, ?s, ?s, ?s, ?s, ?d, ?s)", $login ,$to ,$room ,"<font color=$color>$h</font>" ,$class ,time () ,$city))
+      returnAjax ('complete');
   break;
 }
 ?>

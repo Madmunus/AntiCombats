@@ -26,8 +26,7 @@ $char->test->Guid ();
 <meta http-equiv="Content-Language" content="ru">
 <link rel="StyleSheet" href="styles/style.css" type="text/css">
 <link rel="StyleSheet" href="styles/main.css" type="text/css">
-<script src="scripts/jquery-1.4.4.js" type="text/javascript"></script>
-<script src="scripts/scripts.js" type="text/javascript"></script>
+<script src="scripts/jquery.js" type="text/javascript"></script>
 <script type="text/javascript">
 var TimerOnline = -1;
 var autorefresh = false;
@@ -35,15 +34,14 @@ var autorefresh = false;
 function updateUsers ()
 {
   $.post('ajax_users.php', 'do=refreshusers', function (data){
+    var list = top.exploder(data);
+    
     if (TimerOnline)
       clearTimeout(TimerOnline);
     
-    if (data)
-    {
-      $('#user_list').html(data);
-      if (autorefresh)
-        TimerOnline = setTimeout ('updateUsers()', 10000);
-    }
+    $('#user_list').html(list[0]);
+    if (autorefresh)
+      TimerOnline = setTimeout ('updateUsers()', 10000);
 	});
 }
 

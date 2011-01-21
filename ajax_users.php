@@ -19,14 +19,12 @@ $adb->setErrorHandler("databaseErrorHandler");
 $char = Char::initialization($guid, $adb);
 
 $char->test->Guid ('ajax');
+$char->test->Afk ();
 
 $char_db = $char->getChar ('char_db', 'city', 'room');
+ArrToVar ($char_db);
 
 $do = requestVar ('do');
-
-$city = $char_db['city'];
-$room = $char_db['room'];
-
 switch ($do)
 {
   case 'refreshusers':
@@ -41,7 +39,7 @@ switch ($do)
                               ORDER by `login_display`", $city ,$room);
     foreach ($rows as $num => $online_guid)
       $user_list .= $char->info->character ('online', $online_guid);
-    die ($user_list);
+    returnAjax ($user_list);
   break;
 }
 ?>
