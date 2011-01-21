@@ -70,7 +70,7 @@ function ch_counter_color (color)
 		$('#progress'+i).css('backgroundColor', progressColor);
 }
 
-$(document).ready(function (){
+$(function (){
 	if ($('#ione'))
 		$('.buttons').appendTo('#ione');
 	

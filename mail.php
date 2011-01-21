@@ -83,7 +83,7 @@ switch ($do)
       echo "Примерное время доставки: ".getFormatedTime (1800 + time ());
 ?>
 <script type="text/javascript">
-$(document).ready(function (){
+$(function (){
   if (c = getCookie ('section'))
     section = c;
   else

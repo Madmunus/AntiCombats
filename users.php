@@ -54,7 +54,7 @@ function changeAutoRefresh ()
     clearTimeout(TimerOnline);
 }
 
-$(document).ready(function (){
+$(function (){
   updateUsers ();
 });
 </script>

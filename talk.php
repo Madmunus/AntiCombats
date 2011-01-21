@@ -40,7 +40,7 @@ function changeButtonState (button)
   var src = (chat[button]) ?'img/talk/b_'+button+'_off.gif' :'img/talk/b_'+button+'_on.gif';
   chat[button] = !chat[button];
   $('#'+button).attr('src', src);
-  talk ();
+  talk();
 }
 
 function sendMessage ()
@@ -122,7 +122,7 @@ function talk ()
   $("#phrase").focus();
 }
 
-$(document).ready(function (){
+$(function (){
   for (var i in chat)
     changeButtonState (i);
   full_length = $('#T1').width() + $('#T3').width() + $('#T4').width() + $('#T5').width() + $('#T6').width() + $('#T7').width();
@@ -131,15 +131,15 @@ $(document).ready(function (){
     if (id = $(this).attr('id'))
       changeButtonState (id);
   });
-  $('#phrase').keydown(function (event){
-    if (event.keyCode == '13')
+  $('#phrase').keydown(function (e){
+    if (e.which == '13')
       sendMessage();
   });
 });
 $(window).resize(function (){rslength ();});
 </script>
 </head>
-<body bgcolor="#E6E6E6" onFocus="talk ();">
+<body bgcolor="#E6E6E6" onFocus="talk();">
 <table border="0" cellspacing="0" cellpadding="0" width="100%" height="30">
 <tr>
 <td id="T1"><img src="img/1x1.gif" width="9" /></td>

@@ -30,7 +30,7 @@ $professions = array (
 );
 ?>
 <script type="text/javascript">
-$(document).ready(function (){
+$(function (){
   var cur_Id = '0';
   $('.us2').click(function (){
     $('#'+cur_Id).css('color', '#000000');

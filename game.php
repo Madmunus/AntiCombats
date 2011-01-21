@@ -7,7 +7,7 @@
 <script src="scripts/jquery.js" type="text/javascript"></script>
 <script src="scripts/scripts.js" type="text/javascript"></script>
 <script type="text/javascript">
-$(document).ready(function (){
+$(function (){
   $('[name=menu]').attr('src', 'topp.php');
   $('[name=main]').attr('src', 'main.php?action=enter');
   $('[name=msg]').attr('src', 'msg.php');

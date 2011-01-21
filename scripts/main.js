@@ -196,7 +196,7 @@ function BrokenItems ()
   i = 1;
 }
 
-$(document).ready(function (){
+$(function (){
   $(".broken").each(function (){
     broken[i] = true;
     i++;

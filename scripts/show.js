@@ -8,7 +8,7 @@ function break_str (str, width, brk, cut)
   return str.match(RegExp(regex, 'g')).join(brk);
 }
 
-$(document).ready(function (){
+$(function (){
 	$('img,a,td,span').live('mousemove', function (e){ 
 		var x, y;
 		e.preventDefault();

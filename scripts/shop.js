@@ -78,7 +78,7 @@ function AddCount (entry, name, price, kr)
   $('[name=count]').focus();
 }
 
-$(document).ready(function (){
+$(function (){
   $('input[name=count]').live('keyup', function (){
     $(this).val($(this).val().replace(/[^0-9]/g, ''));
     if ($(this).val() == '')

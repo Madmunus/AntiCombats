@@ -8,7 +8,7 @@ body {background-color: #e2e0e0;}
 switch ($do)
 {
   case 'shape':
-    echo "<script>$(document).ready(function (){showShapes (1);});</script>";
+    echo "<script>$(function (){showShapes (1);});</script>";
     if ($char_db['next_shape'] && $char_db['next_shape'] > time ())
       $char->error->Inventory (111, getFormatedTime ($char_db['next_shape']));
     

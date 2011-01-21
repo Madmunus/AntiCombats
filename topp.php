@@ -32,7 +32,7 @@ $admin_level = $char->getChar ('char_db', 'admin_level');
 <script type="text/javascript">
 var mail = <?echo $mail;?>;
 
-$(document).ready(function (){
+$(function (){
   $('#4').css({'background-color': '#404040', 'color': '#FFFFFF'});
   $('#menu4').css({'visibility': 'visible', 'position': 'relative'});
   var cur_Id = '4';

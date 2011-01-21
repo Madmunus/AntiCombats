@@ -6,7 +6,7 @@ $id2 = requestVar ('id2', 0);
 ?>
 <script src="scripts/move_check.js" type="text/javascript"></script>
 <script type="text/javascript">
-$(document).ready(function (){
+$(function (){
   $('input[name=add_kredit]').live('click', function (){
     if (isNaN(parseFloat($('input[name=add_sum]').val())))
     {

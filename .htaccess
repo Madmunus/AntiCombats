@@ -2,6 +2,10 @@
 <FilesMatch "\.(dat)$">
 	Deny from all
 </FilesMatch>
+# Default startup page
+DirectoryIndex index.php
+# Disable output dirs
+Options -Indexes
 # Globals
 php_value register_globals on
 # UTF8 support

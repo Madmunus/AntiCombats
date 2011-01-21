@@ -56,7 +56,7 @@ function regcheck (login)
   return false;
 }
 
-$(document).ready(function (){
+$(function (){
   $('input[name=reg_login]').keyup(function (){
     $(this).val($(this).val().replace(/[^a-zA-Zа-яА-Я\-_]/g, ''));
   });

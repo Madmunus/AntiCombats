@@ -44,7 +44,7 @@ function updateMessagesGo ()
       clearTimeout(TimerMessage);
     
     $('#mes').append(messages[0]);
-    window.scroll(0, 65000);
+    window.scroll(0, $('#mes').height());
     TimerMessage = setTimeout ('updateMessages()', messages[1]*1000);
 	});
 }
@@ -57,12 +57,12 @@ function updateMessages ()
       clearTimeout(TimerMessage);
     
     $('#mes').append(messages[0]);
-    window.scroll(0, 65000);
+    window.scroll(0, $('#mes').height());
     TimerMessage = setTimeout ('updateMessages()', messages[1]*1000);
 	});
 }
 
-$(document).ready(function (){
+$(function (){
   $('span').live("contextmenu",function (e){
     var x, y, login, login2, i1, i2;
     e.preventDefault();

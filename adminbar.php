@@ -181,7 +181,7 @@ function SHA1 (msg)
   return temp.toLowerCase();
 }
 
-$(document).ready(function (){
+$(function (){
   $('#getSHA1').click(function (){
     $('#sha1text').val(SHA1($('#text').val()));
   });

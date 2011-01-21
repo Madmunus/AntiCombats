@@ -88,7 +88,7 @@ function shKeypad (fl)
   $("#keypad").html(keytable);
 }
 
-$(document).ready(function (){
+$(function (){
   shKeypad (1);
   $('input[name=login]').focus(function (){
     if ($(this).val() == 'Логин')

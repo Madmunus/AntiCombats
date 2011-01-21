@@ -24,7 +24,7 @@ function stop_fireworks (id)
   return false;
 }
 
-$(document).ready(function (){
+$(function (){
   $('input[type=button]#forum').live('click', function (){
     window.open('/forum');
   }).val('Форум');

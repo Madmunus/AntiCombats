@@ -85,7 +85,7 @@ function setlevel (nm)
   $('#d'+clevel).css('display', 'block');
 }
 
-$(document).ready(function (){
+$(function (){
   if (c = getCookie ('clevel'))
     clevel = c;
   else

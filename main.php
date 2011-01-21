@@ -71,7 +71,7 @@ if (link[link.length - 1] != 'game.php')
 <div id="help"></div>
 <div id="hint3" class="ahint"></div>
 <div id="hint4" class="ahint"></div>
-<input type="hidden" id="x" value="0" style="position: fixed; left: 0px; top: 0px; z-index: 110;" /><input type="hidden" id="y" value="0" style="position: fixed; left: 110px; top: 0px; z-index: 110;" />
+<input type="hidden" id="x" value="0" /><input type="hidden" id="y" value="0" />
 <?
 $char_db = $char->getChar ('char_db', '*');
 $char_stats = $char->getChar ('char_stats', '*');
