@@ -54,7 +54,7 @@ if ($section_shop == 'sell')
     echo "<table width='100%' cellspacing='1' cellpadding='2' bgcolor='#A5A5A5'><tr><td bgcolor='#E2E0E0' align='center'>У вас нет подходящих вещей в рюкзаке</td></tr></table>";
 }
 else
-  echo "<script>$(function (){shopSection ('$section_shop');});</script>";
+  echoScript ("$(function (){shopSection ('$section_shop');});");
 ?>
   </div>
 </td>

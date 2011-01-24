@@ -15,7 +15,7 @@ switch ($do)
   break;
   case 'get_item':
   case 'return_item':
-    $char->mail->ItemMail ($item_id, $do);
+    $char->mail->getItem ($item_id, $do);
   break;
   case 'get_money':
   case 'return_money':

@@ -3,7 +3,7 @@ defined('AntiBK') or die ("Доступ запрещен!");
 ?>
 <script src="scripts/inventory.js" type="text/javascript"></script>
 <?
-$bars = $adb->selectRow ("SELECT `stat`, `mod`, `power`, `def`, `btn`, `set` FROM `character_bars` WHERE `guid` = ?d", $guid) or die ("<script>top.location.href = 'index.php';</script>");
+$bars = $money = $char->getChar ('char_bars', 'stat', 'mod', 'power', 'def', 'btn', 'set');
 foreach ($bars as $key => $value)
 {
   if ($value == 0)
@@ -28,7 +28,7 @@ foreach ($bank as $num => $bank_id)
   <tr>
     <td width="210" align="center" valign="top">
       <table border="0" cellspacing="0" cellpadding="0">
-        <tr><td width="210" align="center"><?echo $char->info->character ();$char->equip->showEquipment ('inv');?></td></tr>    
+        <tr><td width="210" align="center"><?$char->equip->showCharacter ('inv');?></td></tr>    
 <?
 if ($shut)
   echo "<tr><td valign='top'><p style='margin-left: 10px;'><small><img src='img/icon/sleep.gif' width='40' height='25'>$lang[shut_desc] ".getFormatedTime($shut)."<br></small></p></td></tr>";

@@ -2,7 +2,7 @@ var clevel = '';
 var all_stats = new Array ('str', 'dex', 'con', 'vit', 'int', 'wis', 'spi');
 var all_skills = new Array ('sword', 'fail', 'staff', 'knife', 'axe', 'fire', 'water', 'air', 'earth', 'light', 'gray', 'dark');
 
-function increaseStat (stat)
+function changeStat (stat)
 {
   $("#loadbar").show();
 	$.post('ajax.php', 'do=increasestat&stat='+stat, function (data){

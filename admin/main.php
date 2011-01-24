@@ -58,12 +58,8 @@ switch ($act)
     case 'new':
     case 'stat_admin': include ("module/$act.php");
     break;
-    case 'phpinfo':    echo "<script>$('#info', parent.document).html('Информация: Phpinfo');</script>";
+    case 'phpinfo':    echoScript ("$('#info', parent.document).html('Информация: Phpinfo');");
                        phpinfo ();
-    break;
-    case 'exit':
-        unset ($_SESSION['admin']);
-        echo "<script>top.location.href = 'index.php';</script>";
     break;
 }
 ?>

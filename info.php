@@ -5,13 +5,13 @@ ini_set ('error_reporting', E_ALL);
 
 define ('AntiBK', true);
 
-if (empty($log))
-  die ("<script>location.href = 'index.php';</script>");
-
 include_once ("engline/config.php");
 include_once ("engline/dbsimple/Generic.php");
 include_once ("engline/data/data.php");
 include_once ("engline/functions/functions.php");
+
+if (empty($log))
+  echoScript (getError ('game'), true);
 
 $adb = DbSimple_Generic::connect($database['adb']);
 $adb->query("SET NAMES ? ",$database['db_encoding']);
@@ -70,8 +70,7 @@ $char->showStatAddition ('info');
 <table width="100%" border="0" cellpadding="1" cellspacing="2">
 <tr valign="top">
   <td align="center" width="227" style="padding-right: 10px;">
-<?  echo $char->info->character ('info', $guid)."<div style='height: 9px;'></div>";
-    $char->equip->showEquipment ('info');
+<?  $char->equip->showCharacter ('info');
     echo "<strong>$city</strong><br>";
     echo ($online) ?"<small>Персонаж сейчас находится в клубе.<br>\"<strong>$room</strong>\"</small>" :(($admin_level > 0) ?"<small>Персонаж не в клубе</small>" :"<small>Персонаж не в клубе, но был тут:<br>".date ('d.m.y H:i', $last_time)." <img src='img/clok3_2.png' alt='Время сервера' border='0'><br> (".getFormatedTime ($last_time)." назад)</small>");
 ?>
@@ -123,7 +122,7 @@ $char->info->showInfDetail ($guid);
 <?
 if ($admin_level < 1)
 {
-  echo ($metka) ?"<br><b>$metka</b> - пройдена проверка." :"";
+  echo ($checkup) ?"<br><b>".date ('d.m.y H:i', $checkup)."</b> - пройдена проверка." :"";
   echo ($delo) ?"<br><b>Личное дело:</b><br>$delo" :"";
 }
 ?>

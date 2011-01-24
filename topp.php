@@ -37,19 +37,11 @@ $(function (){
   $('#menu4').css({'visibility': 'visible', 'position': 'relative'});
   var cur_Id = '4';
   $(".main_text").click(function (){
-    if ($(this).attr('id') == 5)
-    {
-      if (confirm("Вы уверены что хотите выйти из игры?"))
-        top.linkAction('exit');
-    }
-    else
-    {
-      $('#'+cur_Id).css({'background-color': '', 'color': ''});
-      $('#menu'+cur_Id).css({'visibility': 'hidden', 'position': 'absolute'});
-      cur_Id = $(this).attr('id');
-      $('#'+cur_Id).css({'background-color': '#404040', 'color': '#FFFFFF'});
-      $('#menu'+cur_Id).css({'visibility': 'visible', 'position': 'relative'});
-    }
+    $('#'+cur_Id).css({'background-color': '', 'color': ''});
+    $('#menu'+cur_Id).css({'visibility': 'hidden', 'position': 'absolute'});
+    cur_Id = $(this).attr('id');
+    $('#'+cur_Id).css({'background-color': '#404040', 'color': '#FFFFFF'});
+    $('#menu'+cur_Id).css({'visibility': 'visible', 'position': 'relative'});
   });
   $('input, a').live('click', function (){$(this).blur();});
   if (mail)
@@ -77,7 +69,7 @@ $(function (){
                 <td><img height="11" src="img/mennu112_09.gif" width="1" /></td>
                 <td class="main_text" id="4">Персонаж</td>
                 <td><img height="11" src="img/mennu112_09.gif" width="1" /></td>
-                <td class="main_text" id="5">Выход&nbsp;</td>
+                <td class="exit" onclick="top.exit();">Выход&nbsp;</td>
               </tr>
             </table>
           </td>

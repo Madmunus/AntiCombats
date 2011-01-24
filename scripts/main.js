@@ -1,3 +1,11 @@
+function getCenter (width, height)
+{
+  var center = {};
+  center.x = ($(document).width() - width)/2;
+  center.y = ($(document).height() - height)/2;
+  return center;
+}
+
 function drop (id, img, txt)
 {
 	var table = '<table width="100%"><td><img src="img/items/'+img+'"></td><td>Предмет <nobr><b>\''+txt+'\'</b></nobr> будет утерян, вы уверены ?</table>'+
@@ -43,7 +51,8 @@ function showHelp (link)
 	$.post('encicl/help/'+link+'.html', function (data){
 	  if (data)
 	  {
-      $("#help").html(data).css({left: ($(document).width() - 700)/2, top: 100}).before("<div id='help_bg' onclick='hideHelp ();'></div>").fadeIn('10000');
+      var coor = getCenter (700, 200);
+      $("#help").html(data).css({left: coor.x, top: 100}).before("<div id='help_bg' onclick='hideHelp ();'></div>").fadeIn('10000');
       $("#help_bg").fadeIn('10000');
 	  }
 	});
@@ -86,6 +95,24 @@ function chooseShape (shape)
 	});
 }
 
+function getFormatedTime (time)
+{
+  if (!time)
+    return 0;
+  
+  var m = parseInt(time / 60);
+  time %= 60;
+  var s = time;
+  if (m == 0) return s+' cек.';
+  else        return m+' мин. '+s+' cек.';
+}
+
+function updateMmoves (id, text)
+{
+  if (pos.x > $('#'+id).offset().left && pos.x < $('#'+id).offset().left + $('#'+id).width() && pos.y > $('#'+id).offset().top && pos.y < $('#'+id).offset().top + $('#'+id).height())
+    $(".mmoves").html('<small>' + break_str (text, 50, '<br>') + '</small>');
+}
+
 //-- Смена хитпоинтов
 var delay = 2;			// Каждые 2 сек. увеличение HP и MP на 0.2%
 var redHP = 0.33;		// меньше 30% красный цвет
@@ -109,6 +136,7 @@ function showHP (now, max, newspeed)
 
 function setHPlocal ()
 {
+  var plusHP = 0;
 	if (nowHP >= maxHP)
 	{
 		nowHP = maxHP;
@@ -116,7 +144,8 @@ function setHPlocal ()
 	}
 	else
 	{
-		nowHP += maxHP * hspeed * delay * 0.00001;
+    plusHP = maxHP * hspeed * delay * 0.00001;
+		nowHP += plusHP;
 		TimerOnHP = 0;
 	}
 	var le = 120;
@@ -129,11 +158,12 @@ function setHPlocal ()
 	else
 		imag = "img/icon/bk_life_green.gif";
 	var rhp = Math.round(nowHP) + "/" + maxHP;
-	$('#HP').html(	"<table border='0' cellpadding='0' cellspacing='0' width='" + le + "' align='center' style='padding-top: 1px;'><tr>"+
-					"<td style='position: absolute; width: " + le + "px; font-size: 9px; color: white; font-weight: bold; margin-top: -3px; padding-left: 5px;' align='left' alt='Уровень жизни'>" + rhp + "</td>"+
-					"<td style='width: " + h1 + "px; height: 10px; background: url(" + imag + ") repeat-x;'></td>"+
-					"<td style='width: " + h2 + "px; height: 10px; background: url(img/icon/bk_life_loose.gif) repeat-x;'></td>"+
-					"</tr></table>");
+	$('#HP').html("<table border='0' cellpadding='0' cellspacing='0' width='" + le + "' align='center' style='padding-top: 1px;'><tr>"+
+                "<td style='position: absolute; width: " + le + "px; font-size: 9px; color: white; font-weight: bold; margin-top: -3px; padding-left: 5px;' align='left' alt='Уровень жизни"+((plusHP > 0 && (difHP = maxHP-nowHP) > 0) ?'<br>Осталось: '+getFormatedTime (Math.round(difHP*2/plusHP)) :'')+"'>" + rhp + "</td>"+
+                "<td style='width: " + h1 + "px; height: 10px; background: url(" + imag + ") repeat-x;'></td>"+
+                "<td style='width: " + h2 + "px; height: 10px; background: url(img/icon/bk_life_loose.gif) repeat-x;'></td>"+
+                "</tr></table>");
+  updateMmoves('HP', "Уровень жизни"+((plusHP > 0 && (difHP = maxHP-nowHP) > 0) ?'<br>Осталось: '+getFormatedTime (Math.round(difHP*2/plusHP)) :''));
 	if (TimerOnHP != -1)
 		TimerOnHP = setTimeout ('setHPlocal()', delay * 1000);
 }
@@ -156,6 +186,7 @@ function showMP (now, max, newspeed)
 
 function setMPlocal ()
 {
+  var plusMP = 0;
 	if (maxMP == 0)
 		return;
 	
@@ -166,18 +197,20 @@ function setMPlocal ()
 	}
 	else
 	{
-		nowMP += maxMP * mspeed * delay * 0.00001;
+    plusMP = maxMP * mspeed * delay * 0.00001;
+		nowMP += plusMP;
 		TimerOnMP = 0;
 	}
 	var le = 120;
 	var m1 = Math.round ((le / maxMP) * nowMP);
 	var m2 = le - m1;
 	var rmp = Math.round(nowMP) + "/" + maxMP;
-	$('#MP').html(	"<table border='0' cellpadding='0' cellspacing='0' width='" + le + "' align='center' style='margin-top: -1px;'><tr>"+
-					"<td style='position: absolute; width: " + le + "px; font-size: 9px; color: white; font-weight: bold; margin-top: -3px; padding-left: 5px; color: #80FFFF;' align='left' alt='Уровень маны'>" + rmp + "</td>"+
-					"<td style='width: " + m1 + "px; height: 10px; background: url(img/icon/blue.gif) repeat-x;'></td>"+
-					"<td style='width: " + m2 + "px; height: 10px; background: url(img/icon/bk_life_loose.gif) repeat-x;'></td>"+
-					"</tr></table>");
+	$('#MP').html("<table border='0' cellpadding='0' cellspacing='0' width='" + le + "' align='center' style='margin-top: -1px;'><tr>"+
+                "<td style='position: absolute; width: " + le + "px; font-size: 9px; color: white; font-weight: bold; margin-top: -3px; padding-left: 5px; color: #80FFFF;' align='left' alt='Уровень маны"+((plusMP > 0 && (difMP = maxMP-nowMP) > 0) ?'<br>Осталось: '+getFormatedTime (Math.round(difMP*2/plusMP)) :'')+"'>" + rmp + "</td>"+
+                "<td style='width: " + m1 + "px; height: 10px; background: url(img/icon/blue.gif) repeat-x;'></td>"+
+                "<td style='width: " + m2 + "px; height: 10px; background: url(img/icon/bk_life_loose.gif) repeat-x;'></td>"+
+                "</tr></table>");
+  updateMmoves('MP', "Уровень маны"+((plusMP > 0 && (difMP = maxMP-nowMP) > 0) ?'<br>Осталось: '+getFormatedTime (Math.round(difMP*2/plusMP)) :''));
 	if (TimerOnMP != -1)
 		TimerOnMP = setTimeout ('setMPlocal()', delay * 1000);
 }
@@ -195,6 +228,8 @@ function BrokenItems ()
   });
   i = 1;
 }
+
+var pos = {};
 
 $(function (){
   $(".broken").each(function (){
@@ -221,8 +256,8 @@ $(function (){
     location.reload();
   });
   $(document).mousemove(function (e){
-    $("#x").val(e.pageX);
-    $("#y").val(e.pageY);
+    pos.x = e.pageX;
+    pos.y = e.pageY;
   });
   $('input[type=button], input[type=radio], input[type=submit], a').live('click', function (){
     $(this).blur();

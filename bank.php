@@ -71,7 +71,7 @@ switch ($do)
                   VALUES (?d, ?d, ?s);", $id ,$guid ,SHA1 ($id.':'.$pass1));
     $char->history->bank ($id, '', '', '', 1);
     
-    if (!($char->Money (3)))
+    if (!($char->changeMoneyMoney (-3)))
       $char->error->Map (107);
     
     $char->error->Map (318, $id);
@@ -94,7 +94,7 @@ switch ($do)
     {
       $add_sum = requestVar ('add_sum', 0, 11);
       
-      if (!($char->Money ($add_sum)))
+      if (!($char->changeMoney (-$add_sum)))
         $char->error->Map (107);
       
       $char->bank->bMoney (-$add_sum, $id);
@@ -105,7 +105,7 @@ switch ($do)
     {
       $get_sum = requestVar ('get_sum', 0, 11);
       $char->bank->bMoney ($get_sum, $id);
-      $char->Money (-$get_sum);
+      $char->changeMoney ($get_sum);
       $char->history->bank ($id, '', $get_sum, '', 3);
       $char->error->Map (320, "$get_sum|$id");
     }

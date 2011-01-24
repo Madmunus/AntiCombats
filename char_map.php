@@ -3,7 +3,7 @@ defined('AntiBK') or die ("Доступ запрещен!");
 ?>
 <table width="100%" border="0" cellspacing="1" cellpadding="0">
   <tr>
-    <td align="center" valign="top" width="210"><?echo $char->info->character ();$char->equip->showEquipment ();?></td>
+    <td align="center" valign="top" width="210"><?$char->equip->showCharacter ();?></td>
     <td align="left" valign="top" nowrap style="padding-left: 3px;"><br>
 <?
 foreach ($behaviour as $key => $min_level)

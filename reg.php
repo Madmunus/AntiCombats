@@ -407,8 +407,8 @@ echo "<script type='text/javascript'>$regfail</script>";
             $adb->query ("INSERT INTO `character_stats` (`guid`) 
                             VALUES (?d);", $guid);
             // Дополнительные характеристики
-            $adb->query ("INSERT INTO `character_stats_plus` (`guid`) 
-                            VALUES (?d);", $guid);
+            /* $adb->query ("INSERT INTO `character_stats_plus` (`guid`) 
+                            VALUES (?d);", $guid); */
             // Дополнительная информация
             $adb->query ("INSERT INTO `character_info` (`guid`, `name`, `icq`, `hide_icq`, `town`, `birthday`, `color`, `deviz`, `state`, `date`) 
                             VALUES (?d, ?s, ?d, ?d, ?s, ?s, ?s, ?s, ?s, ?d);", $guid ,$name ,$icq ,$hide_icq ,$town ,$birthday ,$color ,$deviz ,$city ,time ());

@@ -345,7 +345,7 @@ switch ($do)
         $adb->query ("DELETE FROM `character_sets` WHERE `guid` = ?d and `name` = ?s", $guid ,$name);
         $adb->query ("INSERT INTO `character_sets` (?#) 
                       VALUES (?a);", array_keys($cur_set), array_values($cur_set)) or die ("errorA_D222");
-        returnAjax ('complete', "<div name='$name' style='display: none;'><img width='200' height='1' src='img/1x1.gif'><br>&nbsp;&nbsp;<img src='img/icon/close2.gif' width='9' height='9' alt='$lang[set_delete]' onclick=\"if (confirm('$lang[set_delete] $name?')) {workSets ('delete', '$name');}\" style='cursor: pointer;'> <a href='main.php?action=wear_set&set_name=$name' class='nick'><small>$lang[equip] \"$name\"</small></a></div>");
+        returnAjax ('complete', $char->getSet ($name));
       break;
       case 'delete':
         if ($name == '')
@@ -354,6 +354,13 @@ switch ($do)
         $set = $adb->selectRow ("SELECT * FROM `character_sets` WHERE `guid` = ?d and `name` = ?s", $guid ,$name) or returnAjax ('error', 221);
         $adb->query ("DELETE FROM `character_sets` WHERE `guid` = ?d and `name` = ?s", $guid ,$name);
         returnAjax ('complete');
+      break;
+      case 'show':
+        $set = $adb->selectRow ("SELECT * FROM `character_sets` WHERE `guid` = ?d and `name` = ?s", $guid ,$name) or returnAjax ('error', 221);
+        $set['hand_l_s'] = "hand_l";
+        $char_feat = $char->getChar ('char_db', 'shape', 'guid');
+        $char_feat['name'] = '';
+        returnAjax ('complete', $char->equip->getCharacterEquipped ($set, $char_feat, 'smart'));
       break;
     }
   break;
@@ -387,13 +394,12 @@ switch ($do)
       $char->equip->getBuyValue ($price);
       $char->equip->getBuyValue ($price_euro);
       
-      if (($price > 0 && !($char->Money ($price))) || ($price_euro > 0 && !($char->Money ($price_euro, 'euro'))))
+      if (($price > 0 && !($char->changeMoney (-$price))) || ($price_euro > 0 && !($char->changeMoney (-$price_euro, 'euro'))))
         continue;
       
       $money = $money - $price;
       $money_euro = $money_euro - $price_euro;
-      $mass = $mass + $i_mass;
-      $adb->query ("UPDATE `characters` SET `mass` = ?f WHERE `guid` = ?d", $mass ,$guid);
+      $mass = $char->changeMass ($i_mass);
       //$adb->query ("UPDATE `character_stats` SET `trade` = `trade` + '0.01' WHERE `guid` = ?d", $guid);
       $adb->query ("INSERT INTO `character_inventory` (`guid`, `item_template`, `tear_max`, `inc_count_p`, `made_in`, `date`, `last_update`) 
                     VALUES (?d, ?d, ?f, ?d, ?s, ?d, ?d)", $guid ,$item_entry ,$tear ,$inc_count ,$city ,$time ,time ());
@@ -433,11 +439,10 @@ switch ($do)
                                 and `c`.`mailed` = '0';", $item_id ,$guid) or returnAjax ('error', 213);
     list ($name, $i_mass, $price, $price_euro, $tear_cur, $tear_max, $tear) = array_values ($dat);
     $sell_price = getSellValue ($dat);
-    $mass = $mass - $i_mass;
-    $adb->query ("UPDATE `characters` SET `mass` = ?f WHERE `guid` = ?d", $mass ,$guid);
+    $mass = $char->changeMass (-$i_mass);
     if ($price > 0)
     {
-      $char->Money (-$sell_price);
+      $char->changeMoney ($sell_price);
       $money = $money + $sell_price;
       $adb->query ("DELETE FROM `character_inventory` WHERE `id` = ?d and `guid` = ?d", $item_id ,$guid);
       $char->history->transfers ('Sell', "$name ($sell_price кр)", $_SERVER['REMOTE_ADDR'], 'Shop');
@@ -445,7 +450,7 @@ switch ($do)
     }
     else if ($price_euro > 0)
     {
-      $char->Money (-$sell_price, 'euro');
+      $char->changeMoney ($sell_price, 'euro');
       $money_euro = $money_euro + $sell_price_euro;
       $adb->query ("DELETE FROM `character_inventory` WHERE `id` = ?d and `guid` = ?d", $item_id ,$guid);
       $char->history->transfers ('Sell', "$name ($sell_price екр)", $_SERVER['REMOTE_ADDR'], 'Shop');
@@ -463,38 +468,36 @@ switch ($do)
     {
       default:
       case 0:
-        $dat = $adb->selectRow ("SELECT `i`.`name`, 
-                                        `i`.`mass` 
-                                 FROM `character_inventory` AS `c` 
-                                 LEFT JOIN `item_template` AS `i` 
-                                 ON `c`.`item_template` = `i`.`entry` 
-                                 WHERE `c`.`guid` = ?d 
-                                   and `c`.`id` = ?d 
-                                   and `c`.`wear` = '0' 
-                                   and `c`.`mailed` = '0';", $guid ,$item_id) or returnAjax ('error', 213);
-        $mass = $mass - $dat['mass'];
-        $adb->query ("UPDATE `characters` SET `mass` = ?f WHERE `guid` = ?d", $mass ,$guid);
+        $item_info = $adb->selectRow ("SELECT `i`.`name`, 
+                                              `i`.`mass` 
+                                       FROM `character_inventory` AS `c` 
+                                       LEFT JOIN `item_template` AS `i` 
+                                       ON `c`.`item_template` = `i`.`entry` 
+                                       WHERE `c`.`guid` = ?d 
+                                         and `c`.`id` = ?d 
+                                         and `c`.`wear` = '0' 
+                                         and `c`.`mailed` = '0';", $guid ,$item_id) or returnAjax ('error', 213);
+        $mass = $char->changeMass (-$item_info['mass']);
         $adb->query ("DELETE FROM `character_inventory` WHERE `id` = ?d and `guid` = ?d", $item_id ,$guid);
-        $char->history->transfers ('Throw out', $dat['name'], $_SERVER['REMOTE_ADDR'], 'Dump');
+        $char->history->transfers ('Throw out', $item_info['name'], $_SERVER['REMOTE_ADDR'], 'Dump');
         returnAjax ('complete', $mass, 1);
       break;
       case 1:
         $item_entry = $adb->selectCell ("SELECT `item_template` FROM `character_inventory` WHERE `guid` = ?d and `id` = ?d and `wear` = '0' and `mailed` = '0';", $guid ,$item_id) or returnAjax ('error', 213);
-        $dat = $adb->select ("SELECT `c`.`id`, 
-                                     `i`.`name`, 
-                                     `i`.`mass` 
-                              FROM `character_inventory` AS `c` 
-                              LEFT JOIN `item_template` AS `i` 
-                              ON `c`.`item_template` = `i`.`entry` 
-                              WHERE `c`.`guid` = ?d 
-                                and `c`.`item_template` = ?d 
-                                and `c`.`wear` = '0' 
-                                and `c`.`mailed` = '0';", $guid ,$item_entry) or returnAjax ('error', 213);
+        $items = $adb->select ("SELECT `c`.`id`, 
+                                       `i`.`name`, 
+                                       `i`.`mass` 
+                                FROM `character_inventory` AS `c` 
+                                LEFT JOIN `item_template` AS `i` 
+                                ON `c`.`item_template` = `i`.`entry` 
+                                WHERE `c`.`guid` = ?d 
+                                  and `c`.`item_template` = ?d 
+                                  and `c`.`wear` = '0' 
+                                  and `c`.`mailed` = '0';", $guid ,$item_entry) or returnAjax ('error', 213);
         $i = 0;
-        foreach ($dat as $item_info)
+        foreach ($items as $item_info)
         {
-          $mass = $mass - $item_info['mass'];
-          $adb->query ("UPDATE `characters` SET `mass` = ?f WHERE `guid` = ?d", $mass ,$guid);
+          $mass = $char->changeMass (-$item_info['mass']);
           $adb->query ("DELETE FROM `character_inventory` WHERE `id` = ?d and `guid` = ?d", $item_info['id'] ,$guid);
           $char->history->transfers ('Throw out', $item_info['name'], $_SERVER['REMOTE_ADDR'], 'Dump');
           $i++;
@@ -507,10 +510,9 @@ switch ($do)
     $stat = requestVar ('stat');
     $travm = $char_feat['travm'];
     $s_stat = str_replace (':', '', $lang[$stat]);
-    if ($char_stats['ups'] > 0 && $travm == 0 && $char_feat['level'] >= $behaviour[$stat])
+    if ($char_stats['ups'] > 0 && $travm == 0 && isset($behaviour[$stat]) && $char_feat['level'] >= $behaviour[$stat] && $char->changeStats ($stat, 1))
     {
-      if ($char->increaseStat ($stat, 1))
-        $adb->query ("UPDATE `character_stats` SET `ups` = `ups` - '1' WHERE `guid` = ?d", $guid);
+      $adb->query ("UPDATE `character_stats` SET `ups` = `ups` - '1' WHERE `guid` = ?d", $guid);
       returnAjax ('complete', 200, $s_stat);
     }
     else
@@ -523,7 +525,8 @@ switch ($do)
     $magic = array ('fire', 'water', 'air', 'earth', 'light', 'gray', 'dark');
     $char->showStatAddition ();
     $s_stat = str_replace (':', '', $lang[$stat]);
-    if ($char_stats['skills'] > 0 && $travm == 0 && $char_feat['level'] >= $mastery[$stat] && ((in_array ($stat, $weapon) & ($char_feat[$stat] - $added[$stat]) < 5) || (in_array ($stat, $magic) & ($char_feat[$stat] - $added[$stat]) < 10)))
+    if ($char_stats['skills'] > 0 && $travm == 0 && isset($mastery[$stat]) && $char_feat['level'] >= $mastery[$stat] && 
+       ((in_array ($stat, $weapon) & ($char_feat[$stat] - $added[$stat]) < 5) || (in_array ($stat, $magic) & ($char_feat[$stat] - $added[$stat]) < 10)))
     {
       if ($adb->query ("UPDATE `character_stats` SET ?# = ?# + '1' WHERE `guid` = ?d", $stat ,$stat ,$guid))
         $adb->query ("UPDATE `character_stats` SET `skills` = `skills` - '1' WHERE `guid` = ?d", $guid);

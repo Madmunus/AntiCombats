@@ -11,8 +11,6 @@ function fixspaces (s)
 
 function bank_open (ac_list, name)
 {
-	var x = parseFloat($('#x').val());
-	var y = parseFloat($('#y').val());
 	var ac = ac_list.split(',');
 	var s;
 	var opt = '<select name="credit" size="0" style="width: 100px;">';
@@ -32,7 +30,7 @@ function bank_open (ac_list, name)
 	if (!name)
 		name = "hint3";
 
-	$('#'+name).html(s).css({'left': x - 135 + "px", 'top': y - 30 + "px", 'zIndex': '101'}).fadeIn('fast');
+	$('#'+name).html(s).css({'left': pos.x - 135 + "px", 'top': pos.y - 30 + "px", 'zIndex': '101'}).fadeIn('fast');
 	$('[name=credit]').focus();
 	Hint3Name = 'credit';
 }

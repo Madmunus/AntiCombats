@@ -156,3 +156,9 @@ function cleanChat ()
 {
   $('#mes', msg.document).html('');
 }
+
+function exit ()
+{
+  if (confirm("Вы уверены что хотите выйти из игры?"))
+    linkAction('exit');
+}

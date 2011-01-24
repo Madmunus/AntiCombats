@@ -111,12 +111,6 @@ function smiles ()
   window.showModalDialog("smiles.html", "Смайлы", "dialogHeight:700px;dialogWidth:500px;dialogLeft:"+x+"px;dialogTop:"+y+"px;help:no;status:no;unadorned:yes;maximize:no;");
 }
 
-function quit ()
-{
-  if (confirm("Вы уверены что хотите выйти из игры?"))
-    top.linkAction('exit');
-}
-
 function talk ()
 {
   $("#phrase").focus();
@@ -165,7 +159,7 @@ $(window).resize(function (){rslength ();});
   <?if($orden == 1){?><img class="button" src="img/talk/a_pal.gif" title="Власть" onClick="top.linkAction('orden');" /><?}?>
   <?if($orden == 2){?><img class="button" src="img/talk/a_drk.gif" title="Власть" onClick="top.linkAction('orden');" /><?}?>
   <?if($clan){?><img class="button" src="img/talk/a_kln.gif" title="Клан" onClick="top.linkAction('clan');" /><?}?>
-  <img class="button" src="img/talk/a_ext.gif" title="Выход из игры" onClick="quit ();" />
+  <img class="button" src="img/talk/a_ext.gif" title="Выход из игры" onClick="top.exit ();" />
   <object><embed width="70" height="30" src="img/talk/clock.swf?hours=<?echo date('H');?>&minutes=<?echo date('i');?>&sec=<?echo date('s');?>" type="application/x-shockwave-flash" /></object>
 </td>
 <td id="T7"><img src="img/1x1.gif" width="9" /></td>

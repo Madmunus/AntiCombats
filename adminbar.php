@@ -272,8 +272,6 @@ $all_characters = $adb->select ("SELECT * FROM `characters` ORDER BY `guid`;");
 <td>Money</td>
 <td>City</td>
 <td>Room</td>
-<td>Hp</td>
-<td>Mp</td>
 </tr>
 <tr>
 <?
@@ -287,19 +285,16 @@ foreach ($all_characters as $one_character)
   echo "<td>$one_character[money]</td>";
   echo "<td>$one_character[city]</td>";
   echo "<td>$one_character[room]</td>";
-  echo "<td>$one_character[hp]</td>";
-  echo "<td>$one_character[mp]</td>";
   echo "</tr>";
 }
 ?>
 </tr></table>
 </div>
-<div id="id1">fff</div>
-<span id="id2">fff</span><br>
 <script>
-document.write($('#id1').width()+'<br>');
-document.write($('#id2').width());
+
 </script>
 <?
-
+$var1 = 45;
+$var2 = 4 + (($var1 == 45) ?20 :0);
+echo $var2;
 ?>

@@ -8,7 +8,7 @@ $conf = requestVar ('conf');
 $bot = '</div>';
 $error_text = array (
   'profession' => '<center>Вы уже имеете професcию! Для того чтобы получить новую профессию, Вам надо уволиться со старой профессии!</center>'.$bot,
-  'metka'      => '<center>Вы не прошли паладинскую проверку! Вы не можете получить профессию!</center>'.$bot,
+  'checkup'    => '<center>Вы не прошли паладинскую проверку! Вы не можете получить профессию!</center>'.$bot,
   'level'      => '<center>Получить профессию Вы сможете только после 4-го уровня!</center>'.$bot,
   'money'      => '<center>У Вас недостаточно средств для получения этой профессии!</center>'.$bot,
   'fire'       => '<center>У Вас нет професии, Вы не можете уволиться!</center>'.$bot,
@@ -16,17 +16,16 @@ $error_text = array (
 );
 
 $professions = array (
-//Профессия          |Стоимость     |Статы        |Остальные статы                                                |Описание
+//Профессия          |Стоимость     |Статы        |Остальные статы                                         |Описание
   'knight' => array ('1000', array ('str' => 10, 
-                                    'vit' => 10), '',                                                            '+10 к Силе, +10 к Выносливости'),
+                                    'vit' => 10), '',                                                      '+10 к Силе, +10 к Выносливости'),
   'mage'   => array ('1300', array ('int' => 10, 
-                                    'wis' => 10), '',                                                            '+10 к Интеллекту, +10 к Мудрости'),
+                                    'wis' => 10), '',                                                      '+10 к Интеллекту, +10 к Мудрости'),
   'elf'    => array ('900',  array ('dex' => 15, 
-                                    'vit' => 5),  '',                                                            '+15 к Ловкости, +5 к Выносливости'),
+                                    'vit' => 5),  '',                                                      '+15 к Ловкости, +5 к Выносливости'),
   'monk'   => array ('2000', array ('con' => 15, 
-                                    'vit' => 5),  '',                                                            '+15 к Интуиции, +5 к Выносливости'),
-  'trade'  => array ('1100',        '', array (   'characters'      => array ('maxmass' => $char_db['maxmass'] + 20), 
-                                                  'character_stats' => array ('trade' => $char_stats['trade'] + 40)), '+40 к навыку Торговли, +20 к максимальной нагрузке')
+                                    'vit' => 5),  '',                                                      '+15 к Интуиции, +5 к Выносливости'),
+  'trade'  => array ('1100', '', array ('maxmass' => $maxmass + 20, 'trade' => $char_stats['trade'] + 40), '+40 к навыку Торговли, +20 к максимальной нагрузке')
 );
 ?>
 <script type="text/javascript">
@@ -78,8 +77,8 @@ switch ($do)
       if ($char_db['profession'])
         die ($error_text['profession']);
       
-      if (!$char_db['metka'])
-        die ($error_text['metka']);
+      if (!$char_db['checkup'])
+        die ($error_text['checkup']);
       
       if ($level < 4)
         die ($error_text['level']);
@@ -92,16 +91,10 @@ switch ($do)
           die ($error_text['money']);
         
         if (is_array($update[1]))
-        {
-          foreach ($update[1] as $stat => $value)
-            $char->increaseStat ($stat, $value);
-        }
+          $char->changeStats ($update[1]);
         
         if (is_array($update[2]))
-        {
-          foreach ($update[2] as $database => $stats)
-            $adb->query ("UPDATE ?# SET ?a WHERE `guid` = ?d", $database ,$stats ,$guid);
-        }
+          $adb->query ("UPDATE `character_stats` SET ?a WHERE `guid` = ?d", $database ,$update[2] ,$guid);
         
         $adb->query ("UPDATE `characters` SET `profession` = ?s WHERE `guid` = ?d", $prof ,$guid);
         die ("Вы получили профессию <b>".$lang['prof_'.$prof]."</b>$bot");
@@ -136,6 +129,7 @@ switch ($do)
   case 'fire':
     if (!$char_db['profession'])
       die ($error_text['fire']);
+    
     $prof = $char_db['profession'];
     $prof_d = $lang['prof_'.$prof];
     if ($conf == 1)
@@ -152,16 +146,10 @@ switch ($do)
         $update = $professions[$prof];
         
         if (is_array($update[1]))
-        {
-          foreach ($update[1] as $stat => $value)
-            $char->increaseStat ($stat, -$value);
-        }
+          $char->changeStats ($update[1]);
         
         if ($prof == 'trade')
-        {
-          $adb->query ("UPDATE `characters` SET `maxmass` = `maxmass` - 20 WHERE `guid` = ?d", $guid);
-          $adb->query ("UPDATE `character_stats` SET `trade` = `trade` - 40 WHERE `guid` = ?d", $guid);
-        }
+          $adb->query ("UPDATE `character_stats` SET `trade` = `trade` - 40, `maxmass` = `maxmass` - 20 WHERE `guid` = ?d", $guid);
         
         $adb->query ("UPDATE `characters` 
                       SET `profession` = '', 

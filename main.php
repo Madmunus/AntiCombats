@@ -71,7 +71,6 @@ if (link[link.length - 1] != 'game.php')
 <div id="help"></div>
 <div id="hint3" class="ahint"></div>
 <div id="hint4" class="ahint"></div>
-<input type="hidden" id="x" value="0" /><input type="hidden" id="y" value="0" />
 <?
 $char_db = $char->getChar ('char_db', '*');
 $char_stats = $char->getChar ('char_stats', '*');
@@ -94,8 +93,8 @@ $next_up = $char_db['next_up'];
 
 $money = $char_db['money'];
 $money_euro = $char_db['money_euro'];
-$mass = $char_db['mass'];
-$maxmass = $char_db['maxmass'];
+$mass = $char_stats['mass'];
+$maxmass = $char_stats['maxmass'];
 
 $chin = $char_db['chin'];
 $status = $char_db['status'];
@@ -109,7 +108,7 @@ $shut = $char_db['shut'];
 $date = date ('d.m.y H:i:s', mktime(date ('H') - $GSM));
 
 $char->city->getRoomGoTime ($mtime);
-echo "<input type='hidden' id='time_to_go' value='$mtime' />";
+echoScript ("var time_to_go = $mtime;");
 
 switch ($action)
 {
@@ -132,13 +131,13 @@ switch ($action)
     fclose ($fp1); */
     
     if ($char_db['dnd'])
-      $adb->query ("UPDATE `characters` SET `dnd` = '0', `message` = '' WHERE `guid` = ?d", $guid);
+      $adb->query ("UPDATE `characters` SET `dnd` = '0', `message` = NULL WHERE `guid` = ?d", $guid);
     
     $char->test->Go ($room_go);
     
     $adb->query ("UPDATE `characters` SET `room` = ?s, `last_go` = ?d, `last_room` = ?s WHERE `guid` = ?d", $room_go ,time () ,$room ,$guid);
     $adb->query ("UPDATE `online` SET `room` = ?s WHERE `guid` = ?d", $room_go ,$guid);
-    echo "<script>top.cleanChat(); parent.user.updateUsers(); parent.msg.updateMessagesGo();</script>";
+    echoScript ("top.cleanChat(); parent.user.updateUsers(); parent.msg.updateMessagesGo();");
     $char->error->Map (0);
   break;
   case 'return':
@@ -146,13 +145,13 @@ switch ($action)
       $char->error->Map (114);
     
     if ($char_db['dnd'])
-      $adb->query ("UPDATE `characters` SET `dnd` = '0', `message` = '' WHERE `guid` = ?d", $guid);
+      $adb->query ("UPDATE `characters` SET `dnd` = '0', `message` = NULL WHERE `guid` = ?d", $guid);
     
     $char->test->Go ($char_db['last_room'], true);
     
     $adb->query ("UPDATE `characters` SET `room` = ?s, `last_room` = ?s, `last_return` = ?d WHERE `guid` = ?d", $char_db['last_room'] ,$room ,time () ,$guid);
     $adb->query ("UPDATE `online` SET `room` = ?s WHERE `guid` = ?d", $char_db['last_room'] ,$guid);
-    echo "<script>top.cleanChat(); parent.user.updateUsers(); parent.msg.updateMessagesGo();</script>";
+    echoScript ("top.cleanChat(); parent.user.updateUsers(); parent.msg.updateMessagesGo();");
     $char->error->Map (0);
   break;
   case 'admin':
@@ -279,7 +278,7 @@ switch ($action)
     $adb->query ("DELETE FROM `online` WHERE `guid` = ?d", $guid);
     $adb->query ("UPDATE `characters` SET `last_time` = ?d WHERE `guid` = ?d", time () ,$guid);
     unset ($_SESSION['guid'], $_SESSION['bankСredit'], $_SESSION['last']);
-    die ("<script>top.location.href = 'index.php';</script>");
+    echoScript (getError (), true);
   break;
   default:
   case 'none':

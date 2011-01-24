@@ -70,11 +70,9 @@ function sellItem (id)
 
 function AddCount (entry, name, price, kr)
 {
-  var x = parseFloat(document.getElementById('x').value);
-  var y = parseFloat(document.getElementById('y').value);
   $("#hint3").html('<table width="100%" cellspacing="1" cellpadding="0" bgcolor="#CCC3AA"><tr><td align="center"><b>Купить неск. штук</b></td><td width="20" align="right" valign="top" style="cursor: pointer;" onclick="closehint3 ();"><strong>X</strong></td></tr><tr><td colspan="2" bgcolor="#FFF6DD"><center><b><i>'+name+'</i></b><br>'+
   'Количество: <input type="text" name="count" size="6" value="1"><input type="hidden" name="price" value="'+price+'">&nbsp;<input style="cursor: pointer;" type="submit" value=" »» " onclick=\'buyItem ("'+entry+'");\'><br>Стоимость: <b><span id="full_price" style="color: #339900;">'+price+'</span></b> '+kr+
-  '</center></td></tr></table>').css({'left': x + 50 + "px", 'top': y - 25 + "px"}).fadeIn('fast');
+  '</center></td></tr></table>').css({'left': pos.x + 50 + "px", 'top': pos.y - 25 + "px"}).fadeIn('fast');
   $('[name=count]').focus();
 }
 

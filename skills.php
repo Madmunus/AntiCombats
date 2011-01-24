@@ -31,7 +31,7 @@ $char->showStatAddition ();
               echo "<tr>";
               echo "<td>&bull; $lang[$key]&nbsp;&nbsp;&nbsp;</td>";
               printf ("<td align='right' class='skill'>".$stat_text, "<font id='base_$key'>".$char_stats[$key]."</font>");
-              echo ($char_stats['ups'] > 0) ?"<td><img id='plus_$key' src='img/plus.gif' class='skill' onclick=\"increaseStat ('$key');\" alt='увеличить' /></td>" :"";
+              echo ($char_stats['ups'] > 0) ?"<td><img id='plus_$key' src='img/plus.gif' class='skill' onclick=\"changeStat ('$key');\" alt='увеличить' /></td>" :"";
               echo "</tr>";
             }
             echo "</table>";

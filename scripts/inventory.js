@@ -1,7 +1,5 @@
 function kmp ()
 {
-	var x = parseFloat($('#x').val());
-	var y = parseFloat($('#y').val());
 	$("#hint3").html('<table width="400" cellspacing="1" cellpadding="0" bgcolor="#CCC3AA">'+
 					 '<tr><td align="center"><b>Запомнить комплект одежды</b></td>'+
 						 '<td width="20" align="right" valign="top" style="cursor: pointer;" onclick="closehint3 ();"><big><b>x</b></big></td>'+
@@ -12,7 +10,7 @@ function kmp ()
 							'<tr><td align="center"><input type="submit" value="Запомнить" onclick=\'workSets ("create");\'></td></tr>'+
 						'</table>'+
 					 '</td></tr></table>')
-				.css({'left': x - 200 + 'px', 'top': y - 75 + 'px'}).fadeIn('fast');
+				.css({'left': pos.x - 200 + 'px', 'top': pos.y - 75 + 'px'}).fadeIn('fast');
 	$("[name=savekmp]").focus();
 }
 
@@ -138,15 +136,20 @@ function workSets (type, name)
 	    closehint3 ();
 	    if (!$("div[name="+name+"]").length)
 		  $("#allsets").append(set[1]);
-	    $("div[name="+name+"]").fadeIn('10000');
+	    $("div[name="+name+"]").hide().fadeIn('10000');
 	  }
 	  else if (type == 'delete' && set[0] == 'complete')
 	    $("div[name="+name+"]").fadeOut('10000', function (){$(this).remove();});
+    else if (type == 'show' && set[0] == 'complete')
+    {
+      $("#hint3").html(set[1]+"<div style='position: absolute; bottom: -15px; left: -15px; height: 13px; width: 13px; background: url(i/clear.gif) no-repeat; cursor: pointer;' onclick='closehint3 ();'></div>");
+      var coor = getCenter ($("#hint3").width(), $("#hint3").height());
+      $("#hint3").css({left: coor.x, top: 100}).fadeIn('10000');
+    }
 	  else if (set[0] == 'error')
 	    showError (set[1], name);
 	});
 }
-
 
 function deleteItem (id)
 {

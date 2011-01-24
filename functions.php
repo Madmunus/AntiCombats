@@ -846,7 +846,7 @@ $int=$db["int"];
 $acsess1=$db["acsess1"];
 $acsess2=$db["acsess2"];
 $animal=$db["animal"];
-$equip -> showEquipment ();
+$equip -> showCharacter ();
 print "Сила: $str<BR>";
 print "Ловкость: $dex<BR>";
 print "Интуиция: $con<BR>";
@@ -909,7 +909,7 @@ mysql_query("SET CHARSET cp1251");
         if(mysql_fetch_array($SEARCH)){$online = 1;}
 
 $block=$db["block"];
-$equip -> showEquipment ($login, "");
+$equip -> showCharacter ($login, "");
 ?>
 <style>
 .small {font-size: 9pt; color: #000000}

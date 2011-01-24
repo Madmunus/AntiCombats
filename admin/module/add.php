@@ -2,7 +2,7 @@
 defined('AntiBK') or die ("Доступ запрещен!");
 ?>
 <script>
-$(document).ready(function (){
+$(function (){
   $("[name=section]").live('change', function (){
     $('#types').html('');
     $('#fields').html('');
