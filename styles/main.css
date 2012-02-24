@@ -23,10 +23,6 @@ a:hover		{color: #0066FF;}
 select,textarea,input	{ border: solid 1pt #B0B0B0; font-family: MS Sans Serif; font-size: 10px; color: #191970; margin-bottom: 2px; margin-top: 1px;}
 .us2		{font-family: verdana; font-size: 13px; text-decoration: none; color: #000000; font-weight: bold;}
 .us2:hover	{color: #8A8A8A;}
-.ahint		{font-family: MS Sans Serif; font-size: 8px; text-decoration: none; color: #000080;}
-#hint2		{position: absolute; width: 140px; background-color: #FFF6DD; visibility: hidden;}
-#hint3		{position: absolute; width: 240px; background-color: #FFF6DD; visibility: hidden;}
-#hint4		{position: absolute; width: 240px; visibility: hidden;}
 
 .B1			{font-weight: bold; color: #6666CC;}
 .B2			{font-weight: bold; color: #B06A00;}

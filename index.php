@@ -1,9 +1,9 @@
 <?
-ini_set ('display_errors', true);
-ini_set ('html_errors', false);
-ini_set ('error_reporting', E_ALL);
+ini_set('display_errors', true);
+ini_set('html_errors', false);
+ini_set('error_reporting', E_ALL);
 
-define ('AntiBK', true);
+define('AntiBK', true);
 
 include_once ("engline/config.php");
 include_once ("engline/dbsimple/Generic.php");
@@ -13,12 +13,12 @@ $adb = DbSimple_Generic::connect($database['adb']);
 $adb->query("SET NAMES ? ",$database['db_encoding']);
 $adb->setErrorHandler("databaseErrorHandler");
 
-$server = $adb->selectRow ("SELECT * FROM `server_info`;");
+$server = $adb->selectRow("SELECT * FROM `server_info`;");
 
 if (date ('d.m.y', $server['last_transfer']) != date ('d.m.y'))
 {
-  $adb->query ("UPDATE `characters` SET `transfers` = '200';");
-  $adb->query ("UPDATE `server_info` SET `last_transfer` = ?d", time ());
+  $adb->query("UPDATE `characters` SET `transfers` = '200';");
+  $adb->query("UPDATE `server_info` SET `last_transfer` = ?d", time ());
 }
 ?>
 <html>
@@ -139,8 +139,8 @@ switch (date('m'))
 {
   case '01':
   case '02':
-    $back = "start_09win10_03.jpg";
-    $icon = "start_09win10_05.jpg";
+    $back = "start_2011_win_03.jpg";
+    $icon = "start_2011_winng_05.jpg";
     $winer = "runet_4.jpg";
     $best = "runet_5.jpg";
   break;

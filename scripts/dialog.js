@@ -23,7 +23,7 @@ function bank_open (ac_list, name)
       '<tr><td colspan="2" align="center">Выберите счёт и введите пароль</td></tr>'+
       '<tr>'+
         '<td style="padding-left: 5px; text-align: right;">' + opt+ '&nbsp;<input style="width: 100px;" type="password" name="pass" size="12" maxlength="30"></td>'+
-        '<td><input type="image" src="#IMGSRC#" width="27" height="20" border="0" onclick="inventoryLoginBank ();"></td>'+
+        '<td><input type="image" src="#IMGSRC#" width="27" height="20" border="0" onclick="inventoryLoginbank();"></td>'+
       '</tr>'+
       '</table>';
 	s = crtmagic ('', 'Счёт в банке', s, '');
@@ -46,7 +46,7 @@ function dialogconfirm (title, script, text, mtype)
 	Hint3Name = "hint3";
 }
 
-function findlogin (title, script, name, defaultlogin, mtype, addon, noclose)
+function findLogin(title, script, name, defaultlogin, mtype, addon, noclose)
 {
 	var s;
 	s = '<form action="'+script+'" method="get" name="slform" style="display: inline;">'+

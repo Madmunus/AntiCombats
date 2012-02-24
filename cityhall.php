@@ -1,32 +1,17 @@
 <?
 defined('AntiBK') or die ("Доступ запрещен!");
 
-$prof = requestVar ('prof');
-$conf = requestVar ('conf');
+$style = requestVar('style');
+$conf = requestVar('conf');
 
 // Переменные
-$bot = '</div>';
 $error_text = array (
-  'profession' => '<center>Вы уже имеете професcию! Для того чтобы получить новую профессию, Вам надо уволиться со старой профессии!</center>'.$bot,
-  'checkup'    => '<center>Вы не прошли паладинскую проверку! Вы не можете получить профессию!</center>'.$bot,
-  'level'      => '<center>Получить профессию Вы сможете только после 4-го уровня!</center>'.$bot,
-  'money'      => '<center>У Вас недостаточно средств для получения этой профессии!</center>'.$bot,
-  'fire'       => '<center>У Вас нет професии, Вы не можете уволиться!</center>'.$bot,
-  'fire_money' => '<center>У Вас недостаточно средств для того, чтобы уволиться!</center>'.$bot
+  'style'   => '<center>Вы уже обучились стилю боя!</center>',
+  'checkup' => '<center>Вы не прошли паладинскую проверку!</center>',
+  'level'   => '<center>Обучиться стилю боя Вы сможете только после 4-го уровня!</center>',
+  'money'   => '<center>У Вас недостаточно средств для обучения этому стилю боя!</center>',
 );
-
-$professions = array (
-//Профессия          |Стоимость     |Статы        |Остальные статы                                         |Описание
-  'knight' => array ('1000', array ('str' => 10, 
-                                    'vit' => 10), '',                                                      '+10 к Силе, +10 к Выносливости'),
-  'mage'   => array ('1300', array ('int' => 10, 
-                                    'wis' => 10), '',                                                      '+10 к Интеллекту, +10 к Мудрости'),
-  'elf'    => array ('900',  array ('dex' => 15, 
-                                    'vit' => 5),  '',                                                      '+15 к Ловкости, +5 к Выносливости'),
-  'monk'   => array ('2000', array ('con' => 15, 
-                                    'vit' => 5),  '',                                                      '+15 к Интуиции, +5 к Выносливости'),
-  'trade'  => array ('1100', '', array ('maxmass' => $maxmass + 20, 'trade' => $char_stats['trade'] + 40), '+40 к навыку Торговли, +20 к максимальной нагрузке')
-);
+$styles = $adb->select("SELECT `style`, `str`, `dex`, `con`, `vit`, `int`, `wis`, `price` FROM `player_styles`");
 ?>
 <script type="text/javascript">
 $(function (){
@@ -38,7 +23,7 @@ $(function (){
     $('#'+cur_Id).css('color', '#bb0000');
     $('#s'+cur_Id).css('display', 'block');
   });
-  $("[name='prof']").click(function (){
+  $("[name='style']").click(function (){
     $('#'+cur_Id).css('display', 'none');
     cur_Id = $(this).val();
     $('#'+cur_Id).css('display', 'block');
@@ -47,131 +32,102 @@ $(function (){
 </script>
 <table width="100%" height="20" style="border: 2px solid #cccccc; -moz-border-radius: 50px; background: #cccccc; padding: 0 5px 0 5px;">
   <tr>
-    <td><b>Академия</b></td>
+    <td><b>Боевая академия</b></td>
     <td align="right"><b>У вас в наличии: <font color="green"><?echo $money;?></font> кр.</b></td>
   </tr>
 </table>
 <br>
 <div style="text-align: center; border: 2px solid #cccccc; -moz-border-radius: 50px; background: #cccccc;">
-  <input type="button" class="b" value=" Правила " id="link" link="none&do=profession">&nbsp; &nbsp; &nbsp;
-  <input type="button" class="b" value=" Получить профессию " id="link" link="none&do=reg_prof">&nbsp; &nbsp; &nbsp;
-  <input type="button" class="b" value=" Уволиться " id="link" link="none&do=fire">&nbsp; &nbsp; &nbsp;
-  <input type="button" class="b" value=" Архив " id="link" link="none&do=best_prof">&nbsp; &nbsp; &nbsp;
+  <input type="button" class="b" value=" Правила " id="link" link="none&do=info">&nbsp; &nbsp; &nbsp;
+  <input type="button" class="b" value=" Стили Боя " id="link" link="none&do=learn_style">&nbsp; &nbsp; &nbsp;
+  <input type="button" class="b" value=" Архив " id="link" link="none&do=best_fighters">&nbsp; &nbsp; &nbsp;
   <input type="button" class="b" value=" Выход " id="link" link="go&room_go=centplosh">
 </div>
 <br>
 <div style="border: 2px solid #cccccc; -moz-border-radius: 15px; background: #cccccc; padding: 0 5px 5px 5px;">
-  <center><b>Академия</b></center>
+  <center><b>Боевая академия</b></center>
 <?
 switch ($do)
 {
   default:
-  case 'profession':
-    $allprof = $adb->selectCell ("SELECT COUNT(*) FROM `characters` WHERE `profession` != '';");
-    $city = $adb->selectCell ("SELECT `name` FROM `server_cities` WHERE `city` = ?s", $city);
-    echo "&nbsp; &nbsp;Добро пожаловать в Академию города <b>$city</b>. Здесь Вы сможете выбрать себе профессию. Вы можете иметь только одну профессию одновременно. Для того чтобы сменить профессию, Вам необходимо уволиться со старой и выбрать новую профессию. Подробнее о выборе профессии и увольнении читайте в разделах \"Получить проффесию\" и \"Уволиться\" соответственно.<br><br>Кол-во профессионалов: $allprof чел.";
+  case 'info':
+    $allfighters = $adb->selectCell("SELECT COUNT(*) FROM `characters` WHERE `f_style` != '';");
+    $city_name = $char->city->getCity($city, 'name');
+    echo "&nbsp; &nbsp;Добро пожаловать в Боевую академию города <b>$city_name</b>. Здесь Вы сможете обучиться стилю боя. Подробнее о выборе стиля боя читайте в разделе \"Стили Боя\".<br><br>Кол-во обученных бойцов: $allfighters чел.";
   break;
-  case 'reg_prof':
+  case 'learn_style':
     if (!empty($conf))
     {
-      if ($char_db['profession'])
-        die ($error_text['profession']);
+      if ($f_style)
+      {
+        echo $error_text['style'];
+        break;
+      }
       
       if (!$char_db['checkup'])
-        die ($error_text['checkup']);
+      {
+        echo $error_text['checkup'];
+        break;
+      }
       
       if ($level < 4)
-        die ($error_text['level']);
-      
-      if ($conf)
       {
-        $update = $professions[$prof];
-        
-        if ($money < $update[0])
-          die ($error_text['money']);
-        
-        if (is_array($update[1]))
-          $char->changeStats ($update[1]);
-        
-        if (is_array($update[2]))
-          $adb->query ("UPDATE `character_stats` SET ?a WHERE `guid` = ?d", $database ,$update[2] ,$guid);
-        
-        $adb->query ("UPDATE `characters` SET `profession` = ?s WHERE `guid` = ?d", $prof ,$guid);
-        die ("Вы получили профессию <b>".$lang['prof_'.$prof]."</b>$bot");
+        echo $error_text['level'];
+        break;
       }
+      
+      $update = $adb->selectRow("SELECT `str`, `dex`, `con`, `vit`, `int`, `wis`, `price` FROM `player_styles` WHERE `style` = ?s", $style);
+      
+      if (!($char->changeMoney($update['price'])))
+      {
+        echo $error_text['money'];
+        break;
+      }
+      
+      unset($update['price']);
+      $char->changeStats($update);
+      $adb->query("UPDATE `characters` SET `f_style` = ?s WHERE `guid` = ?d", $style ,$guid);
+      echo "Вы обучились стилю боя: <b>".$lang['style_'.$style]."</b>";
+      break;
     }
-    if (!empty($prof))
+    if (!empty($style))
     {
-      echo "<center>Вы уверены что хотите выбрать профессию <b>".$lang['prof_'.$prof]."</b>?<br>";
-      echo "<input type='button' class='but' value='Да' id='link' link='none&do=reg_prof&prof=$prof&conf=1'> &nbsp;";
-      echo "<input type='button' class='but' value='Нет' id='link' link='none&do=reg_prof'></center>";
-      die ($bot);
+      echo "<center>Вы уверены что хотите обучиться стилю боя: <b>".$lang['style_'.$style]."</b>?<br>";
+      echo "<input type='button' class='but' value='Да' id='link' link='none&do=learn_style&style=$style&conf=1'> &nbsp;";
+      echo "<input type='button' class='but' value='Нет' id='link' link='none&do=learn_style'></center>";
+      break;
     }
 ?>
-  <b>Правила получения профессии:</b>
+  <b>Правила обучения:</b>
   <ol>
-  <li>Получить профессию можно только после 4-го уровня, только в Академий.</li>
-  <li>Для получения профессии необходимо пройти паладинскую проверку.</li>
-  <li>На момент получения профессии на Вашем счету должна быть необходимая сумма.</li>
+  <li>Обучиться стилю боя можно только после 4-го уровня, только в Боевой академии.</li>
+  <li>Для обучения необходимо пройти паладинскую проверку.</li>
+  <li>На момент обучения на Вашем счету должна быть необходимая сумма.</li>
   </ol>
-  <b>Профессии</b>:<br>
+  <b>Стили боя</b>:<br>
   <form action="" method="get" style="display: inline;">
   <input type="hidden" name="action" value="none">
-  <input type="hidden" name="do" value="reg_prof">
-  <ol>
-<?  foreach ($professions as $key => $value)
-      echo "<li><input type='radio' name='prof' value='$key'><b>".$lang['prof_'.$key]."</b></li><div id='$key' class='prof_desc'><b>Описание</b>: $value[3]<br><b>Стоимость</b>: $value[0] кр.</div>";
-?></ol>
-  <input type="submit" class="but" value="Получить профессию">
+  <input type="hidden" name="do" value="learn_style">
+<?  foreach ($styles as $style)
+    {
+      echo "<input type='radio' name='style' value='$style[style]'><b>".$lang['style_'.$style['style']]."</b><br>";
+      echo "<font id='$style[style]' class='style_desc'><b>Описание</b>: ".$lang['style_'.$style['style'].'_d']."<br><b>Стоимость</b>: $style[price] кр.</font>";
+    }
+?><br>
+  <input type="submit" class="but" value="Обучиться стилю">
   </form>
 <?
   break;
-  case 'fire':
-    if (!$char_db['profession'])
-      die ($error_text['fire']);
-    
-    $prof = $char_db['profession'];
-    $prof_d = $lang['prof_'.$prof];
-    if ($conf == 1)
-    {
-      echo "<center>Вы уверены что хотите уволиться с профессии <b>$prof_d</b>?<br>";
-      echo "<input type='button' class='but' value='Да' id='link' link='none&do=fire&conf=2'> &nbsp;";
-      echo "<input type='button' class='but' value='Нет' id='link' link='none&do=fire'></center>";
-      die ($bot);
-    }
-    if ($conf == 2)
-    {
-      if ($money >= 100)
-      {
-        $update = $professions[$prof];
-        
-        if (is_array($update[1]))
-          $char->changeStats ($update[1]);
-        
-        if ($prof == 'trade')
-          $adb->query ("UPDATE `character_stats` SET `trade` = `trade` - 40, `maxmass` = `maxmass` - 20 WHERE `guid` = ?d", $guid);
-        
-        $adb->query ("UPDATE `characters` 
-                      SET `profession` = '', 
-                          `money` = `money` - 100 
-                      WHERE `guid` = ?d", $guid);
-        die ("Вы уволились с профессии <b>$prof_d</b>.$bot");
-      }
-      else
-        die ($error_text['fire_money']);
-    }
-    echo "Ваша текущая профессия: <b>$prof_d</b><br>";
-    echo "<input type='button' class='but' value='Уволиться (100 кр.)' id='link' link='none&do=fire&conf=1'>";
-  break;
-  case 'best_prof':
+  case 'best_fighters':
     echo "<center><b>Архив:</b></center>";
-    echo "Добро пожаловать в Государственный Архив! Здесь Вы можете найти списки 5 лучших профессионалов в каждой профессии.<br>";
+    echo "Добро пожаловать в Государственный Архив! Здесь Вы можете найти списки 5 лучших бойцов в каждом стиле.<br>";
     $i = 1;
-    foreach ($professions as $key => $value)
+    foreach ($styles as $style)
     {
-      echo "<a href='#' class='us2' id='$i'>".$lang['prof_'.$key].":</a><font id='s$i' class='prof_best'>".$char->info->showArch ($key)."</font><br>";
+      echo "<a href='#' class='us2' id='$i'>".$lang['style_'.$style['style']].":</a><font id='s$i' class='style_best'>".$char->info->showArch($style['style'])."</font><br>";
       $i++;
     }
   break;
 }
 ?>
+</div>

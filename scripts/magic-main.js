@@ -273,7 +273,7 @@ function closehint3()
 
 // Для боевой магии. Заголовок, название магии, номер вещицы в рюкзаке
 //с проверкой поля удара
-function Bmagicklogin (title, magickname, n, defaultlogin, extparam, mtype) {
+function BmagickLogin(title, magickname, n, defaultlogin, extparam, mtype) {
 	if (defend==false) {
 		errmess("Блок не выбран.");
 		return false;

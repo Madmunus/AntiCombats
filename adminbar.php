@@ -1,7 +1,7 @@
 <?
 defined('AntiBK') or die ("Доступ запрещен!");
 
-$char->test->Admin ();
+$char->test->Admin();
 ?>
 <script type="text/javascript">
 function SHA1 (msg)
@@ -193,7 +193,7 @@ $(function (){
   });
 });
 </script>
-<font color='red' id='error'><?$char->error->getFormattedError ($warning, $parameters);?></font>
+<font color='red' id='error'><?$char->error->getFormattedError($error, $parameters);?></font>
 <table width="100%">
   <tr>
     <td align="left">
@@ -260,7 +260,7 @@ echo "<td>".date ('d.m.y H:i:s', $char_db['last_time'])."</td>";
 </div>
 <div id="charactersc" name="content" style="display: none;">
 <?
-$all_characters = $adb->select ("SELECT * FROM `characters` ORDER BY `guid`;");
+$all_characters = $adb->select("SELECT * FROM `characters` ORDER BY `guid`;");
 ?>
 <font color='red'>Персонажи:</font>
 <table border="1" cellspacing="0" cellpadding="0" width="100%">
@@ -291,10 +291,11 @@ foreach ($all_characters as $one_character)
 </tr></table>
 </div>
 <script>
-
+function gg ()
+{
+  document.write('yes');
+}
+gg('');
 </script>
 <?
-$var1 = 45;
-$var2 = 4 + (($var1 == 45) ?20 :0);
-echo $var2;
 ?>

@@ -8,9 +8,9 @@ body {background-color: #e2e0e0;}
 switch ($do)
 {
   case 'shape':
-    echoScript ("$(function (){showShapes (1);});");
+    echoScript("$(function (){showShapes (1);});");
     if ($char_db['next_shape'] && $char_db['next_shape'] > time ())
-      $char->error->Inventory (111, getFormatedTime ($char_db['next_shape']));
+      $char->error->Inventory(111, getFormatedTime($char_db['next_shape']));
     
     echo "<table width='100%' cellspacing='0' cellpadding='0' border='0' style='margin-bottom: -10px;'><tr>";
     echo "<td valign='top' nowrap><input type='submit' id='shape_a' value='Доступные' class='nav' style='background-color: #A9AFC0;' onclick='showShapes (1);'>&nbsp;<input type='submit' id='shape_na' value='Все образы' class='nav' onclick='showShapes (0);'></td>";
@@ -23,71 +23,69 @@ switch ($do)
   case 'passandmail':
     if (isset($_POST['changeMail']))
     {
-      $old_mail = requestVar ('old_mail');
-      $new_mail = requestVar ('new_mail');
+      $old_mail = requestVar('old_mail');
+      $new_mail = requestVar('new_mail');
       
       if (!$pass)
-        $char->error->Form (507, $do);
+        $char->error->Form(507, $do);
       
       if (!$old_mail)
-        $char->error->Form (508, $do);
+        $char->error->Form(508, $do);
       
       if (!$new_mail)
-        $char->error->Form (509, $do);
+        $char->error->Form(509, $do);
       
       if (SHA1 ($guid.':'.$pass) != $char_db['password'])
-        $char->error->Form (501, $do);
+        $char->error->Form(501, $do);
       
       if ($old_mail != $char_db['mail'])
-        $char->error->Form (510, $do);
+        $char->error->Form(510, $do);
       
       if (!eregi ("^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*$", $new_mail))
-        $char->error->Form (511, $do);
+        $char->error->Form(511, $do);
       
-      $q = $adb->query ("UPDATE `characters` 
-                         SET `mail` = ?s 
-                         WHERE `guid` = ?d", $new_mail ,$guid);
+      $q = $adb->query("UPDATE `characters` SET `mail` = ?s WHERE `guid` = ?d", $new_mail ,$guid);
       $msg = "Здравствуйте!\n";
       $msg .= DATE_NO_SEC." был сменен e-mail, указанный при регистрации персонажа $login он-лайн игры Анти Бойцовский Клуб.\n";
       $msg .= "Новый e-mail: $new_mail\n\n\n\n";
       $msg .= "С уважением, администрация Анти Бойцовского Клуба!";
-      mail ($char_db['mail'], "Смена e-mail у персонажа $login", $msg, 'From: Администрация АБК <admin@abk.ru>', 'admin@abk.ru');
+      mail($char_db['mail'], "Смена e-mail у персонажа $login", $msg, 'From: Администрация АБК <admin@abk.ru>', 'admin@abk.ru');
       if ($q)
-        $char->error->Form (512, $do);
+        $char->error->Form(512, $do);
     }
     else if (isset($_POST['changePass']))
     {
-      $new_pass = requestVar ('new_pass');
-      $new_pass2 = requestVar ('new_pass2');
+      $new_pass = requestVar('new_pass');
+      $new_pass2 = requestVar('new_pass2');
       
       if (!$pass || ($pass && !$new_pass))
-        $char->error->Form (0, $do);
+        $char->error->Form(0, $do);
       
       if ($pass && $new_pass && !$new_pass2)
-        $char->error->Form (500, $do);
+        $char->error->Form(500, $do);
       
       if (SHA1 ($guid.':'.$pass) != $char_db['password'])
-        $char->error->Form (501, $do);
+        $char->error->Form(501, $do);
       
       if ($new_pass != $new_pass2)
-        $char->error->Form (502, $do);
+        $char->error->Form(502, $do);
       
-      if (utf8_strlen ($new_pass) < 6 || utf8_strlen ($new_pass) > 30)
-        $char->error->Form (503, $do);
+      if (utf8_strlen($new_pass) < 6 || utf8_strlen($new_pass) > 30)
+        $char->error->Form(503, $do);
       
       if (!ereg ("[a-zA-Zа-яА-Я0-9]$", $new_pass))
-        $char->error->Form (506, $do);
+        $char->error->Form(506, $do);
       
-      $q = $adb->query ("UPDATE `characters` 
+      $q = $adb->query("UPDATE `characters` 
                          SET `password` = ?s 
                          WHERE `guid` = ?d", SHA1 ($guid.':'.$new_pass) ,$guid);
       $msg = "Здраствуйте!\n";
       $msg .= DATE_NO_SEC." был сменен пароль к персонажу $login он-лайн игры Анти Бойцовский Клуб.\n";
       $msg .= "Новый пароль: $new_pass\n\n\n\n";
       $msg .= "С уважением, администрация Анти Бойцовского Клуба!";
-      mail ($char_db['mail'], "Смена пароля у персонажа $login", $msg, 'From: Администрация АБК <admin@abk.ru>', 'admin@abk.ru');
+      mail($char_db['mail'], "Смена пароля у персонажа $login", $msg, 'From: Администрация АБК <admin@abk.ru>', 'admin@abk.ru');
       if ($q)
-        $char->error->Form (504, $do);
+        $char->error->Form(504, $do);
     }
 ?>
 <table width="100%" cellspacing="0" cellpadding="0" style="margin-bottom: -15px;">
@@ -96,7 +94,7 @@ switch ($do)
   <td valign="top" nowrap><input type="button" class="help" value="<?echo $lang['hint'];?>" id="hint" link="psw">&nbsp;<input type="button" name="edit" value="<?echo $lang['return'];?>" id="link" link="inv" class="nav"></td>
 </tr>
 </table>
-<font color='red' id='error'><?$char->error->getFormattedError ($warning, $parameters);?></font>
+<font color='red' id='error'><?$char->error->getFormattedError($error, $parameters);?></font>
 <br>
 Чем выше уровень вашего персонажа, тем больше к нему внимание со стороны хакеров, взломщиков и аферистов. Чтобы однажды не оказаться в ситуации, когда вы уже не сможете зайти под своим персонажем, которого развивали (которым жили!) месяцами, потому что пароль сменили, email сменили, все предметы/вещи/кредиты... все что нажито непосильным трудом... ушли в неизвестном направлении, необходимо соблюдать элементарные меры предосторожности. А именно:<br>
 1. Никогда, ни под каким предлогом, никому не говорите свой пароль. Ни паладинам, ни администрации не нужно знать ваш пароль.<br>
@@ -128,14 +126,14 @@ switch ($do)
   case 'info':
     if (isset($_POST['changeInfo']))
     {
-      $name = requestVar ('name');
+      $name = requestVar('name');
       $town = (isset($_POST['town_n']) && $_POST['town_n'] != '') ?htmlspecialchars ($_POST['town_n']) :((isset($_POST['town'])) ?htmlspecialchars ($_POST['town']) :"");
-      $icq = requestVar ('icq');
-      $hide_icq = requestVar ('hide_icq', 0);
-      $url = requestVar ('url');
-      $color = requestVar ('color');
-      $deviz = requestVar ('deviz');
-      $hobie = requestVar ('hobie');
+      $icq = requestVar('icq');
+      $hide_icq = requestVar('hide_icq', 0);
+      $url = requestVar('url');
+      $color = requestVar('color');
+      $deviz = requestVar('deviz');
+      $hobie = requestVar('hobie');
       $hobie = str_replace ("\n", "<br>", $hobie);
       
       if ($url == "http://")
@@ -143,12 +141,12 @@ switch ($do)
                   
       $count_words = count (split (' ', $hobie));
       if ($count_words > 60)
-        $warning = "Слишком большой размер поля \"Хобби, увлечения\". Максимальный размер: 60 слов.";
+        $error = "Слишком большой размер поля \"Хобби, увлечения\". Максимальный размер: 60 слов.";
       else if (strlen ($hobie) > 2500)
-        $warning = "Слишком большой размер поля \"Хобби, увлечения\". Максимальный размер: 2500 символов.";
+        $error = "Слишком большой размер поля \"Хобби, увлечения\". Максимальный размер: 2500 символов.";
       else
       {
-        $q = $adb->query ("UPDATE `character_info` 
+        $q = $adb->query("UPDATE `character_info` 
                            SET `name` = ?s, 
                                `icq` = ?s, 
                                `hide_icq` = ?d, 
@@ -159,17 +157,17 @@ switch ($do)
                                `hobie` = ?s 
                            WHERE `guid` = ?d", $name ,$icq ,$hide_icq ,$url ,$town ,$color ,$deviz ,$hobie ,$guid);
         if ($q)
-          $warning = "Сохранено удачно.";
+          $error = "Сохранено удачно.";
       }
     }
-    $char_info = $char->getChar ('char_info', 'name', 'icq', 'hide_icq', 'url', 'town', 'color', 'deviz', 'hobie');
-    ArrToVar ($char_info, 's_');
+    $char_info = $char->getChar('char_info', 'name', 'icq', 'hide_icq', 'url', 'town', 'color', 'deviz', 'hobie');
+    ArrToVar($char_info, 's_');
     $s_hobie = str_replace (array("<br>", '\&quot;', "\'"), array("\n", '"', "'"), $s_hobie);
     $s_url = (!empty($s_url)) ?$s_url :"http://";
     $s_hide_icq = ($s_hide_icq) ?" checked" :"";
     
-    if (!empty($warning))
-      echo "<font color='red'><b>$warning</b></font>";
+    if (!empty($error))
+      echo "<font color='red'><b>$error</b></font>";
 ?>
 <table width="100%" cellspacing="0" cellpadding="0" align="center" style="margin-bottom: -15px;">
 <tr>

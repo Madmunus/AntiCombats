@@ -1,13 +1,13 @@
 <?
-ini_set ('display_errors', true);
-ini_set ('html_errors', false);
-ini_set ('error_reporting', E_ALL);
+ini_set('display_errors', true);
+ini_set('html_errors', false);
+ini_set('error_reporting', E_ALL);
 
-define ('AntiBK', true);
+define('AntiBK', true);
 
-include ("engline/config.php");
-include ("engline/dbsimple/Generic.php");
-include ("engline/functions/functions.php");
+include("engline/config.php");
+include("engline/dbsimple/Generic.php");
+include("engline/functions/functions.php");
 
 $adb = DbSimple_Generic::connect($database['adb']);
 $adb->query("SET NAMES ? ",$database['db_encoding']);
@@ -15,7 +15,7 @@ $adb->setErrorHandler("databaseErrorHandler");
 
 $char = Char::initialization(0, $adb);
 
-$db = $adb->selectRow ("SELECT `name`, 
+$db = $adb->selectRow("SELECT `name`, 
                                `glava`, 
                                `name_short` 
                         FROM `clan` 
@@ -28,7 +28,7 @@ $glava = $db['glava'];
 if (empty($clan))     die("$top Неверный запрос.$bot");
 else if (!$name_s)    die("$top Нет информации о клане $name_s.$bot");
 
-$orden = $char->info->character ('turn', $glava);
+$orden = $char->info->character('turn', $glava);
 ?>
 <html>
 <head>
@@ -58,18 +58,18 @@ $orden = $char->info->character ('turn', $glava);
   <tr>
     <td width="50%" valign="top">
 <?
-      echo "Глава клана: {$char->info->character ('clan', $glava)}";
+      echo "Глава клана: {$char->info->character('clan', $glava)}";
 ?>
     </td>
     <td width="50%" valign="top">
       Бойцы клана:<br>
 <?
-    $rows = $adb->selectCol ("SELECT `login` 
+    $rows = $adb->selectCol("SELECT `login` 
                               FROM `characters` 
                               WHERE `clan_short` = ?s 
                               ORDER BY `exp` DESC", $name_s); 
     foreach ($rows as $num => $clan_player)
-        echo $char->info->character ('clan', $clan_player)."<br>";
+        echo $char->info->character('clan', $clan_player)."<br>";
     echo "Всего: <b>".count ($rows)."</b>";
 ?>
     </td>

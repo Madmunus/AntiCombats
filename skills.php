@@ -1,14 +1,14 @@
 <?
 defined('AntiBK') or die ("Доступ запрещен!");
 
-$char->showStatAddition ();
+$char->showStatAddition();
 ?>
 <script src="scripts/skills.js" type="text/javascript"></script>
 <img src="img/1x1.gif" width="1" height="5"><br>
-<font color='red' id='error'><?$char->error->getFormattedError ($warning, $parameters);?></font>
+<font color='red' id='error'><?$char->error->getFormattedError($error, $parameters);?></font>
 <table width="100%">
   <tr>
-    <td>&nbsp; &nbsp;<?echo $char->info->character ();?> <img id='loadbar' src='img/loadbar.gif' class='loadbar'></td>
+    <td>&nbsp; &nbsp;<?echo $char->info->character();?> <img id='loadbar' src='img/loadbar.gif' class='loadbar'></td>
     <td valign="top" align="right">
       <input type="button" class="nav" value="Обновить" id="refresh">
       <input type="button" class="nav" value="<?echo $lang['return'];?>" id="link" link="inv">
@@ -27,7 +27,7 @@ $char->showStatAddition ();
               if ($level < $min_level)
                 continue;
               
-              $stat_text = (in_array ($key, array ('str', 'dex', 'con', 'int'))) ?"<font style='color: ".getStatSkillColor ($char_stats[$key], $added[$key]).";'>%s</font></td><td>".getBraces ($char_stats[$key], $added[$key], $key)."&nbsp;</td>" :"%s</td><td></td>";
+              $stat_text = (in_array ($key, array ('str', 'dex', 'con', 'int'))) ?"<font style='color: ".getStatSkillColor($char_stats[$key], $added[$key]).";'>%s</font></td><td>".getBraces($char_stats[$key], $added[$key], $key)."&nbsp;</td>" :"%s</td><td></td>";
               echo "<tr>";
               echo "<td>&bull; $lang[$key]&nbsp;&nbsp;&nbsp;</td>";
               printf ("<td align='right' class='skill'>".$stat_text, "<font id='base_$key'>".$char_stats[$key]."</font>");
@@ -95,8 +95,8 @@ if ($level > 0)
   {
     echo "<tr>";
     echo "<td>&nbsp;&bull; $lang[$key]</td>";
-    echo "<td width='40' class='skill' align='right'><font style='color: ".getStatSkillColor ($char_stats[$key], $added[$key]).";'><font id='base_$key'>$char_stats[$key]</font></font></td>";
-    echo "<td>".getBraces ($char_stats[$key], $added[$key], $key)."</td>";
+    echo "<td width='40' class='skill' align='right'><font style='color: ".getStatSkillColor($char_stats[$key], $added[$key]).";'><font id='base_$key'>$char_stats[$key]</font></font></td>";
+    echo "<td>".getBraces($char_stats[$key], $added[$key], $key)."</td>";
     if ($char_stats['skills'] > 0 && $char_stats[$key] - $added[$key] < 5)
       echo "<td><img id='plus_$key' src='img/plus.gif' class='skill' onclick=\"increaseSkill ('$key', 5)\" alt='увеличить' /></td>";
     echo "</tr>";
@@ -108,8 +108,8 @@ if ($level > 0)
     {
       echo "<tr>";
       echo "<td>&nbsp;&bull; $lang[$key]</td>";
-      echo "<td width='40' class='skill' align='right'><font style='color: ".getStatSkillColor ($char_stats[$key], $added[$key]).";'><font id='base_$key'>$char_stats[$key]</font></font></td>";
-      echo "<td>".getBraces ($char_stats[$key], $added[$key], $key)."</td>";
+      echo "<td width='40' class='skill' align='right'><font style='color: ".getStatSkillColor($char_stats[$key], $added[$key]).";'><font id='base_$key'>$char_stats[$key]</font></font></td>";
+      echo "<td>".getBraces($char_stats[$key], $added[$key], $key)."</td>";
       if ($char_stats['skills'] > 0 && $char_stats[$key] - $added[$key] < 10)
         echo "<td><img id='plus_$key' src='img/plus.gif' class='skill' onclick=\"increaseSkill ('$key', 10)\" alt='увеличить' /></td>";
       echo "</tr>";

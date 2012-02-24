@@ -8,7 +8,7 @@ switch ($room)
   case 'Березовая роща':
   break;
   case 'centplosh':
-  case 'fairstreet':           include ("globalmap.php");
+  case 'fairstreet':           include("globalmap.php");
   break;
   case 'castle':
   case 'km_1':
@@ -17,47 +17,47 @@ switch ($room)
   case 'km_4':
   case 'castle2':
   case 'km_7':
-  case 'km_6':                 include ("castle.php");
+  case 'km_6':                 include("castle.php");
   break;
-  case 'Комната Знахаря':      include ("km_5.php");
+  case 'Комната Знахаря':      include("km_5.php");
   break;
-  case 'Зал закона':           include ("km_8.php");
+  case 'Зал закона':           include("km_8.php");
   break;
-  case 'stella':               include ("stella.php");
+  case 'stella':               include("stella.php");
   break;
-  case 'Храм':                 include ("brak.php");
+  case 'Храм':                 include("brak.php");
   break;
-  case 'comok':                include ("comok.php");
+  case 'comok':                include("comok.php");
   break;
-  case 'bank':                 include ("bank.php");
+  case 'bank':                 include("bank.php");
   break;
-  case 'Подвал':               include ("10x5.php");
+  case 'Подвал':               include("10x5.php");
   break;
-  case 'Казино':               include ("casino.php");
+  case 'Казино':               include("casino.php");
   break;
-  case 'Блек джек холл':       include ("casino1.php");
+  case 'Блек джек холл':       include("casino1.php");
   break;
-  case 'Лотерея':              include ("lotto.php");
+  case 'Лотерея':              include("lotto.php");
   break;
-  case 'Кости':                include ("kosti.php");
+  case 'Кости':                include("kosti.php");
   break;
-  case 'Ремонтная мастерская': include ("rep.php");
+  case 'Ремонтная мастерская': include("rep.php");
   break;
-  case 'shop':                 include ("shop.php");
+  case 'shop':                 include("shop.php");
   break;
-  case 'Регистратура кланов':  include ("registratura.php");
+  case 'Регистратура кланов':  include("registratura.php");
   break;
-  case 'cityhall':             include ("cityhall.php");
+  case 'cityhall':             include("cityhall.php");
   break;
-  case 'prision':              include ("prison.php");
+  case 'prision':              include("prison.php");
   break;
-  case 'работа':               include ("zarabotok.php");
+  case 'работа':               include("zarabotok.php");
   break;
-  case 'mail':                 include ("mail.php");
+  case 'mail':                 include("mail.php");
   break;
-  case 'Завод':                include ("kuzna.php");
+  case 'Завод':                include("kuzna.php");
   break;
-  case 'Пруд':                 include ("river.php");
+  case 'Пруд':                 include("river.php");
   break;
 }
 /* if($room=="Скупочный магазин"){

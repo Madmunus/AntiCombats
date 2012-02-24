@@ -1,7 +1,7 @@
 <html>
 <head>
-<link rel="SHORTCUT ICON" href="img/favicon.ico" />
 <title>Анти Бойцовский Клуб</title>
+<link rel="SHORTCUT ICON" href="img/favicon.ico" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta http-equiv="Content-Language" content="ru" />
 <script src="scripts/jquery.js" type="text/javascript"></script>
@@ -13,7 +13,6 @@ $(function (){
   $('[name=msg]').attr('src', 'msg.php');
   $('[name=user]').attr('src', 'users.php');
   $('[name=talk]').attr('src', 'talk.php');
-  $('[name=ref]').attr('src', 'refresh.php');
 });
 </script>
 </head>

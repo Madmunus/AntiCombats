@@ -1,31 +1,30 @@
 function showShopSection (section_shop)
 {
-  clearError ();
+  clearError();
   var level_filter = $("input[name=level_filter]").val();
   var name_filter = $("input[name=name_filter]").val();
   $("#loadbar").show();
   $.post('ajax.php', 'do=showshopsection&section_shop='+section_shop+'&level_filter='+level_filter+'&name_filter='+name_filter, function (data){
-    $('html, body').animate({scrollTop: 0}, 500);
     var section = top.exploder(data);
-    $("#section").fadeOut('10000', function (){$(this).html(section[0]).fadeIn('10000'); $("#loadbar").hide();});
+    visual.show_section(section[0]);
   });
 }
 
 function shopSection (section_shop)
 {
-  var cur_section_shop = getCookie ('section_shop');
+  var cur_section_shop = getCookie('section_shop');
   if (section_shop)
   {
     $("#section_shop_"+cur_section_shop+", #section_shop_knife").css('backgroundColor', '');
     $("#section_shop_"+section_shop).css('backgroundColor', '#C7C7C7');
-    setCookie ('section_shop', section_shop, getTimePlusHour ());
+    setCookie('section_shop', section_shop, getTimePlusHour());
     $.post('ajax.php', 'do=getshoptitle&section_shop='+section_shop, function (data){
       var title = top.exploder(data);
-      $("#shop_title").html(title[0]);
+      visual.show_any('#shop_title', title[0]);
     });
   }
-  section_shop = getCookie ('section_shop');
-  showShopSection (section_shop);
+  section_shop = getCookie('section_shop');
+  showShopSection(section_shop);
 }
 
 function buyItem (entry)
@@ -36,14 +35,7 @@ function buyItem (entry)
     $('html, body').animate({scrollTop: 0}, 500);
     var item = top.exploder(data);
     if (item[0] == 'complete')
-    {
-      if (item[3] == 400)
-        $("#money").fadeOut('10000', function (){$(this).html(item[1]).fadeIn('10000');});
-      else if (item[3] == 401)
-        $("#money_euro").fadeOut('10000', function (){$(this).html(item[1]).fadeIn('10000');});
-      $("#mass").fadeOut('10000', function (){$(this).html(item[2]).fadeIn('10000');});
-      showError (item[3], item[4]);
-    }
+      visual.item_buy(item);
     else if (item[0] == 'error')
       showError (item[1], item[2]);
   });
@@ -54,15 +46,7 @@ function sellItem (id)
   $.post('ajax.php', 'do=sellitem&id='+id, function (data){
     var item = top.exploder(data);
     if (item[0] == 'complete')
-    {
-      if (item[3] == 404)
-        $("#money").fadeOut('10000', function (){$(this).html(item[1]).fadeIn('10000');});
-      else if (item[3] == 405)
-        $("#money_euro").fadeOut('10000', function (){$(this).html(item[1]).fadeIn('10000');});
-      $("#item_id_"+id).slideUp('10000', function (){$(this).remove();});
-      $("#mass").fadeOut('10000', function (){$(this).html(item[2]).fadeIn('10000');});
-      showError (item[3], item[4]);
-    }
+      visual.item_sell(id, item);
     else if (item[0] == 'error')
       showError (item[1], item[2]);
   });
@@ -82,6 +66,6 @@ $(function (){
     if ($(this).val() == '')
       $(this).val(1);
     var summ = parseFloat ($('input[name=price]').val()) * parseInt ($('input[name=count]').val());
-    $("#full_price").fadeOut('fast', function (){$(this).html(summ).fadeIn('fast');});
+    visual.show_any('#full_price', summ);
   });
 });

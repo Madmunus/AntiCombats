@@ -80,7 +80,7 @@ function setlevel (nm)
     $('#d'+clevel).css('display', 'none');
   }
   clevel = nm || 'L1';
-  setCookie ('clevel', clevel, getTimePlusHour ());
+  setCookie('clevel', clevel, getTimePlusHour ());
   $('#'+clevel).addClass('tzSet');
   $('#d'+clevel).css('display', 'block');
 }

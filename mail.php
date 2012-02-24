@@ -1,45 +1,41 @@
 <?
-$mail_to = requestVar ('mail_to', 0);
-$mail_id = requestVar ('mail_id', 0);
-$send_sum = requestVar ('send_sum', 0);
+$mail_to = requestVar('mail_to', 0);
+$mail_id = requestVar('mail_id', 0);
+$send_sum = requestVar('send_sum', 0);
 ?>
-<script src="scripts/inventory.js" type="text/javascript"></script>
+<script src="scripts/mail.js" type="text/javascript"></script>
+<script src="scripts/move_check.js" type="text/javascript"></script>
 <?
-$section = $data['sections'][$section];
-
-$mail_recieve = $adb->selectCell ("SELECT COUNT(*) FROM `city_mail_items` WHERE `to` = ?d", $guid) | 0;
+$mail_recieve = $adb->selectCell("SELECT COUNT(*) FROM `city_mail_items` WHERE `to` = ?d", $guid) | 0;
 switch ($do)
 {
   case 'send_item':
-    $char->mail->sendItem ($mail_to, $item_id);
+    $char->mail->sendItem($mail_to, $item_id);
   break;
   case 'get_item':
   case 'return_item':
-    $char->mail->getItem ($item_id, $do);
+    $char->mail->getItem($item_id, $do);
   break;
   case 'get_money':
   case 'return_money':
-    $char->mail->getMoney ($mail_id, $do);
+    $char->mail->getMoney($mail_id, $do);
   break;
   case 'check':
     if (isset($_POST['send_money']))
-      $char->mail->sendMoney ($mail_to, $send_sum);
+      $char->mail->sendMoney($mail_to, $send_sum);
   break;
 }
 ?>
-<script src="scripts/move_check.js" type="text/javascript"></script>
 <table width="100%" cellspacing="0" cellpadding="0" border="0"><tr>
   <td valign="top" height="100%">
     <table width="100%" cellspacing="0" cellpadding="4" bgcolor="#d2d2d2">
     <tr>
       <td class="pH3">&nbsp; &nbsp; Почтовое отделение<?echo (isset($lang['mail_'.$do])) ?$lang['mail_'.$do] :"";?></td>
-      <td align="right" valign="top"><?echo $char->info->character ();?></td>
+      <td align="right" valign="top"><?echo $char->info->character();?></td>
     </tr>
     </table>
-    <font color='red' id='error'><?$char->error->getFormattedError ($warning, $parameters);?></font>
+    <font color='red' id='error'><?$char->error->getFormattedError($error, $parameters);?></font>
 <?
-if ($warning)
-  echo "<br>";
 switch ($do)
 {
   default:
@@ -61,26 +57,29 @@ switch ($do)
 <?
   break;
   case 'items':
-    if ($login_mail)
+    if (!$login_mail)
     {
-      $mail_info = $adb->selectRow ("SELECT `guid`, 
-                                            `login`, 
-                                            `city` 
-                                     FROM `characters` 
-                                     WHERE `login` = ?s or `guid` = ?s", $login_mail ,$login_mail) or $char->error->Map (203, $login_mail);
-      $login_mail = $mail_info['guid'];
-      
-      if ($login_mail == $guid)
-        $char->error->Map (218);
+      echo "<script>findlogin('Почтовые услуги', 'main.php', 'login_mail', '', '', '<input type=\"hidden\" value=\"items\" name=\"do\">', 1)</script>";
+      break;
+    }
+    $mail_info = $adb->selectRow("SELECT `guid`, 
+                                          `login`, 
+                                          `city` 
+                                   FROM `characters` 
+                                   WHERE `login` = ?s or `guid` = ?s", $login_mail ,$login_mail) or $char->error->Map(203, $login_mail);
+    $login_mail = $mail_info['guid'];
+    
+    if ($login_mail == $guid)
+      $char->error->Map(218);
 ?>
-      К кому передавать: <?echo $char->info->character ('mail', $login_mail);?> &nbsp;<input type="button" value="Сменить" onclick="findlogin ('Почтовые услуги', 'main.php', 'login_mail', '', '', '<input type=hidden value=items name=do>', 0); return false;" class="nav"><br>
+    К кому передавать: <?echo $char->info->character('mail', $login_mail);?> &nbsp;<input type="button" value="Сменить" onclick="findLogin('Почтовые услуги', 'main.php', 'login_mail', '', '', '<input type=hidden value=items name=do>', 0); return false;" class="nav"><br>
 <?
-      if ($city == $mail_info['city'])
-        echo "Находится в этом городе";
-      else
-        echo "Находится в $mail_info[city]";
-      echo "<br>";
-      echo "Примерное время доставки: ".getFormatedTime (1800 + time ());
+    if ($city == $mail_info['city'])
+      echo "Находится в этом городе";
+    else
+      echo "Находится в $mail_info[city]";
+    echo "<br>";
+    echo "Примерное время доставки: ".getFormatedTime(1800 + time ());
 ?>
 <script type="text/javascript">
 $(function (){
@@ -88,38 +87,35 @@ $(function (){
     section = c;
   else
     section = 1;
-  showInventory (section, 'mail_to', '<?echo $login_mail;?>');
+  showInventory(section, 'mail_to', '<?echo $login_mail;?>');
 });
 </script>
-      <table border="0" width="100%" bgColor="#d4d2d2" cellpadding="3" cellspacing="0">
-        <tr>
-          <td width="25%" align="center" id="section_1"><a href="javascript:showInventory (1, 'mail_to', '<?echo $login_mail;?>');" class="nick"><b><?echo $lang['sec_item'];?></b></a></td>
-          <td width="25%" align="center" id="section_2"><a href="javascript:showInventory (2, 'mail_to', '<?echo $login_mail;?>');" class="nick"><b><?echo $lang['sec_thing'];?></b></a></td>
-          <td width="25%" align="center" id="section_3"><a href="javascript:showInventory (3, 'mail_to', '<?echo $login_mail;?>');" class="nick"><b><?echo $lang['sec_elix'];?></b></a></td>
-          <td width="25%" align="center" id="section_4"><a href="javascript:showInventory (4, 'mail_to', '<?echo $login_mail;?>');" class="nick"><b><?echo $lang['sec_other'];?></b></a></td>
-        </tr>
-      </table>
-      <div align="center" style="background: #a5a5a5;"><b><?echo $lang['back_pack'];?> (<?echo lowercase ($lang['mass'])." $mass/$maxmass";?>)</div>
-      <div id="inventory"></div>
+    <table border="0" width="100%" bgColor="#d4d2d2" cellpadding="3" cellspacing="0">
+      <tr>
+        <td width="25%" align="center" id="section_1"><a href="javascript:showInventory(1, 'mail_to', '<?echo $login_mail;?>');" class="nick"><b><?echo $lang['sec_item'];?></b></a></td>
+        <td width="25%" align="center" id="section_2"><a href="javascript:showInventory(2, 'mail_to', '<?echo $login_mail;?>');" class="nick"><b><?echo $lang['sec_thing'];?></b></a></td>
+        <td width="25%" align="center" id="section_3"><a href="javascript:showInventory(3, 'mail_to', '<?echo $login_mail;?>');" class="nick"><b><?echo $lang['sec_elix'];?></b></a></td>
+        <td width="25%" align="center" id="section_4"><a href="javascript:showInventory(4, 'mail_to', '<?echo $login_mail;?>');" class="nick"><b><?echo $lang['sec_other'];?></b></a></td>
+      </tr>
+    </table>
+    <div align="center" style="background: #a5a5a5;"><b><?echo $lang['back_pack'];?> (<?echo lowercase($lang['mass'])." $mass/$maxmass";?>)</div>
+    <div id="inventory"></div>
 <?
-  }
-  else
-    echo "<script>findlogin('Почтовые услуги', 'main.php', 'login_mail', '', '', '<input type=\"hidden\" value=\"items\" name=\"do\">', 1)</script>";
   break;
   case 'money':
     if ($login_mail)
     {
-      $mail_info = $adb->selectRow ("SELECT `guid`, 
+      $mail_info = $adb->selectRow("SELECT `guid`, 
                                             `login`, 
                                             `city` 
                                      FROM `characters` 
-                                     WHERE `login` = ?s or `guid` = ?d", $login_mail ,$login_mail) or $char->error->Map (203, $login_mail);
+                                     WHERE `login` = ?s or `guid` = ?d", $login_mail ,$login_mail) or $char->error->Map(203, $login_mail);
       $login_mail = $mail_info['guid'];
       
       if ($login_mail == $guid)
-        $char->error->Map (218);
+        $char->error->Map(218);
 ?>
-      К кому передавать: <?echo $char->info->character ('mail', $login_mail);?> &nbsp;<input type="button" value="Сменить" onclick="findlogin ('Почтовые услуги', 'main.php', 'login_mail', '', '', '<input type=hidden value=money name=do>', 0); return false;" class="nav"><br>
+      К кому передавать: <?echo $char->info->character('mail', $login_mail);?> &nbsp;<input type="button" value="Сменить" onclick="findLogin('Почтовые услуги', 'main.php', 'login_mail', '', '', '<input type=hidden value=money name=do>', 0); return false;" class="nav"><br>
 <?
       if ($city == $mail_info['city'])
         echo "Находится в этом городе";
@@ -158,7 +154,7 @@ ch_l();
   case 'report':
   break;
   case 'get_mail':
-    $rows1 = $adb->select ("SELECT * 
+    $rows1 = $adb->select("SELECT * 
                             FROM `city_mail_items` AS `m` 
                             LEFT JOIN `character_inventory` AS `c` 
                             ON `m`.`item_id` = `c`.`id` 
@@ -168,7 +164,7 @@ ch_l();
                               and `m`.`delivery_time` < ?d 
                               and `c`.`mailed` = '1' 
                             ORDER BY `m`.`delivery_time`;", $guid ,time ());
-    $rows2 = $adb->select ("SELECT * 
+    $rows2 = $adb->select("SELECT * 
                             FROM `city_mail_items` AS `m` 
                             LEFT JOIN `item_template` AS `i` 
                             ON `m`.`item_id` = `i`.`entry` 
@@ -185,14 +181,14 @@ ch_l();
     $i = 1;
     foreach ($rows2 as $money_info)
     {
-      echo $char->equip->showItemInventory ($money_info, 'money_in', $i);
+      echo $char->equip->showItem($money_info, 'money_in', $i);
       $i = !$i;
     }
     
     $i = 1;
     foreach ($rows1 as $item_info)
     {
-      echo $char->equip->showItemInventory ($item_info, 'mail_in', $i);
+      echo $char->equip->showItem($item_info, 'mail_in', $i);
       $i = !$i;
     }
   break;
@@ -203,15 +199,15 @@ ch_l();
     <table cellpadding="0" cellspacing="0" width="100%" style="padding-left: 5px;">
       <tr>
         <td align="right">
-          <?getUpdateBar ();?>
+          <?getUpdateBar();?>
           <table width="148" border="0" cellpadding="0" cellspacing="1" bgcolor="#DEDEDE">
             <tr>
               <td bgcolor="#D3D3D3"><img src="img/links.gif" width="9" height="7" /></td>
-              <td bgcolor="#D3D3D3" nowrap><a href="main.php?action=go&room_go=centplosh" class="passage" alt="<?echo $char->city->getRoomOnline ('centplosh', 'mini');?>">Центральная Площадь</a></td>
+              <td bgcolor="#D3D3D3" nowrap><a href="main.php?action=go&room_go=centplosh" class="passage" alt="<?echo $char->city->getRoomOnline('centplosh', 'mini');?>">Центральная Площадь</a></td>
             </tr>
             <tr>
               <td bgcolor="#D3D3D3"><img src="img/links.gif" width="9" height="7" /></td>
-              <td bgcolor="#D3D3D3" nowrap><a href="main.php?action=go&room_go=centplosh" class="passage" alt="<?echo $char->city->getRoomOnline ('Филиал Аукциона', 'mini');?>">Филиал Аукциона</a></td>
+              <td bgcolor="#D3D3D3" nowrap><a href="main.php?action=go&room_go=centplosh" class="passage" alt="<?echo $char->city->getRoomOnline('Филиал Аукциона', 'mini');?>">Филиал Аукциона</a></td>
             </tr>
           </table>
         </td>
@@ -219,7 +215,7 @@ ch_l();
       <tr>
         <td colspan="2">
           <nobr>
-          <?echo "$lang[money] ".getMoney ($money);?> кр.<br>
+          <?echo "$lang[money] ".getMoney($money);?> кр.<br>
           Передач: <?echo $char_db['transfers'];?><br><br>
 <?
 if ($do == 'items') echo "<b>Передать предметы</b><br>";

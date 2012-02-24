@@ -1,11 +1,12 @@
-body 				{font-size: 10pt; margin: 0px; height: 100%; width: 100%; color: #000000; height: 100%; background-color: #dedede; font-family: Verdana, Arial, Helvetica, Tahoma, sans-serif;}
-.main_text 			{font-weight: bold; font-size: 10px; cursor: pointer; color: #f0f0f0; text-decoration: none;}
-.bottom_text		{visibility: hidden; position: absolute;}
+body                                  {font-size: 10pt; margin: 0px; height: 100%; width: 100%; color: #000000; background-color: #dedede; font-family: Verdana, Arial, Helvetica, Tahoma, sans-serif;}
+.main_text ,
+.exit                               {font-weight: bold; font-size: 10px; cursor: pointer; color: #f0f0f0; text-decoration: none;}
+.bottom_text               {visibility: hidden; position: absolute;}
 .menutop,
 a.menutop:visited,
-a.menutop:active 	{font-weight: bold; font-size: 10px; color: #3b3936; text-decoration: none;}
-a.menutop:hover 		{color: #76726b;}
-.demon_bottom_line	{background: url(../img/site/top_lite_demon_11.gif) repeat-x bottom;}
-.demon_top_line		{background: url(../img/site/top_lite_demon_03.gif) repeat-x top;}
-.demon_menu_back	{background: url(../img/site/top_lite_devils_15.gif);}
-.top_menu			{background: url(../img/site/sand_top_20s.gif) repeat-x;}
+a.menutop:active     {font-weight: bold; font-size: 10px; color: #3b3936; text-decoration: none;}
+a.menutop:hover       {color: #76726b;}
+.dem_bottom_line     {background: url(../img/city/top_lite_dem_11.gif) repeat-x bottom;}
+.dem_top_line            {background: url(../img/city/top_lite_dem_03.gif) repeat-x top;}
+.dem_menu_back          {background: url(../img/city/top_lite_dev_15.gif);}
+.top_menu                      {background: url(../img/city/top_lite_dem_20s.gif) repeat-x;}

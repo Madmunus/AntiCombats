@@ -1,7 +1,7 @@
 <?
 session_start();
-include ("conf.php");
-include ("functions.php");
+include("conf.php");
+include("functions.php");
 
 $act=htmlspecialchars($act);
 $date=htmlspecialchars($date);

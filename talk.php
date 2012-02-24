@@ -1,16 +1,16 @@
 <?
-session_start ();
-ini_set ('display_errors', true);
-ini_set ('html_errors', false);
-ini_set ('error_reporting', E_ALL);
+session_start();
+ini_set('display_errors', true);
+ini_set('html_errors', false);
+ini_set('error_reporting', E_ALL);
 
-define ('AntiBK', true);
+define('AntiBK', true);
 
-include ("engline/config.php");
-include ("engline/dbsimple/Generic.php");
-include ("engline/functions/functions.php");
+include("engline/config.php");
+include("engline/dbsimple/Generic.php");
+include("engline/functions/functions.php");
 
-$guid = getGuid ();
+$guid = getGuid();
 
 $adb = DbSimple_Generic::connect($database['adb']);
 $adb->query("SET NAMES ? ",$database['db_encoding']);
@@ -18,40 +18,41 @@ $adb->setErrorHandler("databaseErrorHandler");
 
 $char = Char::initialization($guid, $adb);
 
-$char->test->Guid ();
+$char->test->Guid();
 
-$char_db = $char->getChar ('char_db', 'admin_level', 'orden', 'level', 'clan', 'chat_filter', 'chat_sys', 'chat_update');
-ArrToVar ($char_db);
+$char_db = $char->getChar('char_db', 'orden', 'level', 'clan', 'chat_filter', 'chat_sys', 'chat_update', 'chat_translit');
+ArrToVar($char_db);
 ?>
 <html><head>
 <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
-<link rel="StyleSheet" href="styles/talk.css" type="text/css">
+<meta http-equiv="Content-Language" content="ru" />
+<link rel="StyleSheet" href="styles/chat.css" type="text/css" />
 <script src="scripts/jquery.js" type="text/javascript"></script>
 <script type="text/javascript">
+top.checkGame();
+
 var chat = new Array ();
-chat['filter'] = (<?echo $char_db['chat_filter'];?>) ?false :true;
-chat['sys'] = (<?echo $char_db['chat_sys'];?>) ?false :true;
-chat['slow'] = (<?echo $char_db['chat_update'];?> != 10) ?false :true;
-chat['translit'] = true;
-var full_length = 0;
+chat['filter'] = (<?echo $chat_filter;?>) ?false :true;
+chat['sys'] = (<?echo $chat_sys;?>) ?false :true;
+chat['slow'] = (<?echo $chat_update;?> == 10) ?true :false;
+chat['translit'] = (<?echo $chat_translit;?>) ?false :true;
 
 function changeButtonState (button)
 {
   var src = (chat[button]) ?'img/talk/b_'+button+'_off.gif' :'img/talk/b_'+button+'_on.gif';
   chat[button] = !chat[button];
   $('#'+button).attr('src', src);
-  talk();
 }
 
 function sendMessage ()
 {
-  var message = $("#phrase").val();
+  var message = $("#text").val();
   if (chat['translit'])
     message = translate (message);
-  $.post('ajax_talk.php', 'do=sendmessage&h='+message, function (data){
+  $.post('ajax_chat.php', 'do=sendmessage&h='+message, function (data){
     var result = top.exploder(data);
     top.msg.updateMessages();
-    $("#phrase").val('').focus();
+    $("#text").val('');
 	});
 }
 
@@ -68,12 +69,12 @@ function convert (str)
 
 function rslength () // изменяет размер строки ввода текста
 {
-  var size = Math.ceil($('body').width() - full_length - (2*30)-5);
+  var size = Math.ceil($('body').width() - ($('#buttons1').width() + $('#buttons2').width() + 42) - 75);
   
   if (size < 300)
     size = 300;
   
-  $("#phrase").css('width', size);
+  $("#text").css('width', size);
 }
 
 function translate (str) // translates latin to russian
@@ -98,8 +99,8 @@ function translate (str) // translates latin to russian
 
 function clean ()
 {
-  if ($("#phrase").val() != '')
-    $("#phrase").val('').focus();
+  if ($("#text").val() != '')
+    $("#text").val('');
   else if (confirm('Очистить окно чата?'))
     top.cleanChat();
 }
@@ -111,56 +112,58 @@ function smiles ()
   window.showModalDialog("smiles.html", "Смайлы", "dialogHeight:700px;dialogWidth:500px;dialogLeft:"+x+"px;dialogTop:"+y+"px;help:no;status:no;unadorned:yes;maximize:no;");
 }
 
-function talk ()
-{
-  $("#phrase").focus();
-}
-
 $(function (){
-  for (var i in chat)
-    changeButtonState (i);
-  full_length = $('#T1').width() + $('#T3').width() + $('#T4').width() + $('#T5').width() + $('#T6').width() + $('#T7').width();
-  rslength ();
+  for (var key in chat)
+    changeButtonState(key);
+  rslength();
   $('.button').live('click', function (){
     if (id = $(this).attr('id'))
-      changeButtonState (id);
+      changeButtonState(id);
   });
-  $('#phrase').keydown(function (e){
-    if (e.which == '13')
+  $('#text').keydown(function (e){
+    if (e.which == 13)
       sendMessage();
   });
 });
-$(window).resize(function (){rslength ();});
+$(window).resize(function (){rslength();});
 </script>
 </head>
-<body bgcolor="#E6E6E6" onFocus="talk();">
+<body class="talk">
 <table border="0" cellspacing="0" cellpadding="0" width="100%" height="30">
 <tr>
 <td id="T1"><img src="img/1x1.gif" width="9" /></td>
 <td id="T2">
   <img src="img/talk/b_chat.gif" title="Чат" />
-  <input type="text" id="phrase" maxlength="240" size="100" />
+  <input type="text" id="text" maxlength="240" />
   <img class="button" src="img/talk/b_ok.gif" title="Отправить сообщение" onclick="sendMessage();" />
 <td id="T3"><img src="img/1x1.gif" width="8" /></td>
 <td id="T4">
-  <img class="button" src="img/talk/b_clear.gif" title="Очистить строку ввода/Чат" onclick="clean ();" />
-  <img class="button" src="img/talk/b_filter_off.gif" id="filter" title="Показывать в чате только сообщения адресованные мне" />
-  <img class="button" src="img/talk/b_sys_off.gif" id="sys" title="Показывать в чате системные сообщения" />
-  <img class="button" src="img/talk/b_slow_off.gif" id="slow" title="Медленное обновление чата (раз в минуту)" />
-  <img class="button" src="img/talk/b_translit_off.gif" id="translit" title="Преобразовывать транслит в русский текст (правила перевода см. в энциклопедии)" />
-  <img class="button" src="img/talk/b_sound_off.gif" id="b_sound" title="Не работает" />
-  <object><embed width="1" height="1" src="img/talk/Sound2.swf" quality="high" scale="noscale" wmode="transparent" id="sound" align="middle" allowScriptAccess="always" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" /></object>
-  <img class="button" src="img/talk/b_smile.gif" title="Смайлики" onclick="smiles ();" />
+<?
+  echo '<span id="buttons1">';
+  echo '<img class="button" src="img/talk/b_clear.gif" title="Очистить строку ввода/Чат" onclick="clean();" />';
+  echo '<img class="button" src="img/talk/b_filter_off.gif" id="filter" title="Показывать в чате только сообщения адресованные мне" />';
+  echo '<img class="button" src="img/talk/b_sys_off.gif" id="sys" title="Показывать в чате системные сообщения" />';
+  echo '<img class="button" src="img/talk/b_slow_off.gif" id="slow" title="Медленное обновление чата (раз в минуту)" />';
+  echo '<img class="button" src="img/talk/b_translit_off.gif" id="translit" title="Преобразовывать транслит в русский текст (правила перевода см. в энциклопедии)" />';
+  //echo '<img class="button" src="img/talk/b_sound_off.gif" id="b_sound" title="Не работает" />';
+  echo '<object><embed width="1" height="1" src="img/talk/Sound2.swf" quality="high" scale="noscale" wmode="transparent" id="sound" align="middle" allowScriptAccess="always" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" /></object>';
+  echo '<img class="button" src="img/talk/b_smile.gif" title="Смайлики" onclick="smiles();" />';
+  echo '</span>';
+?>
 </td>
 <td id="T5"><img src="img/1x1.gif" width="16" /></td>
 <td id="T6">
-  <img class="button" src="img/talk/a_inv.gif" title="Настройки/Инвентарь" onClick="top.linkAction('inv');" />
-  <?if($level >= 4){?><img class="button" src="img/talk/a_trf.gif" title="Передать предметы/кредиты" onClick="top.linkAction('perevod');" /><?}?>
-  <?if($orden == 1){?><img class="button" src="img/talk/a_pal.gif" title="Власть" onClick="top.linkAction('orden');" /><?}?>
-  <?if($orden == 2){?><img class="button" src="img/talk/a_drk.gif" title="Власть" onClick="top.linkAction('orden');" /><?}?>
-  <?if($clan){?><img class="button" src="img/talk/a_kln.gif" title="Клан" onClick="top.linkAction('clan');" /><?}?>
-  <img class="button" src="img/talk/a_ext.gif" title="Выход из игры" onClick="top.exit ();" />
-  <object><embed width="70" height="30" src="img/talk/clock.swf?hours=<?echo date('H');?>&minutes=<?echo date('i');?>&sec=<?echo date('s');?>" type="application/x-shockwave-flash" /></object>
+<?
+  echo '<span id="buttons2">';
+  echo '<img class="button" src="img/talk/a_inv.gif" title="Настройки/Инвентарь" onClick=\'top.linkAction("inv");\' />';
+  echo ($level >= 4) ?'<img class="button" src="img/talk/a_trf.gif" title="Передать предметы/кредиты" onClick=\'top.linkAction("perevod");\' />' :'';
+  echo ($orden == 1) ?'<img class="button" src="img/talk/a_pal.gif" title="Власть" onClick=\'top.linkAction("orden");\' />' :'';
+  echo ($orden == 2) ?'<img class="button" src="img/talk/a_drk.gif" title="Власть" onClick=\'top.linkAction("orden");\' />' :'';
+  echo ($clan) ?'<img class="button" src="img/talk/a_kln.gif" title="Клан" onClick=\'top.linkAction("clan");\' />' :'';
+  echo '<img class="button" src="img/talk/a_ext.gif" title="Выход из игры" onClick="top.exit();" />';
+  echo '<object><embed width="70" height="26" src="img/talk/clock.swf?hours='.date('H').'&minutes='.date('i').'&sec='.date('s').'" type="application/x-shockwave-flash" /></object>';
+  echo '</span>';
+?>
 </td>
 <td id="T7"><img src="img/1x1.gif" width="9" /></td>
 </tr>

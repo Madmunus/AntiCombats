@@ -433,14 +433,14 @@ $status = $B_DATA["status"];
 <script>
 
 function to(name){
-var s=top.talk.talker.phrase.value+="to ["+name+"]";
-top.talk.talker.phrase.focus();
+var s=top.talk.talker.text.value+="to ["+name+"]";
+top.talk.talker.text.focus();
 }
 </script>
 <script>
 function private(name){
-var s=top.talk.talker.phrase.value+="private ["+name+"]";
-top.talk.talker.phrase.focus();
+var s=top.talk.talker.text.value+="private ["+name+"]";
+top.talk.talker.text.focus();
 }
 </script>
 

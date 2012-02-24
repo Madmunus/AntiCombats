@@ -1,16 +1,16 @@
 <?
-session_start ();
-ini_set ('display_errors', true);
-ini_set ('html_errors', false);
-ini_set ('error_reporting', E_ALL);
+session_start();
+ini_set('display_errors', true);
+ini_set('html_errors', false);
+ini_set('error_reporting', E_ALL);
 
-define ('AntiBK', true);
+define('AntiBK', true);
 
-include ("engline/config.php");
-include ("engline/dbsimple/Generic.php");
-include ("engline/functions/functions.php");
+include("engline/config.php");
+include("engline/dbsimple/Generic.php");
+include("engline/functions/functions.php");
 
-$guid = getGuid ();
+$guid = getGuid();
 
 $adb = DbSimple_Generic::connect($database['adb']);
 $adb->query("SET NAMES ? ",$database['db_encoding']);
@@ -18,8 +18,8 @@ $adb->setErrorHandler("databaseErrorHandler");
 
 $char = Char::initialization($guid, $adb);
 
-$char->test->Guid ();
-$char->test->Zayavka ();
+$char->test->Guid();
+$char->test->Zayavka();
 ?>
 <html>
 <head>
@@ -30,8 +30,8 @@ $char->test->Zayavka ();
 </head>
 <body topmargin="0">
 <?
-$char_db = $char->getChar ('char_db', 'login', 'room', 'city', 'battle', 'battle_opponent');
-ArrToVar ($char_db);
+$char_db = $char->getChar('char_db', 'login', 'room', 'city', 'battle', 'battle_opponent');
+ArrToVar($char_db);
 
 if ($battle)
 {
@@ -44,7 +44,7 @@ if ($battle)
 }
 
 /*---------------------Проверки ip-------------------------*/
-$ip = $adb->selectCell ("SELECT `ip` FROM `online` WHERE `guid` = ?d", $guid) or die ("<script>top.main.location.href = 'main.php?action=exit';</script>");
+$ip = $adb->selectCell("SELECT `ip` FROM `online` WHERE `guid` = ?d", $guid) or die ("<script>top.main.location.href = 'main.php?action=exit';</script>");
 if ($ip != $_SERVER['REMOTE_ADDR'])
   die ("<script>top.main.location.href = 'main.php?action=exit';</script>");
 ?>

@@ -1,16 +1,16 @@
 <?
-session_start ();
-ini_set ('display_errors', true);
-ini_set ('html_errors', false);
-ini_set ('error_reporting', E_ALL);
+session_start();
+ini_set('display_errors', true);
+ini_set('html_errors', false);
+ini_set('error_reporting', E_ALL);
 
-define ('AntiBK', true);
+define('AntiBK', true);
 
-include ("engline/config.php");
-include ("engline/dbsimple/Generic.php");
-include ("engline/functions/functions.php");
+include("engline/config.php");
+include("engline/dbsimple/Generic.php");
+include("engline/functions/functions.php");
 
-$guid = getGuid ();
+$guid = getGuid();
 
 $adb = DbSimple_Generic::connect($database['adb']);
 $adb->query("SET NAMES ? ",$database['db_encoding']);
@@ -18,48 +18,50 @@ $adb->setErrorHandler("databaseErrorHandler");
 
 $char = Char::initialization($guid, $adb);
 
-$char->test->Guid ();
+$char->test->Guid();
 
-$lang = $char->getLang ();
-$mail = $adb->selectCell ("SELECT COUNT(*) FROM `city_mail_items` WHERE `to` = ?d", $guid) | 0;
-$admin_level = $char->getChar ('char_db', 'admin_level');
+$lang = $char->getLang();
+$mail = $adb->selectCell("SELECT COUNT(*) FROM `city_mail_items` WHERE `to` = ?d", $guid) | 0;
+$admin_level = $char->getChar('char_db', 'admin_level');
 ?>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link href="styles/topp.css" rel="stylesheet" type="text/css">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="Content-Language" content="ru" />
+<link href="styles/topp.css" rel="stylesheet" type="text/css" />
 <script src="scripts/jquery.js" type="text/javascript"></script>
 <script type="text/javascript">
+top.checkGame();
+
 var mail = <?echo $mail;?>;
 
 $(function (){
-  $('#4').css({'background-color': '#404040', 'color': '#FFFFFF'});
-  $('#menu4').css({'visibility': 'visible', 'position': 'relative'});
   var cur_Id = '4';
-  $(".main_text").click(function (){
-    $('#'+cur_Id).css({'background-color': '', 'color': ''});
-    $('#menu'+cur_Id).css({'visibility': 'hidden', 'position': 'absolute'});
+  $('.main_text').click(function (){
+    $('#'+cur_Id).css({backgroundColor: '', color: ''});
+    $('#menu'+cur_Id).css({visibility: 'hidden', position: 'absolute'});
     cur_Id = $(this).attr('id');
-    $('#'+cur_Id).css({'background-color': '#404040', 'color': '#FFFFFF'});
-    $('#menu'+cur_Id).css({'visibility': 'visible', 'position': 'relative'});
+    $('#'+cur_Id).css({backgroundColor: '#404040', color: '#FFFFFF'});
+    $('#menu'+cur_Id).css({visibility: 'visible', position: 'relative'});
   });
+  $('.main_text').trigger('click');
   $('input, a').live('click', function (){$(this).blur();});
   if (mail)
-    $('#mailspan').html("<img src='img/icon/mail"+mail+".gif' title='Получена почта' width='24' height='15'>");
+    $('#mail').html("<img src='img/icon/mail"+mail+".gif' title='Получена почта' width='24' height='15'>");
 });
 </script>
 </head>
 <body>
-<div class="demon_bottom_line">
-<table width="100%" border="0" cellspacing="0" cellpadding="0" class="demon_top_line">
+<div class="dem_bottom_line">
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="dem_top_line">
   <tr>
-    <td align="left"><img height="14" src="img/site/top_lite_demon_01.gif" width="64" /><span id="mailspan" style="position: absolute;"></span></td>
+    <td align="left"><img height="14" src="img/city/top_lite_dem_01.gif" width="64" /><span id="mail" style="position: absolute;"></span></td>
     <td align="right">
       <table cellspacing="0" cellpadding="0" border="0" width="500">
         <tr valign="bottom">
-          <td width="31" height="14"><img height="14" src="img/site/mennu112_06_lite.gif" width="31" /></td>
+          <td width="31" height="14"><img height="14" src="img/city/mennu112_06_lite.gif" width="31" /></td>
           <td align="center">
-            <table height="14" cellspacing="0" cellpadding="0" width="100%" background="img/site/mennu112_06.gif" border="0">
+            <table height="14" cellspacing="0" cellpadding="0" width="100%" background="img/city/mennu112_06.gif" border="0">
               <tr align="middle">
                 <td class="main_text" id="1">Знания</td>
                 <td><img height="11" src="img/mennu112_09.gif" width="1" /></td>
@@ -73,17 +75,17 @@ $(function (){
               </tr>
             </table>
           </td>
-          <td width="38"><img height="14" src="img/site/mennu112_04_lite.gif" width="37" /></td>
+          <td width="38"><img height="14" src="img/city/mennu112_04_lite.gif" width="37" /></td>
         </tr>
       </table>
     </td>
   </tr>
   <tr>
-    <td align="left"><img height="17" src="img/site/top_lite_demon_07.gif" width="15" /><img height="17" src="img/site/top_lite_demon_08.gif" width="152" /></td>
+    <td align="left"><img height="17" src="img/city/top_lite_dem_07.gif" width="15" /><img height="17" src="img/city/top_lite_dem_08.gif" width="152" /></td>
     <td align="right">
-      <table cellspacing="0" cellpadding="0" width="500" class="demon_menu_back" border="0">
+      <table cellspacing="0" cellpadding="0" width="500" class="dem_menu_back" border="0">
         <tr>
-          <td align="left"><img height="17" src="img/site/top_lite_devils_13.gif" width="20" /></td>
+          <td align="left"><img height="17" src="img/city/top_lite_dev_13.gif" width="20" /></td>
           <td valign="top">
             <table cellspacing="0" cellpadding="0" width="100%" border="0" align="right">
               <tr>
@@ -120,7 +122,7 @@ if ($admin_level > 0)
               </tr>
             </table>
           </td>
-          <td align="right"><img height="17" src="img/site/top_lite_devils_18.gif" width="22" /></td>
+          <td align="right"><img height="17" src="img/city/top_lite_dev_18.gif" width="22" /></td>
         </tr>
       </table>
     </td>
@@ -129,9 +131,9 @@ if ($admin_level > 0)
 </div>
 <table width="100%"  border="0" cellspacing="0" cellpadding="0" valign="top" class="top_menu">
   <tr valign="top">
-    <td><img src="img/site/sand_lit_20.gif" width="15" height="6" /><img src="img/site/dem_lit_21.gif" width="79" height="6" /></td>
-    <td width="100%"><img src="img/site/sand_top_20s.gif" width="31" height="6" /></td>
-    <td><img src="img/site/sand_lit_27.gif" width="24" height="6" /></td>
+    <td><img src="img/city/top_lite_dem_20.gif" width="15" height="6" /><img src="img/city/top_lite_dem_21.gif" width="79" height="6" /></td>
+    <td width="100%"><img src="img/city/top_lite_dem_20s.gif" width="31" height="6" /></td>
+    <td><img src="img/city/top_lite_dem_27.gif" width="24" height="6" /></td>
   </tr>
 </table>
 </body>

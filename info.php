@@ -1,9 +1,9 @@
 <?php
-ini_set ('display_errors', true);
-ini_set ('html_errors', false);
-ini_set ('error_reporting', E_ALL);
+ini_set('display_errors', true);
+ini_set('html_errors', false);
+ini_set('error_reporting', E_ALL);
 
-define ('AntiBK', true);
+define('AntiBK', true);
 
 include_once ("engline/config.php");
 include_once ("engline/dbsimple/Generic.php");
@@ -11,7 +11,7 @@ include_once ("engline/data/data.php");
 include_once ("engline/functions/functions.php");
 
 if (empty($log))
-  echoScript (getError ('game'), true);
+  echoScript(getError('game'), true);
 
 $adb = DbSimple_Generic::connect($database['adb']);
 $adb->query("SET NAMES ? ",$database['db_encoding']);
@@ -22,38 +22,38 @@ $log = (isset($_GET['log']) && !preg_match('//u', $_GET['log'])) ?iconv("CP1251"
 $top = "Произошла ошибка:<br><br>";
 $bot = "<br><br><a href='javascript: window.history.go(-1);'>Назад</a><hr>";
 
-$guid = $adb->selectCell ("SELECT `guid` FROM `characters` WHERE `login` = ?s", $log) or die ("$top Указанный персонаж не найден.$bot");
+$guid = $adb->selectCell("SELECT `guid` FROM `characters` WHERE `login` = ?s", $log) or die ("$top Указанный персонаж не найден.$bot");
 
 $char = Char::initialization($guid, $adb);
 
-$char->test->Guid ('game');
-$char->test->Prision ();
-$char->test->Shut ();
-$char->test->Travm ();
-$char->test->Regen ();
+$char->test->Guid('game');
+$char->test->Prision();
+$char->test->Shut();
+$char->test->Travm();
+$char->test->Regen();
 
-$char_db = $char->getChar ('char_db', '*');
-$char_stats = $char->getChar ('char_stats', 'str', 'dex', 'con', 'vit', 'int', 'wis', 'spi');
-$char_info = $char->getChar ('char_info', 'name', 'icq', 'hide_icq', 'url', 'town', 'deviz', 'hobie', 'state', 'date');
+$char_db = $char->getChar('char_db', '*');
+$char_stats = $char->getChar('char_stats', 'str', 'dex', 'con', 'vit', 'int', 'wis', 'spi');
+$char_info = $char->getChar('char_info', 'name', 'icq', 'hide_icq', 'url', 'town', 'deviz', 'hobie', 'state', 'date');
 
 if (!$char_stats)
   die ("$top Информация о характеристиках персонажа не найдена.$bot");
 if (!$char_info)
   die ("$top Дополнительная информация о персонаже не найдена.$bot");
-ArrToVar ($char_db);
-ArrToVar ($char_info);
+ArrToVar($char_db);
+ArrToVar($char_info);
 
-$lang = $char->getLang ();
+$lang = $char->getLang();
 
 $sex = ($sex == 'male') ?"Мужской" :"Женский";
 $orden_dis = ($orden == 1) ?"Орден Паладинов - " :(($orden == 2) ?"Армада - " :"");
 $date = ($admin_level > 0) ?"До начала времен" :date ('d.m.y H:i', $date);
-$state = ($admin_level > 0) ?"Этого никто не знает" :$adb->selectCell ("SELECT `name` FROM `server_cities` WHERE `city` = ?s", $state);
-$room = $char->city->getRoom ($room, $city, 'name');
-$city = $adb->selectCell ("SELECT `name` FROM `server_cities` WHERE `city` = ?s", $city);
-$online = $adb->selectCell ("SELECT COUNT(*) FROM `online` WHERE `guid` = ?d", $guid);
+$state = ($admin_level > 0) ?"Этого никто не знает" :$char->city->getCity($state, 'name');
+$room = $char->city->getRoom($room, $city, 'name');
+$city = $char->city->getCity($city, 'name');
+$online = $adb->selectCell("SELECT COUNT(*) FROM `online` WHERE `guid` = ?d", $guid);
 
-$char->showStatAddition ('info');
+$char->showStatAddition('info');
 ?>
 <html>
 <head>
@@ -70,9 +70,9 @@ $char->showStatAddition ('info');
 <table width="100%" border="0" cellpadding="1" cellspacing="2">
 <tr valign="top">
   <td align="center" width="227" style="padding-right: 10px;">
-<?  $char->equip->showCharacter ('info');
+<?  $char->equip->showCharacter('info');
     echo "<strong>$city</strong><br>";
-    echo ($online) ?"<small>Персонаж сейчас находится в клубе.<br>\"<strong>$room</strong>\"</small>" :(($admin_level > 0) ?"<small>Персонаж не в клубе</small>" :"<small>Персонаж не в клубе, но был тут:<br>".date ('d.m.y H:i', $last_time)." <img src='img/clok3_2.png' alt='Время сервера' border='0'><br> (".getFormatedTime ($last_time)." назад)</small>");
+    echo ($online) ?"<small>Персонаж сейчас находится в клубе.<br>\"<strong>$room</strong>\"</small>" :(($admin_level > 0) ?"<small>Персонаж не в клубе</small>" :"<small>Персонаж не в клубе, но был тут:<br>".date ('d.m.y H:i', $last_time)." <img src='img/clok3_2.png' alt='Время сервера' border='0'><br> (".getFormatedTime($last_time)." назад)</small>");
 ?>
     <br>
   </td>
@@ -82,7 +82,7 @@ $char->showStatAddition ('info');
       if ($level < $min_level)
         continue;
       
-      $stat_text = (in_array ($key, array ('str', 'dex', 'con', 'int'))) ?"<font style='color: ".getStatSkillColor ($char_stats[$key], $added[$key]).";'>%s</font></b>".getBraces ($char_stats[$key], $added[$key]) :"%s</b>";
+      $stat_text = (in_array ($key, array ('str', 'dex', 'con', 'int'))) ?"<font style='color: ".getStatSkillColor($char_stats[$key], $added[$key]).";'>%s</font></b>".getBraces($char_stats[$key], $added[$key]) :"%s</b>";
       printf ($lang[$key]." <b>".$stat_text."<br>", $char_stats[$key]);
     }
     echo "<hr align='left' width='300' size='1'>"
@@ -90,9 +90,9 @@ $char->showStatAddition ('info');
        . "$lang[wins] <a href='stat.php' class='nick' style='font-size: 10px;'>$win</a><br>"
        . "$lang[loses] $lose<br>"
        . "$lang[draws] $draw<br>";
-    echo ($profession) ?"$lang[prof] <b>".$lang['prof_'.$profession]."</b><br>" :"";
+    echo ($f_style) ?"$lang[style] <b>".$lang['style_'.$f_style]."</b><br>" :"";
     echo ($clan) ?"Клан: <strong><a href='clan_inf.php?clan=$clan_short' class='nick' target='_blank' style='font-size: 10px;'>$clan</a> - $chin</strong><br>" :"";
-    echo ($orden) ?"<strong>$orden_dis$stat_rang</strong><br>" :(($status) ?"Статус: <strong>$status</strong><br>" :"");
+    echo ($orden) ?"<strong>$orden_dis$stat_rang</strong><br>" :"$lang[status] <strong>".$lang['status_'.$status]."</strong><br>";
     echo ($state) ?"Место рождения: <strong>$state</strong><br>" :"";
     echo ($date) ?"Дата рождения персонажа: $date</small><br>" :"";
     echo "<hr align='left' width='300' size='1'>";
@@ -115,7 +115,7 @@ $char->showStatAddition ('info');
       }
       echo "<img src='img/dealer_$d_i.gif' width='35' height='24' alt='$d_d<br>Персонаж имеет право продавать услуги Анти Бойцовского Клуба.' border='0'>";
     }
-$char->info->showInfDetail ($guid);
+$char->info->showInfDetail($guid);
 ?>
   </td>
   <td align="center" valign="top"><br><br>
@@ -133,7 +133,7 @@ if ($admin_level < 1)
   <tr>
     <td align="left" valign="top">
 <?
-$rows = $adb->select ("SELECT `c`.`id`, 
+$rows = $adb->select("SELECT `c`.`id`, 
                               `c`.`gift_author` 
                        FROM `character_inventory` AS `c` 
                        LEFT JOIN `item_template` AS `i` 
@@ -146,7 +146,7 @@ foreach ($rows as $dat_t)
 {
   $item_id = $dat_t['id'];
   $gift_author = $dat_t['gift_author'];
-  $obj_data = $adb->selectRow ("SELECT `name`, 
+  $obj_data = $adb->selectRow("SELECT `name`, 
                                        `img`, 
                                        `msg` 
                                 FROM `medal` 
@@ -175,6 +175,5 @@ foreach ($rows as $dat_t)
     </td>
   </tr>
 </table>
-<div id="mmoves" class="mmoves"></div>
 </body>
 </html>

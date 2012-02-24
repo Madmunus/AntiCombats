@@ -18,7 +18,7 @@ if(empty($target)){
 <?
 }
 else if($db["clan_take"]==1){
-$S="select * from users where login='$target'";
+$S="select * from characters where login='$target'";
 $q=mysql_query($S);
 $res=mysql_fetch_array($q);
 if(!$res){
@@ -37,9 +37,9 @@ if($db["money"]<100){
 print "У Вас недостаточно средств, для приема в клан нового члена!";
 die();
 }
-$sql = "UPDATE users SET clan='$clan_t',clan_short='$clan_s',chin='Новобранец',orden='$orden_t' WHERE login='$target'";
+$sql = "UPDATE characters SET clan='$clan_t',clan_short='$clan_s',chin='Новобранец',orden='$orden_t' WHERE login='$target'";
 $result = mysql_query($sql);
-$S = mysql_query("UPDATE users SET money=money-100 WHERE login='$login'");
+$S = mysql_query("UPDATE characters SET money=money-100 WHERE login='$login'");
 if($result){
 print "Персонаж <b>$target</b> принят в клан. С Вашего счета снято 100 кр.";
 }

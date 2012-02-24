@@ -23,16 +23,16 @@ echo $history;
 }
 else if($db["glava"]==1){
 
-	$history = str_replace("\n","<BR>",$history_n);
+    $history = str_replace("\n","<BR>",$history_n);
 
-	$sql = "UPDATE clan SET site='$site_n',story='$history' WHERE name_short='$clan_s'";
-	$result = mysql_query($sql);
+    $sql = "UPDATE clan SET site='$site_n',story='$history' WHERE name_short='$clan_s'";
+    $result = mysql_query($sql);
 
-	if($result){
-	print "Настройки клана изменены.";
-	}
-	else{
-	echo mysql_error();
-	}
+    if($result){
+    print "Настройки клана изменены.";
+    }
+    else{
+    echo mysql_error();
+    }
 
 }

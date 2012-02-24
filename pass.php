@@ -1,13 +1,13 @@
 <?
-ini_set ('display_errors', true);
-ini_set ('html_errors', false);
-ini_set ('error_reporting', E_ALL);
+ini_set('display_errors', true);
+ini_set('html_errors', false);
+ini_set('error_reporting', E_ALL);
 
-define ('AntiBK', true);
+define('AntiBK', true);
 
-include ("engline/config.php");
-include ("engline/dbsimple/Generic.php");
-include ("engline/functions/functions.php");
+include("engline/config.php");
+include("engline/dbsimple/Generic.php");
+include("engline/functions/functions.php");
 
 $adb = DbSimple_Generic::connect($database['adb']);
 $adb->query("SET NAMES ? ",$database['db_encoding']);
@@ -40,7 +40,7 @@ a:hover   {color: #7e7765; text-decoration: underline;}
 <?
 if (!empty($login))
 {
-  $db = $adb->selectRow ("SELECT `mail` 
+  $db = $adb->selectRow("SELECT `mail` 
                             FROM `characters` 
                             WHERE `login` = ?s", $login);
   if (!$db)
@@ -52,7 +52,7 @@ if (!empty($login))
   $msg .= "Это письмо сгенерировано автоматически, не надо на него отвечать ;)\n";
   $msg .= "Администрация АнтиБК.";
 
-  if (mail ($db['mail'], "АнтиБК+. Пароль для персонажа $login", $msg, 'From: Администрация АБК <admin@abk.ru>', 'admin@abk.ru'))
+  if (mail($db['mail'], "АнтиБК+. Пароль для персонажа $login", $msg, 'From: Администрация АБК <admin@abk.ru>', 'admin@abk.ru'))
     echo "<span class='menu'>Пароль от <b>$login</b> был выслан на e-mail, указанный в анкете.</span><br><br><input type='button' class='inup' value='На главную' onclick=\"window.location='index.php';\">";
   else
     echo "<br><span class='menu'>Не удалось отправить пароль на e-mail, указанный в анкете!</span><br><br><input type='button' class='inup' value='Назад' onclick='window.history.go(-1);'>";

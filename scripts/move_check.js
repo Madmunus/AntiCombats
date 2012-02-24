@@ -105,7 +105,7 @@ $(function (){
 	}).hover(
 		function ()
 		{
-			if (!$(this).attr('id'))
+			if (!($(this).attr('id')))
 				return;
 			
 			var image = $('.'+$(this).attr('id')).find('img');
@@ -113,7 +113,7 @@ $(function (){
 		},
 		function ()
 		{
-			if (!$(this).attr('id'))
+			if (!($(this).attr('id')))
 				return;
 			
 			var image = $('.'+$(this).attr('id')).find('img');

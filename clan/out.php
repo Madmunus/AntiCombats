@@ -16,7 +16,7 @@ if(empty($target)){
 <?
 }
 else if($db["glava"]==1){
-$S="select * from users where login='$target'";
+$S="select * from characters where login='$target'";
 $q=mysql_query($S);
 $res=mysql_fetch_array($q);
 if(!$res){
@@ -31,7 +31,7 @@ if($res["clan_short"]!=$clan_s){
 print "Персонаж <B>$target</B> не состоит в Вашем клане";
 }
 else{
-$sql = "UPDATE users SET clan='',clan_short='',chin='',orden='' WHERE login='$target'";
+$sql = "UPDATE characters SET clan='',clan_short='',chin='',orden='' WHERE login='$target'";
 $result = mysql_query($sql);
 
 if($result){

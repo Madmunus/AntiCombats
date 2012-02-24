@@ -18,7 +18,7 @@ $base = new database();
 $base -> connect();
 
 
-function say ($to,$text,$sender)
+function say($to,$text,$sender)
 {
     $result = mysql_query("SELECT room,city_game FROM characters WHERE login='$sender'");
     $db = mysql_fetch_array($result);
@@ -846,7 +846,7 @@ $int=$db["int"];
 $acsess1=$db["acsess1"];
 $acsess2=$db["acsess2"];
 $animal=$db["animal"];
-$equip -> showCharacter ();
+$equip -> showCharacter();
 print "Сила: $str<BR>";
 print "Ловкость: $dex<BR>";
 print "Интуиция: $con<BR>";
@@ -909,7 +909,7 @@ mysql_query("SET CHARSET cp1251");
         if(mysql_fetch_array($SEARCH)){$online = 1;}
 
 $block=$db["block"];
-$equip -> showCharacter ($login, "");
+$equip -> showCharacter($login, "");
 ?>
 <style>
 .small {font-size: 9pt; color: #000000}
@@ -1417,7 +1417,7 @@ $clan_s = $DATA["clan_short"];
         return $orden.$clan_i.$who."[".$DATA["level"]."]<a href=info.php?log=$who target=_new_$who><img src=img/h.gif border=0 alt='Информация о персонаже $who'></a>";
 }
 /*==============shut say=========================================*/
-function knut_say($phrase,$who){
+function knut_say($text,$who){
 $result = mysql_query("SELECT * FROM characters WHERE login='$who'");
 mysql_query("SET CHARSET cp1251");
 $db = mysql_fetch_array($result);
@@ -1435,7 +1435,7 @@ $city=$db["city_game"];
         $d=date("H:i:s", mktime($chas-$GSM));
 
         $S = mysql_query("INSERT INTO chat(date,name,room,msg,class,date_stamp,city)
-        VALUES('$d','Кнут','$room','$phrase','us','".time()."','$city')");
+        VALUES('$d','Кнут','$room','$text','us','".time()."','$city')");
         mysql_query("SET CHARSET cp1251");
 }
 /*===============================================================*/
@@ -2076,10 +2076,10 @@ include "calc_g.php";
         }
 
         if($blocked == 1){
-        $phrase = "<span class=date>$date</span> <span class=$span1>$attack</span> хотел$pref ударить в $hit_dis[$hit], но <span class=$span2>$defend</span> заблокировал удар.<BR>";
+        $text = "<span class=date>$date</span> <span class=$span1>$attack</span> хотел$pref ударить в $hit_dis[$hit], но <span class=$span2>$defend</span> заблокировал удар.<BR>";
         }
         else if($is_uvorot == 1){
-        $phrase = "<span class=date>$date</span> <span class=$span1>$attack</span> $uvorot_1 $hit_dis[$hit], $uvorot_2 <span class=$span2>$defend</span> $uvorot_3.<BR>";
+        $text = "<span class=date>$date</span> <span class=$span1>$attack</span> $uvorot_1 $hit_dis[$hit], $uvorot_2 <span class=$span2>$defend</span> $uvorot_3.<BR>";
         }
         else if($is_crit == 1){
         $hit_k = $hit_k*2;
@@ -2131,19 +2131,19 @@ include "calc_g.php";
                         $travm_dis[3] = $heavy_d;
 
 
-                        $phrase = "<span class=date>$date</span> Ничто не предвещало беды...Но <span class=$span1>$attack</span> страшно крикнув нанес удар в $hit_dis[$hit] <span class=$span2>$defend</span> на <span class=crit>-$hit_k</span><span class=hitted> [$hp_new/$hp_all]</span>.<BR>";
-                        $phrase .= "<span class=date>$date</span><B> $defend</B> получил$p повреждение: <B><font color='red'>\"$travm_dis[$travm]\"</font></B>.<BR>";
-                        $phrase .= "<span class=date>$date</span><B> $defend убит$p.</B><BR>";
+                        $text = "<span class=date>$date</span> Ничто не предвещало беды...Но <span class=$span1>$attack</span> страшно крикнув нанес удар в $hit_dis[$hit] <span class=$span2>$defend</span> на <span class=crit>-$hit_k</span><span class=hitted> [$hp_new/$hp_all]</span>.<BR>";
+                        $text .= "<span class=date>$date</span><B> $defend</B> получил$p повреждение: <B><font color='red'>\"$travm_dis[$travm]\"</font></B>.<BR>";
+                        $text .= "<span class=date>$date</span><B> $defend убит$p.</B><BR>";
 
                         }
                         else{
 
-                        $phrase = "<span class=date>$date</span> <span class=$span2>$defend</span> $crit_hit_1 <span class=$span1>$attack</span> $crit_hit_2 $hit_dis[$hit] на <span class=crit>-$hit_k</span><span class=hitted> [$hp_new/$hp_all]</span>.<BR>";
-                        $phrase .= "<span class=date>$date</span><B> $defend убит$p.</B><BR>";
+                        $text = "<span class=date>$date</span> <span class=$span2>$defend</span> $crit_hit_1 <span class=$span1>$attack</span> $crit_hit_2 $hit_dis[$hit] на <span class=crit>-$hit_k</span><span class=hitted> [$hp_new/$hp_all]</span>.<BR>";
+                        $text .= "<span class=date>$date</span><B> $defend убит$p.</B><BR>";
                         }
                 }
                 else{
-                $phrase = "<span class=date>$date</span> <span class=$span2>$defend</span> $crit_hit_1 <span class=$span1>$attack</span> $crit_hit_2 $hit_dis[$hit] на <span class=crit>-$hit_k</span><span class=hitted> [$hp_new/$hp_all]</span>.<BR>";
+                $text = "<span class=date>$date</span> <span class=$span2>$defend</span> $crit_hit_1 <span class=$span1>$attack</span> $crit_hit_2 $hit_dis[$hit] на <span class=crit>-$hit_k</span><span class=hitted> [$hp_new/$hp_all]</span>.<BR>";
                 }
 
                 if($type != 1){
@@ -2191,11 +2191,11 @@ include "calc_g.php";
                         if($SS["sex"]=="male"){$p="";}
                         else{$p="а";}
 
-                $phrase = "<span class=date>$date</span> <span class=$span1>$attack</span> $hit_dis_txt $hit_dis[$hit] <span class=$span2>$defend</span> на <span class=hitted>-$hit_k [$hp_new/$hp_all]</span>.<BR>";
-                $phrase .= "<span class=date>$date</span><B> $defend убит$p.</B><BR>";
+                $text = "<span class=date>$date</span> <span class=$span1>$attack</span> $hit_dis_txt $hit_dis[$hit] <span class=$span2>$defend</span> на <span class=hitted>-$hit_k [$hp_new/$hp_all]</span>.<BR>";
+                $text .= "<span class=date>$date</span><B> $defend убит$p.</B><BR>";
                 }
         else{
-        $phrase = "<span class=date>$date</span> <span class=$span1>$attack</span> $hit_dis_txt $hit_dis[$hit] <span class=$span2>$defend</span> на <span class=hitted>-$hit_k [$hp_new/$hp_all]</span>.<BR>";
+        $text = "<span class=date>$date</span> <span class=$span1>$attack</span> $hit_dis_txt $hit_dis[$hit] <span class=$span2>$defend</span> на <span class=hitted>-$hit_k [$hp_new/$hp_all]</span>.<BR>";
         }
                 if($type != 1){
                 $D_UPDATE = mysql_query("UPDATE characters SET hp='$hp_new' WHERE login='$defend'");
@@ -2228,7 +2228,7 @@ include "calc_g.php";
         $t = time();
         $U_T = mysql_query("UPDATE timeout SET lasthit='$t' WHERE battle_id='$battle_id'");
         $td = fopen("logs/$battle_id.dis","a");
-        fputs($td,$phrase);
+        fputs($td,$text);
         fclose($td);
 }
 
@@ -2729,7 +2729,7 @@ include "basexp.php";
 
 }
 /*========================lose===========================================*/
-function lose($team,$battle,$phrase){
+function lose($team,$battle,$text){
 $B = mysql_query("SELECT * FROM battles WHERE id=$battle");
 $B_DAT = mysql_fetch_array($B);
 
@@ -2916,7 +2916,7 @@ while($DATA = mysql_fetch_array($T)){
 
         $LOSER=mysql_query("UPDATE characters SET battle='0',lose='$new_lose',$weapon_t='$new_wp_c',$vladenie='$new_vl',$def_type='$new_def',battle_opponent='',battle_pos='',battle_team='' WHERE login='$player'");
                 if($LOSER && !empty($player)){
-                        if($phrase == 0){
+                        if($text == 0){
         $d=date("H:i");
     $city = $LOSER_DATA["city_game"];
         $time = time();
@@ -2925,7 +2925,7 @@ while($DATA = mysql_fetch_array($T)){
                 $masseg= "private [$login] <font color=black>Бой окончен! Вы проиграли! Всего вами нанесено: $hitted_win HP, получено опыта: 0.</font>";
                 mysql_query("INSERT INTO chat(date,name,room,msg,class,date_stamp,city) VALUES('$d','Смотритель','$room','$masseg','us','$time','$city')");
                         }
-                        else if($phrase == 1){
+                        else if($text == 1){
                         }
                 $all_hp=$LOSER_DATA["hp_all"];
                 setHP($player,'0',$all_hp);

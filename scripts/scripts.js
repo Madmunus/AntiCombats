@@ -1,3 +1,15 @@
+function getFormatedTime (time)
+{
+  if (!time)
+    return 0;
+  
+  var m = parseInt(time / 60);
+  time %= 60;
+  var s = time;
+  if (m == 0) return s+' cек.';
+  else        return m+' мин. '+s+' cек.';
+}
+
 function strip_sc (str)
 {
   str = str.replace (/^\s+/, '');
@@ -21,7 +33,7 @@ function AddTo (login, bPrivate)
     $('#'+c+', [name='+c+']', main.document).val(login).focus();
     return;
   }
-  var txt = $('#phrase', talk.document).val();
+  var txt = $('#text', talk.document).val();
   var txtreg = txt;
   var to = '';
   var private = '';
@@ -95,12 +107,12 @@ function AddTo (login, bPrivate)
         txt = (( bPrivate ) ?'private ['+login+'] ' :'to ['+login+'] ') + txt;
     }
   }
-  $('#phrase', talk.document).val(txt).focus();
+  $('#text', talk.document).val(txt).focus();
 }
 
 function AddToPrivate (login)
 {
-  var s = $('#phrase', talk.document).val();
+  var s = $('#text', talk.document).val();
   var reg2 = new RegExp ("private(\\s*)\\[(.*?)\\]", "");
   var cs = s.replace (reg2, "private$1[,$2,]");
   var slogin = login.replace (/([\^.*{}$%?\[\]+|\/\(\)])/g, "\\$1");
@@ -129,7 +141,7 @@ function AddToPrivate (login)
     s = 'private ['+login+str+']' + space + s;
   else
     s = 'private ['+str+']' + space + s;
-  $('#phrase', talk.document).val(s).focus();
+  $('#text', talk.document).val(s).focus();
 }
 
 function linkAction (action)
@@ -140,16 +152,18 @@ function linkAction (action)
 function exploder (data)
 {
   if (data == '' || data == 'ajax_error')
-    top.location.href = 'index.php';
+    location.href = 'index.php';
   
   var variable = data.split('A_D');
   
   return variable;
 }
 
-function getRandomInt (min, max)
+function checkGame ()
 {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
+  var link = location.href.split("/");
+  if (link[link.length - 1] != 'game.php')
+    location.href = 'index.php';
 }
 
 function cleanChat ()

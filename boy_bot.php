@@ -1,9 +1,9 @@
 <?
 session_start();
 
-include ("engline/config.php");
-include ("engline/dbsimple/Generic.php");
-include ("engline/functions/functions.php");
+include("engline/config.php");
+include("engline/dbsimple/Generic.php");
+include("engline/functions/functions.php");
 
 $adb = DbSimple_Generic::connect($database['adb']);
 $adb->query("SET NAMES ? ",$database['db_encoding']);
@@ -14,7 +14,7 @@ $test = new test;
 if (empty($login))
     echo "<script>top.location.href='index.php';</script>";
 
-include ("functions.php");
+include("functions.php");
 
 if (ereg ("[<>\\/-]", $act) || ereg ("[<>\\/-]", $log) || ereg ("[<>\\/-]", $boy) || ereg ("[<>\\/-]", $train)) {echo "?!"; exit();}
 $act = htmlspecialchars ($act);
@@ -22,7 +22,7 @@ $log = htmlspecialchars ($log);
 $boy = htmlspecialchars ($boy);
 
 $login = $adb->_performEscape ($login);
-$db = $adb->selectRow ("SELECT * FROM `characters` WHERE `login` = $login;");
+$db = $adb->selectRow("SELECT * FROM `characters` WHERE `login` = $login;");
 $login = $db['login'];
 $orden = $db['orden'];
 $orden_d = $db['orden'];
@@ -37,7 +37,7 @@ $time_to_cure = $cure_hp - time();
 $hhh = $db['hp_all'];
 
 $test -> Move ($login, $db);
-$test -> Battle ($db);
+$test -> Battle($db);
 
 if ($db['battle'] == 0)
 {
@@ -46,7 +46,7 @@ if ($db['battle'] == 0)
         $percent_hp = floor ((100 * $time_to_cure) / 1200);
         $percent = 100 - $percent_hp;
         $hp[0] = floor (($hhh * $percent) / 100);
-        $q = $adb->query ("    UPDATE `characters` 
+        $q = $adb->query("    UPDATE `characters` 
                                 SET `hp` = '$hp[0]' 
                                 WHERE `login` = '$login';
                             ");
@@ -54,7 +54,7 @@ if ($db['battle'] == 0)
     else
     {
         $hp[0] = $db['hp_all'];
-        $q = $adb->query ("    UPDATE `characters` 
+        $q = $adb->query("    UPDATE `characters` 
                                 SET `hp` = '$hp[0]', 
                                     `cure_hp` = '0' 
                                 WHERE `login` = '$login';
@@ -122,8 +122,8 @@ die ();
 <?
 if (isset($train))
 {
-    $q_team1 = $adb->selectCell ("SELECT `player` FROM `team1` WHERE `player` = '$login';");
-    $q_team2 = $adb->selectCell ("SELECT `player` FROM `team2` WHERE `player` = '$login';");
+    $q_team1 = $adb->selectCell("SELECT `player` FROM `team1` WHERE `player` = '$login';");
+    $q_team2 = $adb->selectCell("SELECT `player` FROM `team2` WHERE `player` = '$login';");
     if ($q_team1 || $q_team2)
     {
         echo "Вы не можете принять этот вызов! Сначала отзовите свою заявку.<br>";

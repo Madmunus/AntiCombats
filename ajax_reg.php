@@ -1,10 +1,10 @@
 <?
-session_start ();
-ini_set ('display_errors', true);
-ini_set ('html_errors', false);
-ini_set ('error_reporting', E_ALL);
+session_start();
+ini_set('display_errors', true);
+ini_set('html_errors', false);
+ini_set('error_reporting', E_ALL);
 
-define ('AntiBK', true);
+define('AntiBK', true);
 
 include_once ("engline/config.php");
 include_once ("engline/dbsimple/Generic.php");
@@ -19,7 +19,7 @@ switch ($_POST['do'])
 {
   case 'checklogin':
     unset ($_SESSION['reg_login']);
-    $login_check = $adb->selectCell ("SELECT `guid` FROM `characters` WHERE `login` = ?s", $_POST['login']);
+    $login_check = $adb->selectCell("SELECT `guid` FROM `characters` WHERE `login` = ?s", $_POST['login']);
     if ($login_check)
       echo "occupy";
     else

@@ -1,10 +1,10 @@
 <?
-session_start ();
-ini_set ('display_errors', true);
-ini_set ('html_errors', false);
-ini_set ('error_reporting', E_ALL);
+session_start();
+ini_set('display_errors', true);
+ini_set('html_errors', false);
+ini_set('error_reporting', E_ALL);
 
-define ('AntiBK', true);
+define('AntiBK', true);
 
 include_once ("engline/config.php");
 include_once ("engline/dbsimple/Generic.php");
@@ -16,7 +16,7 @@ $adb->query("SET NAMES ? ",$database['db_encoding']);
 $adb->setErrorHandler("databaseErrorHandler");
 
 $error_text = "Пройдите предыдущий шаг!<br><br><a href='javascript: window.history.go(-1);' class='us2'>Назад</a>";
-$step = requestVar ('step');
+$step = requestVar('step');
 ?>
 <html>
 <head>
@@ -113,7 +113,7 @@ $(function (){
     if (email.length < 6 || email.length > 50)
       error = 'Email не может быть короче 6-х символов и длинее 50-ти символов.';
     else if (!(/^\w+[-_\.]*\w+@\w+-?\w+\.[a-z]{2,4}$/.test(email)))
-      error = 'Вы указали явно ошибочный email ('+email+')';
+      error = 'Вы указали явно ошибочный email('+email+')';
     else
       $('form[name=regstep3]').die().submit();
     $("#error").show().html(error);
@@ -141,7 +141,7 @@ $(function (){
       error = 'ICQ должна состоять только из цифр.';
     else if ((/[<>'"]/.test(deviz)))
       error = 'В девизе не должны употребляться запрещенные символы.';
-    else if (!$('input[name=rules]').is(':checked'))
+    else if (!($('input[name=rules]').is(':checked')))
       error = 'Вы должны принять правила Анти Бойцовского Клуба.';
     else
       $('form[name=regstep4]').die().submit();
@@ -386,7 +386,7 @@ echo "<script type='text/javascript'>$regfail</script>";
           $name = $_POST['name'];
           $sex = $_POST['sex'];
           $icq = $_POST['icq'];
-          $hide_icq = requestVar ('hide_icq', 0);
+          $hide_icq = requestVar('hide_icq', 0);
           $town = (isset($_POST['city_n']) && $_POST['city_n'] != '') ?htmlspecialchars ($_POST['city_n']) :((isset($_POST['city'])) ?htmlspecialchars ($_POST['city']) :"");
           $city = "dem";
           $deviz = $_POST['deviz'];
@@ -395,34 +395,34 @@ echo "<script type='text/javascript'>$regfail</script>";
           $birthday = $_POST['birth_day'].".".$_POST['birth_month'].".".$_POST['birth_year'];
           $shape = ($sex == "male") ?"m/1.gif" :"f/1.gif";
           unset ($_SESSION['reg_login'], $_SESSION['reg_password'], $_SESSION['reg_email']);
-          if ($adb->selectCell ("SELECT COUNT(*) FROM `characters` WHERE `login` = ?s", $reg_login) == 0)
+          if ($adb->selectCell("SELECT COUNT(*) FROM `characters` WHERE `login` = ?s", $reg_login) == 0)
           {
-            $guid = ($adb->selectCell ("SELECT MAX(`guid`) FROM `characters`;")) + 1;
+            $guid = ($adb->selectCell("SELECT MAX(`guid`) FROM `characters`;")) + 1;
             $password = SHA1 ($guid.':'.$password);
             $history = History::setGuidDB($guid);
             // Основная база
-            $adb->query ("INSERT INTO `characters` (`guid`, `login`, `login_sec`, `password`, `mail`, `sex`, `city`, `shape`, `reg_ip`) 
+            $adb->query("INSERT INTO `characters` (`guid`, `login`, `login_sec`, `password`, `mail`, `sex`, `city`, `shape`, `reg_ip`) 
                             VALUES (?d, ?s, ?s, ?s, ?s, ?s, ?s, ?s, ?s);", $guid ,$reg_login ,$reg_login ,$password ,$email ,$sex ,$city ,$shape ,$_SERVER['REMOTE_ADDR']);
             // Характеристики
-            $adb->query ("INSERT INTO `character_stats` (`guid`) 
+            $adb->query("INSERT INTO `character_stats` (`guid`) 
                             VALUES (?d);", $guid);
             // Дополнительные характеристики
-            /* $adb->query ("INSERT INTO `character_stats_plus` (`guid`) 
+            /* $adb->query("INSERT INTO `character_stats_plus` (`guid`) 
                             VALUES (?d);", $guid); */
             // Дополнительная информация
-            $adb->query ("INSERT INTO `character_info` (`guid`, `name`, `icq`, `hide_icq`, `town`, `birthday`, `color`, `deviz`, `state`, `date`) 
+            $adb->query("INSERT INTO `character_info` (`guid`, `name`, `icq`, `hide_icq`, `town`, `birthday`, `color`, `deviz`, `state`, `date`) 
                             VALUES (?d, ?s, ?d, ?d, ?s, ?s, ?s, ?s, ?s, ?d);", $guid ,$name ,$icq ,$hide_icq ,$town ,$birthday ,$color ,$deviz ,$city ,time ());
             // Создание инвентаря
-            $adb->query ("INSERT INTO `character_equip` (`guid`) 
+            $adb->query("INSERT INTO `character_equip` (`guid`) 
                             VALUES (?d);", $guid);
             // Создание баров
-            $adb->query ("INSERT INTO `character_bars` (`guid`) 
+            $adb->query("INSERT INTO `character_bars` (`guid`) 
                             VALUES (?d);", $guid);
             // Предметы
-            $adb->query ("INSERT INTO `character_inventory` (`guid`, `item_template`, `tear_max`, `made_in`, `last_update`) 
+            $adb->query("INSERT INTO `character_inventory` (`guid`, `item_template`, `tear_max`, `made_in`, `last_update`) 
                             VALUES (?d, '920', '20', ?s, ?d);", $guid ,$city ,time ());
             echo "Регистрация персонажа $reg_login, прошла успешно!<br>Авторизируйтесь с <a href='index.php' class='us2'>главной страницы</a>.";
-            $history -> authorization (2, $city);
+            $history -> authorization(2, $city);
           }
           else
             echo "Вы уже создали персонажа с таким логином!";

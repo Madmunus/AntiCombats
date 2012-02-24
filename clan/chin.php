@@ -16,7 +16,7 @@ if(empty($target)){
 <?
 }
 else if($db["glava"]==1){
-$S="select * from users where login='$target'";
+$S="select * from characters where login='$target'";
 $q=mysql_query($S);
 $res=mysql_fetch_array($q);
 if(!$res){
@@ -43,14 +43,14 @@ if(empty($new_c)){
 }
 else{
 
-	$sql = "UPDATE users SET chin='$new_c' WHERE login='$target'";
-	$result = mysql_query($sql);
+    $sql = "UPDATE characters SET chin='$new_c' WHERE login='$target'";
+    $result = mysql_query($sql);
 
-	if($result){
-	print "Статус сменен для персонажа $target";
-	}
-	else{
-	echo mysql_error();
-	}
+    if($result){
+    print "Статус сменен для персонажа $target";
+    }
+    else{
+    echo mysql_error();
+    }
 }
 }

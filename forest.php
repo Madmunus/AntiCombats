@@ -2,7 +2,7 @@
 if(empty($login)){
 print "<script>top.location.href='index.php';</script>";
 }
-include ("engline/functions/functions.php");
+include("engline/functions/functions.php");
 
 $test = new test;
 ?>
@@ -20,7 +20,7 @@ $walk = $db["walk"];
 if(empty($act)){$act = "";}
 
 $test -> Move ($login, $db);
-$test -> Battle ($db);
+$test -> Battle($db);
 
 
 ?>

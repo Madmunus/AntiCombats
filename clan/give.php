@@ -16,7 +16,7 @@ if(empty($target)){
 <?
 }
 else if($db["glava"]==1){
-$S="select * from users where login='$target'";
+$S="select * from characters where login='$target'";
 $q=mysql_query($S);
 $res=mysql_fetch_array($q);
 if(!$res){
@@ -28,16 +28,16 @@ print "Персонаж <B>$target</B> не состоит в Вашем кла�
 die();
 }
 
-	$sql = "UPDATE users SET chin='Глава',glava='1',clan_take='1' WHERE login='$target'";
-	$result = mysql_query($sql);
-	$S = mysql_query("UPDATE users SET glava='0',chin='Экс-глава' WHERE login='$login'");
-	$S2 = mysql_query("UPDATE clan SET glava='$target' WHERE name_short='$clan_s'");
+    $sql = "UPDATE characters SET chin='Глава',glava='1',clan_take='1' WHERE login='$target'";
+    $result = mysql_query($sql);
+    $S = mysql_query("UPDATE characters SET glava='0',chin='Экс-глава' WHERE login='$login'");
+    $S2 = mysql_query("UPDATE clan SET glava='$target' WHERE name_short='$clan_s'");
 
-	if($result){
-	print "Новый глава клана: $target";
-	}
-	else{
-	echo mysql_error();
-	}
+    if($result){
+    print "Новый глава клана: $target";
+    }
+    else{
+    echo mysql_error();
+    }
 
 }

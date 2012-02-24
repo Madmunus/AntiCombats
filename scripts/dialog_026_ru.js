@@ -29,7 +29,7 @@ function fixspaces(s)
 }
 
 // Заголовок, название скрипта, имя поля с логином
-function findlogin (title, script, name, defaultlogin, mtype, addon, need_defend)
+function findLogin(title, script, name, defaultlogin, mtype, addon, need_defend)
 {
 	var s;
 
@@ -210,7 +210,7 @@ function closehint3()
 }
 
 // Для боевой магии. Заголовок, название магии, номер вещицы в рюкзаке
-function Bmagicklogin (title, magickname, n, defaultlogin, extparam, mtype) {
+function BmagickLogin(title, magickname, n, defaultlogin, extparam, mtype) {
 	if (defend==false) {
 		defend=-1;
 //		errmess("Блок не выбран.");	return false;

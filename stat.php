@@ -1,14 +1,14 @@
 <?
-ini_set ('display_errors', true);
-ini_set ('html_errors', false);
-ini_set ('error_reporting', E_ALL);
+ini_set('display_errors', true);
+ini_set('html_errors', false);
+ini_set('error_reporting', E_ALL);
 
-define ('AntiBK', true);
+define('AntiBK', true);
 
-include ("engline/config.php");
-include ("engline/dbsimple/Generic.php");
-include ("engline/data/data.php");
-include ("engline/functions/functions.php");
+include("engline/config.php");
+include("engline/dbsimple/Generic.php");
+include("engline/data/data.php");
+include("engline/functions/functions.php");
 
 $adb = DbSimple_Generic::connect($database['adb']);
 $adb->query("SET NAMES ? ",$database['db_encoding']);
@@ -55,7 +55,7 @@ $char = Char::initialization(0, $adb);
                     </tr>
                   </table>
 <?//
-$players = $adb->select ("SELECT `guid`, 
+$players = $adb->select("SELECT `guid`, 
                                  `login`, 
                                  `exp` 
                           FROM `characters` 
@@ -73,8 +73,8 @@ for ($i = 0; $i < count ($players); $i++)
   $bg = (!($i % 2 === 0) || $i == 1) ?" bgcolor='#ECDFAA'" :"";
   echo "<tr$bg>";
   echo "<td align='right'>".($i + 1).".</td>";
-  echo "<td>".$char->info->character ('clan', $players[$i]['guid'])."</td>";
-  echo "<td align='right'><b>".getExp ($players[$i]['exp'])."</b></td>";
+  echo "<td>".$char->info->character('clan', $players[$i]['guid'])."</td>";
+  echo "<td align='right'><b>".getExp($players[$i]['exp'])."</b></td>";
   echo "</tr>";
 }
 echo "</table>";

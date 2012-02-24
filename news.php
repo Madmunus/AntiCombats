@@ -4,11 +4,11 @@ ini_set('display_errors', true);
 ini_set('html_errors', false);
 ini_set('error_reporting', E_ALL);
 
-define ('AntiBK', true);
+define('AntiBK', true);
 
-include ("engline/config.php");
-include ("engline/dbsimple/Generic.php");
-include ("engline/functions/functions.php");
+include("engline/config.php");
+include("engline/dbsimple/Generic.php");
+include("engline/functions/functions.php");
 
 $adb = DbSimple_Generic::connect($database['adb']);
 $adb->query("SET NAMES ? ",$database['db_encoding']);
@@ -35,7 +35,7 @@ $adb->setErrorHandler("databaseErrorHandler");
             <h3><p class="news">Новости</p></h3>
             <table width="73%" border="0" cellPadding="0" cellSpacing="0" align="center">
 <?
-$rows = $adb->select ("SELECT * FROM `news` ORDER BY `id` DESC;");
+$rows = $adb->select("SELECT * FROM `news` ORDER BY `id` DESC;");
 foreach ($rows as $news)
 {
   echo "<tr><td height='19'>"
