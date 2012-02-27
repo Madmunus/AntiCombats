@@ -21,11 +21,11 @@ switch ($_POST['do'])
     unset ($_SESSION['reg_login']);
     $login_check = $adb->selectCell("SELECT `guid` FROM `characters` WHERE `login` = ?s", $_POST['login']);
     if ($login_check)
-      echo "occupy";
+      die("occupy");
     else
     {
       $_SESSION['reg_login'] = $_POST['login'];
-      echo "free";
+      die("free");
     }
   break;
 }

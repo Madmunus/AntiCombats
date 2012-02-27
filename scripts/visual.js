@@ -14,8 +14,8 @@ var visual = {
               },
   hint_set: function (hint)
             {
-              $('#hint3').html(hint+getCloseButton('bottom', 'left', 'closehint3();'));
-              var coor = getCenter($("#hint3").width(), $("#hint3").height());
+              $('#hint3').html(hint+getCloseButton('top', 'left', 'closehint3();'));
+              var coor = getCenter($('#hint3').width(), $('#hint3').height());
               $('#hint3').css({left: coor.x, top: coor.y});
             },
   bar_show: function (bar)
@@ -38,7 +38,7 @@ var visual = {
   show_help: function (data)
              {
                $('body').css({overflow: 'hidden', marginRight: '17px'}).append('<div id="help"></div>');
-               $('#help').html(data+getCloseButton('top', 'left', 'hideHelp();'));
+               $('#help').html(data);
                var coor = getCenter($('#help').width(), $('#help').height());
                $('#help').css({left: coor.x, top: coor.y}).before("<div id='help_bg' onclick='hideHelp();'></div>").fadeIn('10000');
                $('#help_bg').css({width: $(window).width(), height: $(window).height()}).fadeIn('10000');

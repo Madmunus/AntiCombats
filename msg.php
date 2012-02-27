@@ -27,7 +27,7 @@ $char->test->Guid();
 <link rel="stylesheet" type="text/css" href="styles/chat.css" />
 <script src="scripts/jquery.js" type="text/javascript"></script>
 <script type="text/javascript">
-top.checkGame();
+try {top.checkGame();} catch(e) {location.href = 'index.php';}
 
 var TimerMessage = -1;
 

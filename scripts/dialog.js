@@ -39,24 +39,26 @@ function dialogconfirm (title, script, text, mtype)
 {
 	var s;
 	s = '<table border="0" width="100%" cellspacing="0" cellpadding="2"><tr><td colspan="2">'+text+
-      '</td></tr><tr><td width="50%" align="center"><input type="submit" name="yes" value="Да" style="width: 70%;" onclick="'+script+';"></td><td width="50%" align="center"><input type="button" style="width: 70%;" value="Нет" onclick="closehint3 ();"></td></tr></table>';
+      '</td></tr><tr><td width="50%" align="center"><input type="submit" name="yes" value="Да" style="width: 70%; cursor: pointer;" onclick="'+script+';"></td><td width="50%" align="center"><input type="button" style="width: 70%; cursor: pointer;" value="Нет" onclick="closehint3();"></td></tr></table>';
 	s = crtmagic (mtype, title, s);
-  $('#hint3').html(s).css({'left': 100, 'top': document.body.scrollTop + 50, 'zIndex': 200}).fadeIn('fast');
+  $('#hint3').html(s);
+  var coor = getCenter($('#hint3').width(), $('#hint3').height());
+  $('#hint3').css({'left': coor.x, 'top': coor.y, 'zIndex': 200}).fadeIn('fast');
   $('[name=yes]').focus();
 	Hint3Name = "hint3";
 }
 
-function findLogin(title, script, name, defaultlogin, mtype, addon, noclose)
+function findLogin (title, script, name, defaultlogin, mtype, addon, noclose)
 {
 	var s;
 	s = '<form action="'+script+'" method="get" name="slform" style="display: inline;">'+
       '<table border="0" width="100%" cellspacing="0" cellpadding="2"><tr>'+
       '<td colspan="2">Укажите логин персонажа:<small><br>(можно щелкнуть по логину в чате)</td></tr>'+
       '<tr><td width="50%" align="right" style="padding-left: 5px;"><input style="width: 100%" type="text" name="'+name+'" value="'+defaultlogin+'"></td>'+
-      '<td width="50%"><input type=image src="#IMGSRC#" width="27" height="20" border="0" onclick="slform.'+name+'.value = fixspaces (slform.'+name+'.value);">'+(addon ?addon :'')+'</td></tr></table></form>';
-	s = crtmagic (mtype, title, s, noclose);
+      '<td width="50%"><input type="image" src="#IMGSRC#" width="27" height="20" border="0" onclick="slform.'+name+'.value = fixspaces (slform.'+name+'.value);">'+(addon ?addon :'')+'</td></tr></table></form>';
+	s = crtmagic(mtype, title, s, noclose);
 
-	$('#hint3').html(s).css({'left': 100, 'top': document.body.scrollTop + 50, 'zIndex': 200}).fadeIn('fast');
+	$('#hint3').html(s).css({'left': 100, 'top': 50, 'zIndex': 200}).fadeIn('fast');
 	$('[name='+name+']').focus();
 	Hint3Name = name;
 }
@@ -92,7 +94,7 @@ function foundmagictype (mtypes)
 
 function crtmagic (mtype, title, body, noclose)
 {
-	var mtype = foundmagictype (mtype);
+	var mtype = foundmagictype(mtype);
 	var names = new Array (
 	'neitral', 17, 6, 14, 17, 14, 7, 0, 0, 3,
 	'fire', 57, 30, 33, 20, 21, 14, 11, 12, 0,
@@ -104,8 +106,8 @@ function crtmagic (mtype, title, body, noclose)
 	'black', 51, 25, 46, 44, 44, 10, 5, 5, 0);
 	var colors = new Array ('B1A993','DDD5BF', 'ACA396','D3CEC8', '96B0C6', 'BDCDDB', 'AEC0C9', 'CFE1EA', 'AAA291', 'D5CDBC', 'BCBBB6', 'EFEEE9', '969592', 'DADADA', '72726B', 'A6A6A0');
 
-	while (body.indexOf ('#IMGSRC#') >= 0)
-		body = body.replace ('#IMGSRC#', 'i/misc/dmagic/'+names[mtype*10]+'_30.gif');
+	while (body.indexOf('#IMGSRC#') >= 0)
+		body = body.replace('#IMGSRC#', 'i/misc/dmagic/'+names[mtype*10]+'_30.gif');
 	var s = 
 	'<table width="270" border="0" align="center" cellpadding="0" cellspacing="0">'+
 	'<tr>'+

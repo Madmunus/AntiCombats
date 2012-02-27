@@ -31,7 +31,7 @@ $admin_level = $char->getChar('char_db', 'admin_level');
 <link href="styles/topp.css" rel="stylesheet" type="text/css" />
 <script src="scripts/jquery.js" type="text/javascript"></script>
 <script type="text/javascript">
-top.checkGame();
+try {top.checkGame();} catch(e) {location.href = 'index.php';}
 
 var mail = <?echo $mail;?>;
 

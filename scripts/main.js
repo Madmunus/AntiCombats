@@ -1,19 +1,19 @@
 function getCenter (width, height)
 {
   var center = {};
-  center.x = ($(window).width() - width)/2 + $(window).scrollLeft();
-  center.y = ($(window).height() - height)/2 + $(window).scrollTop();
+  center.x = (width <= $(window).width()) ?($(window).width() - width)/2 :0;
+  center.y = (height <= $(window).height()) ?($(window).height() - height)/2 :0;
   return center;
 }
 
 function getCloseButton (vert, horiz, func)
 {
-  return "<div style='position: absolute; "+vert+": -15px; "+horiz+": -15px; cursor: pointer; z-index: 113;'><img src='i/clear.gif' width='13' height='13' onclick="+func+"></div>"
+  return "<div style='position: absolute; "+vert+": 0px; "+horiz+": -15px; cursor: pointer; z-index: 200;'><img src='i/clear.gif' width='13' height='13' onclick="+func+"></div>"
 }
 
 function hideShow (selector, func, v)
 {
-  $(selector).fadeOut('10000', function (){func(v); $(this).fadeIn('10000'); checkWindow();});
+  $(selector).fadeOut('10000', function (){func(v); $(this).fadeIn('10000', function (){checkWindow();});});
 }
 
 function drop (id, img, txt)
@@ -79,7 +79,7 @@ function showInventory (section, type, mail_guid)
 	
 	$('#section_'+cur_section+', #section_1').attr('bgcolor', '#d4d2d2');
 	$('#section_'+section).attr('bgcolor', '#a5a5a5');
-	setCookie('section', section, getTimePlusHour ());
+	setCookie('section', section, getTimePlusHour());
 	$.post('ajax.php', {'do': 'showinventory', 'section': section, 'type': type, 'mail_guid': mail_guid}, function (data){
     var inventory = top.exploder(data);
 	  visual.show_any('#inventory', inventory[0]);
@@ -263,7 +263,7 @@ $(function (){
     top.linkAction($(this).attr('link'));
   });
   $('#hint').live('click', function (){
-    showHelp ($(this).attr('link'));
+    showHelp($(this).attr('link'));
   });
   $('#refresh').live('click', function (){
     location.reload();

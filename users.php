@@ -19,18 +19,19 @@ $adb->setErrorHandler("databaseErrorHandler");
 $char = Char::initialization($guid, $adb);
 
 $char->test->Guid();
+
+$chat_list = $char->getChar('char_db', 'chat_list');
 ?>
-<html>
-<head>
+<html><head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta http-equiv="Content-Language" content="ru" />
 <link rel="StyleSheet" href="styles/chat.css" type="text/css" />
 <script src="scripts/jquery.js" type="text/javascript"></script>
 <script type="text/javascript">
-top.checkGame();
+try {top.checkGame();} catch(e) {location.href = 'index.php';}
 
 var TimerOnline = -1;
-var autorefresh = false;
+var autorefresh = <?echo $chat_list;?>;
 
 function updateUsers ()
 {
@@ -49,14 +50,18 @@ function updateUsers ()
 function changeAutoRefresh ()
 {
   autorefresh = !autorefresh;
-  if (autorefresh)
-    updateUsers ();
-  else
-    clearTimeout(TimerOnline);
+  $.post('ajax_chat.php', {'do': 'change_button', 'but': 'list', 'val': autorefresh}, function (data){
+    if (autorefresh)
+      updateUsers();
+    else
+      clearTimeout(TimerOnline);
+	});
 }
 
 $(function (){
   updateUsers ();
+  if (autorefresh)
+    $('[name=auto_refresh]').attr('checked', 'checked');
 });
 </script>
 </head>

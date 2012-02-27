@@ -23,9 +23,9 @@ function snow_start ()
 
 function snow_create ()
 {
-	snow_x = getRandomInt(0, $("#ione").width());
+	snow_x = getRandomInt(0, $("#ione").width()-20);
 	snow_img = snow_src[Math.floor(Math.random()*snow_src.length)];
-	snow_elem = '<img id="snow'+snow_id+'" style="position: absolute; left: '+snow_x+'px; top: 0px; z-index: 200" src="'+snow_img+'" />';
+	snow_elem = '<img id="snow'+snow_id+'" style="position: absolute; left: '+snow_x+'px; top: 0px; z-index: 102" src="'+snow_img+'" />';
 	$("#ione").append(snow_elem);
 	snow_move(snow_id, snow_img);
 	snow_id++;
@@ -52,7 +52,7 @@ function snow_move (id, type)
 		change_x = -parseInt($('#snow'+id).css('left'));
 		remove = true;
 	}
-	$('#snow'+id).animate({top: '+='+change_y, left: "+="+change_x}, speed, function()
+	$('#snow'+id).animate({top: '+='+change_y, left: '+='+change_x}, speed, function()
 	{
 		if (remove)
 		{

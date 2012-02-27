@@ -73,7 +73,7 @@ else if ($char_info['block'])
 
 if (session_is_registered ('guid'))
 {
-  unset($_SESSION['guid']);
+  deleteSession();
   $_SESSION['guid'] = $guid;
 }
 else

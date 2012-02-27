@@ -38,7 +38,6 @@ $lang = $char->getLang();
 $action = requestVar('action', 'none');
 $do = requestVar('do');
 $section = requestVar('section', 1, 7);
-$login_mail = (isset($_GET['login_mail'])) ?htmlspecialchars ($_GET['login_mail']) :((isset($_COOKIE['login_mail']) && $_COOKIE['login_mail'] != $guid && $_COOKIE['login_mail'] != $char_db['login']) ?$_COOKIE['login_mail'] :"");
 $credit = requestVar('credit');
 $pass = requestVar('pass');
 $item_id = requestVar('item_id', 0);
@@ -52,7 +51,16 @@ $level_filter = requestVar('level_filter', -1, 7);
 $name_filter = requestVar('name_filter', '', 7);
 $level_filter = ($level_filter < 0) ?'' :$level_filter;
 
-setCookie('login_mail', $login_mail,  time () + 3600);
+$login_mail = requestVar('login_mail', '', 5);
+if ($action == 'enter')
+{
+  $login_mail = '';
+  setCookie('login_mail', '');
+}
+else if ($login_mail == $guid || lowercase($login_mail) == lowercase($char_db['login']))
+  $char->error->Map(218);
+else if ($login_mail)
+  setCookie('login_mail', $login_mail,  time () + 3600);
 ?>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -66,7 +74,7 @@ setCookie('login_mail', $login_mail,  time () + 3600);
 <script src="scripts/dialog.js" type="text/javascript"></script>
 <script src="scripts/visual.js" type="text/javascript"></script>
 <script type="text/javascript">
-top.checkGame();
+try {top.checkGame();} catch(e) {location.href = 'index.php';}
 </script>
 </head>
 <body>
@@ -133,8 +141,7 @@ switch ($action)
     
     $adb->query("UPDATE `characters` SET `room` = ?s, `last_go` = ?d, `last_room` = ?s WHERE `guid` = ?d", $room_go ,time () ,$room ,$guid);
     $adb->query("UPDATE `online` SET `room` = ?s WHERE `guid` = ?d", $room_go ,$guid);
-    echoScript("top.cleanChat(); parent.user.updateUsers(); parent.msg.updateMessagesGo();");
-    $char->error->Map();
+    echoScript("top.cleanChat(); parent.user.updateUsers(); parent.msg.updateMessagesGo(); location.href = 'main.php';");
   break;
   case 'return':
     if ((time () - $char_db['last_return']) < $char_db['return_time'])
@@ -273,7 +280,7 @@ switch ($action)
   case 'exit':
     $adb->query("DELETE FROM `online` WHERE `guid` = ?d", $guid);
     $adb->query("UPDATE `characters` SET `last_time` = ?d WHERE `guid` = ?d", time () ,$guid);
-    unset ($_SESSION['guid'], $_SESSION['bankСredit'], $_SESSION['last']);
+    deleteSession();
     echoScript(getError(), true);
   break;
   default:

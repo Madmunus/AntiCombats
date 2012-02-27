@@ -80,72 +80,72 @@ class Char
       {
         case 'str':
           $this->db->query("UPDATE `character_stats` 
-                             SET `str` = `str` + ?d, 
-                                 `wp_min` = `wp_min` + ?d, 
-                                 `wp_max` = `wp_max` + ?d 
-                             WHERE `guid` = ?d", $count ,$count ,$count ,$this->guid);
+                            SET `str` = `str` + ?d, 
+                                `wp_min` = `wp_min` + ?d, 
+                                `wp_max` = `wp_max` + ?d 
+                            WHERE `guid` = ?d", $count ,$count ,$count ,$this->guid);
           break;
         case 'dex':
           $mf_uvorot = $count * 7;
           $mf_antiuvorot = $count * 3;
           $this->db->query("UPDATE `character_stats` 
-                             SET `dex` = `dex` + ?d, 
-                                 `mf_uvorot` = `mf_uvorot` + ?d, 
-                                 `mf_antiuvorot` = `mf_antiuvorot` + ?d 
-                             WHERE `guid` = ?d", $count ,$mf_uvorot ,$mf_antiuvorot ,$this->guid);
+                            SET `dex` = `dex` + ?d, 
+                                `mf_uvorot` = `mf_uvorot` + ?d, 
+                                `mf_antiuvorot` = `mf_antiuvorot` + ?d 
+                            WHERE `guid` = ?d", $count ,$mf_uvorot ,$mf_antiuvorot ,$this->guid);
           break;
         case 'con':
           $mf_crit = $count * 7;
           $mf_anticrit = $count * 3;
           $this->db->query("UPDATE `character_stats` 
-                             SET `con` = `con` + ?d, 
-                                 `mf_crit` = `mf_crit` + ?d, 
-                                 `mf_anticrit` = `mf_anticrit` + ?d 
-                             WHERE `guid` = ?d", $count ,$mf_crit ,$mf_anticrit ,$this->guid);
+                            SET `con` = `con` + ?d, 
+                                `mf_crit` = `mf_crit` + ?d, 
+                                `mf_anticrit` = `mf_anticrit` + ?d 
+                            WHERE `guid` = ?d", $count ,$mf_crit ,$mf_anticrit ,$this->guid);
           break;
         case 'vit':
           $hp = $count * 6;
           $bron = $count * 1.5;
           $this->db->query("UPDATE `character_stats` 
-                             SET `vit` = `vit` + ?d, 
-                                 `hp` = `hp` + ?d, 
-                                 `hp_all` = `hp_all` + ?d, 
-                                 `maxmass` = `maxmass` + ?d, 
-                                 `resist_sting` = `resist_sting` + ?f, 
-                                 `resist_slash` = `resist_slash` + ?f, 
-                                 `resist_crush` = `resist_crush` + ?f, 
-                                 `resist_sharp` = `resist_sharp` + ?f, 
-                                 `resist_fire` = `resist_fire` + ?f, 
-                                 `resist_water` = `resist_water` + ?f, 
-                                 `resist_air` = `resist_air` + ?f, 
-                                 `resist_earth` = `resist_earth` + ?f 
-                             WHERE `guid` = ?d", $count ,$hp ,$hp ,$count ,$bron ,$bron ,$bron ,$bron ,$bron ,$bron ,$bron ,$bron ,$this->guid);
+                            SET `vit` = `vit` + ?d, 
+                                `hp` = `hp` + ?d, 
+                                `hp_all` = `hp_all` + ?d, 
+                                `maxmass` = `maxmass` + ?d, 
+                                `resist_sting` = `resist_sting` + ?f, 
+                                `resist_slash` = `resist_slash` + ?f, 
+                                `resist_crush` = `resist_crush` + ?f, 
+                                `resist_sharp` = `resist_sharp` + ?f, 
+                                `resist_fire` = `resist_fire` + ?f, 
+                                `resist_water` = `resist_water` + ?f, 
+                                `resist_air` = `resist_air` + ?f, 
+                                `resist_earth` = `resist_earth` + ?f 
+                            WHERE `guid` = ?d", $count ,$hp ,$hp ,$count ,$bron ,$bron ,$bron ,$bron ,$bron ,$bron ,$bron ,$bron ,$this->guid);
           break;
         case 'int':
           $mf = $count * 0.5;
           $this->db->query("UPDATE `character_stats` 
-                             SET `int` = `int` + ?d, 
-                                 `mf_fire` = `mf_fire` + ?f, 
-                                 `mf_water` = `mf_water` + ?f, 
-                                 `mf_air` = `mf_air` + ?f, 
-                                 `mf_earth` = `mf_earth` + ?f, 
-                                 `mf_light` = `mf_light` + ?f, 
-                                 `mf_gray` = `mf_gray` + ?f, 
-                                 `mf_dark` = `mf_dark` + ?f 
-                             WHERE `guid` = ?d", $count ,$mf ,$mf ,$mf ,$mf ,$mf ,$mf ,$mf ,$this->guid);
+                            SET `int` = `int` + ?d, 
+                                `mf_fire` = `mf_fire` + ?f, 
+                                `mf_water` = `mf_water` + ?f, 
+                                `mf_air` = `mf_air` + ?f, 
+                                `mf_earth` = `mf_earth` + ?f, 
+                                `mf_light` = `mf_light` + ?f, 
+                                `mf_gray` = `mf_gray` + ?f, 
+                                `mf_dark` = `mf_dark` + ?f 
+                            WHERE `guid` = ?d", $count ,$mf ,$mf ,$mf ,$mf ,$mf ,$mf ,$mf ,$this->guid);
           break;
         case 'wis':
           $mp = $count * 10;
           $this->db->query("UPDATE `character_stats` 
-                             SET `wis` = `wis` + ?d, 
-                                 `mp` = `mp` + ?d, 
-                                 `mp_all` = `mp_all` + ?d 
-                             WHERE `guid` = ?d", $count ,$mp ,$mp ,$this->guid);
+                            SET `wis` = `wis` + ?d, 
+                                `mp` = `mp` + ?d, 
+                                `mp_all` = `mp_all` + ?d 
+                            WHERE `guid` = ?d", $count ,$mp ,$mp ,$this->guid);
           break;
         case 'spi':
           $this->db->query("UPDATE `character_stats` 
-                             SET `spi` = `spi` + ?d 
-                             WHERE `guid` = ?d", $count ,$this->guid);
+                            SET `spi` = `spi` + ?d 
+                            WHERE `guid` = ?d", $count ,$this->guid);
           break;
         default:
           return false;
@@ -1131,8 +1131,7 @@ class Equip extends Char
         $return .= "<a href='javascript:sellItem ($item_id);' onclick=\"if (confirm ('Вы уверены что хотите продать предмет $name за $s_price?')){return true;} else {return false;}\" class='nick'>продать за $s_price</a>";
       break;
       case 'mail_to':
-        global $mail;
-        $s_price = $mail -> getPrice($item_id)." кр.";
+        $s_price = $this->char->mail->getPrice($item_id)." кр.";
         $return .= "<td width='260' align='center'>";
         $return .= "<img src='img/items/$img' border='0'$color /><br><center style='padding-top: 4px;'>";
         $return .= "<a href='main.php?do=send_item&mail_to=$mail_guid&item_id=$item_id' onclick=\"if (confirm ('Отправить предмет $name?')){return true;} else {return false;}\" class='nick'>передать за $s_price</a>";
@@ -1144,7 +1143,7 @@ class Equip extends Char
         $return .= "<br><small>(".getFormatedTime($i_info['delivery_time'] + 5184000).")</small>";
       break;
       case 'money_in':
-        $name = sprintf ($name, $i_info['count']);
+        $name = sprintf($name, $i_info['count']);
         $price_s = "$i_info[count] кр.";
         $mail_id = $i_info['id'];
         $return .= "<td width='260' align='center'>";
@@ -1600,10 +1599,10 @@ class Equip extends Char
     if ($type == 1)
     {
       $q1 = $this->db->query("UPDATE `character_inventory` 
-                               SET `wear` = '1', 
-                                   `last_update` = ?d 
-                               WHERE `guid` = ?d 
-                                 and `id` = ?d", time () ,$guid ,$i_id);
+                              SET `wear` = '1', 
+                                  `last_update` = ?d 
+                              WHERE `guid` = ?d 
+                                and `id` = ?d", time () ,$guid ,$i_id);
       $q2 = $this->db->query("UPDATE `character_equip` SET ?# = ?d WHERE `guid` = ?d", $slot ,$i_id ,$guid);
     }
     else if ($type == -1)
@@ -2075,7 +2074,7 @@ class Chat extends Char
     
     $this->db->query("INSERT INTO `city_chat` (`sender`, `to`, `room`, `msg`, `class`, `date_stamp`, `city`) 
                       VALUES (?s, ?s, ?s, ?s, ?s, ?d, ?s)", $sender ,$char_db['login'] ,$char_db['room'] ,$text ,$class ,time () ,$char_db['city']);
-    echoScript("if(top.msg.updateMessages()) top.msg.updateMessages();");
+    echoScript("try {top.msg.updateMessages();} catch(e) {}");
   }
   /*Выполнение комманд в чате*/
   function executeCommand ($name, $message, $guid)
@@ -2524,7 +2523,7 @@ function returnAjax ()
 {
   $args = func_get_args();
   $str = implode ('A_D', $args);
-  die ($str);
+  die($str);
 }
 /*Получение место перехода*/
 function getError ($type = 'main', $loc = '')
@@ -2543,5 +2542,10 @@ function getGuid ($type = 'main', $loc = '')
     echoScript(getError($type, $loc), true);
   
   return $_SESSION['guid'];
+}
+/*Удаление перменных сессии*/
+function deleteSession ()
+{
+  unset($_SESSION['guid'], $_SESSION['bankСredit']);
 }
 ?>

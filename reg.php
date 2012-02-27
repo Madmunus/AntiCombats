@@ -278,6 +278,15 @@ echo "<script type='text/javascript'>$regfail</script>";
                     <br>В целях безопасности запрещена регистрация с @hotmail.com)</p></td>
                   </tr>
                   <tr>
+                    <td width="146" style="padding: 5px 0 10px 27px;">Ваш секретный вопрос:</td>
+                    <td><input type="text" name="secretquestion" class="inup" value="" size="30" maxlength="50"></td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 5px 0 10px 27px;">Ответ на секретный вопрос: </td>
+                    <td><input type="text" name="secretanswer" value="" class="inup" size="30" maxlength="50"></td>
+                  </tr>
+                  <tr><td colspan="2" style="padding: 5px 0 10px 27px;"><span class="style7"><small>(Если указаны вопрос и ответ, то высылка пароля на email будет производится лишь при правильном ответе)</small></span></td></tr>
+                  <tr>
                     <td><input onclick="window.history.go(-1);" type="button" class="btn" value="Вернуться"></td>
                     <td><input type="submit" class="btn" value="Продолжить"></td>
                   </tr>
@@ -287,8 +296,12 @@ echo "<script type='text/javascript'>$regfail</script>";
         case 4:
           if (!$_POST['email']) die ($error_text);
           $email = $_POST['email'];
+          $secretquestion = $_POST['secretquestion'];
+          $secretanswer = $_POST['secretanswer'];
           $code = rand (1000, 9999);
           $_SESSION['reg_email'] = $email;
+          $_SESSION['secretquestion'] = $secretquestion;
+          $_SESSION['secretanswer'] = $secretanswer;
 ?>
                 <form name="regstep4" action="reg.php?step=5" class="norm" method="post">
                 <table class="g" align="center" border="0" cellpadding="1" cellspacing="0" width="100%">
@@ -380,6 +393,8 @@ echo "<script type='text/javascript'>$regfail</script>";
           $reg_login = $_SESSION['reg_login'];
           $password = $_SESSION['reg_password'];
           $email = $_SESSION['reg_email'];
+          $secretquestion = htmlspecialchars($_SESSION['secretquestion']);
+          $secretanswer = htmlspecialchars($_SESSION['secretanswer']);
           $rules = $_POST['rules'];
           // $code = $_POST['secret_code'];
           // $code_loaded = $_POST['code_loaded'];
@@ -387,42 +402,42 @@ echo "<script type='text/javascript'>$regfail</script>";
           $sex = $_POST['sex'];
           $icq = $_POST['icq'];
           $hide_icq = requestVar('hide_icq', 0);
-          $town = (isset($_POST['city_n']) && $_POST['city_n'] != '') ?htmlspecialchars ($_POST['city_n']) :((isset($_POST['city'])) ?htmlspecialchars ($_POST['city']) :"");
+          $town = (isset($_POST['city_n']) && $_POST['city_n'] != '') ?htmlspecialchars($_POST['city_n']) :((isset($_POST['city'])) ?htmlspecialchars($_POST['city']) :"");
           $city = "dem";
           $deviz = $_POST['deviz'];
           $color = $_POST['color'];
           //elseif($code != $code_loaded){echo 'Ошибка при введении кода! <a href="?step=4">Назад</a><br>'; die();}
           $birthday = $_POST['birth_day'].".".$_POST['birth_month'].".".$_POST['birth_year'];
           $shape = ($sex == "male") ?"m/1.gif" :"f/1.gif";
-          unset ($_SESSION['reg_login'], $_SESSION['reg_password'], $_SESSION['reg_email']);
+          unset ($_SESSION['reg_login'], $_SESSION['reg_password'], $_SESSION['reg_email'], $_SESSION['secretquestion'], $_SESSION['secretanswer']);
           if ($adb->selectCell("SELECT COUNT(*) FROM `characters` WHERE `login` = ?s", $reg_login) == 0)
           {
             $guid = ($adb->selectCell("SELECT MAX(`guid`) FROM `characters`;")) + 1;
             $password = SHA1 ($guid.':'.$password);
-            $history = History::setGuidDB($guid);
+            $char = Char::initialization($guid, $adb);
             // Основная база
             $adb->query("INSERT INTO `characters` (`guid`, `login`, `login_sec`, `password`, `mail`, `sex`, `city`, `shape`, `reg_ip`) 
-                            VALUES (?d, ?s, ?s, ?s, ?s, ?s, ?s, ?s, ?s);", $guid ,$reg_login ,$reg_login ,$password ,$email ,$sex ,$city ,$shape ,$_SERVER['REMOTE_ADDR']);
+                         VALUES (?d, ?s, ?s, ?s, ?s, ?s, ?s, ?s, ?s);", $guid ,$reg_login ,$reg_login ,$password ,$email ,$sex ,$city ,$shape ,$_SERVER['REMOTE_ADDR']);
             // Характеристики
             $adb->query("INSERT INTO `character_stats` (`guid`) 
-                            VALUES (?d);", $guid);
+                         VALUES (?d);", $guid);
             // Дополнительные характеристики
             /* $adb->query("INSERT INTO `character_stats_plus` (`guid`) 
                             VALUES (?d);", $guid); */
             // Дополнительная информация
-            $adb->query("INSERT INTO `character_info` (`guid`, `name`, `icq`, `hide_icq`, `town`, `birthday`, `color`, `deviz`, `state`, `date`) 
-                            VALUES (?d, ?s, ?d, ?d, ?s, ?s, ?s, ?s, ?s, ?d);", $guid ,$name ,$icq ,$hide_icq ,$town ,$birthday ,$color ,$deviz ,$city ,time ());
+            $adb->query("INSERT INTO `character_info` (`guid`, `name`, `icq`, `secretquestion`, `secretanswer`, `hide_icq`, `town`, `birthday`, `color`, `deviz`, `state`, `date`) 
+                         VALUES (?d, ?s, ?d, ?s, ?s, ?d, ?s, ?s, ?s, ?s, ?s, ?d);", $guid ,$name ,$icq ,$secretquestion ,$secretanswer ,$hide_icq ,$town ,$birthday ,$color ,$deviz ,$city ,time());
             // Создание инвентаря
             $adb->query("INSERT INTO `character_equip` (`guid`) 
-                            VALUES (?d);", $guid);
+                         VALUES (?d);", $guid);
             // Создание баров
             $adb->query("INSERT INTO `character_bars` (`guid`) 
-                            VALUES (?d);", $guid);
+                         VALUES (?d);", $guid);
             // Предметы
             $adb->query("INSERT INTO `character_inventory` (`guid`, `item_template`, `tear_max`, `made_in`, `last_update`) 
-                            VALUES (?d, '920', '20', ?s, ?d);", $guid ,$city ,time ());
+                         VALUES (?d, '920', '20', ?s, ?d);", $guid ,$city ,time());
             echo "Регистрация персонажа $reg_login, прошла успешно!<br>Авторизируйтесь с <a href='index.php' class='us2'>главной страницы</a>.";
-            $history -> authorization(2, $city);
+            $char->history->authorization(2, $city);
           }
           else
             echo "Вы уже создали персонажа с таким логином!";

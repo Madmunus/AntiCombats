@@ -59,18 +59,15 @@ switch ($do)
   case 'items':
     if (!$login_mail)
     {
-      echo "<script>findlogin('Почтовые услуги', 'main.php', 'login_mail', '', '', '<input type=\"hidden\" value=\"items\" name=\"do\">', 1)</script>";
+      echo "<script>findLogin('Почтовые услуги', 'main.php', 'login_mail', '', '', '<input type=\"hidden\" value=\"items\" name=\"do\">', 1)</script>";
       break;
     }
     $mail_info = $adb->selectRow("SELECT `guid`, 
-                                          `login`, 
-                                          `city` 
-                                   FROM `characters` 
-                                   WHERE `login` = ?s or `guid` = ?s", $login_mail ,$login_mail) or $char->error->Map(203, $login_mail);
+                                         `login`, 
+                                         `city` 
+                                  FROM `characters` 
+                                  WHERE `login` = ?s or `guid` = ?s", $login_mail ,$login_mail) or $char->error->Map(203, $login_mail);
     $login_mail = $mail_info['guid'];
-    
-    if ($login_mail == $guid)
-      $char->error->Map(218);
 ?>
     К кому передавать: <?echo $char->info->character('mail', $login_mail);?> &nbsp;<input type="button" value="Сменить" onclick="findLogin('Почтовые услуги', 'main.php', 'login_mail', '', '', '<input type=hidden value=items name=do>', 0); return false;" class="nav"><br>
 <?
@@ -83,10 +80,7 @@ switch ($do)
 ?>
 <script type="text/javascript">
 $(function (){
-  if (c = getCookie ('section'))
-    section = c;
-  else
-    section = 1;
+  section = (c = getCookie('section')) ?c :1;
   showInventory(section, 'mail_to', '<?echo $login_mail;?>');
 });
 </script>
@@ -103,42 +97,42 @@ $(function (){
 <?
   break;
   case 'money':
-    if ($login_mail)
+    if (!$login_mail)
     {
-      $mail_info = $adb->selectRow("SELECT `guid`, 
-                                            `login`, 
-                                            `city` 
-                                     FROM `characters` 
-                                     WHERE `login` = ?s or `guid` = ?d", $login_mail ,$login_mail) or $char->error->Map(203, $login_mail);
-      $login_mail = $mail_info['guid'];
-      
-      if ($login_mail == $guid)
-        $char->error->Map(218);
+      echo "<script>findLogin('Почтовые услуги', 'main.php', 'login_mail', '', '', '<input type=\"hidden\" value=\"money\" name=\"do\">', 1)</script>";
+      break;
+    }
+    $mail_info = $adb->selectRow("SELECT `guid`, 
+                                         `login`, 
+                                         `city` 
+                                  FROM `characters` 
+                                  WHERE `login` = ?s or `guid` = ?d", $login_mail ,$login_mail) or $char->error->Map(203, $login_mail);
+    $login_mail = $mail_info['guid'];
 ?>
-      К кому передавать: <?echo $char->info->character('mail', $login_mail);?> &nbsp;<input type="button" value="Сменить" onclick="findLogin('Почтовые услуги', 'main.php', 'login_mail', '', '', '<input type=hidden value=money name=do>', 0); return false;" class="nav"><br>
+    К кому передавать: <?echo $char->info->character('mail', $login_mail);?> &nbsp;<input type="button" value="Сменить" onclick="findLogin('Почтовые услуги', 'main.php', 'login_mail', '', '', '<input type=hidden value=money name=do>', 0); return false;" class="nav"><br>
 <?
-      if ($city == $mail_info['city'])
-        echo "Находится в этом городе";
-      else
-        echo "Находится в $mail_info[city]";
-?>    <br>
-      <form action='?do=check&mail_to=<?echo $login_mail;?>' name='mail' method='post'>
-      <fieldset><legend><b>Передать кредиты</b></legend>
-        У вас на счету: <font color="#339900"><b><?echo $money;?></b></font> кр.<br>
-        Передать кредиты, минимально 1 кр. Комиссия составит 5%<br>
-        Укажите передаваемую сумму: <input type="text" name="send_sum" maxlength="8" size="6"><input type="submit" class="nav" value="Передать" name="send_money"><br>
-      </fieldset>
-      <fieldset><legend><b>Телеграф</b></legend>
-        Услуга платная: <B>0.1 кр.</b><br>
-        Сообщение: (максимально 100 символов)<br>
-        <input type="text" name="telegraph" maxlength="100" size="65"><input type="submit" value="Отправить" name="is_telegraph" class="nav"><br>
-      </fieldset>
-      <fieldset><legend><b>Письмо</b></legend>
-        Услуга платная: <b>1 кр.</b><br>
-        Сообщение: (время доставки 30 мин.)<br>
-        <textarea id="letter" name="letter" cols="65" rows="10" onkeyup="ch_l ();" onchange="ch_l ();"></textarea><br>(осталось <span id="count1">500</SPAN> симв.)<input type="submit" value="Отправить" name="is_letter" class="nav"><br>
-      </fieldset>
-      </form>
+    if ($city == $mail_info['city'])
+      echo "Находится в этом городе";
+    else
+      echo "Находится в $mail_info[city]";
+?>  <br>
+    <form action='?do=check&mail_to=<?echo $login_mail;?>' name='mail' method='post'>
+    <fieldset><legend><b>Передать кредиты</b></legend>
+      У вас на счету: <font color="#339900"><b><?echo $money;?></b></font> кр.<br>
+      Передать кредиты, минимально 1 кр. Комиссия составит 5%<br>
+      Укажите передаваемую сумму: <input type="text" name="send_sum" maxlength="8" size="6"><input type="submit" class="nav" value="Передать" name="send_money"><br>
+    </fieldset>
+    <fieldset><legend><b>Телеграф</b></legend>
+      Услуга платная: <B>0.1 кр.</b><br>
+      Сообщение: (максимально 100 символов)<br>
+      <input type="text" name="telegraph" maxlength="100" size="65"><input type="submit" value="Отправить" name="is_telegraph" class="nav"><br>
+    </fieldset>
+    <fieldset><legend><b>Письмо</b></legend>
+      Услуга платная: <b>1 кр.</b><br>
+      Сообщение: (время доставки 30 мин.)<br>
+      <textarea id="letter" name="letter" cols="65" rows="10" onkeyup="ch_l ();" onchange="ch_l ();"></textarea><br>(осталось <span id="count1">500</SPAN> симв.)<input type="submit" value="Отправить" name="is_letter" class="nav"><br>
+    </fieldset>
+    </form>
 <script type="text/javascript">
 function ch_l ()
 {
@@ -147,32 +141,29 @@ function ch_l ()
 ch_l();
 </script>
 <?
-    }
-    else
-      echo "<script>findlogin('Почтовые услуги', 'main.php', 'login_mail', '', '', '<input type=\"hidden\" value=\"money\" name=\"do\">', 1)</script>";
   break;
   case 'report':
   break;
   case 'get_mail':
     $rows1 = $adb->select("SELECT * 
-                            FROM `city_mail_items` AS `m` 
-                            LEFT JOIN `character_inventory` AS `c` 
-                            ON `m`.`item_id` = `c`.`id` 
-                            LEFT JOIN `item_template` AS `i` 
-                            ON `c`.`item_template` = `i`.`entry` 
-                            WHERE `m`.`to` = ?d 
-                              and `m`.`delivery_time` < ?d 
-                              and `c`.`mailed` = '1' 
-                            ORDER BY `m`.`delivery_time`;", $guid ,time ());
+                           FROM `city_mail_items` AS `m` 
+                           LEFT JOIN `character_inventory` AS `c` 
+                           ON `m`.`item_id` = `c`.`id` 
+                           LEFT JOIN `item_template` AS `i` 
+                           ON `c`.`item_template` = `i`.`entry` 
+                           WHERE `m`.`to` = ?d 
+                             and `m`.`delivery_time` < ?d 
+                             and `c`.`mailed` = '1' 
+                           ORDER BY `m`.`delivery_time`;", $guid ,time ());
     $rows2 = $adb->select("SELECT * 
-                            FROM `city_mail_items` AS `m` 
-                            LEFT JOIN `item_template` AS `i` 
-                            ON `m`.`item_id` = `i`.`entry` 
-                            WHERE `m`.`to` = ?d 
-                              and `m`.`delivery_time` < ?d 
-                              and `m`.`item_id` = '1000' 
-                            ORDER BY `m`.`delivery_time`;", $guid ,time ());
-    if (count ($rows1) == 0 && count ($rows2) == 0 )
+                           FROM `city_mail_items` AS `m` 
+                           LEFT JOIN `item_template` AS `i` 
+                           ON `m`.`item_id` = `i`.`entry` 
+                           WHERE `m`.`to` = ?d 
+                             and `m`.`delivery_time` < ?d 
+                             and `m`.`item_id` = '1000' 
+                           ORDER BY `m`.`delivery_time`;", $guid ,time ());
+    if (count($rows1) == 0 && count($rows2) == 0 )
     {
       echo "<table width='100%' cellspacing='1' cellpadding='2' bgcolor='#A5A5A5'><tr><td bgcolor='#e2e0e0' align='center'>$lang[empty]</td></tr></table>";
       break;

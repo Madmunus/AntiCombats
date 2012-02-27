@@ -22,17 +22,8 @@ $char->test->Guid('ajax');
 $char->test->Afk();
 
 $lang = $char->getLang();
-$char_db = $char->getChar('char_db', '*');
-$char_stats = $char->getChar('char_stats', '*');
-$char_feat = array_merge ($char_db, $char_stats);
-
-$login = $char_feat['login'];
-$city = $char_feat['city'];
-$room = $char_feat['room'];
-$shut = $char_feat['shut'];
-$chat_filter = $char_feat['chat_filter'];
-$chat_sys = $char_feat['chat_sys'];
-$chat_update = $char_feat['chat_update'];
+$char_db = $char->getChar('char_db', 'login', 'city', 'room', 'shut', 'chat_filter', 'chat_sys', 'chat_update');
+ArrToVar($char_db);
 
 $do = requestVar('do');
 switch ($do)
@@ -78,7 +69,7 @@ switch ($do)
     
     $adb->query("UPDATE `characters` SET `afk` = '0' WHERE `guid` = ?d", $guid);
     if ($adb->query("INSERT INTO `city_chat` (`sender`, `to`, `room`, `msg`, `class`, `date_stamp`, `city`) 
-                      VALUES (?s, ?s, ?s, ?s, ?s, ?d, ?s)", $login ,$to ,$room ,"<font color=$color>$h</font>" ,$class ,time () ,$city))
+                     VALUES (?s, ?s, ?s, ?s, ?s, ?d, ?s)", $login ,$to ,$room ,"<font color=$color>$h</font>" ,$class ,time () ,$city))
       returnAjax('complete');
   break;
   /*Users*/
@@ -197,6 +188,22 @@ switch ($do)
       }
     }
     returnAjax($send, $chat_update);
+  break;
+  case 'change_button':
+    $but = requestVar('but');
+    $val = requestVar('val');
+    switch ($but)
+    {
+      default:
+        $val = ($val == 'false' || $val === 0) ?0 :1;
+      break;
+      case 'slow':
+        $val = ($val == 'false' || $val === 0) ?10 :60;
+        $but = 'update';
+      break;
+    }
+    $adb->query("UPDATE `characters` SET ?# = ?d WHERE `guid` = ?d", 'chat_'.$but ,$val ,$guid);
+    returnAjax('complete');
   break;
 }
 ?>

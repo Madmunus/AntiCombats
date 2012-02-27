@@ -173,6 +173,5 @@ function cleanChat ()
 
 function exit ()
 {
-  if (confirm("Вы уверены что хотите выйти из игры?"))
-    linkAction('exit');
+  frames.main.dialogconfirm('Подтверждение', "top.linkAction('exit')", '<center>Вы уверены что хотите выйти из игры?</center>', 6);
 }

@@ -108,33 +108,33 @@ switch ($do)
       default:
       case 'inv':
         $rows = $adb->select("SELECT * 
-                               FROM `character_inventory` AS `c` 
-                               LEFT JOIN `item_template` AS `i` 
-                               ON `c`.`item_template` = `i`.`entry` 
-                               WHERE `i`.`section` = ?s 
-                                 and `c`.`guid` = ?d 
-                                 and `c`.`wear` = '0' 
-                                 and `c`.`mailed` = '0' 
-                               ORDER BY `c`.`last_update` DESC", $data['sections'][$section] ,$guid);
+                              FROM `character_inventory` AS `c` 
+                              LEFT JOIN `item_template` AS `i` 
+                              ON `c`.`item_template` = `i`.`entry` 
+                              WHERE `i`.`section` = ?s 
+                                and `c`.`guid` = ?d 
+                                and `c`.`wear` = '0' 
+                                and `c`.`mailed` = '0' 
+                              ORDER BY `c`.`last_update` DESC", $data['sections'][$section] ,$guid);
       break;
       case 'mail_to':
         $rows = $adb->select("SELECT * 
-                               FROM `character_inventory` AS `c` 
-                               LEFT JOIN `item_template` AS `i` 
-                               ON `c`.`item_template` = `i`.`entry` 
-                               WHERE (`i`.`item_flags` & '1') 
-                                 and `c`.`wear` = '0' 
-                                 and `c`.`mailed` = '0' 
-                                 and `i`.`section` = ?s 
-                                 and `c`.`guid` = ?d 
-                                 and `i`.`price_euro` = '0' 
-                               ORDER BY `c`.`last_update` DESC;", $data['sections'][$section] ,$guid);
+                              FROM `character_inventory` AS `c` 
+                              LEFT JOIN `item_template` AS `i` 
+                              ON `c`.`item_template` = `i`.`entry` 
+                              WHERE (`i`.`item_flags` & '1') 
+                                and `c`.`wear` = '0' 
+                                and `c`.`mailed` = '0' 
+                                and `i`.`section` = ?s 
+                                and `c`.`guid` = ?d 
+                                and `i`.`price_euro` = '0' 
+                              ORDER BY `c`.`last_update` DESC;", $data['sections'][$section] ,$guid);
       break;
     }
     if (count($rows) > 0)
     {
       $inventory = '';
-      $i = true;
+      $i = 1;
       foreach ($rows as $item_info)
       {
         $inventory .= $char->equip->showItem($item_info, $type, $i, $mail_guid);
@@ -150,14 +150,14 @@ switch ($do)
     $section = requestVar('section', 1, 7);
     $sort = ($_POST['num']) ?' DESC' :'';
     $items = $adb->selectCol("SELECT `c`.`id` AS ARRAY_KEY, `i`.?# 
-                               FROM `character_inventory` AS `c` 
-                               LEFT JOIN `item_template` AS `i` 
-                               ON `c`.`item_template` = `i`.`entry` 
-                               WHERE `c`.`guid` = ?d 
-                                 and `c`.`wear` = '0' 
-                                 and `c`.`mailed` = '0' 
-                                 and `i`.`section` = ?s 
-                               ORDER BY `i`.?#$sort", $type ,$guid ,$data['sections'][$section] ,$type);
+                              FROM `character_inventory` AS `c` 
+                              LEFT JOIN `item_template` AS `i` 
+                              ON `c`.`item_template` = `i`.`entry` 
+                              WHERE `c`.`guid` = ?d 
+                                and `c`.`wear` = '0' 
+                                and `c`.`mailed` = '0' 
+                                and `i`.`section` = ?s 
+                              ORDER BY `i`.?#$sort", $type ,$guid ,$data['sections'][$section] ,$type);
     $i = 0;
     foreach ($items as $id => $value)
     {

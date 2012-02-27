@@ -29,19 +29,21 @@ ArrToVar($char_db);
 <link rel="StyleSheet" href="styles/chat.css" type="text/css" />
 <script src="scripts/jquery.js" type="text/javascript"></script>
 <script type="text/javascript">
-top.checkGame();
+try {top.checkGame();} catch(e) {location.href = 'index.php';}
 
 var chat = new Array ();
-chat['filter'] = (<?echo $chat_filter;?>) ?false :true;
-chat['sys'] = (<?echo $chat_sys;?>) ?false :true;
-chat['slow'] = (<?echo $chat_update;?> == 10) ?true :false;
-chat['translit'] = (<?echo $chat_translit;?>) ?false :true;
+chat['filter'] = <?echo $chat_filter;?>;
+chat['sys'] = <?echo $chat_sys;?>;
+chat['slow'] = (<?echo $chat_update;?> == 10) ?false :true;
+chat['translit'] = <?echo $chat_translit;?>;
 
 function changeButtonState (button)
 {
   var src = (chat[button]) ?'img/talk/b_'+button+'_off.gif' :'img/talk/b_'+button+'_on.gif';
   chat[button] = !chat[button];
-  $('#'+button).attr('src', src);
+  $.post('ajax_chat.php', {'do': 'change_button', 'but': button, 'val': chat[button]}, function (data){
+    $('#'+button).attr('src', src);
+	});
 }
 
 function sendMessage ()
@@ -113,8 +115,6 @@ function smiles ()
 }
 
 $(function (){
-  for (var key in chat)
-    changeButtonState(key);
   rslength();
   $('.button').live('click', function (){
     if (id = $(this).attr('id'))
@@ -141,10 +141,10 @@ $(window).resize(function (){rslength();});
 <?
   echo '<span id="buttons1">';
   echo '<img class="button" src="img/talk/b_clear.gif" title="Очистить строку ввода/Чат" onclick="clean();" />';
-  echo '<img class="button" src="img/talk/b_filter_off.gif" id="filter" title="Показывать в чате только сообщения адресованные мне" />';
-  echo '<img class="button" src="img/talk/b_sys_off.gif" id="sys" title="Показывать в чате системные сообщения" />';
-  echo '<img class="button" src="img/talk/b_slow_off.gif" id="slow" title="Медленное обновление чата (раз в минуту)" />';
-  echo '<img class="button" src="img/talk/b_translit_off.gif" id="translit" title="Преобразовывать транслит в русский текст (правила перевода см. в энциклопедии)" />';
+  echo '<img class="button" src="img/talk/b_filter_'.(($chat_filter) ?'on' :'off').'.gif" id="filter" title="Показывать в чате только сообщения адресованные мне" />';
+  echo '<img class="button" src="img/talk/b_sys_'.(($chat_sys) ?'on' :'off').'.gif" id="sys" title="Показывать в чате системные сообщения" />';
+  echo '<img class="button" src="img/talk/b_slow_'.(($chat_update == 60) ?'on' :'off').'.gif" id="slow" title="Медленное обновление чата (раз в минуту)" />';
+  echo '<img class="button" src="img/talk/b_translit_'.(($chat_translit) ?'on' :'off').'.gif" id="translit" title="Преобразовывать транслит в русский текст (правила перевода см. в энциклопедии)" />';
   //echo '<img class="button" src="img/talk/b_sound_off.gif" id="b_sound" title="Не работает" />';
   echo '<object><embed width="1" height="1" src="img/talk/Sound2.swf" quality="high" scale="noscale" wmode="transparent" id="sound" align="middle" allowScriptAccess="always" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" /></object>';
   echo '<img class="button" src="img/talk/b_smile.gif" title="Смайлики" onclick="smiles();" />';
