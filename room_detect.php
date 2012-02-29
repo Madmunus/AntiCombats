@@ -11,6 +11,8 @@ switch ($room)
   case 'fairstreet':           include("globalmap.php");
   break;
   case 'castle':
+  case 'perehod':
+  case 'km_0':
   case 'km_1':
   case 'km_2':
   case 'km_3':

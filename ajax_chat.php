@@ -163,7 +163,7 @@ switch ($do)
                 $send .= "<font class='date2'>$date</font>$msg_full";
             }
           }
-          else
+          else if (!$chat_filter)
             $send .= "<font class='date'>$date</font>$msg_full";
         break;
         case 'private':

@@ -22,7 +22,6 @@ echo ($f_style) ?"<br>$lang[style] <b>".$lang['style_'.$f_style]."</b>" :'';
 echo ($clan) ?"<br>$lang[clan] $clan" :'';
 $orden_dis = ($orden == 1) ?"$lang[orden_pal] - " :(($orden == 2) ?"$lang[orden_dark] - " :"");
 echo ($orden == 1 || $orden == 2) ?"<br><strong>$orden_dis$stat_rang</strong><br></small>" :"<br><small>$lang[status] <strong>".$lang['status_'.$status]."</strong>";
-$return_status = ((time () - $char_db['last_return']) >= $char_db['return_time']) | false;
 ?>
     </td>
   </tr>

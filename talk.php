@@ -50,7 +50,7 @@ function sendMessage ()
 {
   var message = $("#text").val();
   if (chat['translit'])
-    message = translate (message);
+    message = translate(message);
   $.post('ajax_chat.php', 'do=sendmessage&h='+message, function (data){
     var result = top.exploder(data);
     top.msg.updateMessages();
@@ -151,7 +151,7 @@ $(window).resize(function (){rslength();});
   echo '</span>';
 ?>
 </td>
-<td id="T5"><img src="img/1x1.gif" width="16" /></td>
+<td id="T5"><img src="img/1x1.gif" width="15" /></td>
 <td id="T6">
 <?
   echo '<span id="buttons2">';

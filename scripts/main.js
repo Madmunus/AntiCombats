@@ -268,6 +268,12 @@ $(function (){
   $('#refresh').live('click', function (){
     location.reload();
   });
+  $('#forum').live('click', function (){
+    window.open('/forum');
+  });
+  $('#fights').live('click', function (){
+    location.href = 'zayavka.php';
+  });
   $(document).mousemove(function (e){
     pos.x = e.pageX;
     pos.y = e.pageY;

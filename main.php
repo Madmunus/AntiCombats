@@ -139,7 +139,7 @@ switch ($action)
     
     $char->test->Go($room_go);
     
-    $adb->query("UPDATE `characters` SET `room` = ?s, `last_go` = ?d, `last_room` = ?s WHERE `guid` = ?d", $room_go ,time () ,$room ,$guid);
+    $adb->query("UPDATE `characters` SET `room` = ?s, `last_go` = ?d, `last_room` = ?s WHERE `guid` = ?d", $room_go ,time() ,$room ,$guid);
     $adb->query("UPDATE `online` SET `room` = ?s WHERE `guid` = ?d", $room_go ,$guid);
     echoScript("top.cleanChat(); parent.user.updateUsers(); parent.msg.updateMessagesGo(); location.href = 'main.php';");
   break;
@@ -279,7 +279,7 @@ switch ($action)
   break;
   case 'exit':
     $adb->query("DELETE FROM `online` WHERE `guid` = ?d", $guid);
-    $adb->query("UPDATE `characters` SET `last_time` = ?d WHERE `guid` = ?d", time () ,$guid);
+    $adb->query("UPDATE `characters` SET `last_time` = ?d WHERE `guid` = ?d", time() ,$guid);
     deleteSession();
     echoScript(getError(), true);
   break;

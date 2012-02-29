@@ -26,7 +26,7 @@ function snow_create ()
 	snow_x = getRandomInt(0, $("#ione").width()-20);
 	snow_img = snow_src[Math.floor(Math.random()*snow_src.length)];
 	snow_elem = '<img id="snow'+snow_id+'" style="position: absolute; left: '+snow_x+'px; top: 0px; z-index: 102" src="'+snow_img+'" />';
-	$("#ione").append(snow_elem);
+	$('#ione').append(snow_elem);
 	snow_move(snow_id, snow_img);
 	snow_id++;
 }
@@ -37,14 +37,14 @@ function snow_move (id, type)
 	var change_x = (type == 'img/snow2.gif') ?getRandomInt(-2, 2) :getRandomInt(-1, 1);
 	var change_y = (type == 'img/snow2.gif') ?getRandomInt(15, 20) :getRandomInt(20, 25);
 	var speed = (type == 'img/snow2.gif') ?snow_speed1 :snow_speed2;
-	if ((parseInt($('#snow'+id).css('top')) + change_y) > ($("#ione").height() - 40))
+	if ((parseInt($('#snow'+id).css('top')) + change_y) > ($('#ione').height() - 40))
 	{
-		change_y = $("#ione").height() - 40 - parseInt($('#snow'+id).css('top'));
+		change_y = $('#ione').height() - 40 - parseInt($('#snow'+id).css('top'));
 		remove = true;
 	}
-	if ((parseInt($('#snow'+id).css('left')) + change_x) > $("#ione").width())
+	if ((parseInt($('#snow'+id).css('left')) + change_x) > $('#ione').width())
 	{
-		change_x = $("#ione").width() - parseInt($('#snow'+id).css('left'));
+		change_x = $('#ione').width() - parseInt($('#snow'+id).css('left'));
 		remove = true;
 	}
 	if ((parseInt($('#snow'+id).css('left')) + change_x) < 0)
@@ -64,4 +64,7 @@ function snow_move (id, type)
 	});
 }
 
-$(document).ready(snow_start);
+$(function (){
+  $('#ione').append('<div id="snow"></div>');
+  snow_start();
+});

@@ -607,22 +607,22 @@ class Test extends Char
                                         WHERE `up` = ?d", $next_up_id);
     list ($next_level, $next_exp, $next_ups, $next_skills, $next_money, $next_vit, $add_bars, $next_status) = array_values ($exp_table);
     $this->db->query("UPDATE `characters` 
-                       SET `next_up` = ?d, 
-                           `money` = `money` + ?d 
-                       WHERE `guid` = ?d", $next_exp ,$next_money ,$this->guid);
+                      SET `next_up` = ?d, 
+                          `money` = `money` + ?d 
+                      WHERE `guid` = ?d", $next_exp ,$next_money ,$this->guid);
     $this->db->query("UPDATE `character_stats` 
-                       SET `ups` = `ups` + ?d, 
-                           `skills` = `skills` + ?d 
-                       WHERE `guid` = ?d", $next_ups ,$next_skills ,$this->guid);
+                      SET `ups` = `ups` + ?d, 
+                          `skills` = `skills` + ?d 
+                      WHERE `guid` = ?d", $next_ups ,$next_skills ,$this->guid);
     $this->char->history->transfers('Get', "$next_money кр.", $_SERVER['REMOTE_ADDR'], 'Level');
     
     if ($next_level <= $char_db['level'])
       return;
     
     $this->db->query("UPDATE `characters` 
-                       SET `level` = ?d, 
-                           `status` = ?s 
-                       WHERE `guid` = ?d", $next_level ,$next_status ,$this->guid);
+                      SET `level` = ?d, 
+                          `status` = ?s 
+                      WHERE `guid` = ?d", $next_level ,$next_status ,$this->guid);
     $this->changeStats('vit', $next_vit);
     if ($add_bars)
     {
@@ -644,19 +644,19 @@ class Test extends Char
   {
     $speed = $this->getChar('char_db', 'speed');
     $ld = $this->db->selectRow("SELECT `time`, 
-                                        `destenation`, 
-                                        `dest_game`, 
-                                        `len`, 
-                                        `napr` 
-                                 FROM `goers` 
-                                 WHERE `guid` = ?d", $this->guid);
+                                       `destenation`, 
+                                       `dest_game`, 
+                                       `len`, 
+                                       `napr` 
+                                FROM `goers` 
+                                WHERE `guid` = ?d", $this->guid);
     if (!$ld)
       return;
     
     list ($all_time, $dest_g, $dest, $len, $napr) = array_values ($ld);
     $to_go = $all_time - time();
-    $to_go_sec = intval (($all_time - time()));  /*seconds*/
-    $time_to_go = intval ($len / $speed * 3600); /*секунд идти*/
+    $to_go_sec = intval(($all_time - time()));  /*seconds*/
+    $time_to_go = intval($len / $speed * 3600); /*секунд идти*/
     $atg = $time_to_go - $to_go_sec;
     $len_done = getMoney($speed * $atg / 3600);
     $speed_form = getMoney($speed / 1000);
@@ -670,7 +670,7 @@ class Test extends Char
          . "Скорость: <b>$speed_Form(км/час)</b><br>"
          . "Осталось времени: <b>".getFormatedTime($all_time)."</b><br><br>"
          . "<input type='button' onclick=\"location.reload();\" value='Обновить' id='refresh' size='20' class='anketa' style='background-color: #e4e4e4;'>";
-      die ();
+      die();
     }
     else
     {
@@ -681,9 +681,9 @@ class Test extends Char
         $room = "forest";
       
       $this->db->query("UPDATE `characters` 
-                         SET `city` = ?s, 
-                             `room` = ?s 
-                         WHERE `guid` = ?d", $dest ,$room ,$this->guid);
+                        SET `city` = ?s, 
+                            `room` = ?s 
+                        WHERE `guid` = ?d", $dest ,$room ,$this->guid);
       $this->db->query("UPDATE `character_stats` SET `walk` = `walk` + ?d WHERE `guid` = ?d", $walk_coef ,$this->guid);
       $this->db->query("DELETE FROM `goers` WHERE `guid` = ?d", $this->guid);
       echoScript("location.href = 'main.php?action=go&room_go=$room';", true);
@@ -698,9 +698,9 @@ class Test extends Char
     $char_db = $this->getChar('char_db', 'room', 'city', 'sex', 'level', 'last_go', 'prision');
     $char_stats = $this->getChar('char_stats', 'mass', 'maxmass');
     $time_to_go = $this->char->city->getRoom($char_db['room'], $char_db['city'], 'time_to_go');
-    $room_info = $this->char->city->getRoom($room_go, $char_db['city'], 'room', 'from', 'min_level', 'need_orden', 'sex') or $this->char->error->Map(102);
+    $room_info = $this->char->city->getRoom($room_go, $char_db['city'], 'room', 'from', 'min_level', 'max_level', 'need_orden', 'sex') or $this->char->error->Map(102);
     
-    list ($room_go, $from, $min_level, $need_orden, $need_sex) = array_values ($room_info);
+    list ($room_go, $from, $min_level, $max_level, $need_orden, $need_sex) = array_values ($room_info);
     
     if ($char_db['prision'] != 0)
       $this->char->error->Map(100);
@@ -710,6 +710,9 @@ class Test extends Char
     
     if ($char_db['level'] < $min_level)
       $this->char->error->Map(101, ($min_level - 1));
+    
+    if ($char_db['level'] > $max_level)
+      $this->char->error->Map(109, $max_level);
     
     if ($need_orden)
       $this->char->error->Map(102);
@@ -1780,6 +1783,44 @@ class City extends Char
       return $this->db->selectCell("SELECT ?# FROM `server_cities` WHERE city = ?s", $args ,$city);
     else
       return $this->db->selectRow("SELECT ?# FROM `server_cities` WHERE city = ?s", $args ,$city);
+  }
+  /*Информация по комнате на карте*/
+  function showRoomOnMap ($id)
+  {
+    $char_db = $this->getChar('char_db', 'room', 'city');
+    $name = $this->getRoom($id, $char_db['city'], 'name');
+    $flag = ($char_db['room'] == $id) ?"<img src='img/icon/flag2.gif' width='20' height='20' alt='Вы находитесь здесь' align='right'>" :'';
+    echo $flag."<strong>$name</strong> (<strong>".$this->getRoomOnline($id, 'map')."</strong>)";
+  }
+  /*Добавление кнопок в клубе*/
+  function addButtons ($loc = 'castle')
+  {
+    $lang = $this->getLang();
+    $char_db = $this->getChar('char_db', 'room', 'city', 'last_return', 'return_time');
+    $return_status = ((time() - $char_db['last_return']) >= $char_db['return_time']) | false;
+    $format = ($loc == 'castle') ?'<input type="button" class="btn2" value="%1$s" %2$s /> ' :'<span class="buttons_on_image" %2$s>%1$s</span>&nbsp;';
+    $arr = $this->getRoom($char_db['room'], $char_db['city'], 'buttons');
+    $buttons = explode (',', $arr);
+    foreach ($buttons as $button)
+    {
+      switch ($button)
+      {
+        default:       $values = "";
+        break;
+        case 'fights': $values = array($lang['fights'], "id='fights' style='font-weight: bold; width: 102px;'");
+        break;
+        case 'return': $values = ($return_status) ?array($lang['return_b'], "id='link' link='return' style='font-weight: bold; width: 102px;'") :"";
+        break;
+        case 'map':    $values = array($lang['map'], "id='link' link='map' style='font-weight: bold; width: 102px;'");
+        break;
+        case 'forum':  $values = array($lang['forum'], "id='forum'");
+        break;
+        case 'hint':   $values = array($lang['hint'], "id='hint' link='top' style='width: 102px;'");
+        break;
+      }
+      if (is_array($values))
+        vprintf ($format, $values);
+    }
   }
 }
 /*Функции почты*/

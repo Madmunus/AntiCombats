@@ -1,49 +1,52 @@
-hr 					{height: 1px;}
-img.passage 			{cursor: pointer;}
-.map				{position: relative; padding-bottom: 5px;}
-.map_klub1			{position: absolute; z-index: 90; left: 66px; top: 115px; width: 56px; height: 13px;}
-.map_klub2			{position: absolute; z-index: 90; left: 216px; top: 41px; width: 58px; height: 49px;}
-.map_klub3			{position: absolute; z-index: 90; left: 312px; top: 168px; width: 123px; height: 31px;}
-.map_klub4			{position: absolute; z-index: 90; left: 59px; top: 169px; width: 123px; height: 31px;}
-.map_klub5			{position: absolute; z-index: 90; left: 312px; top: 48px; width: 123px; height: 30px;}
-.map_klub6			{position: absolute; z-index: 90; left: 52px; top: 47px; width: 123px; height: 30px;}
-.map_klub7			{position: absolute; z-index: 90; left: 196px; top: 148px; width: 103px; height: 47px;}
-.map_bk				{position: absolute; z-index: 90; left: 184px; top: 94px; width: 120px; height: 35px;}
-.map_2stair			{position: absolute; z-index: 90; left: 29px; top: 115px; width: 120px; height: 35px;}
-.map_sec1			{position: absolute; z-index: 90; left: 23px; top: 174px; width: 91px; height: 43px;}
-.map_sec2			{position: absolute; z-index: 90; left: 36px; top: 40px; width: 63px; height: 40px;}
-.map_sec3			{position: absolute; z-index: 90; left: 119px; top: 175px; width: 101px; height: 37px;}
-.map_sec4			{position: absolute; z-index: 90; left: 391px; top: 120px; width: 89px; height: 32px;}
-.map_sec5			{position: absolute; z-index: 90; left: 282px; top: 174px; width: 122px; height: 31px;}
-.map_sec6			{position: absolute; z-index: 90; left: 305px; top: 50px; width: 123px; height: 32px;}
-.map_sec7			{position: absolute; z-index: 90; left: 122px; top: 52px; width: 123px; height: 39px;}
-.dem_club			{position: absolute; z-index: 90; left: 68px; top: 0px; width: 160px; height: 124px;}
-.dem_shop			{position: absolute; z-index: 90; left: 226px; top: 31px; width: 71px; height: 99px;}
-.dem_repair			{position: absolute; z-index: 90; left: 269px; top: 69px; width: 69px; height: 59px;}
-.dem_optshop		{position: absolute; z-index: 90; left: 397px; top: 80px; width: 50px; height: 70px;}
-.dem_dastman		{position: absolute; z-index: 90; left: 410px; top: 146px; width: 44px; height: 87px;}
-.dem_station		{position: absolute; z-index: 90; left: 101px; top: 128px; width: 99px; height: 85px;}
-.dem_lsh			{position: absolute; z-index: 91; left: 110px; top: 164px; width: 45px; height: 43px;}
-.dem_dungeon		{position: absolute; z-index: 90; left: 337px; top: 48px; width: 42px; height: 35px;}
-.dem_post			{position: absolute; z-index: 90; left: 187px; top: 119px; width: 61px; height: 80px;}
-.dem_stellav		{position: absolute; z-index: 90; left: 40px; top: 75px; width: 75px; height: 90px;}
-.dem_comshop		{position: absolute; z-index: 90; left: 275px; top: 134px; width: 63px; height: 60px;}
-.dem_temple			{position: absolute; z-index: 90; left: 350px; top: 85px; width: 57px; height: 83px;}
+hr                         {height: 1px;}
+img#passage   {cursor: pointer;}
+.map                    {position: relative; padding-bottom: 5px;}
+.map_klub1      {position: absolute; z-index: 90; left: 66px; top: 115px; width: 56px; height: 13px;}
+.map_klub2      {position: absolute; z-index: 90; left: 216px; top: 41px; width: 58px; height: 49px;}
+.map_klub3      {position: absolute; z-index: 90; left: 312px; top: 168px; width: 123px; height: 31px;}
+.map_klub4      {position: absolute; z-index: 90; left: 59px; top: 169px; width: 123px; height: 31px;}
+.map_klub5      {position: absolute; z-index: 90; left: 312px; top: 48px; width: 123px; height: 30px;}
+.map_klub6      {position: absolute; z-index: 90; left: 52px; top: 47px; width: 123px; height: 30px;}
+.map_klub7      {position: absolute; z-index: 90; left: 196px; top: 148px; width: 103px; height: 47px;}
+.map_zal1        {position: absolute; z-index: 90; left: 81px; top: 102px; width: 88px; height: 15px;}
+.map_zal2        {position: absolute; z-index: 90; left: 264px; top: 106px; width: 175px; height: 37px;}
+.map_zal3        {position: absolute; z-index: 90; left: 47px; top: 120px; width: 135px; height: 29px;}
+.map_bk             {position: absolute; z-index: 90; left: 184px; top: 94px; width: 120px; height: 35px;}
+.map_2stair    {position: absolute; z-index: 90; left: 29px; top: 115px; width: 120px; height: 35px;}
+.map_sec1         {position: absolute; z-index: 90; left: 23px; top: 174px; width: 91px; height: 43px;}
+.map_sec2         {position: absolute; z-index: 90; left: 36px; top: 40px; width: 63px; height: 40px;}
+.map_sec3         {position: absolute; z-index: 90; left: 119px; top: 175px; width: 101px; height: 37px;}
+.map_sec4         {position: absolute; z-index: 90; left: 391px; top: 120px; width: 89px; height: 32px;}
+.map_sec5         {position: absolute; z-index: 90; left: 282px; top: 174px; width: 122px; height: 31px;}
+.map_sec6         {position: absolute; z-index: 90; left: 305px; top: 50px; width: 123px; height: 32px;}
+.map_sec7         {position: absolute; z-index: 90; left: 122px; top: 52px; width: 123px; height: 39px;}
+.dem_club         {position: absolute; z-index: 90; left: 68px; top: 0px; width: 160px; height: 124px;}
+.dem_shop         {position: absolute; z-index: 90; left: 226px; top: 31px; width: 71px; height: 99px;}
+.dem_repair    {position: absolute; z-index: 90; left: 269px; top: 69px; width: 69px; height: 59px;}
+.dem_optshop  {position: absolute; z-index: 90; left: 397px; top: 80px; width: 50px; height: 70px;}
+.dem_dastman  {position: absolute; z-index: 90; left: 410px; top: 146px; width: 44px; height: 87px;}
+.dem_station  {position: absolute; z-index: 90; left: 101px; top: 128px; width: 99px; height: 85px;}
+.dem_lsh           {position: absolute; z-index: 91; left: 110px; top: 164px; width: 45px; height: 43px;}
+.dem_dungeon  {position: absolute; z-index: 90; left: 337px; top: 48px; width: 42px; height: 35px;}
+.dem_post         {position: absolute; z-index: 90; left: 187px; top: 119px; width: 61px; height: 80px;}
+.dem_stellav  {position: absolute; z-index: 90; left: 40px; top: 75px; width: 75px; height: 90px;}
+.dem_comshop  {position: absolute; z-index: 90; left: 275px; top: 134px; width: 63px; height: 60px;}
+.dem_temple    {position: absolute; z-index: 90; left: 350px; top: 85px; width: 57px; height: 83px;}
 .dem_dustman_crushed{position: absolute; z-index: 90; left: 410px; top: 146px; width: 44px; height: 87px;}
-.dem_right1			{position: absolute; z-index: 90; left: 471px; top: 126px; width: 21px; height: 30px;}
-.dem_bank			{position: absolute; z-index: 90; left: 113px; top: 92px; width: 81px; height: 64px;}
-.dem_dtower			{position: absolute; z-index: 90; left: 204px; top: 5px; width: 73px; height: 159px;}
-.dem_flshop			{position: absolute; z-index: 90; left: 323px; top: 136px; width: 34px; height: 38px;}
-.dem_fire			{position: absolute; z-index: 90; left: 172px; top: 162px; width: 17px; height: 23px;}
-.dem_skam1			{position: absolute; z-index: 90; left: 196px; top: 183px; width: 23px; height: 15px;}
-.dem_skam2			{position: absolute; z-index: 90; left: 170px; top: 187px; width: 25px; height: 12px;}
-.dem_skam3			{position: absolute; z-index: 90; left: 140px; top: 179px; width: 23px; height: 16px;}
-.dem_left			{position: absolute; z-index: 90; left: 11px; top: 191px; width: 29px; height: 25px;}
-.dem_hostel			{position: absolute; z-index: 90; left: 370px; top: 88px; width: 87px; height: 108px;}
-.dem_soul_stone		{position: absolute; z-index: 90; left: 61px; top: 145px; width: 65px; height: 63px;}
-.dem_right2			{position: absolute; z-index: 90; left: 474px; top: 206px; width: 21px; height: 30px;}
-.buttons			{position: absolute; z-index: 90; right: 23px; bottom: 11px;}
-.fl1				{position: absolute; z-index: 100; width: 16px; height: 18px;}
-.actionbar			{position: absolute; z-index: 101; right: 0px; top: 0px; height: 1px; overflow: visible;}
-.buttons_on_image	{cursor: pointer; font-weight: bold; color: #D8D8D8; font-size: 10px;}
-.map_discrp			{text-align: justify; padding: 3px;}
+.dem_right1  {position: absolute; z-index: 90; left: 471px; top: 126px; width: 21px; height: 30px;}
+.dem_bank       {position: absolute; z-index: 90; left: 113px; top: 92px; width: 81px; height: 64px;}
+.dem_dtower  {position: absolute; z-index: 90; left: 204px; top: 5px; width: 73px; height: 159px;}
+.dem_flshop  {position: absolute; z-index: 90; left: 323px; top: 136px; width: 34px; height: 38px;}
+.dem_fire       {position: absolute; z-index: 90; left: 172px; top: 162px; width: 17px; height: 23px;}
+.dem_skam1     {position: absolute; z-index: 90; left: 196px; top: 183px; width: 23px; height: 15px;}
+.dem_skam2     {position: absolute; z-index: 90; left: 170px; top: 187px; width: 25px; height: 12px;}
+.dem_skam3     {position: absolute; z-index: 90; left: 140px; top: 179px; width: 23px; height: 16px;}
+.dem_left       {position: absolute; z-index: 90; left: 11px; top: 191px; width: 29px; height: 25px;}
+.dem_hostel   {position: absolute; z-index: 90; left: 370px; top: 88px; width: 87px; height: 108px;}
+.dem_soul_stone    {position: absolute; z-index: 90; left: 61px; top: 145px; width: 65px; height: 63px;}
+.dem_right2             {position: absolute; z-index: 90; left: 474px; top: 206px; width: 21px; height: 30px;}
+.buttons                    {position: absolute; z-index: 90; right: 23px; bottom: 11px;}
+.fl1                             {position: absolute; z-index: 100; width: 16px; height: 18px;}
+.actionbar               {position: absolute; z-index: 101; right: 0px; top: 0px; height: 1px; overflow: visible;}
+.buttons_on_image  {cursor: pointer; font-weight: bold; color: #D8D8D8; font-size: 10px;}
+.map_discrp             {text-align: justify; padding: 3px;}

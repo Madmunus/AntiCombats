@@ -45,7 +45,7 @@ if ($shut)
                 <td width="225" align="left" valign="top" style="padding-right: 5px; padding-top: 17px;"><small>
 <?
 echo "$lang[exp] <b>".getExp($exp)."</b> (".getExp($next_up).")<br>"
-   . "$lang[fights] &nbsp; <b>$win <img src='img/icon/wins.gif' border='0' title='$lang[wins] $win'> &nbsp; $lose <img src='img/icon/looses.gif' border='0' title='$lang[loses] $lose'> &nbsp; $draw <img src='img/icon/draw.gif' border='0' title='$lang[draws] $draw'></b><br>"
+   . "$lang[games] &nbsp; <b>$win <img src='img/icon/wins.gif' border='0' title='$lang[wins] $win'> &nbsp; $lose <img src='img/icon/looses.gif' border='0' title='$lang[loses] $lose'> &nbsp; $draw <img src='img/icon/draw.gif' border='0' title='$lang[draws] $draw'></b><br>"
    . "$lang[money] <b>$money</b> кр.<br><br>";
 if ($bank)
 {
