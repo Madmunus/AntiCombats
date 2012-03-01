@@ -31,9 +31,9 @@ function buyItem (entry)
 {
   var count = ($('input[name=count]').val()) ?$('input[name=count]').val() :1;
   $.post('ajax.php', 'do=buyitem&entry='+entry+'&count='+count, function (data){
+    var item = top.exploder(data);
     closehint3 ();
     $('html, body').animate({scrollTop: 0}, 500);
-    var item = top.exploder(data);
     if (item[0] == 'complete')
       visual.item_buy(item);
     else if (item[0] == 'error')

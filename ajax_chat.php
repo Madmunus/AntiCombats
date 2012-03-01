@@ -69,8 +69,10 @@ switch ($do)
     
     $adb->query("UPDATE `characters` SET `afk` = '0' WHERE `guid` = ?d", $guid);
     if ($adb->query("INSERT INTO `city_chat` (`sender`, `to`, `room`, `msg`, `class`, `date_stamp`, `city`) 
-                     VALUES (?s, ?s, ?s, ?s, ?s, ?d, ?s)", $login ,$to ,$room ,"<font color=$color>$h</font>" ,$class ,time () ,$city))
+                     VALUES (?s, ?s, ?s, ?s, ?s, ?d, ?s)", $login ,$to ,$room ,"<font color=$color>$h</font>" ,$class ,time() ,$city))
       returnAjax('complete');
+    else
+      returnAjax('error');
   break;
   /*Users*/
   case 'refreshusers':
@@ -78,23 +80,31 @@ switch ($do)
     $room_name = $char->city->getRoom($room, $city, 'name');
     $user_list = "<font style='color: #8f0000; font-size: 10pt; font-weight: bold;'>$room_name ($room_online)</font><br>";
 
-    $rows = $adb->selectCol("SELECT `guid` 
-                             FROM `online` 
-                             WHERE `city` = ?s 
-                               and `room` = ?s 
-                             ORDER by `login_display`", $city ,$room);
-    foreach ($rows as $num => $online_guid)
-      $user_list .= $char->info->character('online', $online_guid);
+    $rows = $adb->select("SELECT `guid`, 
+                                 `last_time` 
+                          FROM `online` 
+                          WHERE `city` = ?s 
+                            and `room` = ?s 
+                          ORDER by `login_display`", $city ,$room);
+    foreach ($rows as $online)
+    {
+      if ((time() - $online['last_time']) > 100)
+        $adb->query("DELETE FROM `online` WHERE `guid` = ?d", $online['guid']);
+      else
+        $user_list .= $char->info->character('online', $online['guid']);
+    }
     returnAjax($user_list);
   break;
   /*Msg*/
   case 'refreshmessage':
+    $adb->query("UPDATE `characters` SET `last_time` = ?d WHERE `guid` = ?d", time() ,$guid);
+    $adb->query("UPDATE `online` SET `last_time` = ?d WHERE `guid` = ?d", time() ,$guid);
     $go = requestVar('go');
     $send = "";
 
     $last = (isset($_SESSION['last'])) ?$_SESSION['last'] :0;
     if (!$last || $go)
-      $last = $_SESSION['last'] = time () - 300;
+      $last = $_SESSION['last'] = time() - 300;
 
     $rows = $adb->select("SELECT `msg`, 
                                  `sender`, 

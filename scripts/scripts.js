@@ -152,7 +152,7 @@ function linkAction (action)
 function exploder (data)
 {
   if (data == '' || data == 'ajax_error')
-    location.href = 'index.php';
+    frames.main.location.href = 'main.php';
   
   var variable = data.split('A_D');
   
@@ -164,6 +164,13 @@ function checkGame ()
   var link = location.href.split("/");
   if (link[link.length - 1] != 'game.php')
     location.href = 'index.php';
+  try
+  {
+    var gframes = new Array($('[name=msg]').attr('src'), $('[name=user]').attr('src'), $('[name=talk]').attr('src'));
+    if (gframes[0] != 'msg.php' || gframes[1] != 'users.php' || gframes[2] != 'talk.php')
+      location.href = 'index.php';
+  }
+  catch(e){location.href = 'index.php';}
 }
 
 function cleanChat ()

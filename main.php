@@ -30,6 +30,7 @@ $char->test->Items();
 $char->test->Regen();
 $char->test->Room();
 $char->test->WakeUp();
+$char->test->Effects();
 
 $char_db = $char->getChar('char_db', '*');
 $char_stats = $char->getChar('char_stats', '*');
@@ -60,7 +61,7 @@ if ($action == 'enter')
 else if ($login_mail == $guid || lowercase($login_mail) == lowercase($char_db['login']))
   $char->error->Map(218);
 else if ($login_mail)
-  setCookie('login_mail', $login_mail,  time () + 3600);
+  setCookie('login_mail', $login_mail,  time() + 3600);
 ?>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -261,8 +262,8 @@ switch ($action)
     else
     {
       $adb->query("UPDATE `character_inventory` 
-                    SET `book_name` = ?s 
-                    WHERE `id` = ?d", $target ,$book);
+                   SET `book_name` = ?s 
+                   WHERE `id` = ?d", $target ,$book);
       echo "Заглавие успешно записано в книгу.";
     }
   break;
@@ -280,8 +281,7 @@ switch ($action)
   case 'exit':
     $adb->query("DELETE FROM `online` WHERE `guid` = ?d", $guid);
     $adb->query("UPDATE `characters` SET `last_time` = ?d WHERE `guid` = ?d", time() ,$guid);
-    deleteSession();
-    echoScript(getError(), true);
+    toIndex('main');
   break;
   default:
   case 'none':

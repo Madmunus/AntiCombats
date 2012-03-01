@@ -25,10 +25,10 @@ function drop (id, img, txt)
 
 function drophlam ()
 {
-	var table = '<TABLE width=100%><TR><TD width="10%"><IMG src="http://img.combats.com/i/items/just_junk.gif">'+
-              '</TD><TD>Выбросить разный хлам типа выписок, квитанций и увядших букетов?</TD></TR>'+
-              '<TR><TD colspan="2"><small><B style="color:red">Внимание!</B> Имеющие срок годности предметы, купленные за зубы (эликсиры, корм для животных и т.д.), будут уничтожены.</small></TD></TR></TABLE>'+
-              '<INPUT type=hidden name=drophlam value="1"><INPUT type=hidden name=sd4 value="' + sd4+'">';
+	var table = '<table width=100%><tr><td width="10%"><img src="http://img.combats.com/i/items/just_junk.gif">'+
+              '</td><td>Выбросить разный хлам типа выписок, квитанций и увядших букетов?</td></tr>'+
+              '<tr><td colspan="2"><small><b style="color: red">Внимание!</b> Имеющие срок годности предметы, купленные за зубы (эликсиры, корм для животных и т.д.), будут уничтожены.</small></td></tr></table>'+
+              '<input type=hidden name=drophlam value="1"><input type=hidden name=sd4 value="' + sd4+'">';
 	dialogconfirm('Выбросить хлам?', 'main.pl', table);
 }
 
@@ -46,8 +46,8 @@ function showError (error, parameters)
 	if (!parameters)
 	  parameters = '';
 	$.post('ajax.php', {'do': 'geterror', 'error': error, 'parameters': parameters}, function (data){
-	  if (data)
-	    visual.show_any('#error', data);
+	  var id = top.exploder(data);
+	  visual.show_any('#error', id[0]);
 	});
 }
 
@@ -59,8 +59,8 @@ function clearError ()
 function showHelp (link)
 {
 	$.post('encicl/help/'+link+'.html', function (data){
-	  if (data)
-      visual.show_help(data);
+	  var id = top.exploder(data);
+    visual.show_help(id[0]);
 	});
 }
 
@@ -140,15 +140,12 @@ function showHP (now, max, newspeed)
 function setHPlocal ()
 {
   var plusHP = 0;
-	if (nowHP >= maxHP)
-	{
-		nowHP = maxHP;
+	if (nowHP == maxHP)
 		TimerOnHP = -1;
-	}
 	else
 	{
     plusHP = maxHP * hspeed * delay * 0.00001;
-		nowHP += plusHP;
+		nowHP += ((plusHP+nowHP) <= maxHP) ?plusHP :maxHP-nowHP;
 		TimerOnHP = 0;
 	}
 	var le = 120;
@@ -163,7 +160,7 @@ function setHPlocal ()
 	var rhp = Math.round(nowHP) + "/" + maxHP;
   var alt = 'Уровень жизни'+((plusHP > 0 && (difHP = maxHP-nowHP) > 0) ?'<br>Осталось: '+top.getFormatedTime(Math.round(difHP*2/plusHP)) :'');
 	$('#HP').html("<table border='0' cellpadding='0' cellspacing='0' width='"+le+"' align='center' style='padding-top: 1px;'><tr>"+
-                "<td style='position: absolute; width: "+le+"px; font-size: 9px; color: white; font-weight: bold; margin-top: -3px; padding-left: 5px;' align='left' alt='"+alt+"'>"+rhp+"</td>"+
+                "<td style='position: absolute; width: "+le+"px; font-size: 9px; color: white; font-weight: bold; margin-top: -2px; padding-left: 5px;' align='left' alt='"+alt+"'>"+rhp+"</td>"+
                 "<td style='width: "+h1+"px; height: 10px; background: url("+imag+") repeat-x;'></td>"+
                 "<td style='width: "+h2+"px; height: 10px; background: url(img/icon/bk_life_loose.gif) repeat-x;'></td>"+
                 "</tr></table>");
@@ -194,15 +191,12 @@ function setMPlocal ()
 	if (maxMP == 0)
 		return;
 	
-	if (nowMP >= maxMP)
-	{
-		nowMP = maxMP;
+	if (nowMP == maxMP)
 		TimerOnMP = -1
-	}
 	else
 	{
     plusMP = maxMP * mspeed * delay * 0.00001;
-		nowMP += plusMP;
+		nowMP += ((plusMP+nowMP) <= maxMP) ?plusMP :maxMP-nowMP;
 		TimerOnMP = 0;
 	}
 	var le = 120;
@@ -211,7 +205,7 @@ function setMPlocal ()
 	var rmp = Math.round(nowMP) + "/" + maxMP;
   var alt = 'Уровень маны'+((plusMP > 0 && (difMP = maxMP-nowMP) > 0) ?'<br>Осталось: '+top.getFormatedTime(Math.round(difMP*2/plusMP)) :'')
 	$('#MP').html("<table border='0' cellpadding='0' cellspacing='0' width='"+le+"' align='center' style='margin-top: -1px;'><tr>"+
-                "<td style='position: absolute; width: "+le+"px; font-size: 9px; color: white; font-weight: bold; margin-top: -3px; padding-left: 5px; color: #80FFFF;' align='left' alt='"+alt+"'>"+rmp+"</td>"+
+                "<td style='position: absolute; width: "+le+"px; font-size: 9px; color: white; font-weight: bold; margin-top: -2px; padding-left: 5px; color: #80FFFF;' align='left' alt='"+alt+"'>"+rmp+"</td>"+
                 "<td style='width: "+m1+"px; height: 10px; background: url(img/icon/blue.gif) repeat-x;'></td>"+
                 "<td style='width: "+m2+"px; height: 10px; background: url(img/icon/bk_life_loose.gif) repeat-x;'></td>"+
                 "</tr></table>");

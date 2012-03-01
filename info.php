@@ -11,7 +11,7 @@ include_once ("engline/data/data.php");
 include_once ("engline/functions/functions.php");
 
 if (empty($log))
-  echoScript(getError('game'), true);
+  toIndex('info');
 
 $adb = DbSimple_Generic::connect($database['adb']);
 $adb->query("SET NAMES ? ",$database['db_encoding']);
@@ -22,11 +22,11 @@ $log = (isset($_GET['log']) && !preg_match('//u', $_GET['log'])) ?iconv("CP1251"
 $top = "Произошла ошибка:<br><br>";
 $bot = "<br><br><a href='javascript: window.history.go(-1);'>Назад</a><hr>";
 
-$guid = $adb->selectCell("SELECT `guid` FROM `characters` WHERE `login` = ?s", $log) or die ("$top Указанный персонаж не найден.$bot");
+$guid = $adb->selectCell("SELECT `guid` FROM `characters` WHERE `login` = ?s", $log) or die("$top Указанный персонаж не найден.$bot");
 
 $char = Char::initialization($guid, $adb);
 
-$char->test->Guid('game');
+$char->test->Guid('info');
 $char->test->Prision();
 $char->test->Shut();
 $char->test->Travm();
@@ -35,11 +35,6 @@ $char->test->Regen();
 $char_db = $char->getChar('char_db', '*');
 $char_stats = $char->getChar('char_stats', 'str', 'dex', 'con', 'vit', 'int', 'wis', 'spi');
 $char_info = $char->getChar('char_info', 'name', 'icq', 'hide_icq', 'url', 'town', 'deviz', 'hobie', 'state', 'date');
-
-if (!$char_stats)
-  die ("$top Информация о характеристиках персонажа не найдена.$bot");
-if (!$char_info)
-  die ("$top Дополнительная информация о персонаже не найдена.$bot");
 ArrToVar($char_db);
 ArrToVar($char_info);
 
@@ -51,6 +46,8 @@ $date = ($admin_level > 0) ?"До начала времен" :date ('d.m.y H:i',
 $state = ($admin_level > 0) ?"Этого никто не знает" :$char->city->getCity($state, 'name');
 $room = $char->city->getRoom($room, $city, 'name');
 $city = $char->city->getCity($city, 'name');
+if ((time() - $char_db['last_time']) > 100)
+  $adb->query("DELETE FROM `online` WHERE `guid` = ?d", $guid);
 $online = $adb->selectCell("SELECT COUNT(*) FROM `online` WHERE `guid` = ?d", $guid);
 
 $char->showStatAddition('info');
@@ -134,23 +131,23 @@ if ($admin_level < 1)
     <td align="left" valign="top">
 <?
 $rows = $adb->select("SELECT `c`.`id`, 
-                              `c`.`gift_author` 
-                       FROM `character_inventory` AS `c` 
-                       LEFT JOIN `item_template` AS `i` 
-                       ON `c`.`item_template` = `i`.`entry` 
-                       WHERE `c`.`guid` = ?d 
-                         and `i`.`section` = 'thing' 
-                         and `i`.`type` = 'medal' 
-                         and `c`.`wear` = '0'", $guid);
+                             `c`.`gift_author` 
+                      FROM `character_inventory` AS `c` 
+                      LEFT JOIN `item_template` AS `i` 
+                      ON `c`.`item_template` = `i`.`entry` 
+                      WHERE `c`.`guid` = ?d 
+                        and `i`.`section` = 'thing' 
+                        and `i`.`type` = 'medal' 
+                        and `c`.`wear` = '0'", $guid);
 foreach ($rows as $dat_t)
 {
   $item_id = $dat_t['id'];
   $gift_author = $dat_t['gift_author'];
   $obj_data = $adb->selectRow("SELECT `name`, 
-                                       `img`, 
-                                       `msg` 
-                                FROM `medal` 
-                                WHERE `id` = ?d", $item_id);
+                                      `img`, 
+                                      `msg` 
+                               FROM `medal` 
+                               WHERE `id` = ?d", $item_id);
   list ($g_name, $img, $msg) = array_values ($obj_data);
   echo "<img src='$img' alt='$g_name<br>$msg<br>от $gift_author'>&nbsp";
 }

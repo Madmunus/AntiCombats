@@ -51,6 +51,8 @@ function changeAutoRefresh ()
 {
   autorefresh = !autorefresh;
   $.post('ajax_chat.php', {'do': 'change_button', 'but': 'list', 'val': autorefresh}, function (data){
+    var result = top.exploder(data);
+    
     if (autorefresh)
       updateUsers();
     else

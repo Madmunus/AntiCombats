@@ -41,7 +41,7 @@ switch ($do)
 {
   case 'geterror':
     $char->error->getFormattedError($_POST['error'], $_POST['parameters']);
-    die ();
+    die();
   break;
   case 'getroomname':
     $room = requestVar('room');
@@ -222,21 +222,21 @@ switch ($do)
     foreach ($bars as $key => $value)
     {
       if ($value == 0)
-        unset ($bars[$key]);
+        unset($bars[$key]);
     }
     asort ($bars);
 
-    if ($bar && in_array ($bar, array_keys ($bars)) && $type && count ($bars) != 1)
+    if ($bar && in_array ($bar, array_keys($bars)) && $type && count ($bars) != 1)
     {
       $d_b_v = explode ('|', $bars[$bar]);
-      list ($d_b_n, $d_b_s) = array_values ($d_b_v);
-      if (($type == 'down' & $d_b_n != count ($bars)) || ($type == 'up' & $d_b_n != 1))
+      list ($d_b_n, $d_b_s) = array_values($d_b_v);
+      if (($type == 'down' & $d_b_n != count($bars)) || ($type == 'up' & $d_b_n != 1))
       {
-        $c_b_a = ($type == 'down') ?array_slice ($bars, $d_b_n, 1) :array_slice ($bars, $d_b_n - 2, 1);
-        list ($c_b_k) = array_keys ($c_b_a);
-        list ($c_b_v) = array_values ($c_b_a);
-        $c_b_v = explode ('|', $c_b_v);
-        list ($c_b_n, $c_b_s) = array_values ($c_b_v);
+        $c_b_a = ($type == 'down') ?array_slice($bars, $d_b_n, 1) :array_slice($bars, $d_b_n - 2, 1);
+        list ($c_b_k) = array_keys($c_b_a);
+        list ($c_b_v) = array_values($c_b_a);
+        $c_b_v = explode('|', $c_b_v);
+        list ($c_b_n, $c_b_s) = array_values($c_b_v);
         $d_b_n += ($type == 'down') ?1 :-1;
         $c_b_n += ($type == 'down') ?-1 :1;
         if ($adb->query("UPDATE `character_bars` SET ?# = ?s, ?# = ?s WHERE `guid` = ?d", $bar ,$d_b_n."|".$d_b_s ,$c_b_k ,$c_b_n."|".$c_b_s ,$guid))
@@ -247,7 +247,7 @@ switch ($do)
             if ($value == 0)
               unset ($bars[$key]);
           }
-          asort ($bars);
+          asort($bars);
           returnAjax('complete', $bar, $char->showInventoryBar($bar, $bars[$bar], count ($bars)), $c_b_k, ($char->showInventoryBar($c_b_k, $bars[$c_b_k], count ($bars))));
         }
       }
@@ -260,8 +260,8 @@ switch ($do)
   case 'spoilerbar':
     $bar = requestVar('bar');
     $barr = $adb->selectCell("SELECT ?# FROM `character_bars` WHERE `guid` = ?d", $bar ,$guid) or returnAjax('error');
-    $bar_v = explode ('|', $barr);
-    list ($bar_n, $bar_s) = array_values ($bar_v);
+    $bar_v = explode('|', $barr);
+    list($bar_n, $bar_s) = array_values($bar_v);
     if ($bar_s == 1)
     {
       $adb->query("UPDATE `character_bars` SET ?# = ?s WHERE `guid` = ?d", $bar ,$bar_n."|0" ,$guid);
@@ -288,7 +288,7 @@ switch ($do)
         unset($cur_set['hand_r_free'], $cur_set['hand_r_type'], $cur_set['hand_l_free'], $cur_set['hand_l_type']);
         $adb->query("DELETE FROM `character_sets` WHERE `guid` = ?d and `name` = ?s", $guid ,$name);
         $adb->query("INSERT INTO `character_sets` (?#) 
-                      VALUES (?a);", array_keys($cur_set), array_values($cur_set)) or die ("errorA_D222");
+                     VALUES (?a);", array_keys($cur_set), array_values($cur_set)) or die ("errorA_D222");
         returnAjax('complete', $char->getSetRow($name));
       break;
       case 'delete':
@@ -350,11 +350,11 @@ switch ($do)
     $credit = requestVar('credit', 0);
     $pass = requestVar('pass');
     $bank_info = $adb->selectRow("SELECT `guid`, 
-                                          `password`, 
-                                          `cash`, 
-                                          `euro` 
-                                   FROM `character_bank` 
-                                   WHERE `id` = ?d", $credit) or returnAjax('error', 303);
+                                         `password`, 
+                                         `cash`, 
+                                         `euro` 
+                                  FROM `character_bank` 
+                                  WHERE `id` = ?d", $credit) or returnAjax('error', 303);
     if ($guid != $bank_info['guid'])
       returnAjax('error', 322);
     
@@ -390,19 +390,19 @@ switch ($do)
     setCookie('level_filter', $level_filter,  time () + 3600);
     setCookie('name_filter', $name_filter,  time () + 3600);
     $rows = $adb->select("SELECT * 
-                           FROM `item_template` AS `i` 
-                           LEFT JOIN `item_amount` AS `a` 
-                           ON `i`.`entry` = `a`.`entry` 
-                           WHERE `i`.`type` = ?s 
-                             and `a`.?# > '0' 
-                            {and `i`.`min_level` = ?d} 
-                            {and `i`.`name` LIKE (?)} 
-                            {and !(`i`.`item_flags` & ?d) 
-                             and `i`.`price_euro` = '0'} 
-                           ORDER BY `min_level`;", $section_shop ,$city.'-'.$room,
-                           (($check_level) ?$level_filter :DBSIMPLE_SKIP),
-                           (($name_filter) ?escapeLike($name_filter) :DBSIMPLE_SKIP),
-                           (($room != 'shop') ?4 :DBSIMPLE_SKIP));
+                          FROM `item_template` AS `i` 
+                          LEFT JOIN `item_amount` AS `a` 
+                          ON `i`.`entry` = `a`.`entry` 
+                          WHERE `i`.`type` = ?s 
+                            and `a`.?# > '0' 
+                           {and `i`.`min_level` = ?d} 
+                           {and `i`.`name` LIKE (?)} 
+                           {and !(`i`.`item_flags` & ?d) 
+                            and `i`.`price_euro` = '0'} 
+                          ORDER BY `min_level`;", $section_shop ,$city.'-'.$room,
+                          (($check_level) ?$level_filter :DBSIMPLE_SKIP),
+                          (($name_filter) ?escapeLike($name_filter) :DBSIMPLE_SKIP),
+                          (($room != 'shop') ?4 :DBSIMPLE_SKIP));
     if (count($rows) > 0)
     {
       $section = '';
@@ -428,22 +428,22 @@ switch ($do)
     $amount = $city.'-'.$room;
     $room_shop = $char->city->getRoom($room, $city, 'shop') or returnAjax('error', 403);
     $dat = $adb->selectRow("SELECT `i`.`name`, 
-                                    `i`.`mass`, 
-                                    `i`.`price`, 
-                                    `i`.`price_euro`, 
-                                    `i`.`tear`, 
-                                    `i`.`inc_count`, 
-                                    `i`.`validity` 
-                             FROM `item_template` AS `i` 
-                             LEFT JOIN `item_amount` AS `a` 
-                             ON `i`.`entry` = `a`.`entry` 
-                             WHERE `i`.`entry` = ?d 
-                               and `a`.?# > '0';", $item_entry ,$amount) or returnAjax('error', 403);
-    list ($name, $i_mass, $price, $price_euro, $tear, $inc_count, $validity) = array_values ($dat);
+                                   `i`.`mass`, 
+                                   `i`.`price`, 
+                                   `i`.`price_euro`, 
+                                   `i`.`tear`, 
+                                   `i`.`inc_count`, 
+                                   `i`.`validity` 
+                            FROM `item_template` AS `i` 
+                            LEFT JOIN `item_amount` AS `a` 
+                            ON `i`.`entry` = `a`.`entry` 
+                            WHERE `i`.`entry` = ?d 
+                              and `a`.?# > '0';", $item_entry ,$amount) or returnAjax('error', 403);
+    list($name, $i_mass, $price, $price_euro, $tear, $inc_count, $validity) = array_values ($dat);
     
     for ($i = 1; $i <= $count; $i++)
     {
-      $time = ($validity > 0) ?time () + $validity * 3600 :0;
+      $time = ($validity > 0) ?time() + $validity * 3600 :0;
       $char->equip->getBuyValue($price);
       $char->equip->getBuyValue($price_euro);
       
@@ -455,7 +455,7 @@ switch ($do)
       $mass = $char->changeMass($i_mass);
       //$adb->query("UPDATE `character_stats` SET `trade` = `trade` + '0.01' WHERE `guid` = ?d", $guid);
       $adb->query("INSERT INTO `character_inventory` (`guid`, `item_template`, `tear_max`, `inc_count_p`, `made_in`, `date`, `last_update`) 
-                    VALUES (?d, ?d, ?f, ?d, ?s, ?d, ?d)", $guid ,$item_entry ,$tear ,$inc_count ,$city ,$time ,time ());
+                   VALUES (?d, ?d, ?f, ?d, ?s, ?d, ?d)", $guid ,$item_entry ,$tear ,$inc_count ,$city ,$time ,time ());
       $adb->query("UPDATE `item_amount` SET ?# = ?# - '1' WHERE `entry` = ?d", $amount ,$amount ,$item_entry);
       if ($price > 0)
         $char->history->transfers('Buy', "$name ($price кр)", $_SERVER['REMOTE_ADDR'], $room);
@@ -477,20 +477,20 @@ switch ($do)
       returnAjax('error', 213);
     
     $dat = $adb->selectRow("SELECT `i`.`name`, 
-                                    `i`.`mass`, 
-                                    `i`.`price`, 
-                                    `i`.`price_euro`, 
-                                    `c`.`tear_cur`, `c`.`tear_max`, 
-                                    `i`.`tear` 
-                             FROM `character_inventory` AS `c` 
-                             LEFT JOIN `item_template` AS `i` 
-                             ON `c`.`item_template` = `i`.`entry` 
-                             WHERE (`i`.`item_flags` & '1') 
-                                and `c`.`id` = ?d 
-                                and `c`.`guid` = ?d 
-                                and `c`.`wear` = '0' 
-                                and `c`.`mailed` = '0';", $item_id ,$guid) or returnAjax('error', 213);
-    list ($name, $i_mass, $price, $price_euro, $tear_cur, $tear_max, $tear) = array_values ($dat);
+                                   `i`.`mass`, 
+                                   `i`.`price`, 
+                                   `i`.`price_euro`, 
+                                   `c`.`tear_cur`, `c`.`tear_max`, 
+                                   `i`.`tear` 
+                            FROM `character_inventory` AS `c` 
+                            LEFT JOIN `item_template` AS `i` 
+                            ON `c`.`item_template` = `i`.`entry` 
+                            WHERE (`i`.`item_flags` & '1') 
+                               and `c`.`id` = ?d 
+                               and `c`.`guid` = ?d 
+                               and `c`.`wear` = '0' 
+                               and `c`.`mailed` = '0';", $item_id ,$guid) or returnAjax('error', 213);
+    list($name, $i_mass, $price, $price_euro, $tear_cur, $tear_max, $tear) = array_values ($dat);
     $sell_price = getSellValue($dat);
     $mass = $char->changeMass(-$i_mass);
     if ($price > 0)

@@ -66,7 +66,7 @@ echo "<small>";
 echo ($f_style) ?"$lang[style] <b>".$lang['style_'.$f_style]."</b><br>" :"";
 echo ($clan) ?"$lang[clan] <strong><a href='clan_inf.php?clan=$name_s' class='us2' target='_blank' style='font-size: 10px;'>$clan</a> ($chin)</strong><br>" :"";
 $orden_dis = ($orden == 1) ?"$lang[orden_pal] - " :(($orden == 2) ?"$lang[orden_dark] - " :"");
-echo ($orden == 1 || $orden == 2) ?"<strong>$orden_dis$stat_rang</strong><br></small>" :"<small>$lang[status] <strong>".$lang['status_'.$status]."</strong>";
+echo ($orden == 1 || $orden == 2) ?"<strong>$orden_dis$stat_rang</strong><br></small>" :"";//<small>$lang[status] <strong>".$lang['status_'.$status]."</strong>
 ?>
                  </small></td>
                 <td align="center" valign="top">

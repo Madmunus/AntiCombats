@@ -416,8 +416,8 @@ echo "<script type='text/javascript'>$regfail</script>";
             $password = SHA1 ($guid.':'.$password);
             $char = Char::initialization($guid, $adb);
             // Основная база
-            $adb->query("INSERT INTO `characters` (`guid`, `login`, `login_sec`, `password`, `mail`, `sex`, `city`, `shape`, `reg_ip`) 
-                         VALUES (?d, ?s, ?s, ?s, ?s, ?s, ?s, ?s, ?s);", $guid ,$reg_login ,$reg_login ,$password ,$email ,$sex ,$city ,$shape ,$_SERVER['REMOTE_ADDR']);
+            $adb->query("INSERT INTO `characters` (`guid`, `login`, `login_sec`, `password`, `mail`, `sex`, `city`, `shape`, `reg_ip`, `last_time`) 
+                         VALUES (?d, ?s, ?s, ?s, ?s, ?s, ?s, ?s, ?s, ?d);", $guid ,$reg_login ,$reg_login ,$password ,$email ,$sex ,$city ,$shape ,$_SERVER['REMOTE_ADDR'] ,time());
             // Характеристики
             $adb->query("INSERT INTO `character_stats` (`guid`) 
                          VALUES (?d);", $guid);
@@ -434,8 +434,8 @@ echo "<script type='text/javascript'>$regfail</script>";
             $adb->query("INSERT INTO `character_bars` (`guid`) 
                          VALUES (?d);", $guid);
             // Предметы
-            $adb->query("INSERT INTO `character_inventory` (`guid`, `item_template`, `tear_max`, `made_in`, `last_update`) 
-                         VALUES (?d, '920', '20', ?s, ?d);", $guid ,$city ,time());
+            $adb->query("INSERT INTO `character_inventory` (`guid`, `item_template`, `wear`, `tear_max`, `made_in`, `last_update`) 
+                         VALUES (?d, '920', '1', '20', ?s, ?d);", $guid ,$city ,time());
             echo "Регистрация персонажа $reg_login, прошла успешно!<br>Авторизируйтесь с <a href='index.php' class='us2'>главной страницы</a>.";
             $char->history->authorization(2, $city);
           }

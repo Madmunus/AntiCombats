@@ -17,7 +17,7 @@ echo "$lang[level] $level<br>";
 echo "$lang[wins] $win<br>";
 echo "$lang[loses] $lose<br>";
 echo "$lang[draws] $draw<br>";
-echo "$lang[money] <b>$money</b> кр.";
+echo "$lang[money] <b>".getMoney($money)."</b> кр.";
 echo ($f_style) ?"<br>$lang[style] <b>".$lang['style_'.$f_style]."</b>" :'';
 echo ($clan) ?"<br>$lang[clan] $clan" :'';
 $orden_dis = ($orden == 1) ?"$lang[orden_pal] - " :(($orden == 2) ?"$lang[orden_dark] - " :"");

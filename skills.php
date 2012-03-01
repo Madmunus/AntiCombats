@@ -37,9 +37,10 @@ $char->showStatAddition();
             echo "</table>";
             if ($char_stats['ups'] > 0)
               echo "<font id='all_ups'><br>&nbsp;Возможных увеличений: <font id='ups'>$char_stats[ups]</font></font>";
-            if ($char_stats['skills'] > 0)
+            if ($char_stats['skills'] > 0 && $level > 0)
               echo "<font id='all_skills'><br>&nbsp;Свободных умений: <font id='skills'>$char_stats[skills]</font></font>";
 ?>
+          <br><br><br><br><small>Подробнее о Силе, Ловкости, Интуиции и Выносливости вы можете прочитать <a href="" target="_blank" class="nick" style="font-size: 7pt;">здесь</a></small>
         </td>
       </tr>
     </table>
@@ -155,7 +156,28 @@ if ($level > 0)
 Не реализовано!
 </div>
 <div class="dtz" id="dL5">
-Не реализовано!
+<b>Эффекты:</b><br>
+<div style='padding-left: 10'>
+<?
+  $effects = $adb->select("SELECT * FROM `character_effects` WHERE `guid` = ?d", $guid);
+  foreach ($effects as $effect)
+  {
+    $effect_s = $adb->selectRow("SELECT * FROM `player_effects` WHERE `entry` = ?d", $effect['effect_template']);
+    $name = $effect_s['name'];
+    unset($effect_s['entry'], $effect_s['name'], $effect_s['duration']);
+    echo "<b>$name</b><br>";
+    foreach ($effect_s as $stat => $value)
+    {
+      if ($value == 0)
+        continue;
+      
+      if ($value > 0)      echo "&bull; $lang[$stat] +$value<br>";
+      else if ($value < 0) echo "&bull; $lang[$stat] $value<br>";
+    }
+    echo "<br>";
+  }
+?>
+</div>
 </div>
 <div class="dtz" id="dL6">
 Не реализовано!

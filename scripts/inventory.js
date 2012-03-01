@@ -6,7 +6,7 @@ function kmp ()
 
 function sortInventory (type)
 {
-	clearError ();
+	clearError();
   $('html, body').animate({scrollTop: 0}, 500);
 	var num = $("#sort_"+type).attr('name');
 	$.post('ajax.php', {'do': 'sortinventory', 'type': type, 'num': num}, function (data){
@@ -26,7 +26,7 @@ function sortInventory (type)
 
 function increaseItemStat (id, stat)
 {
-	clearError ();
+	clearError();
 	$.post('ajax.php', {'do': 'increaseitemstat', 'id': id, 'stat': stat}, function (data){
 	  var incs = top.exploder(data);
 	  if (incs[0] == 'complete')
@@ -38,7 +38,7 @@ function increaseItemStat (id, stat)
 
 function inventoryLoginbank()
 {
-	clearError ();
+	clearError();
 	var credit = $('select[name=credit]').val();
 	var pass = $('input[name=pass]').val();
 	$.post('ajax.php', {'do': 'inventoryloginbank', 'credit': credit, 'pass': pass}, function (data){
@@ -53,7 +53,7 @@ function inventoryLoginbank()
 
 function inventoryUnLoginbank()
 {
-	clearError ();
+	clearError();
 	$.post('ajax.php', {'do': 'inventoryunloginbank'}, function (data){
     var unlogin = top.exploder(data);
     visual.show_any('#loginbank', unlogin[0]);
@@ -62,7 +62,7 @@ function inventoryUnLoginbank()
 
 function switchBars (type, bar)
 {
-	clearError ();
+	clearError();
 	$.post('ajax.php', {'do': 'switchbars', 'bar': bar, 'type': type}, function (data){
 	  var bars = top.exploder(data);
 	  if (bars[0] == 'complete')
@@ -72,7 +72,7 @@ function switchBars (type, bar)
 
 function spoilerBar (bar)
 {
-	clearError ();
+	clearError();
 	$.post('ajax.php', {'do': 'spoilerbar', 'bar': bar}, function (data){
     var bars = top.exploder(data);
 	  if (bars[0] == 'hide')
@@ -84,7 +84,7 @@ function spoilerBar (bar)
 
 function workSets (type, name)
 {
-	clearError ();
+	clearError();
 	if (!name)
 	  name = $("input[name=set_name]").val();
 	$.post('ajax.php', {'do': 'worksets', 'name': name, 'type': type}, function (data){

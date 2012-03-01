@@ -1,5 +1,5 @@
 /*Установка куки*/
-function setCookie(name, value, expires, path, domain, secure)
+function setCookie (name, value, expires, path, domain, secure)
 {
 	document.cookie = name + "=" + escape(value) +
 					((expires) ? "; expires=" + expires : "") +
@@ -27,13 +27,13 @@ function getCookie (name)
 			setStr = unescape(cookie.substring(offset, end));
 		}
 	}
-	return(setStr);
+	return (setStr);
 }
 
 function getTimePlusHour ()
 {
-	var now = new Date ();
-	var hours = now.getHours ();
+	var now = new Date();
+	var hours = now.getHours();
 	now.setHours(hours + 1);
 	return now;
 }

@@ -42,6 +42,7 @@ function changeButtonState (button)
   var src = (chat[button]) ?'img/talk/b_'+button+'_off.gif' :'img/talk/b_'+button+'_on.gif';
   chat[button] = !chat[button];
   $.post('ajax_chat.php', {'do': 'change_button', 'but': button, 'val': chat[button]}, function (data){
+    var result = top.exploder(data);
     $('#'+button).attr('src', src);
 	});
 }
