@@ -7,17 +7,21 @@ function changeStat (stat)
   $("#loadbar").show();
 	$.post('ajax.php', 'do=increasestat&stat='+stat, function (data){
     var stats = top.exploder(data);
+    
 	  if (stats[0] == 'complete')
     {
       var base = parseInt($("#base_"+stat).html()) + 1;
-      $("#base_"+stat).fadeOut('10000', function (){$(this).html(base).fadeIn('10000');});
+      visual.show_any('#base_'+stat, base);
+      
       if ($("#inst_"+stat).html())
       {
         var inst = parseInt($("#inst_"+stat).html()) + 1;
-        $("#inst_"+stat).fadeOut('10000', function (){$(this).html(inst).fadeIn('10000');});
+        visual.show_any('#inst_'+stat, inst);
       }
+      
       var ups = parseInt($("#ups").html()) - 1;
-      $("#ups").fadeOut('10000', function (){$(this).html(ups).fadeIn('10000');});
+      visual.show_any('#ups', ups);
+      
       if (ups == 0)
       {
         $("#all_ups").fadeOut('10000', function (){$(this).remove();});
@@ -27,10 +31,12 @@ function changeStat (stat)
             $("#plus_"+all_stats[i]).fadeOut('10000', function (){$(this).remove();});
         }
       }
-      showError (stats[1], stats[2]);
+      
+      showError(stats[1], stats[2]);
     }
     else if (stats[0] == 'error')
-      showError (stats[1], stats[2]);
+      showError(stats[1], stats[2]);
+    
     $("#loadbar").hide();
 	});
 }
@@ -40,21 +46,24 @@ function increaseSkill (stat, max)
   $("#loadbar").show();
 	$.post('ajax.php', 'do=increaseskill&stat='+stat, function (data){
     var stats = top.exploder(data);
+    
 	  if (stats[0] == 'complete')
     {
       var base = parseInt($("#base_"+stat).html()) + 1;
-      $("#base_"+stat).fadeOut('10000', function (){$(this).html(base).fadeIn('10000');});
+      visual.show_any('#base_'+stat, base);
+      
       if ($("#inst_"+stat).html())
       {
         var inst = parseInt($("#inst_"+stat).html()) + 1;
-        $("#inst_"+stat).fadeOut('10000', function (){$(this).html(inst).fadeIn('10000');});
+        visual.show_any('#inst_'+stat, inst);
       }
+      
       var skills = parseInt($("#skills").html()) - 1;
       $("#skills").fadeOut('10000', function (){$(this).html(skills).fadeIn('10000');});
+      
       if (inst && inst == max || !inst && base == max)
-      {
         $("#plus_"+stat).fadeOut('10000', function (){$(this).remove();});
-      }
+      
       if (skills == 0)
       {
         $("#all_skills").fadeOut('10000', function (){$(this).remove();});
@@ -64,10 +73,11 @@ function increaseSkill (stat, max)
             $("#plus_"+all_skills[i]).fadeOut('10000', function (){$(this).remove();});
         }
       }
-      showError (stats[1], stats[2]);
+      showError(stats[1], stats[2]);
     }
     else if (stats[0] == 'error')
-      showError (stats[1], stats[2]);
+      showError(stats[1], stats[2]);
+    
     $("#loadbar").hide();
 	});
 }
@@ -79,10 +89,12 @@ function setlevel (nm)
     $('#'+clevel).removeClass('tzSet tzOver');
     $('#d'+clevel).css('display', 'none');
   }
+  
   clevel = nm || 'L1';
-  setCookie('clevel', clevel, getTimePlusHour ());
+  setCookie('clevel', clevel, getTimePlusHour());
   $('#'+clevel).addClass('tzSet');
   $('#d'+clevel).css('display', 'block');
+  checkWindow();
 }
 
 $(function (){
@@ -90,7 +102,7 @@ $(function (){
     clevel = c;
   else
     clevel = 'L5';
-  setlevel (clevel);
+  setlevel(clevel);
   $('.tz').hover(
     function ()
     {
@@ -103,6 +115,6 @@ $(function (){
         $(this).removeClass('tzOver');
     }
   ).click(function (){
-    setlevel ($(this).attr('id'));
+    setlevel($(this).attr('id'));
   });
 });

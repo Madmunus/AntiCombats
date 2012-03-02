@@ -115,15 +115,6 @@ $char->showStatAddition('info');
 $char->info->showInfDetail($guid);
 ?>
   </td>
-  <td align="center" valign="top"><br><br>
-<?
-if ($admin_level < 1)
-{
-  echo ($checkup) ?"<br><b>".date ('d.m.y H:i', $checkup)."</b> - пройдена проверка." :"";
-  echo ($delo) ?"<br><b>Личное дело:</b><br>$delo" :"";
-}
-?>
-  </td>
 </tr>
 </table>
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
@@ -134,7 +125,7 @@ $rows = $adb->select("SELECT `c`.`id`,
                              `c`.`gift_author` 
                       FROM `character_inventory` AS `c` 
                       LEFT JOIN `item_template` AS `i` 
-                      ON `c`.`item_template` = `i`.`entry` 
+                      ON `c`.`item_entry` = `i`.`entry` 
                       WHERE `c`.`guid` = ?d 
                         and `i`.`section` = 'thing' 
                         and `i`.`type` = 'medal' 

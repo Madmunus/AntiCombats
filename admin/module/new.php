@@ -17,7 +17,7 @@ else if (isset($_POST['r_login_new']) && $r_login_new == '')
     echo "Вы не ввели Новый Логин.";
 else if ($r_login != '' && $r_login_new != '')
 {
-    $sql = $adb->query ("    UPDATE `inv` 
+    $sql = $adb->query("    UPDATE `inv` 
                             SET `owner` = '$r_login_new' 
                             WHERE `owner` = '$r_login';
                             ");

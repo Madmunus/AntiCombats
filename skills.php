@@ -27,11 +27,11 @@ $char->showStatAddition();
               if ($level < $min_level)
                 continue;
               
-              $stat_text = (in_array ($key, array ('str', 'dex', 'con', 'int'))) ?"<font style='color: ".getStatSkillColor($char_stats[$key], $added[$key]).";'>%s</font></td><td>".getBraces($char_stats[$key], $added[$key], $key)."&nbsp;</td>" :"%s</td><td></td>";
+              $stat_text = (in_array($key, array ('str', 'dex', 'con', 'int'))) ?"<font style='color: ".getStatSkillColor($char_stats[$key], $added[$key]).";'>%s</font></td><td>".getBraces($char_stats[$key], $added[$key], $key)."&nbsp;</td>" :"%s</td><td></td>";
               echo "<tr>";
               echo "<td>&bull; $lang[$key]&nbsp;&nbsp;&nbsp;</td>";
-              printf ("<td align='right' class='skill'>".$stat_text, "<font id='base_$key'>".$char_stats[$key]."</font>");
-              echo ($char_stats['ups'] > 0) ?"<td><img id='plus_$key' src='img/plus.gif' class='skill' onclick=\"changeStat ('$key');\" alt='увеличить' /></td>" :"";
+              printf("<td align='right' class='skill'>".$stat_text, "<font id='base_$key'>".$char_stats[$key]."</font>");
+              echo ($char_stats['ups'] > 0) ?"<td><img id='plus_$key' src='img/plus.gif' class='skill' onclick=\"changeStat('$key');\" alt='увеличить' /></td>" :"";
               echo "</tr>";
             }
             echo "</table>";
@@ -162,9 +162,9 @@ if ($level > 0)
   $effects = $adb->select("SELECT * FROM `character_effects` WHERE `guid` = ?d", $guid);
   foreach ($effects as $effect)
   {
-    $effect_s = $adb->selectRow("SELECT * FROM `player_effects` WHERE `entry` = ?d", $effect['effect_template']);
+    $effect_s = $adb->selectRow("SELECT * FROM `effect_template` WHERE `entry` = ?d", $effect['effect_entry']);
     $name = $effect_s['name'];
-    unset($effect_s['entry'], $effect_s['name'], $effect_s['duration']);
+    unset($effect_s['entry'], $effect_s['name'], $effect_s['end_time'], $effect_s['set'], $effect_s['power']);
     echo "<b>$name</b><br>";
     foreach ($effect_s as $stat => $value)
     {

@@ -22,7 +22,7 @@ $char->test->Guid('ajax');
 $char->test->Afk();
 
 $lang = $char->getLang();
-$char_db = $char->getChar('char_db', 'login', 'city', 'room', 'shut', 'chat_filter', 'chat_sys', 'chat_update');
+$char_db = $char->getChar('char_db', 'login', 'city', 'room', 'chat_shut', 'chat_filter', 'chat_sys', 'chat_update');
 ArrToVar($char_db);
 
 $do = requestVar('do');
@@ -35,7 +35,7 @@ switch ($do)
     $commands = $adb->selectCol("SELECT `name` FROM `server_commands`;");
     $command = false;
 
-    if (!$h || $shut)
+    if (!$h || $chat_shut)
       returnAjax('none');
     
     $color = $char->getChar('char_info', 'color');

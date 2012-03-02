@@ -1,17 +1,17 @@
 <?
-session_start ();
-ini_set ('display_errors', true);
-ini_set ('html_errors', false);
-ini_set ('error_reporting', E_ALL);
+session_start();
+ini_set('display_errors', true);
+ini_set('html_errors', false);
+ini_set('error_reporting', E_ALL);
 
-define ('AntiBK', true);
+define('AntiBK', true);
 
-include ("../engline/config.php");
-include ("../engline/dbsimple/Generic.php");
-include ("../engline/data/data.php");
-include ("../engline/functions/functions.php");
+include("../engline/config.php");
+include("../engline/dbsimple/Generic.php");
+include("../engline/data/data.php");
+include("../engline/functions/functions.php");
 
-$guid = getGuid ('game', '../');
+$guid = getGuid('game', '../');
 
 $adb = DbSimple_Generic::connect($database['adb']);
 $adb->query("SET NAMES ? ",$database['db_encoding']);
@@ -19,10 +19,10 @@ $adb->setErrorHandler("databaseErrorHandler");
 
 $char = Char::initialization($guid, $adb);
 
-$char->test->Guid ('game', '../');
-$char->test->Admin ('game', '../');
+$char->test->Guid('game', '../');
+$char->test->Admin('game', '../');
 
-$rows = $adb->select ("SELECT * FROM `admin_menu` ORDER BY `id`;");
+$rows = $adb->select("SELECT * FROM `admin_menu` ORDER BY `id`;");
 ?>
 <html>
 <head>
@@ -31,7 +31,7 @@ $rows = $adb->select ("SELECT * FROM `admin_menu` ORDER BY `id`;");
 </head>
 <body bgColor="#3D3D3B">
 <table align="center" cellpadding="0" cellspacing="5" width="100%" height="100%">
-  <tr><td align="center" colspan="2"><img src="img/enter.gif"><?echo "<div align='right'>Здравствуйте, <strong>".$char->info->character ()."</strong> (<a href='../game.php' onclick='this.blur ();' style='color: red; text-decoration: underline;'>Вернуться</a>)</div>";?></td></tr>
+  <tr><td align="center" colspan="2"><img src="img/enter.gif"><?echo "<div align='right'>Здравствуйте, <strong>".$char->info->character()."</strong> (<a href='../game.php' onclick='this.blur ();' style='color: red; text-decoration: underline;'>Вернуться</a>)</div>";?></td></tr>
   <tr>
     <td valign="top" width="270">
       <div class="block">

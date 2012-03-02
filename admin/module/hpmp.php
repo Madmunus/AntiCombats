@@ -16,7 +16,7 @@ $mp = (isset($_POST['mp'])) ?$_POST['mp'] :"";
 <?
 if (isset($_POST['r_login']) && isset($_POST['hp']) && isset($_POST['mp']))
 {
-    $sql = $adb->query ("    UPDATE `characters` 
+    $sql = $adb->query("    UPDATE `characters` 
                             SET `hp` = '$hp', 
                                 `mp` = '$mp' 
                             WHERE `login` = '$login';

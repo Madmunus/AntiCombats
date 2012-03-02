@@ -1,7 +1,7 @@
 <?
 defined('AntiBK') or die ("Доступ запрещен!");
 
-$sort = requestVar ('sort', 1);
+$sort = requestVar('sort', 1);
 $sort_c = array (
   1 => 'login_display',
   2 => 'last_time',
@@ -31,11 +31,11 @@ for ($i = 1; $i <= 4; $i++)
         <td><strong>Город</strong></td>
     </tr>
 <?
-$online = $adb->select ("SELECT * FROM `online` ORDER BY ?#", $sort_c[$sort]);
+$online = $adb->select("SELECT * FROM `online` ORDER BY ?#", $sort_c[$sort]);
 foreach ($online as $character)
 {
   echo "<tr align='center'>"
-     . "<td>".$char->info->character ('clan', $character['guid'])."</td>"
+     . "<td>".$char->info->character('clan', $character['guid'])."</td>"
      . "<td>$character[login_display]</td>"
      . "<td>".date ("d-m-y H:i:s", $character['last_time'])."</td>"
      . "<td>$character[room]</td>"
@@ -43,7 +43,7 @@ foreach ($online as $character)
      . "</tr>";
 }
 echo "</table>";
-$last = $char->info->character ('clan', $adb->selectCell ("SELECT `guid` FROM `online` ORDER BY `last_time` DESC;"));
+$last = $char->info->character('clan', $adb->selectCell("SELECT `guid` FROM `online` ORDER BY `last_time` DESC;"));
 $count = count ($online);
 if ($count > 0)
   echo "<center><em><strong>Последний Зашедший юзер:</em> $last <em>Всего:</strong></em><strong> $count</strong></center>";

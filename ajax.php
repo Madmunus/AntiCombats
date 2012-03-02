@@ -34,7 +34,6 @@ $city = $char_feat['city'];
 $room = $char_feat['room'];
 $money = $char_feat['money'];
 $money_euro = $char_feat['money_euro'];
-$shut = $char_feat['shut'];
 
 $do = requestVar('do');
 switch ($do)
@@ -110,7 +109,7 @@ switch ($do)
         $rows = $adb->select("SELECT * 
                               FROM `character_inventory` AS `c` 
                               LEFT JOIN `item_template` AS `i` 
-                              ON `c`.`item_template` = `i`.`entry` 
+                              ON `c`.`item_entry` = `i`.`entry` 
                               WHERE `i`.`section` = ?s 
                                 and `c`.`guid` = ?d 
                                 and `c`.`wear` = '0' 
@@ -121,7 +120,7 @@ switch ($do)
         $rows = $adb->select("SELECT * 
                               FROM `character_inventory` AS `c` 
                               LEFT JOIN `item_template` AS `i` 
-                              ON `c`.`item_template` = `i`.`entry` 
+                              ON `c`.`item_entry` = `i`.`entry` 
                               WHERE (`i`.`item_flags` & '1') 
                                 and `c`.`wear` = '0' 
                                 and `c`.`mailed` = '0' 
@@ -152,7 +151,7 @@ switch ($do)
     $items = $adb->selectCol("SELECT `c`.`id` AS ARRAY_KEY, `i`.?# 
                               FROM `character_inventory` AS `c` 
                               LEFT JOIN `item_template` AS `i` 
-                              ON `c`.`item_template` = `i`.`entry` 
+                              ON `c`.`item_entry` = `i`.`entry` 
                               WHERE `c`.`guid` = ?d 
                                 and `c`.`wear` = '0' 
                                 and `c`.`mailed` = '0' 
@@ -181,7 +180,7 @@ switch ($do)
                                              `i`.`mass` 
                                       FROM `character_inventory` AS `c` 
                                       LEFT JOIN `item_template` AS `i` 
-                                      ON `c`.`item_template` = `i`.`entry` 
+                                      ON `c`.`item_entry` = `i`.`entry` 
                                       WHERE `c`.`guid` = ?d 
                                         and `c`.`id` = ?d 
                                         and `c`.`wear` = '0' 
@@ -192,15 +191,15 @@ switch ($do)
         returnAjax('complete', $mass, 1);
       break;
       case 1:
-        $item_entry = $adb->selectCell("SELECT `item_template` FROM `character_inventory` WHERE `guid` = ?d and `id` = ?d and `wear` = '0' and `mailed` = '0';", $guid ,$item_id) or returnAjax('error', 213);
+        $item_entry = $adb->selectCell("SELECT `item_entry` FROM `character_inventory` WHERE `guid` = ?d and `id` = ?d and `wear` = '0' and `mailed` = '0';", $guid ,$item_id) or returnAjax('error', 213);
         $items = $adb->select("SELECT `c`.`id`, 
                                       `i`.`name`, 
                                       `i`.`mass` 
                                FROM `character_inventory` AS `c` 
                                LEFT JOIN `item_template` AS `i` 
-                               ON `c`.`item_template` = `i`.`entry` 
+                               ON `c`.`item_entry` = `i`.`entry` 
                                WHERE `c`.`guid` = ?d 
-                                 and `c`.`item_template` = ?d 
+                                 and `c`.`item_entry` = ?d 
                                  and `c`.`wear` = '0' 
                                  and `c`.`mailed` = '0';", $guid ,$item_entry) or returnAjax('error', 213);
         $i = 0;
@@ -318,7 +317,7 @@ switch ($do)
                                       `i`.?# 
                                FROM `character_inventory` AS `c` 
                                LEFT JOIN `item_template` AS `i` 
-                               ON `c`.`item_template` = `i`.`entry` 
+                               ON `c`.`item_entry` = `i`.`entry` 
                                WHERE `c`.`guid` = ?d 
                                  and `c`.`id` = ?d 
                                  and `c`.`wear` = '0' 
@@ -454,7 +453,7 @@ switch ($do)
       $money_euro = $money_euro - $price_euro;
       $mass = $char->changeMass($i_mass);
       //$adb->query("UPDATE `character_stats` SET `trade` = `trade` + '0.01' WHERE `guid` = ?d", $guid);
-      $adb->query("INSERT INTO `character_inventory` (`guid`, `item_template`, `tear_max`, `inc_count_p`, `made_in`, `date`, `last_update`) 
+      $adb->query("INSERT INTO `character_inventory` (`guid`, `item_entry`, `tear_max`, `inc_count_p`, `made_in`, `date`, `last_update`) 
                    VALUES (?d, ?d, ?f, ?d, ?s, ?d, ?d)", $guid ,$item_entry ,$tear ,$inc_count ,$city ,$time ,time ());
       $adb->query("UPDATE `item_amount` SET ?# = ?# - '1' WHERE `entry` = ?d", $amount ,$amount ,$item_entry);
       if ($price > 0)
@@ -484,7 +483,7 @@ switch ($do)
                                    `i`.`tear` 
                             FROM `character_inventory` AS `c` 
                             LEFT JOIN `item_template` AS `i` 
-                            ON `c`.`item_template` = `i`.`entry` 
+                            ON `c`.`item_entry` = `i`.`entry` 
                             WHERE (`i`.`item_flags` & '1') 
                                and `c`.`id` = ?d 
                                and `c`.`guid` = ?d 
@@ -510,7 +509,7 @@ switch ($do)
       returnAjax('complete', getMoney($money_euro), $mass, 405, "$name|$sell_price");
     }
   break;
-  /*Skills*/
+  /*Stats*/
   case 'increasestat':
     $stat = requestVar('stat');
     $travm = $char_feat['travm'];
@@ -523,6 +522,7 @@ switch ($do)
     else
       returnAjax('error', 199, $s_stat);
   break;
+  /*Skills*/
   case 'increaseskill':
     $stat = requestVar('stat');
     $travm = $char_feat['travm'];
@@ -531,7 +531,7 @@ switch ($do)
     $char->showStatAddition();
     $s_stat = str_replace (':', '', $lang[$stat]);
     if ($char_stats['skills'] > 0 && $travm == 0 && isset($mastery[$stat]) && $char_feat['level'] >= $mastery[$stat] && 
-       ((in_array ($stat, $weapon) & ($char_feat[$stat] - $added[$stat]) < 5) || (in_array ($stat, $magic) & ($char_feat[$stat] - $added[$stat]) < 10)))
+       ((in_array($stat, $weapon) & ($char_feat[$stat] - $added[$stat]) < 5) || (in_array($stat, $magic) & ($char_feat[$stat] - $added[$stat]) < 10)))
     {
       if ($adb->query("UPDATE `character_stats` SET ?# = ?# + '1' WHERE `guid` = ?d", $stat ,$stat ,$guid))
         $adb->query("UPDATE `character_stats` SET `skills` = `skills` - '1' WHERE `guid` = ?d", $guid);

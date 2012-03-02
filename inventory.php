@@ -30,8 +30,8 @@ foreach ($bank as $num => $bank_id)
       <table border="0" cellspacing="0" cellpadding="0">
         <tr><td width="210" align="center"><?$char->equip->showCharacter('inv');?></td></tr>    
 <?
-if ($shut)
-  echo "<tr><td valign='top'><p style='margin-left: 10px;'><small><img src='img/icon/sleep.gif' width='40' height='25'>$lang[shut_desc] ".getFormatedTime($shut)."<br></small></p></td></tr>";
+if ($chat_shut)
+  echo "<tr><td valign='top'><p style='margin-left: 10px;'><small><img src='img/icon/sleep.gif' width='40' height='25'>$lang[shut_desc] ".getFormatedTime($chat_shut)."<br></small></p></td></tr>";
 ?>
       </table>
     </td>
@@ -97,7 +97,7 @@ echo ($orden == 1 || $orden == 2) ?"<strong>$orden_dis$stat_rang</strong><br></s
     $rows = $adb->select("SELECT * 
                            FROM `character_inventory` AS `c` 
                            LEFT JOIN `item_template` AS `i` 
-                           ON `c`.`item_template` = `i`.`entry` 
+                           ON `c`.`item_entry` = `i`.`entry` 
                            WHERE `i`.`section` = ?s 
                              and `c`.`guid` = ?d 
                              and `c`.`wear` = '0' 
@@ -130,7 +130,7 @@ echo ($orden == 1 || $orden == 2) ?"<strong>$orden_dis$stat_rang</strong><br></s
         $rows = $adb->select("    SELECT *
                                     FROM `character_inventory` AS `c` 
                                     LEFT JOIN `item_template` AS `i` 
-                                    ON `c`.`item_template` = `i`.`entry` 
+                                    ON `c`.`item_entry` = `i`.`entry` 
                                     WHERE `i`.`section` = ?s 
                                             and `c`.`guid` = ?d", $section ,$guid);
         $i = 0;

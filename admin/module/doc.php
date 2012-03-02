@@ -1,7 +1,7 @@
 <?
 defined('AntiBK') or die ("Доступ запрещен!");
 
-$rows = $adb->select ("SELECT * FROM `admin_menu` ORDER BY `id`;");
+$rows = $adb->select("SELECT * FROM `admin_menu` ORDER BY `id`;");
 ?>
 <div>
 Данная документация ещё не доработана, но всё же хотелось бы рассказать об основных функциях и фишках Админ Центра , что же приступим :).<br>

@@ -18,7 +18,7 @@ if (isset($_POST['r_login']) && $r_login == '')
     echo "Вы не ввели Логин.";
 else if ($r_login != '')
 {
-    $sql = $adb->query ("    UPDATE `characters` 
+    $sql = $adb->query("    UPDATE `characters` 
                             SET `status` = '$status', 
                                 `state` = '$state' 
                             WHERE `login` = '$login';

@@ -22,7 +22,7 @@ if ($action == "submit")
     array_unshift ($history, stripslashes($sqlquery));
     array_splice ($history, 10);
     $worktime = getmicrotime ();
-    $qwresult = @mysql_query (stripslashes($sqlquery));
+    $qwresult = @mysql_query(stripslashes($sqlquery));
     $worktime = getmicrotime () - $worktime;
 
     if (mysql_errno())
@@ -212,7 +212,7 @@ foreach ($alltables as $tables)
                         {
                             echo "Таблица Данных: ";
                             echo "<br><select class='small' style='width: 120px;' name='table'>";
-                            $result = $adb->query ("SHOW TABLE STATUS FROM `$database`;");
+                            $result = $adb->query("SHOW TABLE STATUS FROM `$database`;");
                             for ($i = 0; $i < count ($result); $i++)
                             {
                                 if ($result[$i]['Name'] == $table)
@@ -225,7 +225,7 @@ foreach ($alltables as $tables)
                         }
                         if ($table != "")
                         {
-                            $result = $adb->query ("SHOW TABLE STATUS FROM `$database`;");
+                            $result = $adb->query("SHOW TABLE STATUS FROM `$database`;");
                             echo "Информация таблицы:<br>";
                             echo "Имя таблицы: <strong>{$result[$number]['Name']}</strong><br>";
                             echo "Количество строк: <strong>{$result[$number]['Rows']}</strong><br>";
@@ -280,7 +280,7 @@ if ($table != "")
 {
     $fields = array();
     $color = array();
-    $select = $adb->query ("SHOW COLUMNS FROM `$database`.`$table`;");
+    $select = $adb->query("SHOW COLUMNS FROM `$database`.`$table`;");
     $num_fields = count ($select);
     echo "<table bgcolor='#112255' border='1'>";
     echo "<tr>";
@@ -298,7 +298,7 @@ if ($table != "")
         echo "<td><a href='#' name='<div style=\"color: black;\">Тип: {$select[$i]['Type']}<br>Default: {$select[$i]['Default']}<br>Null: {$select[$i]['Null']}<br>Key: {$select[$i]['Key']}<br>Extra: {$select[$i]['Extra']}</div>' style='cursor: help; color: $color[$i];'>{$select[$i]['Field']}</a></td>";
     }
     echo "</tr>";
-    $select = $adb->select ("SELECT * FROM `$table` LIMIT $showfrom, $showto;");
+    $select = $adb->select("SELECT * FROM `$table` LIMIT $showfrom, $showto;");
     for ($i = 0; $i < count ($select); $i++)
     {
         echo "<tr>";

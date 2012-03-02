@@ -1,17 +1,17 @@
 <?
-session_start ();
-ini_set ('display_errors', true);
-ini_set ('html_errors', false);
-ini_set ('error_reporting', E_ALL);
+session_start();
+ini_set('display_errors', true);
+ini_set('html_errors', false);
+ini_set('error_reporting', E_ALL);
 
-define ('AntiBK', true);
+define('AntiBK', true);
 
-include ("../engline/config.php");
-include ("../engline/dbsimple/Generic.php");
-include ("../engline/data/data.php");
-include ("../engline/functions/functions.php");
+include("../engline/config.php");
+include("../engline/dbsimple/Generic.php");
+include("../engline/data/data.php");
+include("../engline/functions/functions.php");
 
-$guid = getGuid ('main', '../');
+$guid = getGuid('main', '../');
 
 $adb = DbSimple_Generic::connect($database['adb']);
 $adb->query("SET NAMES ? ",$database['db_encoding']);
@@ -19,11 +19,11 @@ $adb->setErrorHandler("databaseErrorHandler");
 
 $char = Char::initialization($guid, $adb);
 
-$char->test->Guid ('main', '../');
-$char->test->Admin ('main', '../');
+$char->test->Guid('main', '../');
+$char->test->Admin('main', '../');
 
-$act = requestVar ('act', 'none');
-$name = $adb->selectCell ("SELECT `name` FROM `admin_menu` WHERE `href` = ?s", $act);
+$act = requestVar('act', 'none');
+$name = $adb->selectCell("SELECT `name` FROM `admin_menu` WHERE `href` = ?s", $act);
 ?>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -56,11 +56,10 @@ switch ($act)
     case 'mer':
     case 'metka':
     case 'new':
-    case 'stat_admin': include ("module/$act.php");
+    case 'stat_admin': include("module/$act.php");
     break;
-    case 'phpinfo':    echoScript ("$('#info', parent.document).html('Информация: Phpinfo');");
+    case 'phpinfo':    echoScript("$('#info', parent.document).html('Информация: Phpinfo');");
                        phpinfo ();
     break;
 }
 ?>
-<div id="mmoves" class="mmoves"></div>

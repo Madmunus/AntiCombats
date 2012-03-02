@@ -10,8 +10,8 @@ $r_login = (isset($_POST['r_login'])) ?$_POST['r_login'] :"";
 <?
 if (isset($_POST['r_login']))
 {
-    $sql1 = $adb->query ("UPDATE `inv` SET `wear` = '0' WHERE `owner` = '$r_login';");
-    $sql2 = $adb->query ("UPDATE `characters` 
+    $sql1 = $adb->query("UPDATE `inv` SET `wear` = '0' WHERE `owner` = '$r_login';");
+    $sql2 = $adb->query("UPDATE `characters` 
                             SET `helmet` = '0', 
                                 `naruchi` = '0', 
                                 `hand_r` = '0', 

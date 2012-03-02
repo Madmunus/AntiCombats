@@ -1,17 +1,17 @@
 <?
-session_start ();
-ini_set ('display_errors', true);
-ini_set ('html_errors', false);
-ini_set ('error_reporting', E_ALL);
+session_start();
+ini_set('display_errors', true);
+ini_set('html_errors', false);
+ini_set('error_reporting', E_ALL);
 
-define ('AntiBK', true);
+define('AntiBK', true);
 
-include ("../engline/config.php");
-include ("../engline/dbsimple/Generic.php");
-include ("../engline/data/data.php");
-include ("../engline/functions/functions.php");
+include("../engline/config.php");
+include("../engline/dbsimple/Generic.php");
+include("../engline/data/data.php");
+include("../engline/functions/functions.php");
 
-$guid = getGuid ('ajax', '../');
+$guid = getGuid('ajax', '../');
 
 $adb = DbSimple_Generic::connect($database['adb']);
 $adb->query("SET NAMES ? ",$database['db_encoding']);
@@ -19,20 +19,20 @@ $adb->setErrorHandler("databaseErrorHandler");
 
 $char = Char::initialization($guid, $adb);
 
-$char->test->Guid ('ajax', '../');
-$char->test->Admin ('ajax', '../');
+$char->test->Guid('ajax', '../');
+$char->test->Admin('ajax', '../');
 
-$do = requestVar ('do');
+$do = requestVar('do');
 
 switch ($do)
 {
   case 'showtypes':
-    $section = requestVar ('section');
+    $section = requestVar('section');
     
     if (!$section)
       die ('');
     
-    $types = $adb->selectCol ("SELECT `type` AS ARRAY_KEY FROM `admin_item_create` WHERE `section` = ?s and `type` != 'lang';", $section);
+    $types = $adb->selectCol("SELECT `type` AS ARRAY_KEY FROM `admin_item_create` WHERE `section` = ?s and `type` != 'lang';", $section);
     
     $return = "<select class='field' name='type'><option value='' selected></option>";
     foreach ($types as $type => $n)
@@ -41,30 +41,30 @@ switch ($do)
     die ($return);
   break;
   case 'showfields':
-    $type = requestVar ('type');
+    $type = requestVar('type');
     
     if (!$type)
       die ('');
     
-    $lang = $adb->selectRow ("SELECT * FROM `admin_item_create` WHERE `type` = 'lang';");
-    $fields = $adb->selectRow ("SELECT * FROM `admin_item_create` WHERE `type` = ?s", $type);
+    $lang = $adb->selectRow("SELECT * FROM `admin_item_create` WHERE `type` = 'lang';");
+    $fields = $adb->selectRow("SELECT * FROM `admin_item_create` WHERE `type` = ?s", $type);
     $return = "<table border='0' width='100%'><tr><td colspan='8' class='header'>Основные:<hr></td></tr><tr>";
     $i = 0;
     foreach ($fields as $field => $val)
     {
       switch ($field)
       {
-        case 'min_dex':          $return .= "</tr><tr><td colspan='8' class='header'>Требования:<hr></td></tr><tr>";     $i = 0; break;
-        case 'add_str':          $return .= "</tr><tr><td colspan='8' class='header'>Характеристики:<hr></td></tr><tr>"; $i = 0; break;
-        case 'def_h_min':        $return .= "</tr><tr><td colspan='8' class='header'>Защита:<hr></td></tr><tr>";         $i = 0; break;
-        case 'resist_all_magic': $return .= "</tr><tr><td colspan='8' class='header'>Резисты:<hr></td></tr><tr>";        $i = 0; break;
-        case 'mf_all_damage':    $return .= "</tr><tr><td colspan='8' class='header'>Мф удара:<hr></td></tr><tr>";       $i = 0; break;
-        case 'mf_anticrit':      $return .= "</tr><tr><td colspan='8' class='header'>Мф усиления:<hr></td></tr><tr>";    $i = 0; break;
-        case 'all_magic':        $return .= "</tr><tr><td colspan='8' class='header'>Умения:<hr></td></tr><tr>";         $i = 0; break;
-        case 'min_attack':       $return .= "</tr><tr><td colspan='8' class='header'>Урон:<hr></td></tr><tr>";           $i = 0; break;
-        case 'repres_all_magic': $return .= "</tr><tr><td colspan='8' class='header'>Подавления:<hr></td></tr><tr>";     $i = 0; break;
-        case 'chance_sting':     $return .= "</tr><tr><td colspan='8' class='header'>Шансы:<hr></td></tr><tr>";          $i = 0; break;
-        case 'inc_count':        $return .= "</tr><tr><td colspan='8' class='header'>Дополнительно:<hr></td></tr><tr>";  $i = 0; break;
+        case 'min_dex':   $return .= "</tr><tr><td colspan='8' class='header'>Требования:<hr></td></tr><tr>";     $i = 0; break;
+        case 'add_str':   $return .= "</tr><tr><td colspan='8' class='header'>Характеристики:<hr></td></tr><tr>"; $i = 0; break;
+        case 'def_h_min': $return .= "</tr><tr><td colspan='8' class='header'>Защита:<hr></td></tr><tr>";         $i = 0; break;
+        case 'res_magic': $return .= "</tr><tr><td colspan='8' class='header'>Резисты:<hr></td></tr><tr>";        $i = 0; break;
+        case 'mf_dmg':    $return .= "</tr><tr><td colspan='8' class='header'>Мф удара:<hr></td></tr><tr>";       $i = 0; break;
+        case 'mf_acrit':  $return .= "</tr><tr><td colspan='8' class='header'>Мф усиления:<hr></td></tr><tr>";    $i = 0; break;
+        case 'all_magic': $return .= "</tr><tr><td colspan='8' class='header'>Умения:<hr></td></tr><tr>";         $i = 0; break;
+        case 'min_hit':   $return .= "</tr><tr><td colspan='8' class='header'>Урон:<hr></td></tr><tr>";           $i = 0; break;
+        case 'rep_magic': $return .= "</tr><tr><td colspan='8' class='header'>Подавления:<hr></td></tr><tr>";     $i = 0; break;
+        case 'ch_sting':  $return .= "</tr><tr><td colspan='8' class='header'>Шансы:<hr></td></tr><tr>";          $i = 0; break;
+        case 'inc_count': $return .= "</tr><tr><td colspan='8' class='header'>Дополнительно:<hr></td></tr><tr>";  $i = 0; break;
       }
       
       if (!$val || $field == 'section' || $field == 'type')
@@ -80,7 +80,7 @@ switch ($do)
     die ($return);
   break;
   case 'createitem':
-    $fields = requestVar ('fields');
+    $fields = requestVar('fields');
     $sql = array ();
     $field = explode ('A_D', $fields);
     unset ($field[count($field) - 1]);
@@ -89,10 +89,10 @@ switch ($do)
       $f = explode ('=', $fill);
       $sql[$f[0]] = $f[1];
     }
-    if ($adb->query ("INSERT INTO `item_template` (?#) VALUES (?a);",array_keys($sql), array_values($sql)))
+    if ($adb->query("INSERT INTO `item_template` (?#) VALUES (?a);",array_keys($sql), array_values($sql)))
     {
-      $entry = $adb->selectCell ("SELECT MAX(`entry`) FROM `item_template`;");
-      $adb->query ("INSERT INTO `item_amount` (`entry`) VALUES (?d);", $entry);
+      $entry = $adb->selectCell("SELECT MAX(`entry`) FROM `item_template`;");
+      $adb->query("INSERT INTO `item_amount` (`entry`) VALUES (?d);", $entry);
       die('complete');
     }
   break;

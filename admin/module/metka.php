@@ -17,7 +17,7 @@ else if (isset($_POST['metka']) && $metka == '')
     echo "Вы не ввели Метку.";
 else if ($r_login != '' && $metka != '')
 {
-    $sql = $adb->query ("    UPDATE `characters` 
+    $sql = $adb->query("    UPDATE `characters` 
                             SET `metka` = '$metka' 
                             WHERE `login` = '$r_login';
                             ");

@@ -109,7 +109,7 @@ $name_s = $char_db['clan_short'];
 $clan  = $char_db['clan'];
 $orden = $char_db['orden'];
 
-$shut = $char_db['shut'];
+$chat_shut = $char_db['chat_shut'];
 $date = date ('d.m.y H:i:s', mktime(date ('H') - $GSM));
 
 $char->city->getRoomGoTime($mtime);

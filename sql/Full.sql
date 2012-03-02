@@ -299,13 +299,24 @@ DROP TABLE IF EXISTS `character_bars`;
 
 CREATE TABLE `character_bars` (
   `guid` int(11) unsigned NOT NULL,
-  `stat` varchar(3) NOT NULL default '2|1',
-  `mod` varchar(3) NOT NULL default '3|1',
+  `stat` varchar(3) NOT NULL default '1|1',
+  `mod` varchar(3) NOT NULL default '2|1',
   `power` varchar(3) NOT NULL default '0',
   `def` varchar(3) NOT NULL default '0',
   `set` varchar(3) NOT NULL default '0',
   `btn` varchar(3) NOT NULL default '0',
   PRIMARY KEY  (`guid`)
+) ENGINE=MyISAM DEFAULT CHARSET=cp1251;
+
+/*Table structure for table `character_effects` */
+
+DROP TABLE IF EXISTS `character_effects`;
+
+CREATE TABLE `character_effects` (
+  `guid` int(11) NOT NULL,
+  `effect_entry` int(11) NOT NULL,
+  `end_time` bigint(20) NOT NULL default '0',
+  PRIMARY KEY  (`guid`,`effect_entry`)
 ) ENGINE=MyISAM DEFAULT CHARSET=cp1251;
 
 /*Table structure for table `character_equip` */
@@ -321,7 +332,7 @@ CREATE TABLE `character_equip` (
   `hand_r_type` varchar(30) NOT NULL default 'phisic',
   `cloak` int(11) NOT NULL default '0',
   `armor` int(11) NOT NULL default '0',
-  `shirt` int(11) NOT NULL default '0',
+  `shirt` int(11) NOT NULL default '1031',
   `belt` int(11) NOT NULL default '0',
   `earring` int(11) NOT NULL default '0',
   `amulet` int(11) NOT NULL default '0',
@@ -332,10 +343,10 @@ CREATE TABLE `character_equip` (
   `hand_l` int(11) NOT NULL default '0',
   `hand_l_free` tinyint(3) NOT NULL default '1',
   `hand_l_type` varchar(30) NOT NULL default 'none',
-  `pants` int(11) NOT NULL default '0',
+  `pants` int(11) NOT NULL default '920',
   `boots` int(11) NOT NULL default '0',
   PRIMARY KEY  (`guid`)
-) ENGINE=MyISAM AUTO_INCREMENT=29 DEFAULT CHARSET=cp1251;
+) ENGINE=MyISAM AUTO_INCREMENT=30 DEFAULT CHARSET=cp1251;
 
 /*Table structure for table `character_info` */
 
@@ -344,6 +355,8 @@ DROP TABLE IF EXISTS `character_info`;
 CREATE TABLE `character_info` (
   `guid` int(11) NOT NULL default '0',
   `name` varchar(30) character set cp1251 default NULL,
+  `secretquestion` text,
+  `secretanswer` text,
   `icq` varchar(30) character set cp1251 default NULL,
   `hide_icq` tinyint(3) unsigned NOT NULL default '0',
   `url` varchar(50) character set cp1251 default NULL,
@@ -365,7 +378,7 @@ DROP TABLE IF EXISTS `character_inventory`;
 CREATE TABLE `character_inventory` (
   `id` int(11) NOT NULL auto_increment,
   `guid` int(11) NOT NULL,
-  `item_template` int(11) NOT NULL default '0',
+  `item_entry` int(11) NOT NULL default '0',
   `wear` tinyint(3) NOT NULL default '0',
   `tear_cur` double NOT NULL default '0',
   `tear_max` double NOT NULL default '0',
@@ -387,7 +400,7 @@ CREATE TABLE `character_inventory` (
   `made_in` varchar(30) NOT NULL,
   `last_update` bigint(20) NOT NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=444 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=507 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `character_sets` */
 
@@ -421,9 +434,9 @@ DROP TABLE IF EXISTS `character_stats`;
 
 CREATE TABLE `character_stats` (
   `guid` int(11) unsigned NOT NULL auto_increment,
-  `hp` int(10) NOT NULL default '48',
+  `hp` int(10) NOT NULL default '49',
   `hp_cure` bigint(20) default '0',
-  `hp_all` int(10) NOT NULL default '48',
+  `hp_all` int(10) NOT NULL default '52',
   `hp_regen` int(10) NOT NULL default '100' COMMENT '%',
   `mp` int(10) NOT NULL default '0',
   `mp_cure` bigint(20) default '0',
@@ -442,7 +455,7 @@ CREATE TABLE `character_stats` (
   `cast` int(10) NOT NULL default '0',
   `walk` int(10) NOT NULL default '0',
   `cost` int(10) NOT NULL default '0',
-  `mass` double NOT NULL default '0',
+  `mass` double NOT NULL default '0.2',
   `maxmass` double NOT NULL default '43',
   `phisic` int(10) NOT NULL default '0',
   `hand_r_phisic` int(10) NOT NULL default '0',
@@ -474,42 +487,42 @@ CREATE TABLE `character_stats` (
   `def_h_max` int(10) NOT NULL default '0',
   `def_a_min` int(10) NOT NULL default '0',
   `def_a_max` int(10) NOT NULL default '0',
-  `def_b_min` int(10) NOT NULL default '0',
-  `def_b_max` int(10) NOT NULL default '0',
-  `def_l_min` int(10) NOT NULL default '0',
-  `def_l_max` int(10) NOT NULL default '0',
-  `resist_sting` double NOT NULL default '4.5',
-  `resist_sting_h` double NOT NULL default '0',
-  `resist_sting_a` double NOT NULL default '0',
-  `resist_sting_b` double NOT NULL default '0',
-  `resist_sting_l` double NOT NULL default '0',
-  `resist_slash` double NOT NULL default '4.5',
-  `resist_slash_h` double NOT NULL default '0',
-  `resist_slash_a` double NOT NULL default '0',
-  `resist_slash_b` double NOT NULL default '0',
-  `resist_slash_l` double NOT NULL default '0',
-  `resist_crush` double NOT NULL default '4.5',
-  `resist_crush_h` double NOT NULL default '0',
-  `resist_crush_a` double NOT NULL default '0',
-  `resist_crush_b` double NOT NULL default '0',
-  `resist_crush_l` double NOT NULL default '0',
-  `resist_sharp` double NOT NULL default '4.5',
-  `resist_sharp_h` double NOT NULL default '0',
-  `resist_sharp_a` double NOT NULL default '0',
-  `resist_sharp_b` double NOT NULL default '0',
-  `resist_sharp_l` double NOT NULL default '0',
-  `resist_fire` double NOT NULL default '4.5',
-  `resist_water` double NOT NULL default '4.5',
-  `resist_air` double NOT NULL default '4.5',
-  `resist_earth` double NOT NULL default '4.5',
-  `resist_light` double NOT NULL default '4.5',
-  `resist_gray` double NOT NULL default '4.5',
-  `resist_dark` double NOT NULL default '4.5',
-  `repres_all_magic` int(10) NOT NULL default '0',
-  `repres_fire` int(10) NOT NULL default '0',
-  `repres_water` int(10) NOT NULL default '0',
-  `repres_air` int(10) NOT NULL default '0',
-  `repres_earth` int(10) NOT NULL default '0',
+  `def_b_min` int(10) NOT NULL default '1',
+  `def_b_max` int(10) NOT NULL default '1',
+  `def_l_min` int(10) NOT NULL default '1',
+  `def_l_max` int(10) NOT NULL default '1',
+  `res_sting` double NOT NULL default '4.5',
+  `res_sting_h` double NOT NULL default '0',
+  `res_sting_a` double NOT NULL default '0',
+  `res_sting_b` double NOT NULL default '0',
+  `res_sting_l` double NOT NULL default '0',
+  `res_slash` double NOT NULL default '4.5',
+  `res_slash_h` double NOT NULL default '0',
+  `res_slash_a` double NOT NULL default '0',
+  `res_slash_b` double NOT NULL default '0',
+  `res_slash_l` double NOT NULL default '0',
+  `res_crush` double NOT NULL default '4.5',
+  `res_crush_h` double NOT NULL default '0',
+  `res_crush_a` double NOT NULL default '0',
+  `res_crush_b` double NOT NULL default '0',
+  `res_crush_l` double NOT NULL default '0',
+  `res_sharp` double NOT NULL default '4.5',
+  `res_sharp_h` double NOT NULL default '0',
+  `res_sharp_a` double NOT NULL default '0',
+  `res_sharp_b` double NOT NULL default '0',
+  `res_sharp_l` double NOT NULL default '0',
+  `res_fire` double NOT NULL default '4.5',
+  `res_water` double NOT NULL default '4.5',
+  `res_air` double NOT NULL default '4.5',
+  `res_earth` double NOT NULL default '4.5',
+  `res_light` double NOT NULL default '4.5',
+  `res_gray` double NOT NULL default '4.5',
+  `res_dark` double NOT NULL default '4.5',
+  `rep_magic` int(10) NOT NULL default '0',
+  `rep_fire` int(10) NOT NULL default '0',
+  `rep_water` int(10) NOT NULL default '0',
+  `rep_air` int(10) NOT NULL default '0',
+  `rep_earth` int(10) NOT NULL default '0',
   `mf_fire` double NOT NULL default '0',
   `mf_water` double NOT NULL default '0',
   `mf_air` double NOT NULL default '0',
@@ -532,24 +545,24 @@ CREATE TABLE `character_stats` (
   `mf_crit` int(10) NOT NULL default '21',
   `hand_r_crit` int(10) NOT NULL default '0',
   `hand_l_crit` int(10) NOT NULL default '0',
-  `mf_critpower` int(10) NOT NULL default '0',
-  `hand_r_critpower` int(10) NOT NULL default '0',
-  `hand_l_critpower` int(10) NOT NULL default '0',
-  `mf_anticrit` int(10) NOT NULL default '9',
-  `mf_uvorot` int(10) NOT NULL default '21',
-  `mf_antiuvorot` int(10) NOT NULL default '9',
-  `hand_r_antiuvorot` int(10) NOT NULL default '0',
-  `hand_l_antiuvorot` int(10) NOT NULL default '0',
-  `mf_piercearmor` int(10) NOT NULL default '0',
-  `hand_r_piercearmor` int(10) NOT NULL default '0',
-  `hand_l_piercearmor` int(10) NOT NULL default '0',
+  `mf_critp` int(10) NOT NULL default '0',
+  `hand_r_critp` int(10) NOT NULL default '0',
+  `hand_l_critp` int(10) NOT NULL default '0',
+  `mf_acrit` int(10) NOT NULL default '9',
+  `mf_dodge` int(10) NOT NULL default '21',
+  `mf_adodge` int(10) NOT NULL default '9',
+  `hand_r_adodge` int(10) NOT NULL default '0',
+  `hand_l_adodge` int(10) NOT NULL default '0',
+  `mf_parmour` int(10) NOT NULL default '0',
+  `hand_r_parmour` int(10) NOT NULL default '0',
+  `hand_l_parmour` int(10) NOT NULL default '0',
   `mf_contr` int(10) NOT NULL default '0',
   `mf_parry` int(10) NOT NULL default '0',
-  `mf_blockshield` int(10) NOT NULL default '0',
-  `wp_min` int(10) NOT NULL default '4',
+  `mf_shieldb` int(10) NOT NULL default '0',
+  `hitmin` int(10) NOT NULL default '4',
   `hand_r_hitmin` int(10) NOT NULL default '0',
   `hand_l_hitmin` int(10) NOT NULL default '0',
-  `wp_max` int(10) NOT NULL default '6',
+  `hitmax` int(10) NOT NULL default '6',
   `hand_r_hitmax` int(10) NOT NULL default '0',
   `hand_l_hitmax` int(10) NOT NULL default '0',
   PRIMARY KEY  (`guid`)
@@ -571,7 +584,7 @@ CREATE TABLE `characters` (
   `money` double NOT NULL default '0',
   `money_euro` double NOT NULL default '0',
   `city` varchar(30) character set cp1251 NOT NULL default '',
-  `room` varchar(30) character set cp1251 NOT NULL default 'km_1',
+  `room` varchar(30) character set cp1251 NOT NULL default 'km_0',
   `clan` varchar(30) character set cp1251 default NULL,
   `orden` smallint(3) unsigned NOT NULL default '0',
   `rang` smallint(3) unsigned NOT NULL default '0',
@@ -581,8 +594,7 @@ CREATE TABLE `characters` (
   `glava` varchar(30) character set cp1251 default NULL,
   `chin` varchar(30) character set cp1251 default NULL,
   `passport` varchar(30) character set cp1251 default NULL,
-  `status` varchar(30) character set cp1251 default 'Рекрут',
-  `shut` bigint(20) NOT NULL default '0',
+  `status` varchar(30) character set cp1251 default 'novice',
   `prision` bigint(20) NOT NULL default '0',
   `prision_reason` varchar(255) character set cp1251 default NULL,
   `block` tinyint(3) NOT NULL default '0',
@@ -603,11 +615,10 @@ CREATE TABLE `characters` (
   `dealer` tinyint(3) NOT NULL default '0',
   `otdel` varchar(30) character set cp1251 NOT NULL default '',
   `checkup` bigint(20) NOT NULL default '0',
-  `profession` varchar(30) character set cp1251 NOT NULL default '',
+  `f_style` varchar(30) character set cp1251 default '',
   `acsess1` varchar(30) character set cp1251 NOT NULL default '',
   `acsess2` varchar(30) character set cp1251 NOT NULL default '',
   `animal` varchar(30) character set cp1251 NOT NULL default '',
-  `chat_s` varchar(30) character set cp1251 NOT NULL default '',
   `navik_wood` varchar(30) character set cp1251 NOT NULL default '',
   `vote` tinyint(3) NOT NULL default '0',
   `add_resourses` int(4) NOT NULL default '0',
@@ -621,9 +632,12 @@ CREATE TABLE `characters` (
   `afk` tinyint(3) unsigned NOT NULL default '0',
   `dnd` tinyint(3) unsigned NOT NULL default '0',
   `message` text,
+  `chat_shut` bigint(20) NOT NULL default '0',
   `chat_filter` tinyint(3) NOT NULL default '0',
   `chat_sys` tinyint(3) NOT NULL default '1',
   `chat_update` tinyint(3) unsigned NOT NULL default '10',
+  `chat_translit` tinyint(3) NOT NULL default '0',
+  `chat_list` tinyint(3) NOT NULL default '0',
   `return_time` int(10) NOT NULL default '1800',
   `next_shape` bigint(20) NOT NULL default '0',
   `last_go` bigint(20) NOT NULL default '0',
@@ -631,7 +645,7 @@ CREATE TABLE `characters` (
   `last_return` bigint(20) NOT NULL default '0',
   `last_time` bigint(20) NOT NULL default '0',
   PRIMARY KEY  (`guid`)
-) ENGINE=MyISAM AUTO_INCREMENT=29 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=30 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `city_chat` */
 
@@ -651,7 +665,7 @@ CREATE TABLE `city_chat` (
   KEY `id_2` (`id`),
   KEY `id_3` (`id`),
   KEY `id_4` (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1184 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=1363 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `city_mail_items` */
 
@@ -666,7 +680,7 @@ CREATE TABLE `city_mail_items` (
   `delivery_time` bigint(20) NOT NULL,
   `date` bigint(20) NOT NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=19 DEFAULT CHARSET=cp1251;
+) ENGINE=MyISAM AUTO_INCREMENT=20 DEFAULT CHARSET=cp1251;
 
 /*Table structure for table `city_rooms` */
 
@@ -679,9 +693,11 @@ CREATE TABLE `city_rooms` (
   `from` text NOT NULL,
   `time_to_go` tinyint(3) NOT NULL default '0',
   `min_level` tinyint(3) NOT NULL default '0',
+  `max_level` tinyint(3) NOT NULL default '12',
   `need_orden` tinyint(3) NOT NULL default '0',
   `sex` varchar(6) NOT NULL,
   `description` longtext,
+  `buttons` text,
   `shop` tinyint(2) NOT NULL default '0',
   `shop_section` varchar(32) default NULL,
   PRIMARY KEY  (`room`,`city`)
@@ -689,23 +705,25 @@ CREATE TABLE `city_rooms` (
 
 /*Data for the table `city_rooms` */
 
-insert  into `city_rooms`(`room`,`city`,`name`,`from`,`time_to_go`,`min_level`,`need_orden`,`sex`,`description`,`shop`,`shop_section`) values ('castle','dem','Бойцовский Клуб','km_1,km_2,km_3,km_4,castle2,centplosh',15,0,0,'',NULL,0,NULL);
-insert  into `city_rooms`(`room`,`city`,`name`,`from`,`time_to_go`,`min_level`,`need_orden`,`sex`,`description`,`shop`,`shop_section`) values ('km_1','dem','Зал воинов','castle',5,0,0,'',NULL,0,NULL);
-insert  into `city_rooms`(`room`,`city`,`name`,`from`,`time_to_go`,`min_level`,`need_orden`,`sex`,`description`,`shop`,`shop_section`) values ('km_2','dem','Зал воинов 2','castle',5,0,0,'',NULL,0,NULL);
-insert  into `city_rooms`(`room`,`city`,`name`,`from`,`time_to_go`,`min_level`,`need_orden`,`sex`,`description`,`shop`,`shop_section`) values ('km_3','dem','Зал воинов 3','castle',5,0,0,'',NULL,0,NULL);
-insert  into `city_rooms`(`room`,`city`,`name`,`from`,`time_to_go`,`min_level`,`need_orden`,`sex`,`description`,`shop`,`shop_section`) values ('km_4','dem','Будуар','castle',5,0,0,'female',NULL,0,NULL);
-insert  into `city_rooms`(`room`,`city`,`name`,`from`,`time_to_go`,`min_level`,`need_orden`,`sex`,`description`,`shop`,`shop_section`) values ('castle2','dem','Этаж 2','castle,km_6,km_7',10,2,0,'',NULL,0,NULL);
-insert  into `city_rooms`(`room`,`city`,`name`,`from`,`time_to_go`,`min_level`,`need_orden`,`sex`,`description`,`shop`,`shop_section`) values ('km_6','dem','Рыцарский Зал','castle2',5,0,0,'',NULL,0,NULL);
-insert  into `city_rooms`(`room`,`city`,`name`,`from`,`time_to_go`,`min_level`,`need_orden`,`sex`,`description`,`shop`,`shop_section`) values ('km_7','dem','Торговый Зал','castle2',5,4,0,'',NULL,0,NULL);
-insert  into `city_rooms`(`room`,`city`,`name`,`from`,`time_to_go`,`min_level`,`need_orden`,`sex`,`description`,`shop`,`shop_section`) values ('centplosh','dem','Центральная Площадь','castle,shop,prision,cityhall,stella,comok,mail,fairstreet',15,0,0,'',NULL,0,NULL);
-insert  into `city_rooms`(`room`,`city`,`name`,`from`,`time_to_go`,`min_level`,`need_orden`,`sex`,`description`,`shop`,`shop_section`) values ('fairstreet','dem','Страшилкина улица','centplosh,bank',15,0,0,'',NULL,0,NULL);
-insert  into `city_rooms`(`room`,`city`,`name`,`from`,`time_to_go`,`min_level`,`need_orden`,`sex`,`description`,`shop`,`shop_section`) values ('bank','dem','Банк','fairstreet',15,0,0,'',NULL,0,NULL);
-insert  into `city_rooms`(`room`,`city`,`name`,`from`,`time_to_go`,`min_level`,`need_orden`,`sex`,`description`,`shop`,`shop_section`) values ('shop','dem','Магазин','centplosh',15,0,0,'',NULL,1,'knife');
-insert  into `city_rooms`(`room`,`city`,`name`,`from`,`time_to_go`,`min_level`,`need_orden`,`sex`,`description`,`shop`,`shop_section`) values ('cityhall','dem','Академия','centplosh',5,0,0,'',NULL,0,NULL);
-insert  into `city_rooms`(`room`,`city`,`name`,`from`,`time_to_go`,`min_level`,`need_orden`,`sex`,`description`,`shop`,`shop_section`) values ('stella','dem','Стела Выбора','centplosh',15,0,0,'',NULL,0,NULL);
-insert  into `city_rooms`(`room`,`city`,`name`,`from`,`time_to_go`,`min_level`,`need_orden`,`sex`,`description`,`shop`,`shop_section`) values ('comok','dem','Комиссионка','centplosh',5,0,0,'',NULL,0,NULL);
-insert  into `city_rooms`(`room`,`city`,`name`,`from`,`time_to_go`,`min_level`,`need_orden`,`sex`,`description`,`shop`,`shop_section`) values ('mail','dem','Почтовое отделение','centplosh',15,0,0,'',NULL,0,NULL);
-insert  into `city_rooms`(`room`,`city`,`name`,`from`,`time_to_go`,`min_level`,`need_orden`,`sex`,`description`,`shop`,`shop_section`) values ('prision','dem','Тюрьма','centplosh',5,0,0,'',NULL,0,NULL);
+insert  into `city_rooms`(`room`,`city`,`name`,`from`,`time_to_go`,`min_level`,`max_level`,`need_orden`,`sex`,`description`,`buttons`,`shop`,`shop_section`) values ('castle','dem','Бойцовский Клуб','km_1,km_2,km_3,km_4,castle2,centplosh',15,0,12,0,'','Благородный дон желает стоять как столб посреди комнаты, и пугать своим видом новичков, или все-таки поднимется на второй этаж, где творятся настоящие дела?','return,map,forum,hint',0,NULL);
+insert  into `city_rooms`(`room`,`city`,`name`,`from`,`time_to_go`,`min_level`,`max_level`,`need_orden`,`sex`,`description`,`buttons`,`shop`,`shop_section`) values ('km_1','dem','Зал воинов','castle',5,0,12,0,'','Возможно, вы ошиблись этажом - настоящие сражения проходят выше.','fights,return,map,forum,hint',0,NULL);
+insert  into `city_rooms`(`room`,`city`,`name`,`from`,`time_to_go`,`min_level`,`max_level`,`need_orden`,`sex`,`description`,`buttons`,`shop`,`shop_section`) values ('km_2','dem','Зал воинов 2','castle',5,0,12,0,'','Если вы пришли сюда не за завтраком, обедом или ужином, то может быть вы ошиблись этажом?','fights,return,map,forum,hint',0,NULL);
+insert  into `city_rooms`(`room`,`city`,`name`,`from`,`time_to_go`,`min_level`,`max_level`,`need_orden`,`sex`,`description`,`buttons`,`shop`,`shop_section`) values ('km_3','dem','Зал воинов 3','castle',5,0,12,0,'','Если вы пришли сюда не за завтраком, обедом или ужином, то может быть вы ошиблись этажом?','fights,return,map,forum,hint',0,NULL);
+insert  into `city_rooms`(`room`,`city`,`name`,`from`,`time_to_go`,`min_level`,`max_level`,`need_orden`,`sex`,`description`,`buttons`,`shop`,`shop_section`) values ('km_4','dem','Будуар','castle',5,0,12,0,'female','Если вы пришли сюда не за завтраком, обедом или ужином, то может быть вы ошиблись этажом?','fights,return,map,forum,hint',0,NULL);
+insert  into `city_rooms`(`room`,`city`,`name`,`from`,`time_to_go`,`min_level`,`max_level`,`need_orden`,`sex`,`description`,`buttons`,`shop`,`shop_section`) values ('castle2','dem','Этаж 2','castle,km_6,km_7',10,2,12,0,'','Если есть желание купить, продать, лечить, точить – посетите Торговый Зал. Если есть желание изменить себя, освоить новые умения и поправить расшатанное эликсирами здоровье - пройдите в комнату Знахаря. Если есть желание драться, то вам в Рыцарский Зал. Если есть желание драться, драться, драться и ещё раз драться, обсуждая в перерывах превосходство мощного крита в репу над всякой магической заумью, то вам в Башню Рыцарей Магов.','return,map,forum,hint',0,NULL);
+insert  into `city_rooms`(`room`,`city`,`name`,`from`,`time_to_go`,`min_level`,`max_level`,`need_orden`,`sex`,`description`,`buttons`,`shop`,`shop_section`) values ('km_6','dem','Рыцарский Зал','castle2',5,0,12,0,'','Вы уже не новичок. Вы уже боец. И не просто боец а Боец с большой буквы. Осталось объяснить это вооон тому артнику...','fights,return,map,forum,hint',0,NULL);
+insert  into `city_rooms`(`room`,`city`,`name`,`from`,`time_to_go`,`min_level`,`max_level`,`need_orden`,`sex`,`description`,`buttons`,`shop`,`shop_section`) values ('km_7','dem','Торговый Зал','castle2',5,4,12,0,'','Ищете лекаря? Ваш доспех вам жмет и вы хотите другой? Нужен умелый наемник? Вы попали по адресу. Именно здесь можно купить или продать любой товар или услугу. Здешние умельцы и оденут и обуют вас в один момент.<br>Орден света предупреждает – настоящий воин должен быть немногословным.','fights,return,map,forum,hint',0,NULL);
+insert  into `city_rooms`(`room`,`city`,`name`,`from`,`time_to_go`,`min_level`,`max_level`,`need_orden`,`sex`,`description`,`buttons`,`shop`,`shop_section`) values ('centplosh','dem','Центральная Площадь','castle,shop,prision,cityhall,stella,comok,mail,fairstreet',15,0,12,0,'',NULL,'return,forum,hint',0,NULL);
+insert  into `city_rooms`(`room`,`city`,`name`,`from`,`time_to_go`,`min_level`,`max_level`,`need_orden`,`sex`,`description`,`buttons`,`shop`,`shop_section`) values ('fairstreet','dem','Страшилкина улица','centplosh,bank',15,0,12,0,'',NULL,'return,forum,hint',0,NULL);
+insert  into `city_rooms`(`room`,`city`,`name`,`from`,`time_to_go`,`min_level`,`max_level`,`need_orden`,`sex`,`description`,`buttons`,`shop`,`shop_section`) values ('bank','dem','Банк','fairstreet',15,0,12,0,'',NULL,NULL,0,NULL);
+insert  into `city_rooms`(`room`,`city`,`name`,`from`,`time_to_go`,`min_level`,`max_level`,`need_orden`,`sex`,`description`,`buttons`,`shop`,`shop_section`) values ('shop','dem','Магазин','centplosh',15,0,12,0,'',NULL,NULL,1,'knife');
+insert  into `city_rooms`(`room`,`city`,`name`,`from`,`time_to_go`,`min_level`,`max_level`,`need_orden`,`sex`,`description`,`buttons`,`shop`,`shop_section`) values ('cityhall','dem','Боевая академия','centplosh',5,0,12,0,'',NULL,NULL,0,NULL);
+insert  into `city_rooms`(`room`,`city`,`name`,`from`,`time_to_go`,`min_level`,`max_level`,`need_orden`,`sex`,`description`,`buttons`,`shop`,`shop_section`) values ('stella','dem','Стела Выбора','centplosh',15,0,12,0,'',NULL,NULL,0,NULL);
+insert  into `city_rooms`(`room`,`city`,`name`,`from`,`time_to_go`,`min_level`,`max_level`,`need_orden`,`sex`,`description`,`buttons`,`shop`,`shop_section`) values ('comok','dem','Комиссионка','centplosh',5,0,12,0,'',NULL,NULL,0,NULL);
+insert  into `city_rooms`(`room`,`city`,`name`,`from`,`time_to_go`,`min_level`,`max_level`,`need_orden`,`sex`,`description`,`buttons`,`shop`,`shop_section`) values ('mail','dem','Почтовое отделение','centplosh',15,0,12,0,'',NULL,NULL,0,NULL);
+insert  into `city_rooms`(`room`,`city`,`name`,`from`,`time_to_go`,`min_level`,`max_level`,`need_orden`,`sex`,`description`,`buttons`,`shop`,`shop_section`) values ('prision','dem','Тюрьма','centplosh',5,0,12,0,'',NULL,NULL,0,NULL);
+insert  into `city_rooms`(`room`,`city`,`name`,`from`,`time_to_go`,`min_level`,`max_level`,`need_orden`,`sex`,`description`,`buttons`,`shop`,`shop_section`) values ('km_0','dem','Комната для новичков','perehod',5,0,3,0,'','В этих залах, отгороженных от основного Бойцовского Клуба, можно спокойно разобраться в преимуществах и недостатках разных тактик боя, познакомиться с интересными людьми. Разобраться в законах Бойцовского Клуба. И даже к душераздирающим крикам и лязгу железа, раздающемуся из БК можно привыкнуть в этих уютных залах.','fights,return,map,forum,hint',0,NULL);
+insert  into `city_rooms`(`room`,`city`,`name`,`from`,`time_to_go`,`min_level`,`max_level`,`need_orden`,`sex`,`description`,`buttons`,`shop`,`shop_section`) values ('perehod','dem','Комната перехода','km_2,km_0',5,0,12,0,'',NULL,'fights,return,map,forum,hint',0,NULL);
 
 /*Table structure for table `city_stella_main` */
 
@@ -760,91 +778,72 @@ CREATE TABLE `clan` (
   KEY `id` (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=cp1251;
 
-/*Table structure for table `clan_zayavka` */
+/*Table structure for table `effect_template` */
 
-DROP TABLE IF EXISTS `clan_zayavka`;
+DROP TABLE IF EXISTS `effect_template`;
 
-CREATE TABLE `clan_zayavka` (
-  `name` varchar(30) NOT NULL default '',
-  `name_short` varchar(5) NOT NULL default '',
-  `site` varchar(50) NOT NULL default '',
-  `znak` varchar(30) NOT NULL default '',
-  `history` mediumtext NOT NULL,
-  `orden` varchar(30) NOT NULL default '',
-  `glava` varchar(30) NOT NULL default '',
-  `glava_fio` varchar(30) NOT NULL default '',
-  `sovet1` varchar(30) NOT NULL default '',
-  `sovet1_fio` varchar(30) NOT NULL default '',
-  `sovet2` varchar(30) NOT NULL default '',
-  `sovet2_fio` varchar(30) NOT NULL default '',
-  `sovet3` varchar(30) NOT NULL default '',
-  `sovet3_fio` varchar(30) NOT NULL default '',
-  `sovet4` varchar(30) NOT NULL default '',
-  `sovet4_fio` varchar(30) NOT NULL default '',
-  `date` varchar(30) NOT NULL default '',
-  `confirm` varchar(30) NOT NULL default ''
-) ENGINE=MyISAM DEFAULT CHARSET=cp1251;
+CREATE TABLE `effect_template` (
+  `entry` int(4) unsigned NOT NULL auto_increment,
+  `name` varchar(30) NOT NULL,
+  `add_hp` int(4) NOT NULL default '0',
+  `add_mp` int(4) NOT NULL default '0',
+  `mpcons` int(3) NOT NULL default '0',
+  `mpreco` int(3) NOT NULL default '0',
+  `res_magic` int(3) NOT NULL default '0',
+  `res_dmg` int(3) NOT NULL default '0',
+  `mf_magic` int(3) NOT NULL default '0',
+  `mf_dmg` int(3) NOT NULL default '0',
+  `add_hit_min` int(2) NOT NULL default '0',
+  `add_hit_max` int(2) NOT NULL default '0',
+  `mf_critp` int(3) NOT NULL default '0',
+  `mf_acrit` int(3) NOT NULL default '0',
+  `mf_dodge` int(3) NOT NULL default '0',
+  `mf_adodge` int(3) NOT NULL default '0',
+  `duration` bigint(20) NOT NULL default '0' COMMENT 'sec',
+  `set` varchar(30) default NULL,
+  `power` int(2) NOT NULL default '0',
+  PRIMARY KEY  (`entry`)
+) ENGINE=MyISAM AUTO_INCREMENT=38 DEFAULT CHARSET=cp1251;
 
-/*Table structure for table `comok` */
+/*Data for the table `effect_template` */
 
-DROP TABLE IF EXISTS `comok`;
-
-CREATE TABLE `comok` (
-  `id` int(4) NOT NULL auto_increment,
-  `owner` varchar(30) default NULL,
-  `price` int(30) default '0',
-  `price_ekr` varchar(30) NOT NULL default '0',
-  `object_id` varchar(30) default NULL,
-  `object_type` varchar(30) default NULL,
-  `object_razdel` varchar(30) default NULL,
-  `iznos` int(30) default NULL,
-  `iznos_max` varchar(30) default NULL,
-  `date` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
-  `term` varchar(30) NOT NULL default '',
-  `is_modified` varchar(30) NOT NULL default '',
-  PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=cp1251;
-
-/*Table structure for table `forums` */
-
-DROP TABLE IF EXISTS `forums`;
-
-CREATE TABLE `forums` (
-  `id` int(2) NOT NULL default '0',
-  `name` varchar(15) NOT NULL default '',
-  `title` varchar(20) NOT NULL default '',
-  PRIMARY KEY  (`id`),
-  KEY `id` (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=cp1251;
-
-/*Data for the table `forums` */
-
-insert  into `forums`(`id`,`name`,`title`) values (1,'Общий','Общий');
-insert  into `forums`(`id`,`name`,`title`) values (2,'Творчество','Творчество');
-insert  into `forums`(`id`,`name`,`title`) values (3,'Предложения','Предложения');
-insert  into `forums`(`id`,`name`,`title`) values (4,'Баги','Баги');
-insert  into `forums`(`id`,`name`,`title`) values (5,'Конкурсы','Конкурсы');
-insert  into `forums`(`id`,`name`,`title`) values (6,'Кланы','Кланы');
-insert  into `forums`(`id`,`name`,`title`) values (7,'Инквизиция','Инквизиция');
-
-/*Table structure for table `gift` */
-
-DROP TABLE IF EXISTS `gift`;
-
-CREATE TABLE `gift` (
-  `id` bigint(20) NOT NULL auto_increment,
-  `name` varchar(30) NOT NULL default '',
-  `img` varchar(30) NOT NULL default '',
-  `price` varchar(30) NOT NULL default '',
-  `wish` varchar(255) NOT NULL default '',
-  `mass` varchar(30) NOT NULL default '',
-  `type` varchar(30) NOT NULL default '',
-  `is_random` varchar(30) NOT NULL default '',
-  `g_type` varchar(30) NOT NULL default '',
-  `g_id` varchar(30) NOT NULL default '',
-  `mountown` varchar(10) NOT NULL default '',
-  KEY `id` (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=cp1251;
+insert  into `effect_template`(`entry`,`name`,`add_hp`,`add_mp`,`mpcons`,`mpreco`,`res_magic`,`res_dmg`,`mf_magic`,`mf_dmg`,`add_hit_min`,`add_hit_max`,`mf_critp`,`mf_acrit`,`mf_dodge`,`mf_adodge`,`duration`,`set`,`power`) values (1,'Выносливость',30,0,0,0,0,0,0,0,0,0,0,0,0,0,0,NULL,0);
+insert  into `effect_template`(`entry`,`name`,`add_hp`,`add_mp`,`mpcons`,`mpreco`,`res_magic`,`res_dmg`,`mf_magic`,`mf_dmg`,`add_hit_min`,`add_hit_max`,`mf_critp`,`mf_acrit`,`mf_dodge`,`mf_adodge`,`duration`,`set`,`power`) values (2,'Чудовищная Сила',0,0,0,0,0,0,0,5,0,0,0,0,0,0,0,'str',1);
+insert  into `effect_template`(`entry`,`name`,`add_hp`,`add_mp`,`mpcons`,`mpreco`,`res_magic`,`res_dmg`,`mf_magic`,`mf_dmg`,`add_hit_min`,`add_hit_max`,`mf_critp`,`mf_acrit`,`mf_dodge`,`mf_adodge`,`duration`,`set`,`power`) values (3,'Чудовищная Сила',0,0,0,0,0,0,0,10,0,0,0,0,0,0,0,'str',2);
+insert  into `effect_template`(`entry`,`name`,`add_hp`,`add_mp`,`mpcons`,`mpreco`,`res_magic`,`res_dmg`,`mf_magic`,`mf_dmg`,`add_hit_min`,`add_hit_max`,`mf_critp`,`mf_acrit`,`mf_dodge`,`mf_adodge`,`duration`,`set`,`power`) values (4,'Чудовищная Сила',50,0,0,0,0,0,0,15,0,0,0,0,0,0,0,'str',3);
+insert  into `effect_template`(`entry`,`name`,`add_hp`,`add_mp`,`mpcons`,`mpreco`,`res_magic`,`res_dmg`,`mf_magic`,`mf_dmg`,`add_hit_min`,`add_hit_max`,`mf_critp`,`mf_acrit`,`mf_dodge`,`mf_adodge`,`duration`,`set`,`power`) values (5,'Чудовищная Сила',50,0,0,0,0,0,0,15,10,10,0,0,0,0,0,'str',4);
+insert  into `effect_template`(`entry`,`name`,`add_hp`,`add_mp`,`mpcons`,`mpreco`,`res_magic`,`res_dmg`,`mf_magic`,`mf_dmg`,`add_hit_min`,`add_hit_max`,`mf_critp`,`mf_acrit`,`mf_dodge`,`mf_adodge`,`duration`,`set`,`power`) values (6,'Чудовищная Сила',50,0,0,0,0,0,0,25,10,10,0,75,0,75,0,'str',5);
+insert  into `effect_template`(`entry`,`name`,`add_hp`,`add_mp`,`mpcons`,`mpreco`,`res_magic`,`res_dmg`,`mf_magic`,`mf_dmg`,`add_hit_min`,`add_hit_max`,`mf_critp`,`mf_acrit`,`mf_dodge`,`mf_adodge`,`duration`,`set`,`power`) values (7,'Чудовищная Сила',100,0,0,0,0,0,0,35,10,10,0,75,0,75,0,'str',6);
+insert  into `effect_template`(`entry`,`name`,`add_hp`,`add_mp`,`mpcons`,`mpreco`,`res_magic`,`res_dmg`,`mf_magic`,`mf_dmg`,`add_hit_min`,`add_hit_max`,`mf_critp`,`mf_acrit`,`mf_dodge`,`mf_adodge`,`duration`,`set`,`power`) values (8,'Скорость Молнии',0,0,0,0,0,0,0,0,0,0,0,0,0,50,0,'dex',1);
+insert  into `effect_template`(`entry`,`name`,`add_hp`,`add_mp`,`mpcons`,`mpreco`,`res_magic`,`res_dmg`,`mf_magic`,`mf_dmg`,`add_hit_min`,`add_hit_max`,`mf_critp`,`mf_acrit`,`mf_dodge`,`mf_adodge`,`duration`,`set`,`power`) values (9,'Скорость Молнии',0,0,0,0,0,0,0,0,0,0,0,0,100,50,0,'dex',2);
+insert  into `effect_template`(`entry`,`name`,`add_hp`,`add_mp`,`mpcons`,`mpreco`,`res_magic`,`res_dmg`,`mf_magic`,`mf_dmg`,`add_hit_min`,`add_hit_max`,`mf_critp`,`mf_acrit`,`mf_dodge`,`mf_adodge`,`duration`,`set`,`power`) values (10,'Скорость Молнии',0,0,0,0,0,0,0,0,0,0,0,0,100,150,0,'dex',3);
+insert  into `effect_template`(`entry`,`name`,`add_hp`,`add_mp`,`mpcons`,`mpreco`,`res_magic`,`res_dmg`,`mf_magic`,`mf_dmg`,`add_hit_min`,`add_hit_max`,`mf_critp`,`mf_acrit`,`mf_dodge`,`mf_adodge`,`duration`,`set`,`power`) values (11,'Скорость Молнии',0,0,0,0,0,0,0,0,0,0,0,0,100,150,0,'dex',4);
+insert  into `effect_template`(`entry`,`name`,`add_hp`,`add_mp`,`mpcons`,`mpreco`,`res_magic`,`res_dmg`,`mf_magic`,`mf_dmg`,`add_hit_min`,`add_hit_max`,`mf_critp`,`mf_acrit`,`mf_dodge`,`mf_adodge`,`duration`,`set`,`power`) values (12,'Скорость Молнии',0,0,0,0,0,0,0,0,0,0,0,0,250,150,0,'dex',5);
+insert  into `effect_template`(`entry`,`name`,`add_hp`,`add_mp`,`mpcons`,`mpreco`,`res_magic`,`res_dmg`,`mf_magic`,`mf_dmg`,`add_hit_min`,`add_hit_max`,`mf_critp`,`mf_acrit`,`mf_dodge`,`mf_adodge`,`duration`,`set`,`power`) values (13,'Скорость Молнии',0,0,0,0,0,0,0,10,0,0,0,0,250,200,0,'dex',6);
+insert  into `effect_template`(`entry`,`name`,`add_hp`,`add_mp`,`mpcons`,`mpreco`,`res_magic`,`res_dmg`,`mf_magic`,`mf_dmg`,`add_hit_min`,`add_hit_max`,`mf_critp`,`mf_acrit`,`mf_dodge`,`mf_adodge`,`duration`,`set`,`power`) values (14,'Предчувствие',0,0,0,0,0,0,0,0,0,0,10,0,0,0,0,'con',1);
+insert  into `effect_template`(`entry`,`name`,`add_hp`,`add_mp`,`mpcons`,`mpreco`,`res_magic`,`res_dmg`,`mf_magic`,`mf_dmg`,`add_hit_min`,`add_hit_max`,`mf_critp`,`mf_acrit`,`mf_dodge`,`mf_adodge`,`duration`,`set`,`power`) values (15,'Предчувствие',0,0,0,0,0,0,0,0,0,0,10,50,0,0,0,'con',2);
+insert  into `effect_template`(`entry`,`name`,`add_hp`,`add_mp`,`mpcons`,`mpreco`,`res_magic`,`res_dmg`,`mf_magic`,`mf_dmg`,`add_hit_min`,`add_hit_max`,`mf_critp`,`mf_acrit`,`mf_dodge`,`mf_adodge`,`duration`,`set`,`power`) values (16,'Предчувствие',0,0,0,0,0,0,0,0,0,0,25,50,0,0,0,'con',3);
+insert  into `effect_template`(`entry`,`name`,`add_hp`,`add_mp`,`mpcons`,`mpreco`,`res_magic`,`res_dmg`,`mf_magic`,`mf_dmg`,`add_hit_min`,`add_hit_max`,`mf_critp`,`mf_acrit`,`mf_dodge`,`mf_adodge`,`duration`,`set`,`power`) values (17,'Предчувствие',0,0,0,0,0,0,0,0,0,0,25,50,0,0,0,'con',4);
+insert  into `effect_template`(`entry`,`name`,`add_hp`,`add_mp`,`mpcons`,`mpreco`,`res_magic`,`res_dmg`,`mf_magic`,`mf_dmg`,`add_hit_min`,`add_hit_max`,`mf_critp`,`mf_acrit`,`mf_dodge`,`mf_adodge`,`duration`,`set`,`power`) values (18,'Предчувствие',0,0,0,0,0,0,0,0,0,0,25,200,0,0,0,'con',5);
+insert  into `effect_template`(`entry`,`name`,`add_hp`,`add_mp`,`mpcons`,`mpreco`,`res_magic`,`res_dmg`,`mf_magic`,`mf_dmg`,`add_hit_min`,`add_hit_max`,`mf_critp`,`mf_acrit`,`mf_dodge`,`mf_adodge`,`duration`,`set`,`power`) values (19,'Предчувствие',0,0,0,0,0,0,0,0,0,0,35,300,0,0,0,'con',6);
+insert  into `effect_template`(`entry`,`name`,`add_hp`,`add_mp`,`mpcons`,`mpreco`,`res_magic`,`res_dmg`,`mf_magic`,`mf_dmg`,`add_hit_min`,`add_hit_max`,`mf_critp`,`mf_acrit`,`mf_dodge`,`mf_adodge`,`duration`,`set`,`power`) values (20,'Стальное Тело',50,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'vit',1);
+insert  into `effect_template`(`entry`,`name`,`add_hp`,`add_mp`,`mpcons`,`mpreco`,`res_magic`,`res_dmg`,`mf_magic`,`mf_dmg`,`add_hit_min`,`add_hit_max`,`mf_critp`,`mf_acrit`,`mf_dodge`,`mf_adodge`,`duration`,`set`,`power`) values (21,'Стальное Тело',150,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'vit',2);
+insert  into `effect_template`(`entry`,`name`,`add_hp`,`add_mp`,`mpcons`,`mpreco`,`res_magic`,`res_dmg`,`mf_magic`,`mf_dmg`,`add_hit_min`,`add_hit_max`,`mf_critp`,`mf_acrit`,`mf_dodge`,`mf_adodge`,`duration`,`set`,`power`) values (22,'Стальное Тело',300,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'vit',3);
+insert  into `effect_template`(`entry`,`name`,`add_hp`,`add_mp`,`mpcons`,`mpreco`,`res_magic`,`res_dmg`,`mf_magic`,`mf_dmg`,`add_hit_min`,`add_hit_max`,`mf_critp`,`mf_acrit`,`mf_dodge`,`mf_adodge`,`duration`,`set`,`power`) values (23,'Стальное Тело',300,0,0,0,10,10,0,0,0,0,0,0,0,0,0,'vit',4);
+insert  into `effect_template`(`entry`,`name`,`add_hp`,`add_mp`,`mpcons`,`mpreco`,`res_magic`,`res_dmg`,`mf_magic`,`mf_dmg`,`add_hit_min`,`add_hit_max`,`mf_critp`,`mf_acrit`,`mf_dodge`,`mf_adodge`,`duration`,`set`,`power`) values (24,'Стальное Тело',500,0,0,0,10,10,0,0,0,0,0,0,0,0,0,'vit',5);
+insert  into `effect_template`(`entry`,`name`,`add_hp`,`add_mp`,`mpcons`,`mpreco`,`res_magic`,`res_dmg`,`mf_magic`,`mf_dmg`,`add_hit_min`,`add_hit_max`,`mf_critp`,`mf_acrit`,`mf_dodge`,`mf_adodge`,`duration`,`set`,`power`) values (25,'Стальное Тело',750,0,0,0,10,10,0,0,0,0,0,0,0,0,0,'vit',6);
+insert  into `effect_template`(`entry`,`name`,`add_hp`,`add_mp`,`mpcons`,`mpreco`,`res_magic`,`res_dmg`,`mf_magic`,`mf_dmg`,`add_hit_min`,`add_hit_max`,`mf_critp`,`mf_acrit`,`mf_dodge`,`mf_adodge`,`duration`,`set`,`power`) values (26,'Разум',0,0,0,0,0,0,5,0,0,0,0,0,0,0,0,'int',1);
+insert  into `effect_template`(`entry`,`name`,`add_hp`,`add_mp`,`mpcons`,`mpreco`,`res_magic`,`res_dmg`,`mf_magic`,`mf_dmg`,`add_hit_min`,`add_hit_max`,`mf_critp`,`mf_acrit`,`mf_dodge`,`mf_adodge`,`duration`,`set`,`power`) values (27,'Разум',0,0,0,0,0,0,10,0,0,0,0,0,0,0,0,'int',2);
+insert  into `effect_template`(`entry`,`name`,`add_hp`,`add_mp`,`mpcons`,`mpreco`,`res_magic`,`res_dmg`,`mf_magic`,`mf_dmg`,`add_hit_min`,`add_hit_max`,`mf_critp`,`mf_acrit`,`mf_dodge`,`mf_adodge`,`duration`,`set`,`power`) values (28,'Разум',0,0,0,0,0,0,15,0,0,0,0,0,0,0,0,'int',3);
+insert  into `effect_template`(`entry`,`name`,`add_hp`,`add_mp`,`mpcons`,`mpreco`,`res_magic`,`res_dmg`,`mf_magic`,`mf_dmg`,`add_hit_min`,`add_hit_max`,`mf_critp`,`mf_acrit`,`mf_dodge`,`mf_adodge`,`duration`,`set`,`power`) values (29,'Разум',0,0,0,0,0,0,15,0,0,0,0,0,0,0,0,'int',4);
+insert  into `effect_template`(`entry`,`name`,`add_hp`,`add_mp`,`mpcons`,`mpreco`,`res_magic`,`res_dmg`,`mf_magic`,`mf_dmg`,`add_hit_min`,`add_hit_max`,`mf_critp`,`mf_acrit`,`mf_dodge`,`mf_adodge`,`duration`,`set`,`power`) values (30,'Разум',0,100,0,0,0,0,20,0,0,0,0,0,0,0,0,'int',5);
+insert  into `effect_template`(`entry`,`name`,`add_hp`,`add_mp`,`mpcons`,`mpreco`,`res_magic`,`res_dmg`,`mf_magic`,`mf_dmg`,`add_hit_min`,`add_hit_max`,`mf_critp`,`mf_acrit`,`mf_dodge`,`mf_adodge`,`duration`,`set`,`power`) values (31,'Разум',0,150,0,0,0,0,30,0,0,0,0,0,0,0,0,'int',6);
+insert  into `effect_template`(`entry`,`name`,`add_hp`,`add_mp`,`mpcons`,`mpreco`,`res_magic`,`res_dmg`,`mf_magic`,`mf_dmg`,`add_hit_min`,`add_hit_max`,`mf_critp`,`mf_acrit`,`mf_dodge`,`mf_adodge`,`duration`,`set`,`power`) values (32,'Сила Мудрости',0,50,0,100,0,0,0,0,0,0,0,0,0,0,0,'wis',1);
+insert  into `effect_template`(`entry`,`name`,`add_hp`,`add_mp`,`mpcons`,`mpreco`,`res_magic`,`res_dmg`,`mf_magic`,`mf_dmg`,`add_hit_min`,`add_hit_max`,`mf_critp`,`mf_acrit`,`mf_dodge`,`mf_adodge`,`duration`,`set`,`power`) values (33,'Сила Мудрости',0,100,0,200,0,0,0,0,0,0,0,0,0,0,0,'wis',2);
+insert  into `effect_template`(`entry`,`name`,`add_hp`,`add_mp`,`mpcons`,`mpreco`,`res_magic`,`res_dmg`,`mf_magic`,`mf_dmg`,`add_hit_min`,`add_hit_max`,`mf_critp`,`mf_acrit`,`mf_dodge`,`mf_adodge`,`duration`,`set`,`power`) values (34,'Сила Мудрости',0,200,0,350,0,0,0,0,0,0,0,0,0,0,0,'wis',3);
+insert  into `effect_template`(`entry`,`name`,`add_hp`,`add_mp`,`mpcons`,`mpreco`,`res_magic`,`res_dmg`,`mf_magic`,`mf_dmg`,`add_hit_min`,`add_hit_max`,`mf_critp`,`mf_acrit`,`mf_dodge`,`mf_adodge`,`duration`,`set`,`power`) values (35,'Сила Мудрости',0,200,5,350,0,0,0,0,0,0,0,0,0,0,0,'wis',4);
+insert  into `effect_template`(`entry`,`name`,`add_hp`,`add_mp`,`mpcons`,`mpreco`,`res_magic`,`res_dmg`,`mf_magic`,`mf_dmg`,`add_hit_min`,`add_hit_max`,`mf_critp`,`mf_acrit`,`mf_dodge`,`mf_adodge`,`duration`,`set`,`power`) values (36,'Сила Мудрости',0,350,5,500,0,0,0,0,0,0,0,0,0,0,0,'wis',5);
+insert  into `effect_template`(`entry`,`name`,`add_hp`,`add_mp`,`mpcons`,`mpreco`,`res_magic`,`res_dmg`,`mf_magic`,`mf_dmg`,`add_hit_min`,`add_hit_max`,`mf_critp`,`mf_acrit`,`mf_dodge`,`mf_adodge`,`duration`,`set`,`power`) values (37,'Сила Мудрости',0,550,5,600,0,0,0,0,0,0,0,0,0,0,0,'wis',6);
 
 /*Table structure for table `goers` */
 
@@ -877,7 +876,7 @@ CREATE TABLE `history_auth` (
   `date` bigint(20) NOT NULL default '0',
   PRIMARY KEY  (`id`,`guid`),
   KEY `id` (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=370 DEFAULT CHARSET=cp1251;
+) ENGINE=MyISAM AUTO_INCREMENT=437 DEFAULT CHARSET=cp1251;
 
 /*Table structure for table `history_bank` */
 
@@ -907,7 +906,7 @@ CREATE TABLE `history_mail` (
   `ip` varchar(30) NOT NULL default '',
   `date` bigint(20) NOT NULL default '0',
   PRIMARY KEY  (`id`,`guid`)
-) ENGINE=MyISAM AUTO_INCREMENT=61 DEFAULT CHARSET=cp1251;
+) ENGINE=MyISAM AUTO_INCREMENT=63 DEFAULT CHARSET=cp1251;
 
 /*Table structure for table `history_transfers` */
 
@@ -922,7 +921,7 @@ CREATE TABLE `history_transfers` (
   `ip` varchar(30) NOT NULL default '',
   `date` bigint(20) NOT NULL default '0',
   PRIMARY KEY  (`id`,`guid`)
-) ENGINE=MyISAM AUTO_INCREMENT=569 DEFAULT CHARSET=cp1251;
+) ENGINE=MyISAM AUTO_INCREMENT=699 DEFAULT CHARSET=cp1251;
 
 /*Table structure for table `hit_temp` */
 
@@ -1000,41 +999,41 @@ CREATE TABLE `item_template` (
   `def_b_max` tinyint(3) NOT NULL default '0',
   `def_l_min` tinyint(3) NOT NULL default '0',
   `def_l_max` tinyint(3) NOT NULL default '0',
-  `resist_all_magic` int(3) NOT NULL default '0',
-  `resist_fire` int(3) NOT NULL default '0',
-  `resist_water` int(3) NOT NULL default '0',
-  `resist_air` int(3) NOT NULL default '0',
-  `resist_earth` int(3) NOT NULL default '0',
-  `resist_light` int(3) NOT NULL default '0',
-  `resist_gray` int(3) NOT NULL default '0',
-  `resist_dark` int(3) NOT NULL default '0',
-  `resist_all_damage` int(3) NOT NULL default '0',
-  `resist_all_damage_h` int(3) NOT NULL default '0',
-  `resist_all_damage_a` int(3) NOT NULL default '0',
-  `resist_all_damage_b` int(3) NOT NULL default '0',
-  `resist_all_damage_l` int(3) NOT NULL default '0',
-  `resist_sting` int(3) NOT NULL default '0',
-  `resist_sting_h` int(3) NOT NULL default '0',
-  `resist_sting_a` int(3) NOT NULL default '0',
-  `resist_sting_b` int(3) NOT NULL default '0',
-  `resist_sting_l` int(3) NOT NULL default '0',
-  `resist_slash` int(3) NOT NULL default '0',
-  `resist_slash_h` int(3) NOT NULL default '0',
-  `resist_slash_a` int(3) NOT NULL default '0',
-  `resist_slash_b` int(3) NOT NULL default '0',
-  `resist_slash_l` int(3) NOT NULL default '0',
-  `resist_crush` int(3) NOT NULL default '0',
-  `resist_crush_h` int(3) NOT NULL default '0',
-  `resist_crush_a` int(3) NOT NULL default '0',
-  `resist_crush_b` int(3) NOT NULL default '0',
-  `resist_crush_l` int(3) NOT NULL default '0',
-  `resist_sharp` int(3) NOT NULL default '0',
-  `resist_sharp_h` int(3) NOT NULL default '0',
-  `resist_sharp_a` int(3) NOT NULL default '0',
-  `resist_sharp_b` int(3) NOT NULL default '0',
-  `resist_sharp_l` int(3) NOT NULL default '0',
-  `mf_all_damage` int(3) NOT NULL default '0',
-  `mf_all_damage_h` int(3) NOT NULL default '0',
+  `res_magic` int(3) NOT NULL default '0',
+  `res_fire` int(3) NOT NULL default '0',
+  `res_water` int(3) NOT NULL default '0',
+  `res_air` int(3) NOT NULL default '0',
+  `res_earth` int(3) NOT NULL default '0',
+  `res_light` int(3) NOT NULL default '0',
+  `res_gray` int(3) NOT NULL default '0',
+  `res_dark` int(3) NOT NULL default '0',
+  `res_dmg` int(3) NOT NULL default '0',
+  `res_dmg_h` int(3) NOT NULL default '0',
+  `res_dmg_a` int(3) NOT NULL default '0',
+  `res_dmg_b` int(3) NOT NULL default '0',
+  `res_dmg_l` int(3) NOT NULL default '0',
+  `res_sting` int(3) NOT NULL default '0',
+  `res_sting_h` int(3) NOT NULL default '0',
+  `res_sting_a` int(3) NOT NULL default '0',
+  `res_sting_b` int(3) NOT NULL default '0',
+  `res_sting_l` int(3) NOT NULL default '0',
+  `res_slash` int(3) NOT NULL default '0',
+  `res_slash_h` int(3) NOT NULL default '0',
+  `res_slash_a` int(3) NOT NULL default '0',
+  `res_slash_b` int(3) NOT NULL default '0',
+  `res_slash_l` int(3) NOT NULL default '0',
+  `res_crush` int(3) NOT NULL default '0',
+  `res_crush_h` int(3) NOT NULL default '0',
+  `res_crush_a` int(3) NOT NULL default '0',
+  `res_crush_b` int(3) NOT NULL default '0',
+  `res_crush_l` int(3) NOT NULL default '0',
+  `res_sharp` int(3) NOT NULL default '0',
+  `res_sharp_h` int(3) NOT NULL default '0',
+  `res_sharp_a` int(3) NOT NULL default '0',
+  `res_sharp_b` int(3) NOT NULL default '0',
+  `res_sharp_l` int(3) NOT NULL default '0',
+  `mf_dmg` int(3) NOT NULL default '0',
+  `mf_dmg_h` int(3) NOT NULL default '0',
   `mf_sting` int(3) NOT NULL default '0',
   `mf_sting_h` int(3) NOT NULL default '0',
   `mf_slash` int(3) NOT NULL default '0',
@@ -1043,7 +1042,7 @@ CREATE TABLE `item_template` (
   `mf_crush_h` int(3) NOT NULL default '0',
   `mf_sharp` int(3) NOT NULL default '0',
   `mf_sharp_h` int(3) NOT NULL default '0',
-  `mf_all_magic` int(3) NOT NULL default '0',
+  `mf_magic` int(3) NOT NULL default '0',
   `mf_fire` int(3) NOT NULL default '0',
   `mf_water` int(3) NOT NULL default '0',
   `mf_air` int(3) NOT NULL default '0',
@@ -1053,17 +1052,17 @@ CREATE TABLE `item_template` (
   `mf_dark` int(3) NOT NULL default '0',
   `mf_crit` int(3) NOT NULL default '0',
   `mf_crit_h` int(3) NOT NULL default '0',
-  `mf_critpower` int(3) NOT NULL default '0',
-  `mf_critpower_h` int(3) NOT NULL default '0',
-  `mf_anticrit` int(3) NOT NULL default '0',
-  `mf_uvorot` int(3) NOT NULL default '0',
-  `mf_antiuvorot` int(3) NOT NULL default '0',
-  `mf_antiuvorot_h` int(3) NOT NULL default '0',
-  `mf_piercearmor` int(3) NOT NULL default '0',
-  `mf_piercearmor_h` int(3) NOT NULL default '0',
+  `mf_critp` int(3) NOT NULL default '0',
+  `mf_critp_h` int(3) NOT NULL default '0',
+  `mf_acrit` int(3) NOT NULL default '0',
+  `mf_dodge` int(3) NOT NULL default '0',
+  `mf_adodge` int(3) NOT NULL default '0',
+  `mf_adodge_h` int(3) NOT NULL default '0',
+  `mf_parmour` int(3) NOT NULL default '0',
+  `mf_parmour_h` int(3) NOT NULL default '0',
   `mf_contr` int(3) NOT NULL default '0',
   `mf_parry` int(3) NOT NULL default '0',
-  `mf_blockshield` int(3) NOT NULL default '0',
+  `mf_shieldb` int(3) NOT NULL default '0',
   `all_magic` int(3) NOT NULL default '0',
   `fire` int(3) NOT NULL default '0',
   `water` int(3) NOT NULL default '0',
@@ -1083,25 +1082,25 @@ CREATE TABLE `item_template` (
   `knife_h` int(3) NOT NULL default '0',
   `staff` int(3) NOT NULL default '0',
   `shot` int(3) NOT NULL default '0',
-  `min_attack` int(2) NOT NULL default '0',
-  `max_attack` int(2) NOT NULL default '0',
-  `add_attack_min` int(2) NOT NULL default '0',
-  `add_attack_max` int(2) NOT NULL default '0',
-  `repres_all_magic` int(3) NOT NULL default '0',
-  `repres_fire` int(3) NOT NULL default '0',
-  `repres_water` int(3) NOT NULL default '0',
-  `repres_air` int(3) NOT NULL default '0',
-  `repres_earth` int(3) NOT NULL default '0',
-  `chance_sting` tinyint(3) NOT NULL default '0',
-  `chance_slash` tinyint(3) NOT NULL default '0',
-  `chance_crush` tinyint(3) NOT NULL default '0',
-  `chance_sharp` tinyint(3) NOT NULL default '0',
-  `chance_fire` tinyint(3) NOT NULL default '0',
-  `chance_water` tinyint(3) NOT NULL default '0',
-  `chance_air` tinyint(3) NOT NULL default '0',
-  `chance_earth` tinyint(3) NOT NULL default '0',
-  `chance_light` tinyint(3) NOT NULL default '0',
-  `chance_dark` tinyint(3) NOT NULL default '0',
+  `min_hit` int(2) NOT NULL default '0',
+  `max_hit` int(2) NOT NULL default '0',
+  `add_hit_min` int(2) NOT NULL default '0',
+  `add_hit_max` int(2) NOT NULL default '0',
+  `rep_magic` int(3) NOT NULL default '0',
+  `rep_fire` int(3) NOT NULL default '0',
+  `rep_water` int(3) NOT NULL default '0',
+  `rep_air` int(3) NOT NULL default '0',
+  `rep_earth` int(3) NOT NULL default '0',
+  `ch_sting` tinyint(3) NOT NULL default '0',
+  `ch_slash` tinyint(3) NOT NULL default '0',
+  `ch_crush` tinyint(3) NOT NULL default '0',
+  `ch_sharp` tinyint(3) NOT NULL default '0',
+  `ch_fire` tinyint(3) NOT NULL default '0',
+  `ch_water` tinyint(3) NOT NULL default '0',
+  `ch_air` tinyint(3) NOT NULL default '0',
+  `ch_earth` tinyint(3) NOT NULL default '0',
+  `ch_light` tinyint(3) NOT NULL default '0',
+  `ch_dark` tinyint(3) NOT NULL default '0',
   `inc_count` tinyint(3) NOT NULL default '0',
   `personal_owner` varchar(30) default NULL,
   `block` tinyint(3) NOT NULL default '0',
@@ -1117,7 +1116,7 @@ CREATE TABLE `item_template` (
   `add_walk` varchar(30) NOT NULL default '',
   PRIMARY KEY  (`entry`),
   KEY `id` (`entry`)
-) ENGINE=MyISAM AUTO_INCREMENT=1085 DEFAULT CHARSET=cp1251;
+) ENGINE=MyISAM AUTO_INCREMENT=1120 DEFAULT CHARSET=cp1251;
 
 /*Table structure for table `lotto` */
 
@@ -1138,7 +1137,24 @@ CREATE TABLE `lotto_fond` (
   `fond` varchar(30) NOT NULL default ''
 ) ENGINE=MyISAM DEFAULT CHARSET=cp1251;
 
-insert  into `lotto_fond`(`fond`) values ('42');
+/*Table structure for table `medal` */
+
+DROP TABLE IF EXISTS `medal`;
+
+CREATE TABLE `medal` (
+  `id` bigint(30) NOT NULL auto_increment,
+  `name` varchar(30) NOT NULL default '',
+  `img` varchar(30) NOT NULL default '',
+  `msg` varchar(255) NOT NULL default '',
+  `type` varchar(30) NOT NULL default '',
+  `price` varchar(30) NOT NULL default '',
+  `disc` longtext NOT NULL,
+  `add_l` varchar(30) NOT NULL default '',
+  `add_u` varchar(30) NOT NULL default '',
+  `mass` varchar(30) NOT NULL default '',
+  PRIMARY KEY  (`id`),
+  KEY `id` (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=cp1251;
 
 /*Table structure for table `miners` */
 
@@ -1195,6 +1211,7 @@ CREATE TABLE `player_exp_for_level` (
   `skills` tinyint(3) unsigned NOT NULL default '0',
   `money` double NOT NULL default '0',
   `vit` int(11) NOT NULL default '0',
+  `spi` int(11) NOT NULL default '0',
   `add_bars` varchar(32) NOT NULL default '',
   `status` varchar(30) default '',
   PRIMARY KEY  (`up`)
@@ -1202,59 +1219,121 @@ CREATE TABLE `player_exp_for_level` (
 
 /*Data for the table `player_exp_for_level` */
 
-insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`add_bars`,`status`) values (1,0,20,1,0,0,0,'','');
-insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`add_bars`,`status`) values (2,0,45,1,0,0,0,'','');
-insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`add_bars`,`status`) values (3,0,75,1,0,0,0,'','');
-insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`add_bars`,`status`) values (4,1,110,3,1,0,1,'','Рекрут');
-insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`add_bars`,`status`) values (5,1,160,1,0,0,0,'','');
-insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`add_bars`,`status`) values (6,1,215,1,0,0,0,'','');
-insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`add_bars`,`status`) values (7,1,280,1,0,0,0,'','');
-insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`add_bars`,`status`) values (8,1,350,1,0,0,0,'','');
-insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`add_bars`,`status`) values (9,2,410,3,1,0,1,'power,def,set','Оруженосец');
-insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`add_bars`,`status`) values (10,2,530,1,0,0,0,'','');
-insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`add_bars`,`status`) values (11,2,670,1,0,0,0,'','');
-insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`add_bars`,`status`) values (12,2,830,1,0,0,0,'','');
-insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`add_bars`,`status`) values (13,2,950,1,0,0,0,'','');
-insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`add_bars`,`status`) values (14,2,1100,1,0,0,0,'','');
-insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`add_bars`,`status`) values (15,3,1300,3,1,0,1,'','Воин');
-insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`add_bars`,`status`) values (16,3,1450,1,0,0,0,'','');
-insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`add_bars`,`status`) values (17,3,1650,1,0,0,0,'','');
-insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`add_bars`,`status`) values (18,3,1850,1,0,0,0,'','');
-insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`add_bars`,`status`) values (19,3,2050,1,0,0,0,'','');
-insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`add_bars`,`status`) values (20,3,2200,1,0,0,0,'','');
-insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`add_bars`,`status`) values (21,4,2500,5,1,0,1,'btn','Воин');
-insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`add_bars`,`status`) values (22,4,2900,1,0,0,0,'','');
-insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`add_bars`,`status`) values (23,4,3350,1,0,0,0,'','');
-insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`add_bars`,`status`) values (24,4,3800,1,0,0,0,'','');
-insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`add_bars`,`status`) values (25,4,4200,1,0,0,0,'','');
-insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`add_bars`,`status`) values (26,4,4600,1,0,0,0,'','');
-insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`add_bars`,`status`) values (27,5,5000,3,1,0,1,'','Воин');
-insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`add_bars`,`status`) values (28,5,6000,1,0,0,0,'','');
-insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`add_bars`,`status`) values (29,5,7000,1,0,0,0,'','');
-insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`add_bars`,`status`) values (30,5,8000,1,0,0,0,'','');
-insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`add_bars`,`status`) values (31,5,9000,1,0,0,0,'','');
-insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`add_bars`,`status`) values (32,5,10000,1,0,0,0,'','');
-insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`add_bars`,`status`) values (33,5,11000,1,0,0,0,'','');
-insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`add_bars`,`status`) values (34,5,12000,1,0,0,0,'','');
-insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`add_bars`,`status`) values (35,6,12500,3,1,0,1,'','Рыцарь');
-insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`add_bars`,`status`) values (36,6,14000,1,0,0,0,'','');
-insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`add_bars`,`status`) values (37,6,15500,1,0,0,0,'','');
-insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`add_bars`,`status`) values (53,8,300000,5,1,0,1,'','Рыцарь');
-insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`add_bars`,`status`) values (52,7,280000,1,0,0,0,'','');
-insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`add_bars`,`status`) values (51,7,260000,1,0,0,0,'','');
-insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`add_bars`,`status`) values (50,7,250000,1,0,0,0,'','');
-insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`add_bars`,`status`) values (49,7,225000,1,0,0,0,'','');
-insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`add_bars`,`status`) values (48,7,200000,1,0,0,0,'','');
-insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`add_bars`,`status`) values (47,7,175000,1,0,0,0,'','');
-insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`add_bars`,`status`) values (46,7,150000,1,0,0,0,'','');
-insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`add_bars`,`status`) values (45,7,75000,1,0,0,0,'','');
-insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`add_bars`,`status`) values (44,7,60000,1,0,0,0,'','');
-insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`add_bars`,`status`) values (43,7,30000,5,1,0,1,'','Рыцарь');
-insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`add_bars`,`status`) values (38,6,17000,1,0,0,0,'','');
-insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`add_bars`,`status`) values (39,6,19000,1,0,0,0,'','');
-insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`add_bars`,`status`) values (40,6,21000,1,0,0,0,'','');
-insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`add_bars`,`status`) values (41,6,23000,1,0,0,0,'','');
-insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`add_bars`,`status`) values (42,6,27000,1,0,0,0,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (1,0,20,1,0,0,0,0,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (2,0,45,1,0,0,0,0,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (3,0,75,1,0,0,0,0,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (4,1,110,3,1,0,1,0,'mod','private');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (5,1,160,1,0,0,0,0,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (6,1,215,1,0,0,0,0,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (7,1,280,1,0,0,0,0,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (8,1,350,1,0,0,0,0,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (9,2,410,3,1,0,1,0,'power,def,set','corporal');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (10,2,530,1,0,0,0,0,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (11,2,670,1,0,0,0,0,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (12,2,830,1,0,0,0,0,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (13,2,950,1,0,0,0,0,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (14,2,1100,1,0,0,0,0,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (15,3,1300,3,1,0,1,0,'','sergeant');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (16,3,1450,1,0,0,0,0,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (17,3,1650,1,0,0,0,0,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (18,3,1850,1,0,0,0,0,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (19,3,2050,1,0,0,0,0,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (20,3,2200,1,0,0,0,0,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (21,4,2500,5,1,0,1,0,'btn','m_sergeant');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (22,4,2900,1,0,0,0,0,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (23,4,3350,1,0,0,0,0,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (24,4,3800,1,0,0,0,0,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (25,4,4200,1,0,0,0,0,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (26,4,4600,1,0,0,0,0,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (27,5,5000,3,1,0,1,0,'','s_major');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (28,5,6000,1,0,0,0,0,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (29,5,7000,1,0,0,0,0,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (30,5,8000,1,0,0,0,0,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (31,5,9000,1,0,0,0,0,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (32,5,10000,1,0,0,0,0,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (33,5,11000,1,0,0,0,0,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (34,5,12000,1,0,0,0,0,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (35,6,12500,3,1,0,1,0,'','knight');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (36,6,14000,1,0,0,0,0,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (37,6,15500,1,0,0,0,0,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (53,8,300000,5,1,500,1,0,'','k_champion');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (52,7,280000,1,0,0,0,0,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (51,7,260000,1,0,0,0,0,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (50,7,250000,1,0,0,0,0,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (49,7,225000,1,0,0,0,0,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (48,7,200000,1,0,0,0,0,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (47,7,175000,1,0,0,0,0,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (46,7,150000,1,0,0,0,0,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (45,7,75000,1,0,0,0,0,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (44,7,60000,1,0,0,0,0,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (43,7,30000,5,1,0,1,0,'','k_captain');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (38,6,17000,1,0,0,0,0,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (39,6,19000,1,0,0,0,0,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (40,6,21000,1,0,0,0,0,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (41,6,23000,1,0,0,0,0,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (42,6,27000,1,0,0,0,0,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (54,8,400000,0,0,100,0,0,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (55,8,500000,0,0,100,0,0,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (56,8,600000,0,0,100,0,0,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (57,8,700000,0,0,100,0,0,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (58,8,800000,0,0,100,0,0,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (59,8,900000,0,0,100,0,0,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (60,8,1000000,0,0,100,0,0,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (61,8,1200000,0,0,100,0,0,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (62,8,1500000,1,0,500,0,0,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (63,8,1750000,1,0,200,0,0,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (64,8,2000000,1,0,300,0,0,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (65,8,2175000,1,0,100,0,0,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (66,8,2300000,1,0,100,0,0,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (67,8,2400000,1,0,1,0,0,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (68,8,2500000,1,0,200,0,0,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (69,8,2600000,1,0,100,0,0,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (70,8,2800000,1,0,200,0,0,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (71,9,3000000,7,1,1400,2,0,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (72,9,6000000,1,0,500,0,0,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (73,9,6500000,1,0,200,0,0,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (74,9,7500000,1,0,1,0,0,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (75,9,8500000,1,0,250,0,0,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (76,9,9000000,1,0,400,0,0,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (77,9,9250000,1,0,50,0,0,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (78,9,9500000,1,0,400,0,0,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (79,9,9750000,1,0,350,0,0,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (80,9,9900000,1,0,500,0,0,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (81,10,10000000,9,1,2400,3,0,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (82,10,13000000,2,0,200,0,0,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (83,10,14000000,2,0,200,0,0,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (84,10,15000000,2,0,200,0,0,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (85,10,16000000,2,0,200,0,0,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (86,10,17000000,2,0,200,0,0,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (87,10,17500000,2,0,200,0,0,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (88,10,18000000,2,0,200,0,0,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (89,10,19000000,2,0,200,0,0,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (90,10,19500000,2,0,200,0,0,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (91,10,20000000,2,0,200,0,0,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (92,10,30000000,2,0,0,0,1,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (93,10,32000000,2,0,0,0,0,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (94,10,34000000,2,0,0,0,0,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (95,10,35000000,2,0,0,0,1,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (96,10,36000000,2,0,0,0,0,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (97,10,38000000,2,0,0,0,0,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (98,10,40000000,2,0,0,0,1,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (99,10,42000000,2,0,0,0,0,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (100,10,44000000,2,0,0,0,0,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (101,10,45000000,2,0,0,0,1,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (102,10,46000000,2,0,0,0,0,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (103,10,48000000,2,0,0,0,0,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (104,10,50000000,2,0,0,0,1,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (105,11,52000000,10,1,0,5,0,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (106,11,55000000,1,0,0,1,1,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (107,11,60000000,1,0,0,1,1,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (108,11,65000000,1,0,0,1,1,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (109,11,70000000,1,0,0,1,1,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (110,11,80000000,1,0,0,1,1,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (111,11,85000000,1,0,0,1,1,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (112,11,90000000,1,0,0,1,1,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (113,11,95000000,1,0,0,1,1,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (114,11,100000000,5,1,0,5,5,'','');
+insert  into `player_exp_for_level`(`up`,`level`,`exp`,`ups`,`skills`,`money`,`vit`,`spi`,`add_bars`,`status`) values (115,12,120000000,0,0,0,20,0,'','');
 
 /*Table structure for table `player_shapes` */
 
@@ -1405,6 +1484,29 @@ insert  into `player_shapes`(`id`,`sex`,`img`,`level`,`str`,`dex`,`con`,`vit`,`i
 insert  into `player_shapes`(`id`,`sex`,`img`,`level`,`str`,`dex`,`con`,`vit`,`int`,`wis`,`sword`,`axe`,`fail`,`knife`,`fire`,`water`,`earth`,`air`,`light`,`dark`) values (117,'f','67.gif',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
 insert  into `player_shapes`(`id`,`sex`,`img`,`level`,`str`,`dex`,`con`,`vit`,`int`,`wis`,`sword`,`axe`,`fail`,`knife`,`fire`,`water`,`earth`,`air`,`light`,`dark`) values (118,'f','68.gif',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
 
+/*Table structure for table `player_styles` */
+
+DROP TABLE IF EXISTS `player_styles`;
+
+CREATE TABLE `player_styles` (
+  `style` varchar(30) NOT NULL,
+  `str` int(10) NOT NULL default '0',
+  `dex` int(10) NOT NULL default '0',
+  `con` int(10) NOT NULL default '0',
+  `vit` int(10) NOT NULL default '0',
+  `int` int(10) NOT NULL default '0',
+  `wis` int(10) NOT NULL default '0',
+  `price` int(10) NOT NULL default '0',
+  PRIMARY KEY  (`style`)
+) ENGINE=MyISAM DEFAULT CHARSET=cp1251;
+
+/*Data for the table `player_styles` */
+
+insert  into `player_styles`(`style`,`str`,`dex`,`con`,`vit`,`int`,`wis`,`price`) values ('warrior',10,0,0,10,0,0,1000);
+insert  into `player_styles`(`style`,`str`,`dex`,`con`,`vit`,`int`,`wis`,`price`) values ('mage',0,0,0,0,10,10,1300);
+insert  into `player_styles`(`style`,`str`,`dex`,`con`,`vit`,`int`,`wis`,`price`) values ('rogue',0,15,5,0,0,0,900);
+insert  into `player_styles`(`style`,`str`,`dex`,`con`,`vit`,`int`,`wis`,`price`) values ('barbarian',0,0,15,5,0,0,1000);
+
 /*Table structure for table `podval` */
 
 DROP TABLE IF EXISTS `podval`;
@@ -1413,20 +1515,6 @@ CREATE TABLE `podval` (
   `number` varchar(40) NOT NULL default '',
   `type` varbinary(40) NOT NULL default '                                        '
 ) ENGINE=MyISAM DEFAULT CHARSET=cp1251;
-
-/*Data for the table `podval` */
-
-insert  into `podval`(`number`,`type`) values ('100','1                                       ');
-insert  into `podval`(`number`,`type`) values ('100','2                                       ');
-insert  into `podval`(`number`,`type`) values ('100','3                                       ');
-insert  into `podval`(`number`,`type`) values ('100','4                                       ');
-insert  into `podval`(`number`,`type`) values ('136','5                                       ');
-insert  into `podval`(`number`,`type`) values ('100','6                                       ');
-insert  into `podval`(`number`,`type`) values ('100','7                                       ');
-insert  into `podval`(`number`,`type`) values ('99','8                                       ');
-insert  into `podval`(`number`,`type`) values ('100','9                                       ');
-insert  into `podval`(`number`,`type`) values ('100','10                                      ');
-insert  into `podval`(`number`,`type`) values ('0','11                                      ');
 
 /*Table structure for table `posts` */
 
@@ -1447,10 +1535,6 @@ CREATE TABLE `posts` (
   KEY `top_id` (`top_id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=1176923677 DEFAULT CHARSET=cp1251;
 
-/*Data for the table `posts` */
-
-insert  into `posts`(`id`,`top_id`,`text`,`date`,`poster`,`p_id`,`p_rank`,`p_tribe`,`p_level`,`p_rase`) values (1176923676,1176923603,'dasd','','',0,0,'',0,0);
-
 /*Table structure for table `protocol` */
 
 DROP TABLE IF EXISTS `protocol`;
@@ -1467,22 +1551,6 @@ CREATE TABLE `protocol` (
   KEY `id` (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=14 DEFAULT CHARSET=cp1251;
 
-/*Data for the table `protocol` */
-
-insert  into `protocol`(`id`,`login`,`templier`,`type`,`reason`,`time`,`date`) values (1,'hacik','Delux','clan_reg','sss','','2007-04-06 20:16:16');
-insert  into `protocol`(`id`,`login`,`templier`,`type`,`reason`,`time`,`date`) values (2,'delux','Мироздатель','shut','','  15 минут','2007-04-09 12:11:36');
-insert  into `protocol`(`id`,`login`,`templier`,`type`,`reason`,`time`,`date`) values (3,'Papazogla','Delux','prision','munic','сутки','2007-04-10 15:22:42');
-insert  into `protocol`(`id`,`login`,`templier`,`type`,`reason`,`time`,`date`) values (4,'Papazogla','Delux','unprision','','','2007-04-10 15:22:59');
-insert  into `protocol`(`id`,`login`,`templier`,`type`,`reason`,`time`,`date`) values (5,'Delux','Мироздатель','prision','dsds','3 месяца','2007-04-13 16:26:20');
-insert  into `protocol`(`id`,`login`,`templier`,`type`,`reason`,`time`,`date`) values (6,'Delux','Мироздатель','unprision','','','2007-04-13 16:27:09');
-insert  into `protocol`(`id`,`login`,`templier`,`type`,`reason`,`time`,`date`) values (7,'Delux','Мироздатель','kill','ss','','2007-04-13 16:27:44');
-insert  into `protocol`(`id`,`login`,`templier`,`type`,`reason`,`time`,`date`) values (8,'Delux','Мироздатель','unkill','','','2007-04-13 16:28:43');
-insert  into `protocol`(`id`,`login`,`templier`,`type`,`reason`,`time`,`date`) values (9,'Delux','Мироздатель','shut','','1 часов','2007-04-19 13:23:22');
-insert  into `protocol`(`id`,`login`,`templier`,`type`,`reason`,`time`,`date`) values (10,'Delux','Мироздатель','unshut','','','2007-04-19 13:30:01');
-insert  into `protocol`(`id`,`login`,`templier`,`type`,`reason`,`time`,`date`) values (11,'Delux','Мироздатель','shut','','  15 минут','2007-04-19 13:30:14');
-insert  into `protocol`(`id`,`login`,`templier`,`type`,`reason`,`time`,`date`) values (12,'Delux','Мироздатель','unshut','','','2007-04-19 13:30:34');
-insert  into `protocol`(`id`,`login`,`templier`,`type`,`reason`,`time`,`date`) values (13,'Delux','Мироздатель','shut','','  15 минут','2007-04-19 13:30:42');
-
 /*Table structure for table `protocol_adm` */
 
 DROP TABLE IF EXISTS `protocol_adm`;
@@ -1496,10 +1564,6 @@ CREATE TABLE `protocol_adm` (
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=cp1251;
 
-/*Data for the table `protocol_adm` */
-
-insert  into `protocol_adm`(`id`,`date_time`,`login`,`target`,`msg`) values (1,'22.06.07 19:09:20','Смотритель','Смотритель','Сила изменена с <b>4</b> на <b>5</b>.<br>Деньги изменены с <b>0</b> на <b>1000</b>.<br>');
-
 /*Table structure for table `res` */
 
 DROP TABLE IF EXISTS `res`;
@@ -1511,6 +1575,20 @@ CREATE TABLE `res` (
   `type` varchar(30) NOT NULL default ''
 ) ENGINE=MyISAM DEFAULT CHARSET=cp1251;
 
+/*Table structure for table `riba` */
+
+DROP TABLE IF EXISTS `riba`;
+
+CREATE TABLE `riba` (
+  `id` bigint(30) NOT NULL auto_increment,
+  `name` varchar(30) NOT NULL default '',
+  `img` varchar(30) NOT NULL default '',
+  `price` varchar(30) NOT NULL default '',
+  `mass` varchar(30) NOT NULL default '',
+  `mountown` varchar(30) NOT NULL default '',
+  KEY `id` (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=10001 DEFAULT CHARSET=cp1251;
+
 /*Table structure for table `river` */
 
 DROP TABLE IF EXISTS `river`;
@@ -1521,10 +1599,6 @@ CREATE TABLE `river` (
   `resource` varchar(30) NOT NULL default '',
   KEY `login` (`login`)
 ) ENGINE=MyISAM DEFAULT CHARSET=cp1251;
-
-/*Data for the table `river` */
-
-insert  into `river`(`login`,`time`,`resource`) values ('Мироздатель','','riba');
 
 /*Table structure for table `sapojn` */
 
@@ -1538,10 +1612,6 @@ CREATE TABLE `sapojn` (
   `zarplata` varchar(30) NOT NULL default '0.2',
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=cp1251;
-
-/*Data for the table `sapojn` */
-
-insert  into `sapojn`(`id`,`login`,`money`,`num`,`zarplata`) values (3,'Мироздатель','0','970','0.2');
 
 /*Table structure for table `scroll` */
 
@@ -1584,13 +1654,6 @@ CREATE TABLE `scroll` (
   PRIMARY KEY  (`id`),
   KEY `id` (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
-
-/*Data for the table `scroll` */
-
-insert  into `scroll`(`id`,`name`,`img`,`mass`,`price`,`veroyat`,`min_vospriyatie`,`min_intellekt`,`min_level`,`iznos_min`,`iznos_max`,`mana`,`file`,`orden`,`mountown`,`min_sila2`,`add_arm_l`,`add_arm_m`,`add_arm_h`,`add_water`,`add_air`,`add_earth`,`add_cast`,`add_trade`,`add_cure`,`add_walk`,`min_lovkost2`,`min_udacha2`,`min_power2`,`min_intellekt2`,`min_vospriyatie2`,`min_level2`,`school`) values (2,'?????????','icon/magic/attack.gif',1,9,'70',0,7,4,0,5,'','attack.php','','9973','','','','','','','1','','','','','','','','','','','');
-insert  into `scroll`(`id`,`name`,`img`,`mass`,`price`,`veroyat`,`min_vospriyatie`,`min_intellekt`,`min_level`,`iznos_min`,`iznos_max`,`mana`,`file`,`orden`,`mountown`,`min_sila2`,`add_arm_l`,`add_arm_m`,`add_arm_h`,`add_water`,`add_air`,`add_earth`,`add_cast`,`add_trade`,`add_cure`,`add_walk`,`min_lovkost2`,`min_udacha2`,`min_power2`,`min_intellekt2`,`min_vospriyatie2`,`min_level2`,`school`) values (1,'??????? ?????','icon/magic/lech.gif',1,15,'50',0,8,4,0,5,'','lech.php','','9995','','','','','','','','','','','','','','','','','','');
-insert  into `scroll`(`id`,`name`,`img`,`mass`,`price`,`veroyat`,`min_vospriyatie`,`min_intellekt`,`min_level`,`iznos_min`,`iznos_max`,`mana`,`file`,`orden`,`mountown`,`min_sila2`,`add_arm_l`,`add_arm_m`,`add_arm_h`,`add_water`,`add_air`,`add_earth`,`add_cast`,`add_trade`,`add_cure`,`add_walk`,`min_lovkost2`,`min_udacha2`,`min_power2`,`min_intellekt2`,`min_vospriyatie2`,`min_level2`,`school`) values (3,'HP 10','icon/magic/10.gif',1,15,'100',0,2,0,0,5,'','cure_hp10.php','','9994','','','','','','','','','','','','','','','','','','air');
-insert  into `scroll`(`id`,`name`,`img`,`mass`,`price`,`veroyat`,`min_vospriyatie`,`min_intellekt`,`min_level`,`iznos_min`,`iznos_max`,`mana`,`file`,`orden`,`mountown`,`min_sila2`,`add_arm_l`,`add_arm_m`,`add_arm_h`,`add_water`,`add_air`,`add_earth`,`add_cast`,`add_trade`,`add_cure`,`add_walk`,`min_lovkost2`,`min_udacha2`,`min_power2`,`min_intellekt2`,`min_vospriyatie2`,`min_level2`,`school`) values (4,'HP 25','icon/magic/25.gif',1,15,'100',0,2,0,0,5,'','cure_hp25.php','','9996','','','','','','','','','','','','','','','','','','air');
 
 /*Table structure for table `server_cities` */
 
@@ -1642,103 +1705,104 @@ DROP TABLE IF EXISTS `server_errors`;
 CREATE TABLE `server_errors` (
   `id` int(11) unsigned NOT NULL,
   `text` text NOT NULL,
-  `warning` tinyint(3) unsigned NOT NULL default '1',
+  `bold` tinyint(3) unsigned NOT NULL default '1',
   `hyphen` tinyint(3) unsigned NOT NULL default '1',
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=cp1251;
 
 /*Data for the table `server_errors` */
 
-insert  into `server_errors`(`id`,`text`,`warning`,`hyphen`) values (100,'Вы отбываете тюремное заключение! Вы не можете покинуть здание тюрьмы.',1,1);
-insert  into `server_errors`(`id`,`text`,`warning`,`hyphen`) values (101,'Проход сюда только после <b>%1$s-го</b> уровня.',0,1);
-insert  into `server_errors`(`id`,`text`,`warning`,`hyphen`) values (102,'Вы не можете перемещаться через стены.',1,1);
-insert  into `server_errors`(`id`,`text`,`warning`,`hyphen`) values (103,'Вы не можете передвигаться! Масса всех вещей [%1$s] превышает допустимую норму [%2$s].',1,1);
-insert  into `server_errors`(`id`,`text`,`warning`,`hyphen`) values (104,'Вход разрешен только %1$s',1,1);
-insert  into `server_errors`(`id`,`text`,`warning`,`hyphen`) values (105,'Вы не можете пользоваться здесь чем-либо кроме почты.',1,0);
-insert  into `server_errors`(`id`,`text`,`warning`,`hyphen`) values (106,'Адресат не существует.',1,1);
-insert  into `server_errors`(`id`,`text`,`warning`,`hyphen`) values (107,'У вас недостаточно средств!',1,1);
-insert  into `server_errors`(`id`,`text`,`warning`,`hyphen`) values (108,'Екровые вещи нельзя отправить по почте.',1,1);
-insert  into `server_errors`(`id`,`text`,`warning`,`hyphen`) values (110,'Вы не можете так быстро бегать по комнатам',1,1);
-insert  into `server_errors`(`id`,`text`,`warning`,`hyphen`) values (111,'Вы сможете сменить образ через %1$s',1,1);
-insert  into `server_errors`(`id`,`text`,`warning`,`hyphen`) values (112,'Предмет не найден на почте.',1,1);
-insert  into `server_errors`(`id`,`text`,`warning`,`hyphen`) values (113,'Исчерпан лимит передач.',1,1);
-insert  into `server_errors`(`id`,`text`,`warning`,`hyphen`) values (114,'Действие не доступно.',1,1);
-insert  into `server_errors`(`id`,`text`,`warning`,`hyphen`) values (201,'Заклинание удачно использовано.',0,1);
-insert  into `server_errors`(`id`,`text`,`warning`,`hyphen`) values (202,'У вас не достаточно параметров для использования этого заклинания.',1,1);
-insert  into `server_errors`(`id`,`text`,`warning`,`hyphen`) values (203,'Персонаж <b>\"%1$s\"</b> не найден',0,1);
-insert  into `server_errors`(`id`,`text`,`warning`,`hyphen`) values (204,'Персонаж <b>\"%1$s\"</b> не травмирован.',0,1);
-insert  into `server_errors`(`id`,`text`,`warning`,`hyphen`) values (205,'Вы не можете использовать это заклинание на себя.',1,1);
-insert  into `server_errors`(`id`,`text`,`warning`,`hyphen`) values (206,'Персонаж <b>\"%1$s\"</b> сейчас оффлайн.',0,1);
-insert  into `server_errors`(`id`,`text`,`warning`,`hyphen`) values (207,'Персонаж <b>\"%1$s\"</b> находится в другой комнате.',0,1);
-insert  into `server_errors`(`id`,`text`,`warning`,`hyphen`) values (208,'Персонаж <b>\"%1$s\"</b> находится в бою.',0,1);
-insert  into `server_errors`(`id`,`text`,`warning`,`hyphen`) values (209,'Персонаж <b>\"%1$s\"</b> слишком ослаблен.',0,1);
-insert  into `server_errors`(`id`,`text`,`warning`,`hyphen`) values (210,'Нападение на персонажей 0-го уровня запрещено Мироздателем.',1,1);
-insert  into `server_errors`(`id`,`text`,`warning`,`hyphen`) values (211,'Использование этого заклинания на персонажа <b>\"%1$s\"</b> запрещено.',0,1);
-insert  into `server_errors`(`id`,`text`,`warning`,`hyphen`) values (212,'Вам не удалось использовать это заклинание.',1,1);
-insert  into `server_errors`(`id`,`text`,`warning`,`hyphen`) values (213,'Предмет не найден в вашем рюкзаке.',1,1);
-insert  into `server_errors`(`id`,`text`,`warning`,`hyphen`) values (214,'Предмет не надет на вас.',1,1);
-insert  into `server_errors`(`id`,`text`,`warning`,`hyphen`) values (216,'У предмета нет доступных увеличений.',1,1);
-insert  into `server_errors`(`id`,`text`,`warning`,`hyphen`) values (217,'Предмет требуется снять.',1,1);
-insert  into `server_errors`(`id`,`text`,`warning`,`hyphen`) values (218,'Зачем вам самому себе что-либо передавать?',1,1);
-insert  into `server_errors`(`id`,`text`,`warning`,`hyphen`) values (219,'Неизвестное увеличение.',1,1);
-insert  into `server_errors`(`id`,`text`,`warning`,`hyphen`) values (220,'Увеличение параметра <b>\"%1$s\"</b> у предмета <b>\"%2$s\"</b> произведено удачно.',0,1);
-insert  into `server_errors`(`id`,`text`,`warning`,`hyphen`) values (300,'Пароли не совпадают!',1,1);
-insert  into `server_errors`(`id`,`text`,`warning`,`hyphen`) values (301,'Вы не ввели пароль.',1,1);
-insert  into `server_errors`(`id`,`text`,`warning`,`hyphen`) values (302,'Неверный пароль!',1,1);
-insert  into `server_errors`(`id`,`text`,`warning`,`hyphen`) values (303,'Счет не существует!',1,1);
-insert  into `server_errors`(`id`,`text`,`warning`,`hyphen`) values (304,'У вас нет при себе <b>%1$s кр.</b>',0,1);
-insert  into `server_errors`(`id`,`text`,`warning`,`hyphen`) values (305,'У вас нет <b>%1$s кр.</b> на счету',0,1);
-insert  into `server_errors`(`id`,`text`,`warning`,`hyphen`) values (306,'Эта услуга доступна только персонажам, достигшим 8-го уровня.',1,1);
-insert  into `server_errors`(`id`,`text`,`warning`,`hyphen`) values (307,'Нельзя передавать кредиты самому себе.',1,1);
-insert  into `server_errors`(`id`,`text`,`warning`,`hyphen`) values (308,'Вы обменяли <b>%1$s екр.</b> со счета <b>#%2$s</b>. Вам зачисленно <b>%3$s кр.</b>',0,1);
-insert  into `server_errors`(`id`,`text`,`warning`,`hyphen`) values (309,'Нельзя передать сумму менее 1 кр.',1,1);
-insert  into `server_errors`(`id`,`text`,`warning`,`hyphen`) values (310,'У вас нет <b>%1$s екр.</b> на счету',0,1);
-insert  into `server_errors`(`id`,`text`,`warning`,`hyphen`) values (311,'Пароль изменен. На всякий случай, рекомендуем выйти из банка и войти снова для проверки нового пароля. Убедитесь, что функция высылки пароля на email включена ;)',0,1);
-insert  into `server_errors`(`id`,`text`,`warning`,`hyphen`) values (312,'Пароль не был изменен.',1,1);
-insert  into `server_errors`(`id`,`text`,`warning`,`hyphen`) values (313,'Сохранили записную книжку.',0,1);
-insert  into `server_errors`(`id`,`text`,`warning`,`hyphen`) values (314,'Записная книжка не сохранена.',1,1);
-insert  into `server_errors`(`id`,`text`,`warning`,`hyphen`) values (315,'Вы не ввели новый пароль.',1,1);
-insert  into `server_errors`(`id`,`text`,`warning`,`hyphen`) values (316,'Новый пароль нужно ввести дважды.',1,1);
-insert  into `server_errors`(`id`,`text`,`warning`,`hyphen`) values (317,'Второй раз пароль нужно ввести, чтобы избежать возможных опечаток. Вы ошиблись при повторном вводе нового пароля. Будьте внимательнее!',1,1);
-insert  into `server_errors`(`id`,`text`,`warning`,`hyphen`) values (318,'Вы открыли счет <b>#%1$s</b>.',0,1);
-insert  into `server_errors`(`id`,`text`,`warning`,`hyphen`) values (319,'Вы положили <b>%1$s кр.</b> на счет <b>#%2$s</b>.',0,1);
-insert  into `server_errors`(`id`,`text`,`warning`,`hyphen`) values (320,'Вы сняли <b>%1$s кр.</b> со счета <b>#%2$s</b>.',0,1);
-insert  into `server_errors`(`id`,`text`,`warning`,`hyphen`) values (321,'Вы перевели <b>%1$s кр.</b> к <b>%2$s</b> на счет <b>#%3$s</b> со счета <b>#%4$s</b>.',0,1);
-insert  into `server_errors`(`id`,`text`,`warning`,`hyphen`) values (322,'Счет пренадлежит не вам.',1,1);
-insert  into `server_errors`(`id`,`text`,`warning`,`hyphen`) values (323,'Для открытия счета необходимо иметь при себе <b>%1$s кр.</b>',0,1);
-insert  into `server_errors`(`id`,`text`,`warning`,`hyphen`) values (324,'Пароль нужно ввести дважды.',1,1);
-insert  into `server_errors`(`id`,`text`,`warning`,`hyphen`) values (325,'Укажите сумму',1,1);
-insert  into `server_errors`(`id`,`text`,`warning`,`hyphen`) values (326,'Укажите сумму и номер счета',1,1);
-insert  into `server_errors`(`id`,`text`,`warning`,`hyphen`) values (327,'Укажите обмениваемую сумму',1,1);
-insert  into `server_errors`(`id`,`text`,`warning`,`hyphen`) values (400,'Вы купили предмет <b>\"%1$s\"</b>x<b>%3$s</b> за <b>%2$s кр.</b>',0,0);
-insert  into `server_errors`(`id`,`text`,`warning`,`hyphen`) values (401,'Вы купили предмет <b>\"%1$s\"</b>x<b>%3$s</b> за <b>%2$s екр.</b>',0,0);
-insert  into `server_errors`(`id`,`text`,`warning`,`hyphen`) values (403,'Вещь не найдена в магазине',1,0);
-insert  into `server_errors`(`id`,`text`,`warning`,`hyphen`) values (404,'Вы продали предмет <b>\"%1$s\"</b> за <b>%2$s кр.</b>',0,0);
-insert  into `server_errors`(`id`,`text`,`warning`,`hyphen`) values (405,'Вы продали предмет <b>\"%1$s\"</b> за <b>%2$s екр.</b>',0,0);
-insert  into `server_errors`(`id`,`text`,`warning`,`hyphen`) values (406,'Вы отправили предмет <b>\"%1$s\"</b> за <b>%2$s кр.</b>',0,0);
-insert  into `server_errors`(`id`,`text`,`warning`,`hyphen`) values (407,'Вы забрали \"%1$s\"',1,0);
-insert  into `server_errors`(`id`,`text`,`warning`,`hyphen`) values (408,'Вы отправили обратно \"%1$s\"',1,0);
-insert  into `server_errors`(`id`,`text`,`warning`,`hyphen`) values (409,'Вы отправили <b>%1$s кр.</b>',0,0);
-insert  into `server_errors`(`id`,`text`,`warning`,`hyphen`) values (410,'Минимальная сумма перевода: %1$s кр.',1,0);
-insert  into `server_errors`(`id`,`text`,`warning`,`hyphen`) values (500,'\"Новый пароль нужно написать дважды (чтобы избежать возможных опечаток)\"',0,0);
-insert  into `server_errors`(`id`,`text`,`warning`,`hyphen`) values (501,'Прежний пароль указан неверно',0,0);
-insert  into `server_errors`(`id`,`text`,`warning`,`hyphen`) values (502,'Вы ошиблись при написании пароля. Будьте внимательнее!',0,0);
-insert  into `server_errors`(`id`,`text`,`warning`,`hyphen`) values (503,'Длина пароля не может быть меньше 6 символов или более 30 символов',0,0);
-insert  into `server_errors`(`id`,`text`,`warning`,`hyphen`) values (504,'Новый пароль записан',0,0);
-insert  into `server_errors`(`id`,`text`,`warning`,`hyphen`) values (505,'Должно пройти не менее трех суток между сменой подтверждения, пароля или email',0,0);
-insert  into `server_errors`(`id`,`text`,`warning`,`hyphen`) values (506,'Новый пароль должен состоять только из букв русского и английского алфавита, а также из цифр!',0,0);
-insert  into `server_errors`(`id`,`text`,`warning`,`hyphen`) values (507,'Укажите пароль к персонажу',0,0);
-insert  into `server_errors`(`id`,`text`,`warning`,`hyphen`) values (508,'Укажите прежний email',0,0);
-insert  into `server_errors`(`id`,`text`,`warning`,`hyphen`) values (509,'Укажите новый email',0,0);
-insert  into `server_errors`(`id`,`text`,`warning`,`hyphen`) values (510,'Неверно указан старый e-mail',0,0);
-insert  into `server_errors`(`id`,`text`,`warning`,`hyphen`) values (511,'Неправильный формат e-mail',0,0);
-insert  into `server_errors`(`id`,`text`,`warning`,`hyphen`) values (512,'Новый e-mail записан',0,0);
-insert  into `server_errors`(`id`,`text`,`warning`,`hyphen`) values (0,'',0,0);
-insert  into `server_errors`(`id`,`text`,`warning`,`hyphen`) values (221,'Не найден такой комплект',1,1);
-insert  into `server_errors`(`id`,`text`,`warning`,`hyphen`) values (215,'Вы не можете выбрать данный образ.',1,1);
-insert  into `server_errors`(`id`,`text`,`warning`,`hyphen`) values (222,'Не удалось запомнить комплект \"%1$s\"',1,1);
-insert  into `server_errors`(`id`,`text`,`warning`,`hyphen`) values (200,'&nbsp; &nbsp;Увеличение способности \"<b>%1$s</b>\" произведено удачно',0,1);
-insert  into `server_errors`(`id`,`text`,`warning`,`hyphen`) values (199,'&nbsp; &nbsp;Увеличение способности \"%1$s\" невозможно',1,1);
+insert  into `server_errors`(`id`,`text`,`bold`,`hyphen`) values (100,'Вы отбываете тюремное заключение! Вы не можете покинуть здание тюрьмы.',1,1);
+insert  into `server_errors`(`id`,`text`,`bold`,`hyphen`) values (101,'Проход сюда только после <b>%1$s-го</b> уровня.',0,1);
+insert  into `server_errors`(`id`,`text`,`bold`,`hyphen`) values (102,'Вы не можете перемещаться через стены.',1,1);
+insert  into `server_errors`(`id`,`text`,`bold`,`hyphen`) values (103,'Вы не можете передвигаться! Масса всех вещей [%1$s] превышает допустимую норму [%2$s].',1,1);
+insert  into `server_errors`(`id`,`text`,`bold`,`hyphen`) values (104,'Вход разрешен только %1$s',1,1);
+insert  into `server_errors`(`id`,`text`,`bold`,`hyphen`) values (105,'Вы не можете пользоваться здесь чем-либо кроме почты.',1,1);
+insert  into `server_errors`(`id`,`text`,`bold`,`hyphen`) values (106,'Адресат не существует.',1,1);
+insert  into `server_errors`(`id`,`text`,`bold`,`hyphen`) values (107,'У вас недостаточно средств!',1,1);
+insert  into `server_errors`(`id`,`text`,`bold`,`hyphen`) values (108,'Екровые вещи нельзя отправить по почте.',1,1);
+insert  into `server_errors`(`id`,`text`,`bold`,`hyphen`) values (110,'Вы не можете так быстро бегать по комнатам',1,1);
+insert  into `server_errors`(`id`,`text`,`bold`,`hyphen`) values (111,'Вы сможете сменить образ через %1$s',1,1);
+insert  into `server_errors`(`id`,`text`,`bold`,`hyphen`) values (112,'Предмет не найден на почте.',1,1);
+insert  into `server_errors`(`id`,`text`,`bold`,`hyphen`) values (113,'Исчерпан лимит передач.',1,1);
+insert  into `server_errors`(`id`,`text`,`bold`,`hyphen`) values (114,'Действие не доступно.',1,1);
+insert  into `server_errors`(`id`,`text`,`bold`,`hyphen`) values (201,'Заклинание удачно использовано.',0,1);
+insert  into `server_errors`(`id`,`text`,`bold`,`hyphen`) values (202,'У вас не достаточно параметров для использования этого заклинания.',1,1);
+insert  into `server_errors`(`id`,`text`,`bold`,`hyphen`) values (203,'Персонаж <b>\"%1$s\"</b> не найден',0,1);
+insert  into `server_errors`(`id`,`text`,`bold`,`hyphen`) values (204,'Персонаж <b>\"%1$s\"</b> не травмирован.',0,1);
+insert  into `server_errors`(`id`,`text`,`bold`,`hyphen`) values (205,'Вы не можете использовать это заклинание на себя.',1,1);
+insert  into `server_errors`(`id`,`text`,`bold`,`hyphen`) values (206,'Персонаж <b>\"%1$s\"</b> сейчас оффлайн.',0,1);
+insert  into `server_errors`(`id`,`text`,`bold`,`hyphen`) values (207,'Персонаж <b>\"%1$s\"</b> находится в другой комнате.',0,1);
+insert  into `server_errors`(`id`,`text`,`bold`,`hyphen`) values (208,'Персонаж <b>\"%1$s\"</b> находится в бою.',0,1);
+insert  into `server_errors`(`id`,`text`,`bold`,`hyphen`) values (209,'Персонаж <b>\"%1$s\"</b> слишком ослаблен.',0,1);
+insert  into `server_errors`(`id`,`text`,`bold`,`hyphen`) values (210,'Нападение на персонажей 0-го уровня запрещено Мироздателем.',1,1);
+insert  into `server_errors`(`id`,`text`,`bold`,`hyphen`) values (211,'Использование этого заклинания на персонажа <b>\"%1$s\"</b> запрещено.',0,1);
+insert  into `server_errors`(`id`,`text`,`bold`,`hyphen`) values (212,'Вам не удалось использовать это заклинание.',1,1);
+insert  into `server_errors`(`id`,`text`,`bold`,`hyphen`) values (213,'Предмет не найден в вашем рюкзаке.',1,1);
+insert  into `server_errors`(`id`,`text`,`bold`,`hyphen`) values (214,'Предмет не надет на вас.',1,1);
+insert  into `server_errors`(`id`,`text`,`bold`,`hyphen`) values (216,'У предмета нет доступных увеличений.',1,1);
+insert  into `server_errors`(`id`,`text`,`bold`,`hyphen`) values (217,'Предмет требуется снять.',1,1);
+insert  into `server_errors`(`id`,`text`,`bold`,`hyphen`) values (218,'Зачем вам самому себе что-либо передавать?',1,1);
+insert  into `server_errors`(`id`,`text`,`bold`,`hyphen`) values (219,'Неизвестное увеличение.',1,1);
+insert  into `server_errors`(`id`,`text`,`bold`,`hyphen`) values (220,'Увеличение параметра <b>\"%1$s\"</b> у предмета <b>\"%2$s\"</b> произведено удачно.',0,1);
+insert  into `server_errors`(`id`,`text`,`bold`,`hyphen`) values (300,'Пароли не совпадают!',1,1);
+insert  into `server_errors`(`id`,`text`,`bold`,`hyphen`) values (301,'Вы не ввели пароль.',1,1);
+insert  into `server_errors`(`id`,`text`,`bold`,`hyphen`) values (302,'Неверный пароль!',1,1);
+insert  into `server_errors`(`id`,`text`,`bold`,`hyphen`) values (303,'Счет не существует!',1,1);
+insert  into `server_errors`(`id`,`text`,`bold`,`hyphen`) values (304,'У вас нет при себе <b>%1$s кр.</b>',0,1);
+insert  into `server_errors`(`id`,`text`,`bold`,`hyphen`) values (305,'У вас нет <b>%1$s кр.</b> на счету',0,1);
+insert  into `server_errors`(`id`,`text`,`bold`,`hyphen`) values (306,'Эта услуга доступна только персонажам, достигшим 8-го уровня.',1,1);
+insert  into `server_errors`(`id`,`text`,`bold`,`hyphen`) values (307,'Нельзя передавать кредиты самому себе.',1,1);
+insert  into `server_errors`(`id`,`text`,`bold`,`hyphen`) values (308,'Вы обменяли <b>%1$s екр.</b> со счета <b>#%2$s</b>. Вам зачисленно <b>%3$s кр.</b>',0,1);
+insert  into `server_errors`(`id`,`text`,`bold`,`hyphen`) values (309,'Нельзя передать сумму менее 1 кр.',1,1);
+insert  into `server_errors`(`id`,`text`,`bold`,`hyphen`) values (310,'У вас нет <b>%1$s екр.</b> на счету',0,1);
+insert  into `server_errors`(`id`,`text`,`bold`,`hyphen`) values (311,'Пароль изменен. На всякий случай, рекомендуем выйти из банка и войти снова для проверки нового пароля. Убедитесь, что функция высылки пароля на email включена ;)',0,1);
+insert  into `server_errors`(`id`,`text`,`bold`,`hyphen`) values (312,'Пароль не был изменен.',1,1);
+insert  into `server_errors`(`id`,`text`,`bold`,`hyphen`) values (313,'Сохранили записную книжку.',0,1);
+insert  into `server_errors`(`id`,`text`,`bold`,`hyphen`) values (314,'Записная книжка не сохранена.',1,1);
+insert  into `server_errors`(`id`,`text`,`bold`,`hyphen`) values (315,'Вы не ввели новый пароль.',1,1);
+insert  into `server_errors`(`id`,`text`,`bold`,`hyphen`) values (316,'Новый пароль нужно ввести дважды.',1,1);
+insert  into `server_errors`(`id`,`text`,`bold`,`hyphen`) values (317,'Второй раз пароль нужно ввести, чтобы избежать возможных опечаток. Вы ошиблись при повторном вводе нового пароля. Будьте внимательнее!',1,1);
+insert  into `server_errors`(`id`,`text`,`bold`,`hyphen`) values (318,'Вы открыли счет <b>#%1$s</b>.',0,1);
+insert  into `server_errors`(`id`,`text`,`bold`,`hyphen`) values (319,'Вы положили <b>%1$s кр.</b> на счет <b>#%2$s</b>.',0,1);
+insert  into `server_errors`(`id`,`text`,`bold`,`hyphen`) values (320,'Вы сняли <b>%1$s кр.</b> со счета <b>#%2$s</b>.',0,1);
+insert  into `server_errors`(`id`,`text`,`bold`,`hyphen`) values (321,'Вы перевели <b>%1$s кр.</b> к <b>%2$s</b> на счет <b>#%3$s</b> со счета <b>#%4$s</b>.',0,1);
+insert  into `server_errors`(`id`,`text`,`bold`,`hyphen`) values (322,'Счет пренадлежит не вам.',1,1);
+insert  into `server_errors`(`id`,`text`,`bold`,`hyphen`) values (323,'Для открытия счета необходимо иметь при себе <b>%1$s кр.</b>',0,1);
+insert  into `server_errors`(`id`,`text`,`bold`,`hyphen`) values (324,'Пароль нужно ввести дважды.',1,1);
+insert  into `server_errors`(`id`,`text`,`bold`,`hyphen`) values (325,'Укажите сумму',1,1);
+insert  into `server_errors`(`id`,`text`,`bold`,`hyphen`) values (326,'Укажите сумму и номер счета',1,1);
+insert  into `server_errors`(`id`,`text`,`bold`,`hyphen`) values (327,'Укажите обмениваемую сумму',1,1);
+insert  into `server_errors`(`id`,`text`,`bold`,`hyphen`) values (400,'Вы купили предмет <b>\"%1$s\"</b>x<b>%3$s</b> за <b>%2$s кр.</b>',0,0);
+insert  into `server_errors`(`id`,`text`,`bold`,`hyphen`) values (401,'Вы купили предмет <b>\"%1$s\"</b>x<b>%3$s</b> за <b>%2$s екр.</b>',0,0);
+insert  into `server_errors`(`id`,`text`,`bold`,`hyphen`) values (403,'Вещь не найдена в магазине',1,0);
+insert  into `server_errors`(`id`,`text`,`bold`,`hyphen`) values (404,'Вы продали предмет <b>\"%1$s\"</b> за <b>%2$s кр.</b>',0,0);
+insert  into `server_errors`(`id`,`text`,`bold`,`hyphen`) values (405,'Вы продали предмет <b>\"%1$s\"</b> за <b>%2$s екр.</b>',0,0);
+insert  into `server_errors`(`id`,`text`,`bold`,`hyphen`) values (406,'Вы отправили предмет <b>\"%1$s\"</b> за <b>%2$s кр.</b>',0,0);
+insert  into `server_errors`(`id`,`text`,`bold`,`hyphen`) values (407,'Вы забрали \"%1$s\"',1,0);
+insert  into `server_errors`(`id`,`text`,`bold`,`hyphen`) values (408,'Вы отправили обратно \"%1$s\"',1,0);
+insert  into `server_errors`(`id`,`text`,`bold`,`hyphen`) values (409,'Вы отправили <b>%1$s кр.</b>',0,0);
+insert  into `server_errors`(`id`,`text`,`bold`,`hyphen`) values (410,'Минимальная сумма перевода: %1$s кр.',1,0);
+insert  into `server_errors`(`id`,`text`,`bold`,`hyphen`) values (500,'\"Новый пароль нужно написать дважды (чтобы избежать возможных опечаток)\"',0,0);
+insert  into `server_errors`(`id`,`text`,`bold`,`hyphen`) values (501,'Прежний пароль указан неверно',0,0);
+insert  into `server_errors`(`id`,`text`,`bold`,`hyphen`) values (502,'Вы ошиблись при написании пароля. Будьте внимательнее!',0,0);
+insert  into `server_errors`(`id`,`text`,`bold`,`hyphen`) values (503,'Длина пароля не может быть меньше 6 символов или более 30 символов',0,0);
+insert  into `server_errors`(`id`,`text`,`bold`,`hyphen`) values (504,'Новый пароль записан',0,0);
+insert  into `server_errors`(`id`,`text`,`bold`,`hyphen`) values (505,'Должно пройти не менее трех суток между сменой подтверждения, пароля или email',0,0);
+insert  into `server_errors`(`id`,`text`,`bold`,`hyphen`) values (506,'Новый пароль должен состоять только из букв русского и английского алфавита, а также из цифр!',0,0);
+insert  into `server_errors`(`id`,`text`,`bold`,`hyphen`) values (507,'Укажите пароль к персонажу',0,0);
+insert  into `server_errors`(`id`,`text`,`bold`,`hyphen`) values (508,'Укажите прежний email',0,0);
+insert  into `server_errors`(`id`,`text`,`bold`,`hyphen`) values (509,'Укажите новый email',0,0);
+insert  into `server_errors`(`id`,`text`,`bold`,`hyphen`) values (510,'Неверно указан старый e-mail',0,0);
+insert  into `server_errors`(`id`,`text`,`bold`,`hyphen`) values (511,'Неправильный формат e-mail',0,0);
+insert  into `server_errors`(`id`,`text`,`bold`,`hyphen`) values (512,'Новый e-mail записан',0,0);
+insert  into `server_errors`(`id`,`text`,`bold`,`hyphen`) values (0,'',0,0);
+insert  into `server_errors`(`id`,`text`,`bold`,`hyphen`) values (221,'Не найден такой комплект',1,1);
+insert  into `server_errors`(`id`,`text`,`bold`,`hyphen`) values (215,'Вы не можете выбрать данный образ.',1,1);
+insert  into `server_errors`(`id`,`text`,`bold`,`hyphen`) values (222,'Не удалось запомнить комплект \"%1$s\"',1,1);
+insert  into `server_errors`(`id`,`text`,`bold`,`hyphen`) values (200,'&nbsp; &nbsp;Увеличение способности \"<b>%1$s</b>\" произведено удачно',0,1);
+insert  into `server_errors`(`id`,`text`,`bold`,`hyphen`) values (199,'&nbsp; &nbsp;Увеличение способности \"%1$s\" невозможно',1,1);
+insert  into `server_errors`(`id`,`text`,`bold`,`hyphen`) values (109,'Проход сюда только до <b>%1$s-го</b> уровня.',0,1);
 
 /*Table structure for table `server_images` */
 
@@ -1749,26 +1813,28 @@ CREATE TABLE `server_images` (
   `width` int(11) NOT NULL default '0',
   `height` int(11) NOT NULL default '0',
   `default` varchar(30) default NULL,
+  `low_level` varchar(30) default NULL,
+  `level` tinyint(3) NOT NULL default '0',
   PRIMARY KEY  (`name`)
 ) ENGINE=MyISAM DEFAULT CHARSET=cp1251;
 
 /*Data for the table `server_images` */
 
-insert  into `server_images`(`name`,`width`,`height`,`default`) values ('item_amulet',60,20,'wamulet.gif');
-insert  into `server_images`(`name`,`width`,`height`,`default`) values ('item_earring',60,20,'wearring.gif');
-insert  into `server_images`(`name`,`width`,`height`,`default`) values ('item_armor',60,80,'warmor.gif');
-insert  into `server_images`(`name`,`width`,`height`,`default`) values ('item_pants',60,80,'wpants.gif');
-insert  into `server_images`(`name`,`width`,`height`,`default`) values ('item_belt',60,40,'wbelt.gif');
-insert  into `server_images`(`name`,`width`,`height`,`default`) values ('item_bracer',60,40,'wbracer.gif');
-insert  into `server_images`(`name`,`width`,`height`,`default`) values ('item_gloves',60,40,'wgloves.gif');
-insert  into `server_images`(`name`,`width`,`height`,`default`) values ('item_boots',60,40,'wboots.gif');
-insert  into `server_images`(`name`,`width`,`height`,`default`) values ('item_ring',20,20,'wring.gif');
-insert  into `server_images`(`name`,`width`,`height`,`default`) values ('item_animal',90,60,NULL);
-insert  into `server_images`(`name`,`width`,`height`,`default`) values ('item_hand_r',60,60,'whand_r.gif');
-insert  into `server_images`(`name`,`width`,`height`,`default`) values ('item_acsess',60,60,NULL);
-insert  into `server_images`(`name`,`width`,`height`,`default`) values ('item_hand_l',60,60,'whand_l.gif');
-insert  into `server_images`(`name`,`width`,`height`,`default`) values ('item_hand_l_f',60,60,'whand_l.gif');
-insert  into `server_images`(`name`,`width`,`height`,`default`) values ('item_helmet',60,60,'whelmet.gif');
+insert  into `server_images`(`name`,`width`,`height`,`default`,`low_level`,`level`) values ('item_amulet',60,20,'wamulet.gif','amulet0001.gif',4);
+insert  into `server_images`(`name`,`width`,`height`,`default`,`low_level`,`level`) values ('item_earring',60,20,'wearring.gif','clips0001.gif',4);
+insert  into `server_images`(`name`,`width`,`height`,`default`,`low_level`,`level`) values ('item_armor',60,80,'warmor.gif',NULL,0);
+insert  into `server_images`(`name`,`width`,`height`,`default`,`low_level`,`level`) values ('item_pants',60,80,'wpants.gif',NULL,0);
+insert  into `server_images`(`name`,`width`,`height`,`default`,`low_level`,`level`) values ('item_belt',60,40,'wbelt.gif','belt0001.gif',3);
+insert  into `server_images`(`name`,`width`,`height`,`default`,`low_level`,`level`) values ('item_bracer',60,40,'wbracer.gif','arms0001.gif',2);
+insert  into `server_images`(`name`,`width`,`height`,`default`,`low_level`,`level`) values ('item_gloves',60,40,'wgloves.gif','hands0001.gif',2);
+insert  into `server_images`(`name`,`width`,`height`,`default`,`low_level`,`level`) values ('item_boots',60,40,'wboots.gif','boots0001.gif',3);
+insert  into `server_images`(`name`,`width`,`height`,`default`,`low_level`,`level`) values ('item_ring',20,20,'wring.gif','ring0001.gif',4);
+insert  into `server_images`(`name`,`width`,`height`,`default`,`low_level`,`level`) values ('item_animal',90,60,NULL,NULL,0);
+insert  into `server_images`(`name`,`width`,`height`,`default`,`low_level`,`level`) values ('item_hand_r',60,60,'whand_r.gif','weapon0001.gif',1);
+insert  into `server_images`(`name`,`width`,`height`,`default`,`low_level`,`level`) values ('item_acsess',60,60,NULL,NULL,0);
+insert  into `server_images`(`name`,`width`,`height`,`default`,`low_level`,`level`) values ('item_hand_l',60,60,'whand_l.gif','shield0001.gif',1);
+insert  into `server_images`(`name`,`width`,`height`,`default`,`low_level`,`level`) values ('item_hand_l_f',60,60,'whand_l.gif','shield0001.gif',1);
+insert  into `server_images`(`name`,`width`,`height`,`default`,`low_level`,`level`) values ('item_helmet',60,60,'whelmet.gif','head0001.gif',3);
 
 /*Table structure for table `server_info` */
 
@@ -1784,7 +1850,7 @@ CREATE TABLE `server_info` (
 
 /*Data for the table `server_info` */
 
-insert  into `server_info`(`login`,`registration`,`password`,`last_transfer`) values (1,1,1,1295825292);
+insert  into `server_info`(`login`,`registration`,`password`,`last_transfer`) values (1,1,1,1330682135);
 
 /*Table structure for table `server_language` */
 
@@ -1822,62 +1888,62 @@ insert  into `server_language`(`key`,`text`) values ('earth','Мастерств
 insert  into `server_language`(`key`,`text`) values ('light','Мастерство владения магией Света:');
 insert  into `server_language`(`key`,`text`) values ('gray','Мастерство владения серой магией:');
 insert  into `server_language`(`key`,`text`) values ('dark','Мастерство владения магией Тьмы:');
-insert  into `server_language`(`key`,`text`) values ('mf_critpower','Мф. мощности крит. удара (%):');
-insert  into `server_language`(`key`,`text`) values ('mf_anticrit','Мф. против критического удара (%):');
-insert  into `server_language`(`key`,`text`) values ('mf_antiuvorot','Мф. против увертывания (%):');
-insert  into `server_language`(`key`,`text`) values ('mf_piercearmor','Мф. удара сквозь броню (%):');
+insert  into `server_language`(`key`,`text`) values ('mf_critp','Мф. мощности крит. удара (%):');
+insert  into `server_language`(`key`,`text`) values ('mf_acrit','Мф. против критического удара (%):');
+insert  into `server_language`(`key`,`text`) values ('mf_adodge','Мф. против увертывания (%):');
+insert  into `server_language`(`key`,`text`) values ('mf_parmour','Мф. удара сквозь броню (%):');
 insert  into `server_language`(`key`,`text`) values ('mf_crit','Мф. критического удара (%):');
 insert  into `server_language`(`key`,`text`) values ('mf_parry','Мф. парирования (%):');
-insert  into `server_language`(`key`,`text`) values ('mf_blockshield','Мф. блока щитом (%):');
-insert  into `server_language`(`key`,`text`) values ('mf_uvorot','Мф. увертывания (%):');
+insert  into `server_language`(`key`,`text`) values ('mf_shieldb','Мф. блока щитом (%):');
+insert  into `server_language`(`key`,`text`) values ('mf_dodge','Мф. увертывания (%):');
 insert  into `server_language`(`key`,`text`) values ('mf_contr','Мф. контрудара (%):');
-insert  into `server_language`(`key`,`text`) values ('repres_all_magic','Подавление защиты от магии:');
-insert  into `server_language`(`key`,`text`) values ('repres_fire','Подавление защиты от магии Огня:');
-insert  into `server_language`(`key`,`text`) values ('repres_water','Подавление защиты от магии Воды:');
-insert  into `server_language`(`key`,`text`) values ('repres_air','Подавление защиты от магии Воздуха:');
-insert  into `server_language`(`key`,`text`) values ('repres_earth','Подавление защиты от магии Земли:');
-insert  into `server_language`(`key`,`text`) values ('mf_all_magic','Мф. мощности магии стихий:');
+insert  into `server_language`(`key`,`text`) values ('rep_magic','Подавление защиты от магии:');
+insert  into `server_language`(`key`,`text`) values ('rep_fire','Подавление защиты от магии Огня:');
+insert  into `server_language`(`key`,`text`) values ('rep_water','Подавление защиты от магии Воды:');
+insert  into `server_language`(`key`,`text`) values ('rep_air','Подавление защиты от магии Воздуха:');
+insert  into `server_language`(`key`,`text`) values ('rep_earth','Подавление защиты от магии Земли:');
+insert  into `server_language`(`key`,`text`) values ('mf_magic','Мф. мощности магии стихий:');
 insert  into `server_language`(`key`,`text`) values ('mf_fire','Мф. мощности магии Огня:');
 insert  into `server_language`(`key`,`text`) values ('mf_water','Мф. мощности магии Воды:');
 insert  into `server_language`(`key`,`text`) values ('mf_air','Мф. мощности магии Воздуха:');
 insert  into `server_language`(`key`,`text`) values ('mf_earth','Мф. мощности магии Земли:');
-insert  into `server_language`(`key`,`text`) values ('mf_all_damage','Мф. мощности урона:');
+insert  into `server_language`(`key`,`text`) values ('mf_dmg','Мф. мощности урона:');
 insert  into `server_language`(`key`,`text`) values ('mf_sting','Мф. мощности колющего урона:');
 insert  into `server_language`(`key`,`text`) values ('mf_slash','Мф. мощности рубящего урона:');
 insert  into `server_language`(`key`,`text`) values ('mf_crush','Мф. мощности дробящего урона:');
 insert  into `server_language`(`key`,`text`) values ('mf_sharp','Мф. мощности режущего урона:');
 insert  into `server_language`(`key`,`text`) values ('all_magic','Мастерство владения магией стихий:');
 insert  into `server_language`(`key`,`text`) values ('all_mastery','Мастерство владения оружием:');
-insert  into `server_language`(`key`,`text`) values ('resist_all_magic','Защита от магии:');
-insert  into `server_language`(`key`,`text`) values ('resist_fire','Защита от магии огня:');
-insert  into `server_language`(`key`,`text`) values ('resist_water','Защита от магии воды:');
-insert  into `server_language`(`key`,`text`) values ('resist_air','Защита от магии воздуха:');
-insert  into `server_language`(`key`,`text`) values ('resist_earth','Защита от магии земли:');
-insert  into `server_language`(`key`,`text`) values ('resist_light','Защита от магии Света:');
-insert  into `server_language`(`key`,`text`) values ('resist_gray','Защита от серой магии:');
-insert  into `server_language`(`key`,`text`) values ('resist_dark','Защита от магии Тьмы:');
-insert  into `server_language`(`key`,`text`) values ('resist_all_damage','Защита от урона:');
-insert  into `server_language`(`key`,`text`) values ('resist_sting','Защита от колющего урона:');
-insert  into `server_language`(`key`,`text`) values ('resist_slash','Защита от рубящего урона:');
-insert  into `server_language`(`key`,`text`) values ('resist_crush','Защита от дробящего урона:');
-insert  into `server_language`(`key`,`text`) values ('resist_sharp','Защита от режущего урона:');
+insert  into `server_language`(`key`,`text`) values ('res_magic','Защита от магии:');
+insert  into `server_language`(`key`,`text`) values ('res_fire','Защита от магии огня:');
+insert  into `server_language`(`key`,`text`) values ('res_water','Защита от магии воды:');
+insert  into `server_language`(`key`,`text`) values ('res_air','Защита от магии воздуха:');
+insert  into `server_language`(`key`,`text`) values ('res_earth','Защита от магии земли:');
+insert  into `server_language`(`key`,`text`) values ('res_light','Защита от магии Света:');
+insert  into `server_language`(`key`,`text`) values ('res_gray','Защита от серой магии:');
+insert  into `server_language`(`key`,`text`) values ('res_dark','Защита от магии Тьмы:');
+insert  into `server_language`(`key`,`text`) values ('res_dmg','Защита от урона:');
+insert  into `server_language`(`key`,`text`) values ('res_sting','Защита от колющего урона:');
+insert  into `server_language`(`key`,`text`) values ('res_slash','Защита от рубящего урона:');
+insert  into `server_language`(`key`,`text`) values ('res_crush','Защита от дробящего урона:');
+insert  into `server_language`(`key`,`text`) values ('res_sharp','Защита от режущего урона:');
 insert  into `server_language`(`key`,`text`) values ('add_hp','Уровень жизни (HP):');
 insert  into `server_language`(`key`,`text`) values ('add_mp','Уровень маны (MP):');
 insert  into `server_language`(`key`,`text`) values ('mpcons','Уменьшение расхода маны (%):');
 insert  into `server_language`(`key`,`text`) values ('mpreco','Восстановление маны (%):');
 insert  into `server_language`(`key`,`text`) values ('hpreco','Восстановление здоровья (%):');
-insert  into `server_language`(`key`,`text`) values ('add_attack_min','Минимальное наносимое повреждение:');
-insert  into `server_language`(`key`,`text`) values ('add_attack_max','Максимальное наносимое повреждение:');
-insert  into `server_language`(`key`,`text`) values ('chance_sting','Колющие атаки:');
-insert  into `server_language`(`key`,`text`) values ('chance_slash','Рубящие атаки:');
-insert  into `server_language`(`key`,`text`) values ('chance_crush','Дробящие атаки:');
-insert  into `server_language`(`key`,`text`) values ('chance_sharp','Режущие атаки:');
-insert  into `server_language`(`key`,`text`) values ('chance_fire','Огненные атаки:');
-insert  into `server_language`(`key`,`text`) values ('chance_water','Ледяные атаки:');
-insert  into `server_language`(`key`,`text`) values ('chance_air','Электрические атаки:');
-insert  into `server_language`(`key`,`text`) values ('chance_earth','Земляные атаки:');
-insert  into `server_language`(`key`,`text`) values ('chance_light','Атаки Светом:');
-insert  into `server_language`(`key`,`text`) values ('chance_dark','Атаки Тьмой:');
+insert  into `server_language`(`key`,`text`) values ('add_hit_min','Минимальное наносимое повреждение:');
+insert  into `server_language`(`key`,`text`) values ('add_hit_max','Максимальное наносимое повреждение:');
+insert  into `server_language`(`key`,`text`) values ('ch_sting','Колющие атаки:');
+insert  into `server_language`(`key`,`text`) values ('ch_slash','Рубящие атаки:');
+insert  into `server_language`(`key`,`text`) values ('ch_crush','Дробящие атаки:');
+insert  into `server_language`(`key`,`text`) values ('ch_sharp','Режущие атаки:');
+insert  into `server_language`(`key`,`text`) values ('ch_fire','Огненные атаки:');
+insert  into `server_language`(`key`,`text`) values ('ch_water','Ледяные атаки:');
+insert  into `server_language`(`key`,`text`) values ('ch_air','Электрические атаки:');
+insert  into `server_language`(`key`,`text`) values ('ch_earth','Земляные атаки:');
+insert  into `server_language`(`key`,`text`) values ('ch_light','Атаки Светом:');
+insert  into `server_language`(`key`,`text`) values ('ch_dark','Атаки Тьмой:');
 insert  into `server_language`(`key`,`text`) values ('def_h','Броня головы:');
 insert  into `server_language`(`key`,`text`) values ('def_a','Броня корпуса:');
 insert  into `server_language`(`key`,`text`) values ('def_b','Броня пояса:');
@@ -1914,7 +1980,7 @@ insert  into `server_language`(`key`,`text`) values ('amulet_f','Пустой с
 insert  into `server_language`(`key`,`text`) values ('earring_f','Пустой слот серьги');
 insert  into `server_language`(`key`,`text`) values ('helmet_f','Пустой слот шлем');
 insert  into `server_language`(`key`,`text`) values ('armor_f','Пустой слот броня');
-insert  into `server_language`(`key`,`text`) values ('pants_f','Пустой слот штаны');
+insert  into `server_language`(`key`,`text`) values ('pants_f','Пустой слот поножи');
 insert  into `server_language`(`key`,`text`) values ('belt_f','Пустой слот пояс');
 insert  into `server_language`(`key`,`text`) values ('bracer_f','Пустой слот наручи');
 insert  into `server_language`(`key`,`text`) values ('gloves_f','Пустой слот перчатки');
@@ -1961,23 +2027,23 @@ insert  into `server_language`(`key`,`text`) values ('bar_def','Защита:');
 insert  into `server_language`(`key`,`text`) values ('bar_btn','Кнопки:');
 insert  into `server_language`(`key`,`text`) values ('bar_mod','Модификаторы:');
 insert  into `server_language`(`key`,`text`) values ('mf_crit_i','Мф. крит. удара:');
-insert  into `server_language`(`key`,`text`) values ('mf_critpower_i','Мф. мощности крит. удара:');
-insert  into `server_language`(`key`,`text`) values ('mf_anticrit_i','Мф. против крит. удара:');
+insert  into `server_language`(`key`,`text`) values ('mf_critp_i','Мф. мощности крит. удара:');
+insert  into `server_language`(`key`,`text`) values ('mf_acrit_i','Мф. против крит. удара:');
 insert  into `server_language`(`key`,`text`) values ('mf_crit_m','Мф. крит. удара позволяет нанести критический удар, наносящий дополнительные повреждения даже сквозь блок.');
-insert  into `server_language`(`key`,`text`) values ('mf_critpower_m','Мф. мощности крит. удара показывает, на сколько % критический удар будет сильнее, чем обычно.');
-insert  into `server_language`(`key`,`text`) values ('mf_anticrit_m','Мф. против крит. удара снижает вероятность получения крит. удара');
-insert  into `server_language`(`key`,`text`) values ('mf_uvorot_m','Мф. увертывания позволяет вам уклониться от атаки противника, полностью игнорируя ее.');
-insert  into `server_language`(`key`,`text`) values ('mf_antiuvorot_m','Мф. против увертывания снижает шансы противника уклониться от вашей атаки');
+insert  into `server_language`(`key`,`text`) values ('mf_critp_m','Мф. мощности крит. удара показывает, на сколько % критический удар будет сильнее, чем обычно.');
+insert  into `server_language`(`key`,`text`) values ('mf_acrit_m','Мф. против крит. удара снижает вероятность получения крит. удара');
+insert  into `server_language`(`key`,`text`) values ('mf_dodge_m','Мф. увертывания позволяет вам уклониться от атаки противника, полностью игнорируя ее.');
+insert  into `server_language`(`key`,`text`) values ('mf_adodge_m','Мф. против увертывания снижает шансы противника уклониться от вашей атаки');
 insert  into `server_language`(`key`,`text`) values ('mf_contr_m','Мф. контрудара позволяет нанести дополнительный удар по противнику, после того как вы уклонились от его атаки');
 insert  into `server_language`(`key`,`text`) values ('mf_parry_m','Мф. парирования позволяет \"угадать\" зону удара противника. Итоговый шанс парирования в бою равен разнице вашего мф. парирования и половины мф. парирования противника');
-insert  into `server_language`(`key`,`text`) values ('mf_blockshield_m','Мф. блока щитом позволяет \"угадать\" зону удара противника. Этот модификатор абсолютен.');
+insert  into `server_language`(`key`,`text`) values ('mf_shieldb_m','Мф. блока щитом позволяет \"угадать\" зону удара противника. Этот модификатор абсолютен.');
 insert  into `server_language`(`key`,`text`) values ('mastery_m','Мастерство владения текущим оружием в момент нанесения удара');
 insert  into `server_language`(`key`,`text`) values ('mastery','Мастерство:');
-insert  into `server_language`(`key`,`text`) values ('mf_uvorot_i','Мф. увертывания:');
-insert  into `server_language`(`key`,`text`) values ('mf_antiuvorot_i','Мф. против увертывания:');
+insert  into `server_language`(`key`,`text`) values ('mf_dodge_i','Мф. увертывания:');
+insert  into `server_language`(`key`,`text`) values ('mf_adodge_i','Мф. против увертывания:');
 insert  into `server_language`(`key`,`text`) values ('mf_contr_i','Мф. контрудара:');
 insert  into `server_language`(`key`,`text`) values ('mf_parry_i','Мф. парирования:');
-insert  into `server_language`(`key`,`text`) values ('mf_blockshield_i','Мф. блока щитом:');
+insert  into `server_language`(`key`,`text`) values ('mf_shieldb_i','Мф. блока щитом:');
 insert  into `server_language`(`key`,`text`) values ('bar_stat','Характеристики:');
 insert  into `server_language`(`key`,`text`) values ('ups','Способности');
 insert  into `server_language`(`key`,`text`) values ('skills','Обучение');
@@ -2012,11 +2078,10 @@ insert  into `server_language`(`key`,`text`) values ('shop_earring','серьг�
 insert  into `server_language`(`key`,`text`) values ('shop_amulet','ожерелья');
 insert  into `server_language`(`key`,`text`) values ('shop_ring','кольца');
 insert  into `server_language`(`key`,`text`) values ('shop_scroll','Заклинания');
-insert  into `server_language`(`key`,`text`) values ('prof_knight','Рыцарь');
-insert  into `server_language`(`key`,`text`) values ('prof_mage','Маг');
-insert  into `server_language`(`key`,`text`) values ('prof_trade','Торговец');
-insert  into `server_language`(`key`,`text`) values ('prof_monk','Варвар');
-insert  into `server_language`(`key`,`text`) values ('prof_elf','Эльф');
+insert  into `server_language`(`key`,`text`) values ('style_warrior','Воин');
+insert  into `server_language`(`key`,`text`) values ('style_mage','Маг');
+insert  into `server_language`(`key`,`text`) values ('style_barbarian','Варвар');
+insert  into `server_language`(`key`,`text`) values ('style_rogue','Разбойник');
 insert  into `server_language`(`key`,`text`) values ('bank_1','Вы открыли счет');
 insert  into `server_language`(`key`,`text`) values ('bank_2','Вы положили на счет <b>%2$s кр.</b>');
 insert  into `server_language`(`key`,`text`) values ('bank_3','Вы сняли со счета <b>%2$s кр.</b>');
@@ -2030,12 +2095,12 @@ insert  into `server_language`(`key`,`text`) values ('mail_get_mail',' . Пол�
 insert  into `server_language`(`key`,`text`) values ('wins','Побед:');
 insert  into `server_language`(`key`,`text`) values ('loses','Поражений:');
 insert  into `server_language`(`key`,`text`) values ('draws','Ничьих:');
-insert  into `server_language`(`key`,`text`) values ('prof','Профессия:');
+insert  into `server_language`(`key`,`text`) values ('style','Стиль боя:');
 insert  into `server_language`(`key`,`text`) values ('money','Деньги:');
 insert  into `server_language`(`key`,`text`) values ('exp','Опыт:');
 insert  into `server_language`(`key`,`text`) values ('clan','Клан:');
 insert  into `server_language`(`key`,`text`) values ('status','Статус:');
-insert  into `server_language`(`key`,`text`) values ('fights','Бои:');
+insert  into `server_language`(`key`,`text`) values ('games','Бои:');
 insert  into `server_language`(`key`,`text`) values ('bank','Банк:');
 insert  into `server_language`(`key`,`text`) values ('sort_by','Выровнять по');
 insert  into `server_language`(`key`,`text`) values ('sort_name','названию');
@@ -2069,6 +2134,43 @@ insert  into `server_language`(`key`,`text`) values ('shop_no','Это мест�
 insert  into `server_language`(`key`,`text`) values ('mf_dark','Мф. мощности магии Тьмы:');
 insert  into `server_language`(`key`,`text`) values ('mf_light','Мф. мощности магии Света:');
 insert  into `server_language`(`key`,`text`) values ('mf_gray','Мф. мощности серой магии:');
+insert  into `server_language`(`key`,`text`) values ('style_warrior_d','Сила: +10, Выносливость: +10');
+insert  into `server_language`(`key`,`text`) values ('status_private','Рядовой');
+insert  into `server_language`(`key`,`text`) values ('status_corporal','Капрал');
+insert  into `server_language`(`key`,`text`) values ('status_sergeant','Сержант');
+insert  into `server_language`(`key`,`text`) values ('status_m_sergeant','Старший сержант');
+insert  into `server_language`(`key`,`text`) values ('status_s_major','Старшина');
+insert  into `server_language`(`key`,`text`) values ('status_knight','Рыцарь');
+insert  into `server_language`(`key`,`text`) values ('status_k_lieutenant','Рыцарь-лейтенант');
+insert  into `server_language`(`key`,`text`) values ('status_k_captain','Рыцарь-капитан');
+insert  into `server_language`(`key`,`text`) values ('status_k_champion','Рыцарь-защитник');
+insert  into `server_language`(`key`,`text`) values ('status_l_commander','Лейтенант-командор');
+insert  into `server_language`(`key`,`text`) values ('status_commander','Командор');
+insert  into `server_language`(`key`,`text`) values ('status_marshal','Маршал');
+insert  into `server_language`(`key`,`text`) values ('status_f_marshal','Фельдмаршал');
+insert  into `server_language`(`key`,`text`) values ('status_g_marshal','Главнокомандующий');
+insert  into `server_language`(`key`,`text`) values ('status_god','Бог');
+insert  into `server_language`(`key`,`text`) values ('status_admin','Администратор');
+insert  into `server_language`(`key`,`text`) values ('status_novice','Новичок');
+insert  into `server_language`(`key`,`text`) values ('style_mage_d','Интеллект: +10, Мудрость: +10');
+insert  into `server_language`(`key`,`text`) values ('style_rogue_d','Ловкость: +15, Интуиция: +5');
+insert  into `server_language`(`key`,`text`) values ('style_barbarian_d','Интуиция: +15, Выносливость: +5');
+insert  into `server_language`(`key`,`text`) values ('refresh','Обновить');
+insert  into `server_language`(`key`,`text`) values ('forum','Форум');
+insert  into `server_language`(`key`,`text`) values ('return_b','Возврат');
+insert  into `server_language`(`key`,`text`) values ('map','Карта клуба');
+insert  into `server_language`(`key`,`text`) values ('fights','Поединки');
+insert  into `server_language`(`key`,`text`) values ('amulet_l','Слот ожерелья открывается на 4-ом уровне.');
+insert  into `server_language`(`key`,`text`) values ('earring_l','Слот серег открывается на 4-ом уровне.');
+insert  into `server_language`(`key`,`text`) values ('helmet_l','Слот шлема открывается на 3-ем уровне.');
+insert  into `server_language`(`key`,`text`) values ('belt_l','Слот пояса открывается на 3-ем уровне.');
+insert  into `server_language`(`key`,`text`) values ('bracer_l','Слот наручей открывается на 2-ом уровне.');
+insert  into `server_language`(`key`,`text`) values ('gloves_l','Слот перчаток открывается на 2-ом уровне.');
+insert  into `server_language`(`key`,`text`) values ('boots_l','Слот обуви открывается на 3-ем уровне.');
+insert  into `server_language`(`key`,`text`) values ('ring_l','Слот кольца открывается на 4-ом уровне.');
+insert  into `server_language`(`key`,`text`) values ('hand_r_l','Слот основной руки открывается на 1-ом уровне.');
+insert  into `server_language`(`key`,`text`) values ('hand_l_l','Слот второй руки открывается на 1-ом уровне.');
+insert  into `server_language`(`key`,`text`) values ('hand_l_f_l','Слот второй руки открывается на 1-ом уровне.');
 
 /*Table structure for table `team1` */
 
@@ -2164,10 +2266,6 @@ CREATE TABLE `thing_book` (
   KEY `id` (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=cp1251;
 
-/*Data for the table `thing_book` */
-
-insert  into `thing_book`(`id`,`name`,`img`,`mass`,`price`,`min_intellekt`,`min_vospriyatie`,`min_level`,`add_intellekt`,`add_mana`,`iznos_min`,`iznos_max`,`type`,`mountown`,`orden`,`add_water`,`add_earth`,`add_fire`,`add_air`,`pages`,`desc`) values (1,'Book','helmet/helmet27.gif','11','10','10','10','1','10','10','0','20',NULL,NULL,NULL,'1','1','1','1','1','Nanana');
-
 /*Table structure for table `thing_scroll` */
 
 DROP TABLE IF EXISTS `thing_scroll`;
@@ -2210,13 +2308,6 @@ CREATE TABLE `thing_scroll` (
   KEY `id` (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 
-/*Data for the table `thing_scroll` */
-
-insert  into `thing_scroll`(`id`,`name`,`img`,`mass`,`price`,`veroyat`,`min_vospriyatie`,`min_intellekt`,`min_level`,`iznos_min`,`iznos_max`,`mana`,`file`,`orden`,`mountown`,`min_sila2`,`add_arm_l`,`add_arm_m`,`add_arm_h`,`add_water`,`add_air`,`add_earth`,`add_cast`,`add_trade`,`add_cure`,`add_walk`,`min_lovkost2`,`min_udacha2`,`min_power2`,`min_intellekt2`,`min_vospriyatie2`,`min_level2`,`school`) values (2,'?????????','icon/magic/attack.gif',1,9,'70',0,7,4,0,5,'','attack.php','','9973','','','','','','','1','','','','','','','','','','','');
-insert  into `thing_scroll`(`id`,`name`,`img`,`mass`,`price`,`veroyat`,`min_vospriyatie`,`min_intellekt`,`min_level`,`iznos_min`,`iznos_max`,`mana`,`file`,`orden`,`mountown`,`min_sila2`,`add_arm_l`,`add_arm_m`,`add_arm_h`,`add_water`,`add_air`,`add_earth`,`add_cast`,`add_trade`,`add_cure`,`add_walk`,`min_lovkost2`,`min_udacha2`,`min_power2`,`min_intellekt2`,`min_vospriyatie2`,`min_level2`,`school`) values (1,'??????? ?????','icon/magic/lech.gif',1,15,'50',0,8,4,0,5,'','lech.php','','9995','','','','','','','','','','','','','','','','','','');
-insert  into `thing_scroll`(`id`,`name`,`img`,`mass`,`price`,`veroyat`,`min_vospriyatie`,`min_intellekt`,`min_level`,`iznos_min`,`iznos_max`,`mana`,`file`,`orden`,`mountown`,`min_sila2`,`add_arm_l`,`add_arm_m`,`add_arm_h`,`add_water`,`add_air`,`add_earth`,`add_cast`,`add_trade`,`add_cure`,`add_walk`,`min_lovkost2`,`min_udacha2`,`min_power2`,`min_intellekt2`,`min_vospriyatie2`,`min_level2`,`school`) values (3,'HP 10','icon/magic/10.gif',1,15,'100',0,2,0,0,5,'','cure_hp10.php','','9995','','','','','','','','','','','','','','','','','','air');
-insert  into `thing_scroll`(`id`,`name`,`img`,`mass`,`price`,`veroyat`,`min_vospriyatie`,`min_intellekt`,`min_level`,`iznos_min`,`iznos_max`,`mana`,`file`,`orden`,`mountown`,`min_sila2`,`add_arm_l`,`add_arm_m`,`add_arm_h`,`add_water`,`add_air`,`add_earth`,`add_cast`,`add_trade`,`add_cure`,`add_walk`,`min_lovkost2`,`min_udacha2`,`min_power2`,`min_intellekt2`,`min_vospriyatie2`,`min_level2`,`school`) values (4,'HP 25','icon/magic/25.gif',1,15,'100',0,2,0,0,5,'','cure_hp25.php','','9996','','','','','','','','','','','','','','','','','','air');
-
 /*Table structure for table `thread` */
 
 DROP TABLE IF EXISTS `thread`;
@@ -2237,21 +2328,6 @@ CREATE TABLE `thread` (
   KEY `id` (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=16 DEFAULT CHARSET=cp1251;
 
-/*Data for the table `thread` */
-
-insert  into `thread`(`id`,`topic`,`thr`,`topic_id`,`date`,`creator`,`clan`,`clan_s`,`orden`,`level`,`last_post`) values (4,'dsadsa','news','','2007-04-18 21:17:56','hacik','','','0','3','18.04.2007-19:17:56');
-insert  into `thread`(`id`,`topic`,`thr`,`topic_id`,`date`,`creator`,`clan`,`clan_s`,`orden`,`level`,`last_post`) values (5,'dasd','news','','2007-04-18 21:20:14','Мироздатель','sss','sssss','4','1','18.04.2007-19:20:14');
-insert  into `thread`(`id`,`topic`,`thr`,`topic_id`,`date`,`creator`,`clan`,`clan_s`,`orden`,`level`,`last_post`) values (6,'dasdsa','relax','','2007-04-18 21:20:39','Мироздатель','sss','sssss','4','1','18.04.2007-19:20:39');
-insert  into `thread`(`id`,`topic`,`thr`,`topic_id`,`date`,`creator`,`clan`,`clan_s`,`orden`,`level`,`last_post`) values (7,'выфвыф','news','','2007-04-18 21:23:57','Мироздатель','sss','sssss','4','1','18.04.2007-21:23:57');
-insert  into `thread`(`id`,`topic`,`thr`,`topic_id`,`date`,`creator`,`clan`,`clan_s`,`orden`,`level`,`last_post`) values (8,'dasd','news','','2007-04-18 21:26:32','Мироздатель','sss','sssss','4','1','18.04.2007-21:26:32');
-insert  into `thread`(`id`,`topic`,`thr`,`topic_id`,`date`,`creator`,`clan`,`clan_s`,`orden`,`level`,`last_post`) values (9,'sa','news','9','2007-04-18 21:40:10','Мироздатель','sss','sssss','4','1','9');
-insert  into `thread`(`id`,`topic`,`thr`,`topic_id`,`date`,`creator`,`clan`,`clan_s`,`orden`,`level`,`last_post`) values (10,'sas','clan','10','2007-04-18 21:40:43','Мироздатель','sss','sssss','4','1','10');
-insert  into `thread`(`id`,`topic`,`thr`,`topic_id`,`date`,`creator`,`clan`,`clan_s`,`orden`,`level`,`last_post`) values (11,'sas','clan','11','2007-04-18 21:41:39','Мироздатель','sss','sssss','4','1','11');
-insert  into `thread`(`id`,`topic`,`thr`,`topic_id`,`date`,`creator`,`clan`,`clan_s`,`orden`,`level`,`last_post`) values (12,'sas','clan','12','2007-04-18 21:41:44','Мироздатель','sss','sssss','4','1','12');
-insert  into `thread`(`id`,`topic`,`thr`,`topic_id`,`date`,`creator`,`clan`,`clan_s`,`orden`,`level`,`last_post`) values (13,'sas','clan','13','2007-04-18 21:41:51','Мироздатель','sss','sssss','4','1','13');
-insert  into `thread`(`id`,`topic`,`thr`,`topic_id`,`date`,`creator`,`clan`,`clan_s`,`orden`,`level`,`last_post`) values (14,'sas','clan','14','2007-04-18 21:41:56','Мироздатель','sss','sssss','4','1','14');
-insert  into `thread`(`id`,`topic`,`thr`,`topic_id`,`date`,`creator`,`clan`,`clan_s`,`orden`,`level`,`last_post`) values (15,'sas','clan','15','2007-04-18 21:42:12','Мироздатель','sss','sssss','4','1','15');
-
 /*Table structure for table `timeout` */
 
 DROP TABLE IF EXISTS `timeout`;
@@ -2263,10 +2339,6 @@ CREATE TABLE `timeout` (
   `battle_id` varchar(30) NOT NULL default '',
   KEY `id` (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=189 DEFAULT CHARSET=cp1251;
-
-/*Data for the table `timeout` */
-
-insert  into `timeout`(`id`,`lasthit`,`creator`,`battle_id`) values (130,'1176904035','','120');
 
 /*Table structure for table `topic` */
 
@@ -2307,10 +2379,20 @@ CREATE TABLE `topics` (
   KEY `cat` (`cat`)
 ) ENGINE=MyISAM AUTO_INCREMENT=1176923604 DEFAULT CHARSET=cp1251;
 
-/*Data for the table `topics` */
+/*Table structure for table `wood` */
 
-insert  into `topics`(`id`,`last_update`,`fixed`,`cat`,`title`,`icon`,`text`,`date`,`poster`,`p_id`,`p_rank`,`p_tribe`,`p_level`,`p_rase`) values (1175708956,1175708956,0,'Инквизиция','зделанно',0,'1)износ вешей','04.04.07 20:49','hacik',38,100,'test',30,3);
-insert  into `topics`(`id`,`last_update`,`fixed`,`cat`,`title`,`icon`,`text`,`date`,`poster`,`p_id`,`p_rank`,`p_tribe`,`p_level`,`p_rase`) values (1176923603,1176923676,0,'main','dsada',0,'dsaddsada','','',0,0,'',0,0);
+DROP TABLE IF EXISTS `wood`;
+
+CREATE TABLE `wood` (
+  `id` bigint(30) NOT NULL auto_increment,
+  `name` varchar(30) character set cp1251 NOT NULL default '',
+  `img` varchar(30) character set cp1251 NOT NULL default '',
+  `price` varchar(30) character set cp1251 NOT NULL default '',
+  `mass` varchar(30) character set cp1251 NOT NULL default '',
+  `mountown` varchar(30) character set cp1251 NOT NULL default '',
+  PRIMARY KEY  (`id`),
+  KEY `id` (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `zayavka` */
 
@@ -2337,8 +2419,6 @@ CREATE TABLE `zayavka` (
   KEY `player1` (`id`),
   KEY `id` (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=190 DEFAULT CHARSET=cp1251;
-
-/*Data for the table `zayavka` */
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

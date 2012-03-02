@@ -13,8 +13,8 @@ $answer = (isset($_POST['answer'])) ?$_POST['answer'] :"";
 <?
 if ($answer == 'yes')
 {
-    $sql1 = $adb->query ("UPDATE `inv` SET `wear` = '0';");
-    $sql2 = $adb->query ("UPDATE `characters` 
+    $sql1 = $adb->query("UPDATE `inv` SET `wear` = '0';");
+    $sql2 = $adb->query("UPDATE `characters` 
                             SET `helmet` = '0', 
                                 `naruchi` = '0', 
                                 `hand_r` = '0', 

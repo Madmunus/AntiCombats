@@ -150,7 +150,7 @@ ch_l();
                            LEFT JOIN `character_inventory` AS `c` 
                            ON `m`.`item_id` = `c`.`id` 
                            LEFT JOIN `item_template` AS `i` 
-                           ON `c`.`item_template` = `i`.`entry` 
+                           ON `c`.`item_entry` = `i`.`entry` 
                            WHERE `m`.`to` = ?d 
                              and `m`.`delivery_time` < ?d 
                              and `c`.`mailed` = '1' 

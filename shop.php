@@ -36,14 +36,14 @@ $check_level = ($level_filter > 0 || $level_filter == '0');
 if ($section_shop == 'sell')
 {
   $rows = $adb->select("SELECT * 
-                         FROM `character_inventory` AS `c` 
-                         LEFT JOIN `item_template` AS `i` 
-                         ON `c`.`item_template` = `i`.`entry` 
-                         WHERE (`i`.`item_flags` & '1') 
-                            and `c`.`wear` = '0' 
-                            and `c`.`mailed` = '0' 
-                            and `c`.`guid` = ?d 
-                         ORDER BY `c`.`last_update` DESC", $guid);
+                        FROM `character_inventory` AS `c` 
+                        LEFT JOIN `item_template` AS `i` 
+                        ON `c`.`item_entry` = `i`.`entry` 
+                        WHERE (`i`.`item_flags` & '1') 
+                           and `c`.`wear` = '0' 
+                           and `c`.`mailed` = '0' 
+                           and `c`.`guid` = ?d 
+                        ORDER BY `c`.`last_update` DESC", $guid);
   $i = true;
   foreach ($rows as $item_info)
   {

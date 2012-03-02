@@ -433,9 +433,13 @@ echo "<script type='text/javascript'>$regfail</script>";
             // Создание баров
             $adb->query("INSERT INTO `character_bars` (`guid`) 
                          VALUES (?d);", $guid);
+            // Эффекты
+            $adb->query("INSERT INTO `character_effects` (`guid`, `effect_entry`, `end_time`) 
+                         VALUES (?d, '1', '0');", $guid);
             // Предметы
-            $adb->query("INSERT INTO `character_inventory` (`guid`, `item_template`, `wear`, `tear_max`, `made_in`, `last_update`) 
-                         VALUES (?d, '920', '1', '20', ?s, ?d);", $guid ,$city ,time());
+            $adb->query("INSERT INTO `character_inventory` (`guid`, `item_entry`, `wear`, `tear_max`, `made_in`, `last_update`) 
+                         VALUES (?d, '920', '1', '20', ?s, ?d),
+                                (?d, '1031', '1', '10', ?s, ?d);", $guid ,$city ,time() ,$guid ,$city ,time());
             echo "Регистрация персонажа $reg_login, прошла успешно!<br>Авторизируйтесь с <a href='index.php' class='us2'>главной страницы</a>.";
             $char->history->authorization(2, $city);
           }
