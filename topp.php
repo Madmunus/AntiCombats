@@ -103,10 +103,10 @@ $(function (){
                     | <a class="menutop" href="stat.php" target="_blank">Рейтинг</a>
                   </span>
                   <span id="menu3" class="bottom_text">
-                      <a class="menutop" onclick="top.linkAction('report');" href="#">Отчеты</a>
+                      <a class="menutop" onclick="top.linkAction('form&do=passandmail');" href="#">Смена пароля</a>
+                    | <a class="menutop" onclick="top.linkAction('report');" href="#">Отчеты</a>
                     | <a class="menutop" href="encicl/FAQ/afer.html" target="_blank">Правила</a>
                     | <a class="menutop" onclick="top.linkAction('form&do=passandmail');" href="#">Настройки</a>
-                    | <a class="menutop" onclick="top.linkAction('form&do=passandmail');" href="#">Смена пароля</a>
                   </span>
                   <span id="menu4" class="bottom_text">
                       <a class="menutop" onClick="top.linkAction('inv');" href="#">Инвентарь</a>

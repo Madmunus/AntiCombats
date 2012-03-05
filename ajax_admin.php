@@ -26,7 +26,7 @@ switch ($do)
 {
   /*Удаление персонажа*/
   case 'delete_char':
-    $d_guid = requestVar('guid');
+    $d_guid = requestVar('d_guid');
     $adb->query("DELETE FROM `character_bank` WHERE `guid` = ?d", $d_guid);
     $adb->query("DELETE FROM `character_bars` WHERE `guid` = ?d", $d_guid);
     $adb->query("DELETE FROM `character_effects` WHERE `guid` = ?d", $d_guid);

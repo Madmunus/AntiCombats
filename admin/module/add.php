@@ -1,5 +1,5 @@
 <?
-defined('AntiBK') or die ("Доступ запрещен!");
+defined('AntiBK') or die("Доступ запрещен!");
 ?>
 <script>
 $(function (){

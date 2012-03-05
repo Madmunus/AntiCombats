@@ -46,7 +46,7 @@ function updateMessagesGo ()
     
     $('#mes').append(messages[0]);
     $(window).scrollTop($('#mes').height());
-    TimerMessage = setTimeout('updateMessages()', messages[1]*1000);
+    TimerMessage = setTimeout(updateMessages, messages[1]*1000);
 	});
 }
 
@@ -60,7 +60,7 @@ function updateMessages ()
     
     $('#mes').append(messages[0]);
     $(window).scrollTop($('#mes').height());
-    TimerMessage = setTimeout('updateMessages()', messages[1]*1000);
+    TimerMessage = setTimeout(updateMessages, messages[1]*1000);
 	});
 }
 

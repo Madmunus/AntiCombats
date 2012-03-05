@@ -3,17 +3,27 @@ defined('AntiBK') or die ("Доступ запрещен!");
 ?>
 <script src="scripts/inventory.js" type="text/javascript"></script>
 <?
+if ($action == 'wear_item')
+  $char->equip->equipItem($item_id);
+else if ($action == 'unwear_item')
+  $char->equip->equipItem($item_slot, -1);
+else if ($action == 'unwear_full')
+  $char->equip->unWearAllItems();
+else if ($action == 'wear_set')
+  $char->equip->equipSet($set_name);
+
 $bars = $char->getChar('char_bars', 'stat', 'mod', 'power', 'def', 'btn', 'set');
 foreach ($bars as $key => $value)
 {
   if ($value == 0)
-    unset ($bars[$key]);
+    unset($bars[$key]);
 }
-asort ($bars);
+asort($bars);
 
 $countitems = $adb->selectCell("SELECT COUNT(*) FROM `character_inventory` WHERE `guid` = ?d and `wear` = '0' and `mailed` = '0';", $guid) | 0;
 
 $money = getMoney($money);
+$chat_shut = $char_db['chat_shut'];
 
 $bank = $adb->selectCol("SELECT `id` FROM `character_bank` WHERE `guid` = ?d", $guid);
 foreach ($bank as $num => $bank_id)
@@ -46,10 +56,10 @@ if ($chat_shut)
 <?
 echo "$lang[exp] <b>".getExp($exp)."</b> (".getExp($next_up).")<br>"
    . "$lang[games] &nbsp; <b>$win <img src='img/icon/wins.gif' border='0' title='$lang[wins] $win'> &nbsp; $lose <img src='img/icon/looses.gif' border='0' title='$lang[loses] $lose'> &nbsp; $draw <img src='img/icon/draw.gif' border='0' title='$lang[draws] $draw'></b><br>"
-   . "$lang[money] <b>$money</b> кр.<br><br>";
+   . "$lang[money] <b>$money</b> кр.<br>";
 if ($bank)
 {
-  echo "$lang[bank] <span id='loginbank'>";
+  echo "<br>$lang[bank] <span id='loginbank'>";
   if (empty($_SESSION['bankСredit']))
     echo "<a href=\"javascript:bank_open ('$credits');\" class='nick' style='font-size: 7pt;'>$lang[credit_choose]</a>";
   else if (!empty($_SESSION['bankСredit']))
@@ -59,6 +69,8 @@ if ($bank)
   }
   echo "</span>";
 }
+else if ($level > 0)
+  echo "<br>Банк: <a href='javascript:bank_info();' class='nick' style='font-size: 7pt;'>информация</a>";
 echo "</small>";
 foreach ($bars as $bar => $value)
   echo "<div id='bar_$bar'>".$char->showInventoryBar($bar, $value, count($bars))."</div>";
@@ -95,14 +107,14 @@ echo ($orden == 1 || $orden == 2) ?"<strong>$orden_dis$stat_rang</strong><br></s
                   <div id="inventory">
 <?
     $rows = $adb->select("SELECT * 
-                           FROM `character_inventory` AS `c` 
-                           LEFT JOIN `item_template` AS `i` 
-                           ON `c`.`item_entry` = `i`.`entry` 
-                           WHERE `i`.`section` = ?s 
-                             and `c`.`guid` = ?d 
-                             and `c`.`wear` = '0' 
-                             and `c`.`mailed` = '0' 
-                           ORDER BY `c`.`last_update` DESC", $data['sections'][$section] ,$guid);
+                          FROM `character_inventory` AS `c` 
+                          LEFT JOIN `item_template` AS `i` 
+                          ON `c`.`item_entry` = `i`.`entry` 
+                          WHERE `i`.`section` = ?s 
+                            and `c`.`guid` = ?d 
+                            and `c`.`wear` = '0' 
+                            and `c`.`mailed` = '0' 
+                          ORDER BY `c`.`last_update` DESC", $data['sections'][$section] ,$guid);
     if (count($rows) > 0)
     {
       $i = 1;

@@ -109,10 +109,9 @@ $name_s = $char_db['clan_short'];
 $clan  = $char_db['clan'];
 $orden = $char_db['orden'];
 
-$chat_shut = $char_db['chat_shut'];
 $date = date ('d.m.y H:i:s', mktime(date ('H') - $GSM));
 
-$char->city->getRoomGoTime($mtime);
+$mtime = $char->city->getRoomGoTime();
 echoScript("var time_to_go = $mtime;");
 
 switch ($action)
@@ -153,7 +152,7 @@ switch ($action)
     
     $char->test->Go($char_db['last_room'], true);
     
-    $adb->query("UPDATE `characters` SET `room` = ?s, `last_room` = ?s, `last_return` = ?d WHERE `guid` = ?d", $char_db['last_room'] ,$room ,time () ,$guid);
+    $adb->query("UPDATE `characters` SET `room` = ?s, `last_room` = ?s, `last_return` = ?d WHERE `guid` = ?d", $char_db['last_room'] ,$room ,time() ,$guid);
     $adb->query("UPDATE `online` SET `room` = ?s WHERE `guid` = ?d", $char_db['last_room'] ,$guid);
     echoScript("top.cleanChat(); parent.user.updateUsers(); parent.msg.updateMessagesGo();");
     $char->error->Map();
@@ -168,25 +167,17 @@ switch ($action)
     include("orden.php");
   break;
   case 'inv':
+  case 'wear_item':
+  case 'unwear_item':
+  case 'unwear_full':
+  case 'wear_set':
     include("inventory.php");
   break;
   case 'skills':
     include("skills.php");
   break;
-  case 'wear_item':
-    $char->equip->equipItem($item_id);
-    $char->error->Inventory();
-  break;
-  case 'unwear_item':
-    $char->equip->equipItem($item_slot, -1);
-    $char->error->Inventory();
-  break;
-  case 'unwear_full':
-    $char->equip->unWearAllItems();
-    $char->error->Inventory();
-  break;
-  case 'wear_set':
-    $char->equip->equipSet($set_name);
+  case 'zayavka':
+    include("zayavka.php");
   break;
   case 'unwear_thing':
     unwear_t ($guid, $item_id);
@@ -272,9 +263,9 @@ switch ($action)
     {
       $id = $adb->selectCell("SELECT `id` FROM `history_auth` WHERE `guid` = ?d ORDER BY `id` DESC", $guid) - 1;
       $auth = $adb->selectRow("SELECT `ip`, `date` FROM `history_auth` WHERE `guid` = ?d and `id` = ?d", $guid ,$id);
-      unset ($_SESSION['bankСredit']);
+      unset($_SESSION['bankСredit']);
       if ($id && $auth && $auth['ip'] != $_SERVER['REMOTE_ADDR'])
-        $char->chat->say($guid, date ('d.m.y H:i', $auth['date'])." <font color='red'><b>ВНИМАНИЕ!</b></font> В предыдущий раз этим персонажем заходили с другого компьютера.");
+        $char->chat->say($guid, date('d.m.y H:i', $auth['date'])." <font color='red'><b>ВНИМАНИЕ!</b></font> В предыдущий раз этим персонажем заходили с другого компьютера.");
     }
     include("room_detect.php");
   break;

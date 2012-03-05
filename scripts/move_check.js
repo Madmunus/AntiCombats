@@ -1,6 +1,6 @@
 var solo_store, progressTimer;
-var progressEnd = 32;							              // set to number of progress <span>'s.
-var progressColor = '#00CC00';					        // set to progress bar color
+var progressEnd = 32;							// set to number of progress <span>'s.
+var progressColor = '#00CC00';		// set to progress bar color
 var mtime = parseInt(time_to_go);	// set time to next step (seconds)
 if (!mtime || mtime <= 0)
 	mtime = 0;
@@ -59,7 +59,7 @@ function progress_update ()
 	else
 	{
 		$('#progress'+progressAt).css('backgroundColor', progressColor);
-		progressTimer = setTimeout ('progress_update()', progressInterval);
+		progressTimer = setTimeout(progress_update, progressInterval);
 	}
 }
 

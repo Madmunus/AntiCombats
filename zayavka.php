@@ -1,183 +1,112 @@
 <?
-session_start();
-ini_set('display_errors', true);
-ini_set('html_errors', false);
-ini_set('error_reporting', E_ALL);
+defined('AntiBK') or die("Доступ запрещен!");
 
-define('AntiBK', true);
+$do = requestVar('do');
+$boy = requestVar('boy');
+$battle_type = requestVar('battle_type');
+$timeout = requestVar('timeout');
+$log = requestVar('log');
+$ac = requestVar('ac');
+$accept = requestVar('accept');
+$accept2 = requestVar('accept2');
+$otkaz = requestVar('otkaz');
+$id = requestVar('id');
+$denie = requestVar('denie');
 
-include("engline/config.php");
-include("engline/dbsimple/Generic.php");
-include("engline/data/data.php");
-include("engline/functions/functions.php");
-
-$guid = getGuid();
-
-$adb = DbSimple_Generic::connect($database['adb']);
-$adb->query("SET NAMES ? ",$database['db_encoding']);
-$adb->setErrorHandler("databaseErrorHandler");
-
-$char = Char::initialization($guid, $adb);
-
-$act = htmlspecialchars ($act);
-$boy = htmlspecialchars ($boy);
-$battle_type = htmlspecialchars ($battle_type);
-$timeout = htmlspecialchars ($timeout);
-$log = htmlspecialchars ($log);
-$ac = htmlspecialchars ($ac);
-$accept = htmlspecialchars ($accept);
-$accept2 = htmlspecialchars ($accept2);
-$otkaz = htmlspecialchars ($otkaz);
-$id = htmlspecialchars ($id);
-$denie = htmlspecialchars ($denie);
-
-$login = $adb->_performEscape ($login);
-$db = $adb->selectRow("SELECT * FROM `characters` WHERE `login` = $login;");
-$login = $db['login'];
-$orden_d = $db['orden'];
-$clan_s = $db['clan_short'];
-$clan_f = $db['clan'];
-$travm = $db['travm'];
-$level = $db['level'];
-$room = $db['room'];
-$rang = $db['rang'];
-$city_game = $db['city_game'];
-$travm_i = ($travm != 0) ?"<img src='img/travma2.gif' title='Персонаж поврежден'>" :"";
-$orden_dis = ($orden_d == 1) ?"Белое братство" :(($orden_d == 2) ?"Темное братство" :(($orden_d == 3) ?"Нейтральное братство" :(($orden_d == 4) ?"Алхимик" :(($orden_d == 5) ?"Хаос" :""))));
-$clan = (empty($clan_s)) ?"" :"<img src='img/clan/$clan_s.gif' border='0' title='$clan_f'>";
-$orden = ($orden_d == 1) ?"<img src='img/orden/pal/$rang.gif' width='12' height='15' border='0' title='$orden_dis'>" :(($orden_d == 2) ?"<img src='img/orden/arm/$rang.gif' width='12' height='15' border='0' title='$orden_dis'>" :(($orden_d == 3) ?"<img src='img/orden/3.gif' width='12' height='15' border='0' title='$orden_dis'>" :(($orden_d == 4) ?"<img src='img/orden/4.gif' width='12' height='15' border='0' title='$orden_dis'>" :(($orden_d == 5) ?"<img src='img/orden/2.gif' width='12' height='15' border='0' title='$orden_dis'>" :""))));
-
-$test -> Move ();
-$test -> Battle();
-?>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta http-equiv="Content-Language" content="ru">
-<meta http-equiv="Refresh" content="30"; url="zayavka.php">
-<link rel="StyleSheet" href="styles/style.css" type="text/css">
-<title>Анти Бойцовский Клуб</title>
-</head>
-<body bgColor="#e2e0e0" leftMargin="5" topMargin="5" marginheight="5" marginwidth="5">
-<?
-$look_m = $adb->selectCell("SELECT `login` FROM `miners` WHERE `login` = '$login';");
-if ($look_m['login'] == $login)
-    die ("Вы добываете ресурсы. Вы не можете передвигаться сейчас.");
-$cure_hp = $db['cure_hp'];
-$cure_mp = $db['cure_mp'];
-$time_to_cure = $cure_hp - time();
-$hhh = $db['hp_all'];
-if ($db['battle'] == 0)
-{
-    if ($time_to_cure > 0)
-    {
-        $percent_hp = floor ((100 * $time_to_cure) / 1200);
-        $percent = 100 - $percent_hp;
-        $hp[0] = floor (($hhh * $percent) / 100);
-        $q = $adb->query("    UPDATE `characters` 
-                                SET `hp` = '$hp[0]' 
-                                WHERE `login` = '$login';
-                            ");
-    }
-    else
-    {
-        $hp[0] = $db['hp_all'];
-        $q = $adb->query("    UPDATE `characters` 
-                                SET `hp` = '$hp[0]', 
-                                    `cure_hp` = '0' 
-                                WHERE `login` = '$login';
-                            ");
-        $time_to_cure_f = 0;
-    }
-}
-$md1 = $adb->select("SELECT `battle_id` FROM `team1` WHERE `player` = '$login';");
-$countrows = count ($md1);
-
-for ($i = 0; $i < $countrows; $i++)
-{
-    $m = $md1[$i]['battle_id'];
-    $opponent = $adb->selectCell("SELECT `player` FROM `team2` WHERE `battle_id` = '$m';");
-    $pl1 = str_replace (" ", "%20", $opponent);
-    $t = 1;
-}
-$md2 = $adb->select("SELECT `battle_id` FROM `team2` WHERE `player` = '$login';");
-$countrows = count ($md2);
-
-for ($i = 0; $i < $countrows; $i++)
-{
-    $m = $md2[$i]['battle_id'];
-    $opponent = $adb->selectCell("SELECT `player` FROM `team1` WHERE `battle_id` = '$m';");
-    $pl1 = str_replace (" ", "%20", $opponent);
-    $t = 2;
-}
-
+/*
 $dat = $adb->select("SELECT * FROM `zayavka`;");
 $countrows = count ($dat);
 
 for ($i = 0; $i < $countrows; $i++)
 {
-    $cr = $dat[$i]['creator'];
-    $player = $adb->selectCell("SELECT `login` FROM `characters` WHERE `id` = '$cr';");
-    $search = $adb->selectCell("SELECT `login` FROM `online` WHERE `login` = '$player';");
-    $online = ($search) ?1 :0;
-    if ($online == 0)
-    {
-        $del = $adb->query("DELETE FROM `zayavka` WHERE `creator` = '$cr';");
-        $del1 = $adb->query("DELETE FROM `team1` WHERE `battle_id` = '$cr';");
-        $del2 = $adb->query("DELETE FROM `team2` WHERE `battle_id` = '$cr';");
-    }
-    if ($m == $dat[$i]['creator'] && $dat[$i]['status'] == 1)
-        $zayavka_status = "awaiting";
-    if ($m == $dat[$i]['creator'] && $dat[$i]['status'] == 2 && $t == 1)
-        $zayavka_status = "confirm_mine";
-    if ($m == $dat[$i]['creator'] && $dat[$i]['status'] == 2 && $t == 2)
-        $zayavka_status = "confirm_opp";
-    if ($m == $dat[$i]['creator'] && $dat[$i]['status'] == 3)
-        goBattle($login);
+  $cr = $dat[$i]['creator'];
+  $player = $adb->selectCell("SELECT `login` FROM `characters` WHERE `id` = '$cr';");
+  $search = $adb->selectCell("SELECT `login` FROM `online` WHERE `login` = '$player';");
+  $online = ($search) ?1 :0;
+  if ($online == 0)
+  {
+    $del = $adb->query("DELETE FROM `zayavka` WHERE `creator` = '$cr';");
+    $del1 = $adb->query("DELETE FROM `team1` WHERE `battle_id` = '$cr';");
+    $del2 = $adb->query("DELETE FROM `team2` WHERE `battle_id` = '$cr';");
+  }
+  if ($m == $dat[$i]['creator'] && $dat[$i]['status'] == 1)
+    $zayavka_status = "awaiting";
+  if ($m == $dat[$i]['creator'] && $dat[$i]['status'] == 2 && $t == 1)
+    $zayavka_status = "confirm_mine";
+  if ($m == $dat[$i]['creator'] && $dat[$i]['status'] == 2 && $t == 2)
+    $zayavka_status = "confirm_opp";
+  if ($m == $dat[$i]['creator'] && $dat[$i]['status'] == 3)
+    goBattle($login);
 }
 if (empty($zayavka_status))
-    $zayavka_status = "no";
+  $zayavka_status = "no";*/
+$fights = $char->city->getRoom($room, $city, 'fights');
+$hps = array('fiz', 'dgv', 'group', 'haos');
 ?>
-<table align="center" width="100%" border="0" cellspacing="0" cellpadding="0">
-    <tr>
-        <td align="left" valign="middle" width="50%"><b><font size="2"></font></b></td>
-        <td align="right" valign="middle">
-            <input type="button" value="Обновить" onclick="location.href = 'zayavka.php?boy=phisic';">
-            <input type="button" value="Вернуться" onclick="location.href = 'main.php';">
-        </td>
-    </tr>
+<table align="center" width="100%" border="0" cellspacing="0" cellpadding="0" style="padding-top: 10px;">
+  <tr>
+    <td align="left" valign="middle" width="50%" style="padding-bottom: 2px;">
+<?
+    if (in_array($boy, $hps))
+    {
+      echo $char->info->character('clan');
+      echo "<span id='HP'></span>";
+      echo "<img src='img/icon/heart_03.gif' width='10' height='10' alt='Уровень жизни' style='padding-left: 1px; vertical-align: middle;'>";
+      echoScript("showHpmini($char_stats[hp], $char_stats[hp_all], $char_stats[hp_regen]);");
+    }
+?>
+    </td>
+    <td align="right" valign="middle">
+      <input type="button" class="help" value="<?echo $lang['hint'];?>" id="hint" link="combats">
+      <input type="button" class="nav" value="<?echo $lang['return'];?>" id="link" link="none">
+    </td>
+  </tr>
 </table>
 <table align="center" cellSpacing="1" cellPadding="1" width="100%">
-    <tr>
+  <tr>
+    <td class="m" width="40">&nbsp;<b>Бои:</b></td>
+    <td class="<?echo ($boy == 'fiz') ?"s" :"m"?>"><a href="?action=zayavka&boy=fiz" class="nick">1 на 1</a></td>
+    <td class="m"><a href="?action=zayavka&boy=dgv" class="nick">Учебные</a></td>
+    <td class="<?echo ($boy == 'group') ?"s" :"m"?>"><a href="?action=zayavka&boy=group" class="nick">Групповые</a></td>
+    <td class="<?echo ($boy == 'haos') ?"s" :"m"?>"><a href="?action=zayavka&boy=haos" class="nick">Хаотичные</a></td>
+    <td class="<?echo ($boy == 'tklogs') ?"s" :"m"?>"><a href="?action=zayavka&boy=tklogs" class="nick">Текущие</a></td>
+    <td class="<?echo ($boy == 'logs') ?"s" :"m"?>"><a href="?action=zayavka&boy=logs" class="nick">Завершенные</a></td>
+  </tr>
+</table>
 <?
-if ($room == "Зал воинов" || $room == "Зал воинов 2" || $room == "Зал воинов 3" || $room == "Будуар" || $room == "Рыцарский Зал" || $room == "Комната Знахаря" || $room == "Торговый Зал" || $room == "Зал закона")
+switch ($boy)
 {
-    $class = (empty($boy) || $boy == "") ?"m" :"s";
-    $msg = (empty($boy) || $boy == "") ?"<br><br><center><b>Выберите раздел</b></center>" :"";
-    echo "<td class='m' width='40'>&nbsp;<b>Бои:</b></td>";
-    echo "<td class='$class'><a href=\"zayavka.php?boy=phisic\" class='nick'>Физические</a></td>";
-    echo "<td class='m'><a href=\"boy_bot.php\" class='nick'>С ботом</a></td>";
-    echo "<td class='m'><a href=\"group_zayavka.php\" class='nick'>Групповые</a></td>";
-    echo "<td class='m'><a href=\"during.php\" class='nick'>Текущие</a></td>";
-    echo "<td class='m'><a href=\"archive.php\" class='nick'>Завершенные</a></td>";
-    echo "</tr>";
-    echo "</table>$msg";
-    if (empty($boy) || $boy == "")
-        die ();
+  case 'fiz':
+    if (!$fights)
+      die("<br><br><center><b>В этой комнате невозможно подавать заявки</b></center>");
+    
+    echo "После подачи заявки, вам будет подобран случайный противник вашего уровня<br>";
+    echo "<input type='submit' value='Подать заявку'>";
+  break;
+  case 'dgv':
+    die("<br><br><center><b>Выберите раздел...</b></center>");
+  break;
+  case 'group':
+    if ($level < 2)
+      die("<br><br><center><b>В групповые бои только со второго уровня.</b></center>");
+    else if (!$fights)
+      die("<br><br><center><b>В этой комнате невозможно подавать заявки</b></center>");
+  break;
+  case 'haos':
+    if ($level < 2)
+      die("<br><br><center><b>В хаотичные бои только со второго уровня.</b></center>");
+    else if (!$fights)
+      die("<br><br><center><b>В этой комнате невозможно подавать заявки</b></center>");
+  break;
+  case 'tklogs':
+  break;
+  case 'logs':
+  break;
+  default:
+    die("<br><br><center><b>Выберите раздел</b></center>");
+  break;
 }
-else
-{
-    echo "<td class='m' width='40'>&nbsp;<b>Бои:</b></td>";
-    echo "<td class='m'><a href='#' class='nick'>Физические</a></td>";
-    echo "<td class='m'><a href='#' class='nick'>С ботом</a></td>";
-    echo "<td class='m'><a href='#' class='nick'>Групповые</a></td>";
-    echo "<td class='m'><a href='#' class='nick'>Текущие</a></td>";
-    echo "<td class='m'><a href='#' class='nick'>Завершенные</a></td>";
-    echo "</tr>";
-    echo "</table>";
-    echo "<br><br>";
-    echo "<center><b>Бои проводятся только в залах Бойцовского клуба!</b></center>";
-    die ();
-}
+die();
 /*=====status disc=========*/
 /*1 - ожидает вызова       */
 /*2 - ожидает подтверждения*/
@@ -372,39 +301,39 @@ if ($zayavka_status == "no")
 {
 ?>
 <table border="0" width="100%" cellpadding="0" cellspacing="0">
-    <tr>
-        <td width="50%" align="left" valign="top">
+  <tr>
+    <td width="50%" align="left" valign="top">
+      <form name="boy" action="zayavka.php?boy=phisic&act=podat" method="post">
+      <table cellSpacing="0" cellPadding=0>
+        <tbody>
+        <tr>
+          <td>
             <form name="boy" action="zayavka.php?boy=phisic&act=podat" method="post">
-            <table cellSpacing="0" cellPadding=0>
-                <tbody>
-                <tr>
-                    <td>
-                        <form name="boy" action="zayavka.php?boy=phisic&act=podat" method="post">
-                        <fieldset>
-                            <legend><b>Подать заявку на бой</b></legend>
-                            Таймаут 
-                            <select name="timeout">
-                                <option value="3">3 мин.
-                                <option value="4">4 мин.
-                                <option value="5">5 мин.
-                                <option value="7">7 мин.
-                                <option value="10" selected>10 мин.
-                            </select> 
-                            Тип боя 
-                            <select name="battle_type">
-                                <option value="1" selected>с оружием
-                                <option value="2">кулачный
-                            </select> 
-                            <input type="submit" value="Подать заявку">&nbsp; 
-                        </fieldset>
-                        </form>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </td>
-        <td align="right" valign="top"><input type="button" value="Обновить" onclick="location.href = 'zayavka.php?boy=phisic';"></td>
-    </tr>
+            <fieldset>
+              <legend><b>Подать заявку на бой</b></legend>
+              Таймаут 
+              <select name="timeout">
+                <option value="3">3 мин.
+                <option value="4">4 мин.
+                <option value="5">5 мин.
+                <option value="7">7 мин.
+                <option value="10" selected>10 мин.
+              </select> 
+              Тип боя 
+              <select name="battle_type">
+                <option value="1" selected>с оружием
+                <option value="2">кулачный
+              </select> 
+              <input type="submit" value="Подать заявку">&nbsp; 
+            </fieldset>
+            </form>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </td>
+    <td align="right" valign="top"><input type="button" value="Обновить" onclick="location.href = 'zayavka.php?boy=phisic';"></td>
+  </tr>
 </table>
 <?
 }
@@ -412,66 +341,66 @@ else if ($zayavka_status == "awaiting")
 {
 ?>
 <table border="0" width="100%" cellpadding="0" cellspacing="0">
-    <tr>
-        <td width="50%" align="left" valign="top">
-            <form name="otziv" action="zayavka.php?boy=phisic&act=recall" method="post">
-                Вы уже подали заявку на бой.
-                <input type="hidden" name="otziv" value="1">
-                <input type="submit" value="Отозвать заявку">
-            </form>
-        </td>
-        <td align="right" valign="top"><input type="button" value="Обновить" onclick="location.href = 'zayavka.php?boy=phisic';"></td>
-    </tr>
+  <tr>
+    <td width="50%" align="left" valign="top">
+      <form name="otziv" action="zayavka.php?boy=phisic&act=recall" method="post">
+        Вы уже подали заявку на бой.
+        <input type="hidden" name="otziv" value="1">
+        <input type="submit" value="Отозвать заявку">
+      </form>
+    </td>
+    <td align="right" valign="top"><input type="button" value="Обновить" onclick="location.href = 'zayavka.php?boy=phisic';"></td>
+  </tr>
 </table>
 <?
 }
 else if ($zayavka_status == "confirm_mine")
 {
-    $op_level = $adb->selectCell("SELECT `level` FROM `characters` WHERE `login` = '$opponent';");
+  $op_level = $adb->selectCell("SELECT `level` FROM `characters` WHERE `login` = '$opponent';");
 ?>
 <table border="0" width="100%" cellpadding="0" cellspacing="0">
-    <tr>
-        <td width="100%" align="left" valign="top">
-            <table border="0" width="100%">
-                <tr>
-                    <td>
-                        <form name="accept" action="zayavka.php?boy=phisic&act=confirm" method="post">
-                            <font color="red"><b>Персонаж </b></font><?echo "<b>$opponent</b> [$op_level]<a href='info.php?log=$pl1' target='_blank'><img src='img/inf.gif' border='0' title='Информация о персонаже $opponent'></a>";?><font color="red"><b> принял ваш вызов!</b></font>
-                            <input type="hidden" name="ac" value="1">
-                            <input type="submit" name="accept" value="Битва!">
-                            <input type="hidden" name="ac" value="2">
-                            <input type="submit" name="denie" value="Отказать">
-                        </form>
-                    </td>
-                </tr>
-            </table>
-        </td>
-        <td align="right" valign="top"><input type="button" value="Обновить" onclick="location.href = 'zayavka.php?boy=phisic';"></td>
-    </tr>
+  <tr>
+    <td width="100%" align="left" valign="top">
+      <table border="0" width="100%">
+        <tr>
+          <td>
+            <form name="accept" action="zayavka.php?boy=phisic&act=confirm" method="post">
+              <font color="red"><b>Персонаж </b></font><?echo "<b>$opponent</b> [$op_level]<a href='info.php?log=$pl1' target='_blank'><img src='img/inf.gif' border='0' title='Информация о персонаже $opponent'></a>";?><font color="red"><b> принял ваш вызов!</b></font>
+              <input type="hidden" name="ac" value="1">
+              <input type="submit" name="accept" value="Битва!">
+              <input type="hidden" name="ac" value="2">
+              <input type="submit" name="denie" value="Отказать">
+            </form>
+          </td>
+        </tr>
+      </table>
+    </td>
+    <td align="right" valign="top"><input type="button" value="Обновить" onclick="location.href = 'zayavka.php?boy=phisic';"></td>
+  </tr>
 </table>
 <?
 }
 else if ($zayavka_status == "confirm_opp")
 {
-    $op_level = $adb->selectCell("SELECT `level` FROM `characters` WHERE `login` = '$opponent';");
+  $op_level = $adb->selectCell("SELECT `level` FROM `characters` WHERE `login` = '$opponent';");
 ?>
 <table border="0" width="100%" cellpadding="0" cellspacing="0">
-    <tr>
-        <td width="100%" align="left" valign="top">
-            <table border="0" width="100%">
-                <tr>
-                    <td>
-                        <form name="accept2" action="zayavka.php?boy=phisic&act=recallbattle" method="post">
-                            <font color="red"><b>Ожидается подтверждение боя от персонажа</b></font> <?echo "<b>$opponent</b> [$op_level]<a href='info.php?log=$pl1' target='_blank'><img src='img/inf.gif' border='0' title='Информация о персонаже $opponent'></a>";?>
-                            <input type="hidden" name="otkaz" value="1">
-                            <input type="submit" value="Отозвать вызов">
-                        </form>
-                    </td>
-                </tr>
-            </table>
-        </td>
-        <td align="right" valign="top"><input type="button" value="Обновить" onclick="location.href = 'zayavka.php?boy=phisic';"></td>
-    </tr>
+  <tr>
+    <td width="100%" align="left" valign="top">
+      <table border="0" width="100%">
+        <tr>
+          <td>
+            <form name="accept2" action="zayavka.php?boy=phisic&act=recallbattle" method="post">
+              <font color="red"><b>Ожидается подтверждение боя от персонажа</b></font> <?echo "<b>$opponent</b> [$op_level]<a href='info.php?log=$pl1' target='_blank'><img src='img/inf.gif' border='0' title='Информация о персонаже $opponent'></a>";?>
+              <input type="hidden" name="otkaz" value="1">
+              <input type="submit" value="Отозвать вызов">
+            </form>
+          </td>
+        </tr>
+      </table>
+    </td>
+    <td align="right" valign="top"><input type="button" value="Обновить" onclick="location.href = 'zayavka.php?boy=phisic';"></td>
+  </tr>
 </table>
 <?
 }
@@ -479,57 +408,57 @@ echo "<form name='prinatie' action='zayavka.php?boy=phisic&act=a' method='POST'>
 $data_p = $adb->select("SELECT * FROM `zayavka` WHERE `type` = '1' or `type` = '2' ORDER BY `date` DESC;");
 $countrows = count ($data_p);
 if ($countrows != 0)
-    echo "<input type='submit' value='Принять вызов'><br>";
+  echo "<input type='submit' value='Принять вызов'><br>";
 for ($i = 0; $i < $countrows; $i++)
 {
-    if ($data_p[$i]['status'] != 3)
+  if ($data_p[$i]['status'] != 3)
+  {
+    $creator = $data_p[$i]['creator'];
+    $date = $data_p[$i]['date'];
+    $timeout = $data_p[$i]['timeout'];
+    $battle_type = $data_p[$i]['type'];
+    $id = $data_p[$i]['creator'];
+
+    $t1 = $adb->select("SELECT `player` FROM `team1` WHERE `battle_id` = '$creator';");
+    for ($h = 0; $h < $countrows; $h++)
     {
-        $creator = $data_p[$i]['creator'];
-        $date = $data_p[$i]['date'];
-        $timeout = $data_p[$i]['timeout'];
-        $battle_type = $data_p[$i]['type'];
-        $id = $data_p[$i]['creator'];
-
-        $t1 = $adb->select("SELECT `player` FROM `team1` WHERE `battle_id` = '$creator';");
-        for ($h = 0; $h < $countrows; $h++)
-        {
-            $p1 = $t1[$h]['player'];
-            $p1_lev = $adb->selectCell("SELECT `level` FROM `characters` WHERE `login` = '$p1';");
-            $pl1 = str_replace (" ", "%20", $p1);
-        }
-
-        $t2 = $adb->select("SELECT `player` FROM `team2` WHERE `battle_id` = '$creator';");
-        for ($h = 0; $h < $countrows; $h++)
-        {
-            $p2 = $td2['player'];
-            $p2_lev = $adb->selectCell("SELECT `level` FROM `characters` WHERE `login` = '$p2';");
-            $pl12 = str_replace (" ", "%20", $p2);
-        }
-
-        if ($p2 == '')
-            $rad = "<input type='radio' name='id' value='$id'>";
-        else
-        {
-            $rad = "<input type='radio' name='id' value='$id' disabled>";
-            $p2 = "против <font color='black'><b>$p2</b> [$p2_lev]<a href='info.php?log=$pl12' target='_blank'><img src='img/inf.gif' border='0'></a>";
-        }
-        switch ($battle_type)
-        {
-            case 1:    $battle_type = "<img src='img/icon/fighttype1.gif' width='20' height='20' title='Физический бой'>";
-            break;
-            case 2:    $battle_type = "<img src='img/icon/fighttype5.gif' width='20' height='20' title='Кулачный бой'>";
-            break;
-        }
-        if ($p1 == $db['login'])
-            $rad = "<input type='radio' name='id' value='$id' disabled>";
-        $p1 = "<font color='black'><b>$p1</b> [$p1_lev]</font><a href='info.php?log=$pl1' target='_black'><img src='img/inf.gif' border='0'></a>";
-        echo "$rad <span class='date'>$date</span> $p1 $p2 ";
-        echo "тип боя: $battle_type ";
-        echo "(таймаут $timeout мин.)";
-        echo "<br>";
+      $p1 = $t1[$h]['player'];
+      $p1_lev = $adb->selectCell("SELECT `level` FROM `characters` WHERE `login` = '$p1';");
+      $pl1 = str_replace (" ", "%20", $p1);
     }
+
+    $t2 = $adb->select("SELECT `player` FROM `team2` WHERE `battle_id` = '$creator';");
+    for ($h = 0; $h < $countrows; $h++)
+    {
+      $p2 = $td2['player'];
+      $p2_lev = $adb->selectCell("SELECT `level` FROM `characters` WHERE `login` = '$p2';");
+      $pl12 = str_replace (" ", "%20", $p2);
+    }
+
+    if ($p2 == '')
+      $rad = "<input type='radio' name='id' value='$id'>";
+    else
+    {
+      $rad = "<input type='radio' name='id' value='$id' disabled>";
+      $p2 = "против <font color='black'><b>$p2</b> [$p2_lev]<a href='info.php?log=$pl12' target='_blank'><img src='img/inf.gif' border='0'></a>";
+    }
+    switch ($battle_type)
+    {
+      case 1: $battle_type = "<img src='img/icon/fighttype1.gif' width='20' height='20' title='Физический бой'>";
+      break;
+      case 2: $battle_type = "<img src='img/icon/fighttype5.gif' width='20' height='20' title='Кулачный бой'>";
+      break;
+    }
+    if ($p1 == $db['login'])
+      $rad = "<input type='radio' name='id' value='$id' disabled>";
+    $p1 = "<font color='black'><b>$p1</b> [$p1_lev]</font><a href='info.php?log=$pl1' target='_black'><img src='img/inf.gif' border='0'></a>";
+    echo "$rad <span class='date'>$date</span> $p1 $p2 ";
+    echo "тип боя: $battle_type ";
+    echo "(таймаут $timeout мин.)";
+    echo "<br>";
+  }
 }
 if ($countrows > 1)
-    echo "<input type='submit' value='Принять вызов'><br>";
+  echo "<input type='submit' value='Принять вызов'><br>";
 echo "</form>";
 ?>

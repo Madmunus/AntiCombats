@@ -1,5 +1,5 @@
 <?
-defined('AntiBK') or die ("Доступ запрещен!");
+defined('AntiBK') or die("Доступ запрещен!");
 
 /*Интерфейс персонажа*/
 class Char
@@ -121,8 +121,11 @@ class Char
                                 `res_fire` = `res_fire` + ?f, 
                                 `res_water` = `res_water` + ?f, 
                                 `res_air` = `res_air` + ?f, 
-                                `res_earth` = `res_earth` + ?f 
-                            WHERE `guid` = ?d", $count ,$hp ,$hp ,$count ,$bron ,$bron ,$bron ,$bron ,$bron ,$bron ,$bron ,$bron ,$this->guid);
+                                `res_earth` = `res_earth` + ?f, 
+                                `res_light` = `res_light` + ?f, 
+                                `res_gray` = `res_gray` + ?f, 
+                                `res_dark` = `res_dark` + ?f 
+                            WHERE `guid` = ?d", $count ,$hp ,$hp ,$count ,$bron ,$bron ,$bron ,$bron ,$bron ,$bron ,$bron ,$bron ,$bron ,$bron ,$bron ,$this->guid);
           $this->statsBonus($stat);
         break;
         case 'int':
@@ -218,15 +221,16 @@ class Char
   function showStatAddition ($type = 'skills')
   {
     global $added;
-    $added = array('str' => 0, 'dex' => 0, 'con' => 0, 'int' => 0, 'sword' => 0, 'axe' => 0, 'fail' => 0, 'knife' => 0, 'staff' => 0, 'shot' => 0, 'fire' => 0, 'water' => 0, 'air' => 0, 'earth' => 0, 'light' => 0, 'gray' => 0, 'dark' => 0);
+    $added = array('str' => 0, 'dex' => 0, 'con' => 0, 'int' => 0, 'sword' => 0, 'bow' => 0, 'crossbow' => 0, 'axe' => 0, 'fail' => 0, 'knife' => 0, 'staff' => 0, 'fire' => 0, 'water' => 0, 'air' => 0, 'earth' => 0, 'light' => 0, 'gray' => 0, 'dark' => 0);
     $rows = $this->db->select("SELECT `i`.`add_str`, `c`.`inc_str`, 
                                       `i`.`add_dex`, `c`.`inc_dex`, 
                                       `i`.`add_con`, `c`.`inc_con`, 
                                       `i`.`add_int`, `c`.`inc_int`, 
                                       `i`.`all_mastery`, 
                                       `i`.`sword`, `i`.`axe`, 
+                                      `i`.`bow`, `i`.`crossbow`,
                                       `i`.`fail`, `i`.`knife`, 
-                                      `i`.`staff`, `i`.`shot`, 
+                                      `i`.`staff`, 
                                       `i`.`all_magic`, 
                                       `i`.`fire`, `i`.`water`, 
                                       `i`.`air`, `i`.`earth`, 
@@ -251,11 +255,12 @@ class Char
     foreach ($rows as $dat)
     {
       $added['sword'] += $dat['sword'] + $dat['all_mastery'];
+      $added['bow'] += $dat['bow'] + $dat['all_mastery'];
+      $added['crossbow'] += $dat['crossbow'] + $dat['all_mastery'];
       $added['axe'] += $dat['axe'] + $dat['all_mastery'];
       $added['fail'] += $dat['fail'] + $dat['all_mastery'];
       $added['knife'] += $dat['knife'] + $dat['all_mastery'];
       $added['staff'] += $dat['staff'];
-      $added['shot'] += $dat['shot'];
       $added['fire'] += $dat['fire'] + $dat['all_magic'];
       $added['water'] += $dat['water'] + $dat['all_magic'];
       $added['air'] += $dat['air'] + $dat['all_magic'];
@@ -294,7 +299,7 @@ class Char
   /*Отображение модуля инвентаря*/
   function showInventoryBar ($bar, $value, $max_num)
   {
-    global $behaviour, $mastery;
+    global $behaviour;
     $flag = explode ('|', $value);
     $lang = $this->getLang();
     $char_stats = $this->getChar('char_stats', '*');
@@ -312,9 +317,7 @@ class Char
       case 'stat':       /*Характеристики*/
         $level = $this->db->selectCell("SELECT `level` FROM `characters` WHERE `guid` = ?d", $this->guid);
         foreach ($behaviour as $key => $min_level)
-        {
           $content .= ($level >= $min_level) ?"$lang[$key] <b>$char_stats[$key]</b><br>" :"";
-        }
         $content .= ($char_stats['ups'] > 0) ?"<a class='nick' href='?action=skills'><b><small>+ $lang[ups]</small></b></a> " :"";
         $content .= ($char_stats['skills'] > 0) ?"&bull; <a class='nick' href='?action=skills'><b><small> $lang[skills]</small></b></a>" :"";
       break;
@@ -659,7 +662,7 @@ class Test extends Char
   function Regen ()
   {
     $char_stats = $this->getChar('char_stats', 'hp', 'hp_cure', 'hp_all', 'hp_regen', 'mp', 'mp_cure', 'mp_all', 'mp_regen');
-    list ($now["hp"], $cure["hp"], $all["hp"], $regen["hp"], $now["mp"], $cure["mp"], $all["mp"], $regen["mp"]) = array_values ($char_stats);
+    list($now["hp"], $cure["hp"], $all["hp"], $regen["hp"], $now["mp"], $cure["mp"], $all["mp"], $regen["mp"]) = array_values($char_stats);
     $battle = $this->getChar('char_db', 'battle');
     
     if ($battle != 0)
@@ -675,7 +678,7 @@ class Test extends Char
       else if ($cure[$key] == 0)
         continue;
       
-      $regenerated = getRegeneratedValue($value, ($cure[$key] - time ()), $regen[$key]);
+      $regenerated = getRegeneratedValue($value, ($cure[$key] - time()), $regen[$key]);
       if ($regenerated >= 0 && $regenerated < $value)
         $this->db->query("UPDATE `character_stats` SET ?# = ?d WHERE `guid` = ?d", $key ,$regenerated ,$this->guid);
       else
@@ -683,8 +686,6 @@ class Test extends Char
         $this->db->query("UPDATE `character_stats` SET ?# = ?d, ?# = '0' WHERE `guid` = ?d", $key ,$value ,$key.'_cure' ,$this->guid);
         continue;
       }
-      getCureValue($regenerated, $value, $regen[$key], $cure[$key]);
-      $this->db->query("UPDATE `character_stats` SET ?# = ?d WHERE `guid` = ?d", $key.'_cure' ,$cure[$key] ,$this->guid);
     }
   }
   /*Проверка травм у персонажа*/
@@ -695,13 +696,13 @@ class Test extends Char
     if (!$char_db['travm'])
       return;
     
-    if (intval (($char_db['travm'] - time()) / 60) > 0)
+    if (intval(($char_db['travm'] - time()) / 60) > 0)
       return;
     
     $this->db->query("UPDATE `characters` SET `travm` = '0' WHERE `guid` = ?d" ,$this->guid);
     $this->db->query("UPDATE `character_stats` SET ?# = ?d WHERE `guid` = ?d", $char_db['travm_stat'] ,$char_db['travm_old_stat'] ,$this->guid);
   }
-  /*Проверка на получение апа/лвла*/
+  /*Проверка на получение апа/уровня*/
   function Up ()
   {
     $char_db = $this->getChar('char_db', 'exp', 'next_up', 'level');
@@ -709,23 +710,31 @@ class Test extends Char
     if ($char_db['exp'] < $char_db['next_up'])
       return;
     
-    $next_up_id = $this->db->selectCell("SELECT `up` FROM `player_exp_for_level` WHERE `exp` = ?d", $char_db['next_up']) + 1;
-    $exp_table = $this->db->selectRow("SELECT `level`, `exp`, 
-                                              `ups`, `skills`, 
-                                              `money`, `vit`, 
+    $exp_table = $this->db->selectRow("SELECT `up`, `level`, `ups`, 
+                                              `skills`, `money`, `vit`, 
+                                              `spi`, `hp_regen`, 
                                               `add_bars`, `status` 
                                        FROM `player_exp_for_level` 
-                                       WHERE `up` = ?d", $next_up_id);
-    list ($next_level, $next_exp, $next_ups, $next_skills, $next_money, $next_vit, $add_bars, $next_status) = array_values ($exp_table);
+                                       WHERE `exp` = ?d", $char_db['next_up']);
+    list($this_up, $next_level, $next_ups, $next_skills, $next_money, $next_vit, $next_spi, $next_hpr, $next_bars, $next_status) = array_values($exp_table);
+    $next_exp = $this->db->selectCell("SELECT `exp` FROM `player_exp_for_level` WHERE `up` = ?d", ($this_up + 1));
     $this->db->query("UPDATE `characters` 
                       SET `next_up` = ?d, 
-                          `money` = `money` + ?d 
+                          `money` = `money` + ?f 
                       WHERE `guid` = ?d", $next_exp ,$next_money ,$this->guid);
     $this->db->query("UPDATE `character_stats` 
                       SET `ups` = `ups` + ?d, 
                           `skills` = `skills` + ?d 
                       WHERE `guid` = ?d", $next_ups ,$next_skills ,$this->guid);
-    $this->char->history->transfers('Get', "$next_money кр.", $_SERVER['REMOTE_ADDR'], 'Level');
+    
+    if ($next_vit)
+      $this->changeStats('vit', $next_vit);
+    
+    if ($next_spi)
+    $this->changeStats('spi', $next_spi);
+    
+    if ($next_money)
+      $this->char->history->transfers('Get', "$next_money кр.", $_SERVER['REMOTE_ADDR'], 'Level');
     
     if ($next_level <= $char_db['level'])
       return;
@@ -734,18 +743,12 @@ class Test extends Char
                       SET `level` = ?d, 
                           `status` = ?s 
                       WHERE `guid` = ?d", $next_level ,$next_status ,$this->guid);
-    $this->changeStats('vit', $next_vit);
-    if ($add_bars)
+    $this->db->query("UPDATE `character_stats` SET `maxmass` = `maxmass` + ?f, `hp_regen` = `hp_regen` - ?d WHERE `guid` = ?d", 40 ,$next_hpr ,$this->guid);
+    if ($next_bars)
     {
-      $bar_enums = array (
-        'mod'   => 2,
-        'power' => 3,
-        'def'   => 4,
-        'set'   => 5,
-        'btn'   => 6
-      );
-      $add_bars = explode(',', $add_bars);
-      foreach ($add_bars as $key => $value)
+      $bar_enums = array('mod' => 2, 'power' => 3, 'def' => 4, 'set' => 5, 'btn' => 6);
+      $next_bars = explode(',', $next_bars);
+      foreach ($next_bars as $key => $value)
       {
         $this->db->query("UPDATE `character_bars` SET ?# = ?s WHERE `guid` = ?d", $value ,$bar_enums[$value]."|1" ,$this->guid);
       }
@@ -809,7 +812,7 @@ class Test extends Char
     
     $char_db = $this->getChar('char_db', 'room', 'city', 'sex', 'level', 'last_go', 'prision');
     $char_stats = $this->getChar('char_stats', 'mass', 'maxmass');
-    $time_to_go = $this->char->city->getRoom($char_db['room'], $char_db['city'], 'time_to_go');
+    $time = $this->char->city->getRoom($char_db['room'], $char_db['city'], 'time');
     $room_info = $this->char->city->getRoom($room_go, $char_db['city'], 'room', 'from', 'min_level', 'max_level', 'need_orden', 'sex') or $this->char->error->Map(102);
     
     list ($room_go, $from, $min_level, $max_level, $need_orden, $need_sex) = array_values ($room_info);
@@ -821,7 +824,7 @@ class Test extends Char
       $this->char->error->Map(103, "$char_stats[mass]|$char_stats[maxmass]");
     
     if ($char_db['level'] < $min_level)
-      $this->char->error->Map(101, ($min_level - 1));
+      $this->char->error->Map(101);
     
     if ($char_db['level'] > $max_level)
       $this->char->error->Map(109, $max_level);
@@ -838,7 +841,7 @@ class Test extends Char
     if (!in_array ($char_db['room'], explode (',', $from)) && $char_db['room'] != $room_go)
       $this->char->error->Map(102);
     
-    if (($time_to_go - (time () - $char_db['last_go'])) > 0 && !$return)
+    if (($time - (time() - $char_db['last_go'])) > 0 && !$return)
       $this->char->error->Map(110);
   }
   /*Проверка всех предметов*/
@@ -1121,7 +1124,7 @@ class Equip extends Char
     
     $slot = $this->getItemSlot($item_id);
     $return_format = ($type == 'inv') ?"<a href='main.php?action=unwear_item&item_slot=$slot'>%s</a>" :"%s";
-    return sprintf ($return_format, "<img src='img/items/$img' width='$image[width]' height='$image[height]' border='0' alt='$desc'$color>");
+    return sprintf($return_format, "<img src='img/items/$img' width='$image[width]' height='$image[height]' border='0' alt='$desc'$color>");
   }
   /*Получение всплывающей подсказки о предмете*/
   function getItemAlt ($item_id, $type, &$color = '', &$img = '')
@@ -1287,7 +1290,7 @@ class Equip extends Char
     $modifiers = array('mf_critp', 'mf_acrit', 'mf_adodge', 'mf_parmour', 'mf_crit', 'mf_parry', 'mf_shieldb', 'mf_dodge', 'mf_contr', 'rep_magic',
                        'rep_fire', 'rep_water', 'rep_air', 'rep_earth', 'mf_magic', 'mf_fire', 'mf_water', 'mf_air', 'mf_earth', 'mf_light', 'mf_gray', 
                        'mf_dark', 'mf_dmg', 'mf_sting', 'mf_slash', 'mf_crush', 'mf_sharp', 'all_magic', 'fire', 'water', 'air', 'earth', 'light', 'gray', 
-                       'dark', 'all_mastery', 'sword', 'axe', 'fail', 'knife', 'staff', 'shot', 'res_magic', 'res_fire', 'res_water', 'res_air', 
+                       'dark', 'all_mastery', 'sword', 'axe', 'fail', 'knife', 'staff', 'res_magic', 'res_fire', 'res_water', 'res_air', 
                        'res_earth', 'res_light', 'res_gray', 'res_dark', 'res_dmg', 'res_sting', 'res_slash', 'res_crush', 'res_sharp', 
                        'add_hp', 'add_mp', 'mpcons', 'mpreco', 'hpreco', 'add_hit_min', 'add_hit_max');
     $w_modifiers = array('mf_adodge', 'mf_crit', 'mf_critp', 'mf_sting', 'mf_slash', 'mf_crush', 'mf_sharp', 'sword', 'axe', 'fail', 'knife', 'mf_parmour');
@@ -1482,7 +1485,6 @@ class Equip extends Char
     $error_id = ($type == 1) ?213 :214;
     $wear_status = ($type == 1) ?0 :1;
     $char_equip = $this->getChar('char_equip', '*', $guid);
-    $char_stats = $this->getChar('char_stats', '*', $guid);
     $i_info = $this->db->selectRow("SELECT * 
                                     FROM `character_inventory` AS `c` 
                                     LEFT JOIN `item_template` AS `i` 
@@ -1508,70 +1510,44 @@ class Equip extends Char
         case 'knife':
           if ($i_hands == 1)
           {
-            if ($char_equip['hand_r_free'])
-              $slot = "hand_r";
-            else if (!$char_equip['hand_r_free'] && $char_equip['hand_l_free'])
+            $slot = "hand_r";
+            
+            if (!$char_equip['hand_r_free'] && $char_equip['hand_l_free'])
             {
               if ($i_info['item_flags'] & 16)
                 $slot = "hand_l";
               else
-              {
                 $this->equipItem('hand_r', -1);
-                $this->equipItem($i_id);
-                return;
-              }
             }
             else if (!$char_equip['hand_r_free'] && !$char_equip['hand_l_free'])
-            {
               $this->equipItem('hand_r', -1);
-              $this->equipItem($i_id);
-              return;
-            }
           }
           else if ($i_hands == 2)
           {
-            if ($char_equip['hand_r_free'] && $char_equip['hand_l_free'])
-              $slot = "hand_r";
-            else if ($char_equip['hand_r_free'] && !$char_equip['hand_l_free'])
-            {
-              $this->equipItem('hand_l', -1);
-              $this->equipItem($i_id);
-              return;
-            }
-            else if (!$char_equip['hand_r_free'] && $char_equip['hand_l_free'])
-            {
+            $slot = "hand_r";
+            
+            if (!$char_equip['hand_r_free'])
               $this->equipItem('hand_r', -1);
-              $this->equipItem($i_id);
-              return;
-            }
-            else if (!$char_equip['hand_r_free'] && !$char_equip['hand_l_free'])
-            {
-              $this->equipItem('hand_r', -1);
+            
+            if (!$char_equip['hand_l_free'])
               $this->equipItem('hand_l', -1);
-              $this->equipItem($i_id);
-              return;
-            }
           }
           $w_type = $i_type;
         break;
         case 'shield':
-          if ($char_equip['hand_l_free'])
-            $slot = "hand_l";
-          else if ($char_equip['hand_l'])
-          {
+          $slot = "hand_l";
+          
+          if ($char_equip['hand_l'])
             $this->equipItem('hand_l', -1);
-            $this->equipItem($i_id);
-            return;
-          }
-          else if ($char_equip['hand_r'])
-          {
+          
+          if ($char_equip['hand_r'] && !$char_equip['hand_l_free'])
             $this->equipItem('hand_r', -1);
-            $this->equipItem($i_id);
-            return;
-          }
+          
           $w_type = $i_type;
         break;
         case 'ring':
+          $slot = "ring1";
+          
           if (!$char_equip['ring1'])
             $slot = "ring1";
           else if (!$char_equip['ring2'])
@@ -1579,21 +1555,13 @@ class Equip extends Char
           else if (!$char_equip['ring3'])
             $slot = "ring3";
           else
-          {
             $this->equipItem('ring1', -1);
-            $this->equipItem($i_id);
-            return;
-          }
         break;
         default:
-          if (!$char_equip[$i_type])
-            $slot = $i_type;
-          else
-          {
+          $slot = $i_type;
+          
+          if ($char_equip[$i_type])
             $this->equipItem($i_type, -1);
-            $this->equipItem($i_id);
-            return;
-          }
         break;
       }
     }
@@ -1609,6 +1577,9 @@ class Equip extends Char
         }
       }
     }
+    
+    $char_stats = $this->getChar('char_stats', '*', $guid);
+    
     $new_sql = array();
     $ress = array('', '_h', '_a', '_b', '_l');
     $defs = array('h', 'a', 'b', 'l');
@@ -1630,11 +1601,12 @@ class Equip extends Char
     $new_sql['res_dark'] = $i_info['res_dark'] + $i_info['res_magic'];
 // Mastery
     $new_sql['sword'] = $i_info['sword'] + $i_info['all_mastery'];
+    $new_sql['bow'] = $i_info['bow'] + $i_info['all_mastery'];
+    $new_sql['crossbow'] = $i_info['crossbow'] + $i_info['all_mastery'];
     $new_sql['axe'] = $i_info['axe'] + $i_info['all_mastery'];
     $new_sql['fail'] = $i_info['fail'] + $i_info['all_mastery'];
     $new_sql['knife'] = $i_info['knife'] + $i_info['all_mastery'];
     // --
-    $new_sql['shot'] = $i_info['shot'];
     $new_sql['staff'] = $i_info['staff'];
     // -- magic
     $new_sql['fire'] = $i_info['fire'] + $i_info['all_magic'];
@@ -1708,6 +1680,12 @@ class Equip extends Char
     
     foreach ($new_sql as $key => $value)
     {
+      if ($value == 0)
+      {
+        unset($new_sql[$key]);
+        continue;
+      }
+      
       $new_sql[$key] = $value*$type;
       $new_sql[$key] += $char_stats[$key];
     }
@@ -1723,6 +1701,9 @@ class Equip extends Char
     foreach ($stats as $key => $value)
     {
       $stats[$key] = ($i_info['add_'.$key] + $i_info['inc_'.$key])*$type;
+      
+      if ($stats[$key] == 0)
+        unset($stats[$key]);
     }
     
     if ($type == 1)
@@ -1749,7 +1730,7 @@ class Equip extends Char
       $this->changeStats($stats);
       if ($type == 1)
       {
-        if ($i_hands == 2 && $slot == 'hand_r')
+        if ($i_hands == 2)
           $this->db->query("UPDATE `character_equip` 
                             SET `hand_r_type` = ?s, 
                                 `hand_r_free` = '0', 
@@ -1765,7 +1746,7 @@ class Equip extends Char
       }
       else if ($type == -1)
       {
-        if ($i_hands == 2 && $slot == 'hand_r')
+        if ($i_hands == 2)
           $this->db->query("UPDATE `character_equip` 
                             SET `hand_r_type` = 'phisic', 
                                 `hand_r_free` = '1', 
@@ -1839,7 +1820,6 @@ class Equip extends Char
         $this->equipItem($item_id);
       }
     }
-    $this->char->error->Inventory();
   }
 }
 /*Функции города*/
@@ -1869,29 +1849,29 @@ class City extends Char
       return $this->db->selectRow("SELECT ?# FROM `city_rooms` WHERE `room` = ?s and city = ?s", $args ,$room ,$city);
   }
   /*Получение времени до возможности перехода*/
-  function getRoomGoTime (&$mtime)
+  function getRoomGoTime ()
   {
     $char_db = $this->getChar('char_db', 'last_go', 'room', 'city');
-    $time_to_go = $this->getRoom($char_db['room'], $char_db['city'], 'time_to_go');
+    $time = $this->getRoom($char_db['room'], $char_db['city'], 'time');
     
-    if (!$time_to_go || !$char_db['room'])
-      return;
+    if (!$time || !$char_db['room'])
+      return 0;
     
-    $mtime = ($time_to_go - (time() - $char_db['last_go']));
+    return ($time - (time() - $char_db['last_go']));
   }
   /*Получение кол-ва человек в комнате*/
   function getRoomOnline ($room, $type = 'full')
   {
     $city = $this->getChar('char_db', 'city');
     $online = $this->db->selectCell("SELECT COUNT(*) FROM `online` WHERE `room` = ?s", $room);
-    $room_info = $this->getRoom($room, $city, 'name', 'time_to_go');
+    $room_info = $this->getRoom($room, $city, 'name', 'time');
     
     if (!$room_info) return "Bug";
     switch ($type)
     {
       case 'full':   return "<strong>$room_info[name]</strong><br>Сейчас в комнате: $online";
       case 'map':    return $online;
-      case 'mini':   return "Время перехода: $room_info[time_to_go] сек.<br>Сейчас в комнате: $online";
+      case 'mini':   return "Время перехода: $room_info[time] сек.<br>Сейчас в комнате: $online";
       default:       return "Bug";
     }
   }
@@ -1931,7 +1911,7 @@ class City extends Char
       {
         default:       $values = "";
         break;
-        case 'fights': $values = array($lang['fights'], "id='fights' style='font-weight: bold; width: 102px;'");
+        case 'fights': $values = array($lang['fights'], "id='link' link='zayavka' style='font-weight: bold; width: 102px;'");
         break;
         case 'return': $values = ($return_status) ?array($lang['return_b'], "id='link' link='return' style='font-weight: bold; width: 102px;'") :"";
         break;
@@ -1945,6 +1925,31 @@ class City extends Char
       if (is_array($values))
         vprintf($format, $values);
     }
+  }
+  /*Получение подсказки комнаты*/
+  function getDescription ($room, $city)
+  {
+    $char_db = $this->getChar('char_db', 'login', 'room', 'city', 'level', 'exp');
+    $descs = $this->getRoom($char_db['room'], $char_db['city'], 'desc1', 'desc2', 'desc3');
+    $needs = $this->getRoom($char_db['room'], $char_db['city'], 'desc1_need', 'desc2_need', 'desc3_need');
+    
+    foreach ($needs as $key => $need)
+    {
+      if (!$need)
+        continue;
+      
+      $need = split('\=', $need);
+      
+      if ($char_db[$need[0]] >= $need[1])
+      {
+        $desc_num = utf8_substr($key, 0, -5);
+        return $descs[$desc_num];
+      }
+    }
+    if ($room == 'km_0')
+      return sprintf($descs['desc3'], $char_db['login']);
+    else
+      return $descs['desc3'];
   }
 }
 /*Функции почты*/
@@ -2328,7 +2333,7 @@ class Info extends Char
   {
     $guid = (!$guid) ?$this->guid :$guid;
     $char_db = $this->getChar('char_db', 'login', 'level', 'orden', 'clan', 'clan_short', 'block', 'rang', 'chat_shut', 'afk', 'dnd', 'message', 'travm', $guid);
-    list($login, $level, $orden, $clan_f, $clan_s, $block, $rang, $chat_shut, $afk, $dnd, $message, $travm) = array_values ($char_db);
+    list($login, $level, $orden, $clan_f, $clan_s, $block, $rang, $chat_shut, $afk, $dnd, $message, $travm) = array_values($char_db);
     switch ($orden)
     {
       case 1:  $orden_img = "<img src='img/orden/pal/$rang.gif' width='12' height='15' border='0' title='Белое братство'>";  break;
@@ -2422,6 +2427,11 @@ class Error extends Char
   {
     echoScript("location.href = 'main.php?action=inv&error=$id&parameters=$parameters';", true);
   }
+  /*Вывод ошибки в умениях*/
+  function Skills ($id = 0, $parameters = '')
+  {
+    echoScript("location.href = 'main.php?action=skills&error=$id&parameters=$parameters';", true);
+  }
   /*Вывод ошибки в разделе "Анкета"*/
   function Form ($id, $do, $parameters = '')
   {
@@ -2465,7 +2475,7 @@ class Error extends Char
     if ($err_hyph || $needBr)
       $err_text = "$err_text<br>";
     
-    vprintf ($err_text, $parametr);
+    vprintf($err_text, $parametr);
   }
 }
 
@@ -2533,12 +2543,12 @@ function getSellValue ($i_info, $text = false)
 /*Получение времени восстановления здоровья*/
 function getCureValue ($now, $all, $regen, &$value)
 {
-  $value = intval(((($all - $now) / ($all * 0.01)) * 10) / ($regen * 0.01)) + time();
+  $value = intval(30000*($all-$now)/($all*$regen)) + time();
 }
 /*Получение количества восстановленного здоровья*/
 function getRegeneratedValue ($all, $cure, $regen)
 {
-  return $all - intval((($cure * ($regen * 0.01)) / 10) * ($all * 0.01));
+  return $all - intval(0.0001*$all*$cure*$regen/3);
 }
 /*Получение отформатированного времени*/
 function getFormatedTime ($timestamp)
@@ -2549,12 +2559,12 @@ function getFormatedTime ($timestamp)
   if (!is_numeric($timestamp))
     $timestamp = time();
   
-  $seconds = abs ($timestamp - time());
-  $d = intval ($seconds / 86400);
+  $seconds = abs($timestamp - time());
+  $d = intval($seconds / 86400);
   $seconds %= 86400;
-  $h = intval ($seconds / 3600);
+  $h = intval($seconds / 3600);
   $seconds %= 3600;
-  $m = intval ($seconds / 60);
+  $m = intval($seconds / 60);
   $seconds %= 60;
   $s = $seconds;
   

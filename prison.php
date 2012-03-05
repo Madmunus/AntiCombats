@@ -1,5 +1,5 @@
 <?
-defined('AntiBK') or die ("Доступ запрещен!");
+defined('AntiBK') or die("Доступ запрещен!");
 
 $xaos = $adb->selectCell("SELECT COUNT(*) FROM `characters` WHERE `prision` != '0';");
 ?>

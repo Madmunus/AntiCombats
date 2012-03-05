@@ -7,10 +7,9 @@ defined('AntiBK') or die ("Доступ запрещен!");
     <td align="left" valign="top" nowrap style="padding-left: 3px;"><br>
 <?
 foreach ($behaviour as $key => $min_level)
-  echo (($level >= $min_level) ?"$lang[$key] $char_stats[$key]" :"").(($key != 'spi' && $level >= $min_level) ?"<br>" :"");
-echo ($char_stats['ups'] > 0 || $char_stats['skills'] > 0) ?"<br>" :"";
+  echo ($level >= $min_level) ?"$lang[$key] $char_stats[$key]<br>" :"";
 echo ($char_stats['ups'] > 0) ?" <a class='nick' href='?action=skills'>+ $lang[ups]</a> " :'';
-echo ($char_stats['skills'] > 0) ?"&bull; <a class='nick' href='?action=skills'><b> $lang[skills]</b></a><br>" :"<br>";
+echo ($char_stats['skills'] > 0 && $level > 1) ?"&bull; <a class='nick' href='?action=skills'><b> $lang[skills]</b></a><br>" :"<br>";
 echo "<br>";
 echo "$lang[exp] <b>".getExp($exp)."</b> (".getExp($next_up).")<br>";
 echo "$lang[level] $level<br>";

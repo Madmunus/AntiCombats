@@ -43,7 +43,7 @@ function updateUsers ()
     
     $('#user_list').html(list[0]);
     if (autorefresh)
-      TimerOnline = setTimeout ('updateUsers()', 10000);
+      TimerOnline = setTimeout (updateUsers, 10000);
 	});
 }
 

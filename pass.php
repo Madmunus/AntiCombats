@@ -13,7 +13,7 @@ $adb = DbSimple_Generic::connect($database['adb']);
 $adb->query("SET NAMES ? ",$database['db_encoding']);
 $adb->setErrorHandler("databaseErrorHandler");
 
-$login = (isset($_POST['login'])) ?htmlspecialchars ($_POST['login']) :"";
+$login = requestVar('login', '', 2);
 ?>
 <html>
 <head>
@@ -38,13 +38,11 @@ a:hover   {color: #7e7765; text-decoration: underline;}
   <tbody><tr>
     <td width="100%" valign="top" align="center">
 <?
-if (!empty($login))
+if ($login)
 {
-  $db = $adb->selectRow("SELECT `mail` 
-                            FROM `characters` 
-                            WHERE `login` = ?s", $login);
+  $db = $adb->selectRow("SELECT `mail` FROM `characters` WHERE `login` = ?s", $login);
   if (!$db)
-    die ("<font class='menu' style='color: red;'>Логин \"$login\" не найден в базе.</font><br><br><input type='button' class='inup' value='Назад' onclick='window.history.go(-1);'>");
+    die("<font class='menu' style='color: red;'>Логин \"$login\" не найден в базе.</font><br><br><input type='button' class='inup' value='Назад' onclick='window.history.go(-1);'>");
 
   $msg = "Здравствуйте!\n";
   $msg .= "Кто-то с ip-адреса ".$_SERVER['REMOTE_ADDR']." запросил пароль к персонажу $login он-лайн игры АнтиБК+.\n";

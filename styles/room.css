@@ -1,6 +1,7 @@
 hr                         {height: 1px;}
 img#passage   {cursor: pointer;}
-.map                    {position: relative; padding-bottom: 5px;}
+.map                    {position: relative; padding-bottom: 5px; width: 500px; height: 268px; padding-right: 2px;}
+.map_klub        {position: relative; padding-bottom: 5px; width: 500px; height: 240px; padding-right: 2px;}
 .map_klub1      {position: absolute; z-index: 90; left: 66px; top: 115px; width: 56px; height: 13px;}
 .map_klub2      {position: absolute; z-index: 90; left: 216px; top: 41px; width: 58px; height: 49px;}
 .map_klub3      {position: absolute; z-index: 90; left: 312px; top: 168px; width: 123px; height: 31px;}
@@ -33,7 +34,7 @@ img#passage   {cursor: pointer;}
 .dem_comshop  {position: absolute; z-index: 90; left: 275px; top: 134px; width: 63px; height: 60px;}
 .dem_temple    {position: absolute; z-index: 90; left: 350px; top: 85px; width: 57px; height: 83px;}
 .dem_dustman_crushed{position: absolute; z-index: 90; left: 410px; top: 146px; width: 44px; height: 87px;}
-.dem_right1  {position: absolute; z-index: 90; left: 471px; top: 126px; width: 21px; height: 30px;}
+.dem_right    {position: absolute; z-index: 90; left: 471px; top: 126px; width: 21px; height: 30px;}
 .dem_bank       {position: absolute; z-index: 90; left: 113px; top: 92px; width: 81px; height: 64px;}
 .dem_dtower  {position: absolute; z-index: 90; left: 204px; top: 5px; width: 73px; height: 159px;}
 .dem_flshop  {position: absolute; z-index: 90; left: 323px; top: 136px; width: 34px; height: 38px;}

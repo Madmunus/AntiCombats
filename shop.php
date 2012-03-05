@@ -3,7 +3,7 @@ defined('AntiBK') or die ("Доступ запрещен!");
 
 $room_info = $char->city->getRoom($room, $city, 'shop', 'shop_section');
 $section_shop = requestVar('section_shop', '', 7);
-$section_shop = (array_key_exists ($section_shop, $data['sections_shop'])) ?$section_shop :$room_info['shop_section'];
+$section_shop = (array_key_exists($section_shop, $data['sections_shop'])) ?$section_shop :$room_info['shop_section'];
 ?>
 <script src="scripts/shop.js" type="text/javascript"></script>
 <script src="scripts/move_check.js" type="text/javascript"></script>
@@ -54,7 +54,7 @@ if ($section_shop == 'sell')
     echo "<table width='100%' cellspacing='1' cellpadding='2' bgcolor='#A5A5A5'><tr><td bgcolor='#E2E0E0' align='center'>У вас нет подходящих вещей в рюкзаке</td></tr></table>";
 }
 else
-  echoScript("$(function (){shopSection ('$section_shop');});");
+  echoScript("$(function (){shopSection('$section_shop');});");
 ?>
   </div>
 </td>
@@ -92,13 +92,13 @@ foreach ($data['sections_shop'] as $key => $value)
     echo "<div style='background-color: #C7C7C7'><a class='nick' href='?section_shop=$key'>".$lang[$value[2]]."</a></div><br>";
     break;
   }
-  $show_in = explode (',', $value[0]);
+  $show_in = explode(',', $value[0]);
   foreach ($show_in as $key2 => $value2)
   {
     if ($value2 != 'shop')
       continue;
     
-    echo "<div id='section_shop_$key'><a class='nick' href=\"javascript:shopSection ('$key');\">".$lang[$value[2]].$lang['shop_'.$key]."</a><br></div>";
+    echo "<div id='section_shop_$key'><a class='nick' href=\"javascript:shopSection('$key');\">".$lang[$value[2]].$lang['shop_'.$key]."</a><br></div>";
   }
 }
 ?>

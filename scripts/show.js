@@ -11,7 +11,7 @@ function break_str (str, width, brk, cut)
 function updateMmoves (id, text)
 {
   if (pos.x > $('#'+id).offset().left && pos.x < $('#'+id).offset().left + $('#'+id).width() && pos.y > $('#'+id).offset().top && pos.y < $('#'+id).offset().top + $('#'+id).height())
-    $("#mmoves").html('<small>' + break_str (text, 50, '<br>') + '</small>');
+    $("#mmoves").html('<small>' + break_str(text, 50, '<br>') + '</small>');
 }
 
 $(function (){
@@ -21,10 +21,10 @@ $(function (){
 		if (!($(this).attr('alt')) || $(this).attr('alt') == '')
 			return;
     $('body').append('<div id="mmoves"></div>');
-		$("#mmoves").html('<small>' + break_str ($(this).attr('alt'), 50, '<br>') + '</small>');
-		var razX = $(window).width() - (e.pageX - $(window).scrollLeft()) - 20;
+		$("#mmoves").html('<small>' + break_str($(this).attr('alt'), 50, '<br>') + '</small>');
+		var razX = $(window).width() - (e.pageX - $(window).scrollLeft()) - 25;
 		x = (razX < $("#mmoves").width())	?$("#mmoves").width() + 15 :-15;
-		var razY = $(window).height() - (e.pageY - $(window).scrollTop()) - 20;
+		var razY = $(window).height() - (e.pageY - $(window).scrollTop()) - 25;
 		y = (razY < $("#mmoves").height()) ?$("#mmoves").height() + 15 :-15;
 		$("#mmoves").css({'left': e.pageX - x + 'px', 'top': e.pageY - y + 'px', 'visibility': 'visible'});
 	});

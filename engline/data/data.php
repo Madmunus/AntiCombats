@@ -1,5 +1,5 @@
 <?
-defined('AntiBK') or die ("Доступ запрещен!");
+defined('AntiBK') or die("Доступ запрещен!");
 
 $data['colors'] = array (
   'black'     => 'Черный',
@@ -125,23 +125,26 @@ $behaviour = array (
   'wis' => 6,
   'spi' => 10
 );
+
 $mastery = array (
-  'phisic' => 0,
-  'sword'  => 0,
-  'fail'   => 0,
-  'staff'  => 0,
-  'knife'  => 0,
-  'axe'    => 0,
-  'fire'   => 4,
-  'water'  => 4,
-  'air'    => 4,
-  'earth'  => 4,
-  'light'  => 4,
-  'gray'   => 4,
-  'dark'   => 4
+  'phisic'   => 1,
+  'sword'    => 1,
+  'bow'      => 1,
+  'crossbow' => 1,
+  'fail'     => 1,
+  'staff'    => 4,
+  'knife'    => 1,
+  'axe'      => 1,
+  'fire'     => 4,
+  'water'    => 4,
+  'air'      => 4,
+  'earth'    => 4,
+  'light'    => 4,
+  'gray'     => 4,
+  'dark'     => 4
 );
 
-define ("DATE_FULL", date ('d.m.y H:i:s'));
-define ("DATE_NO_SEC", date ('d.m.y H:i'));
-define ("DATE_TIME", date ('H:i'));
+define ("DATE_FULL", date('d.m.y H:i:s'));
+define ("DATE_NO_SEC", date('d.m.y H:i'));
+define ("DATE_TIME", date('H:i'));
 ?>

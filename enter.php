@@ -14,8 +14,8 @@ $adb = DbSimple_Generic::connect($database['adb']);
 $adb->query("SET NAMES ? ",$database['db_encoding']);
 $adb->setErrorHandler("databaseErrorHandler");
 
-$login = requestVar('login', '', 2);
-$password = requestVar('password', '', 2);
+$login = requestVar('login', '', 3);
+$password = requestVar('password', '', 3);
 ?>
 <html>
 <head>

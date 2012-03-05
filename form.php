@@ -9,7 +9,7 @@ switch ($do)
 {
   case 'shape':
     echoScript("$(function (){showShapes (1);});");
-    if ($char_db['next_shape'] && $char_db['next_shape'] > time ())
+    if ($char_db['next_shape'] && $char_db['next_shape'] > time())
       $char->error->Inventory(111, getFormatedTime($char_db['next_shape']));
     
     echo "<table width='100%' cellspacing='0' cellpadding='0' border='0' style='margin-bottom: -10px;'><tr>";
@@ -21,10 +21,15 @@ switch ($do)
     echo "<div id='shapes' style='width: 100%;'></div>";
   break;
   case 'passandmail':
+    $pass = requestVar('pass');
+    
     if (isset($_POST['changeMail']))
     {
       $old_mail = requestVar('old_mail');
       $new_mail = requestVar('new_mail');
+      
+      if ($char_db['next_change'] != 0 && time() < $char_db['next_change'])
+        $char->error->Form(515, $do);
       
       if (!$pass)
         $char->error->Form(507, $do);
@@ -35,7 +40,7 @@ switch ($do)
       if (!$new_mail)
         $char->error->Form(509, $do);
       
-      if (SHA1 ($guid.':'.$pass) != $char_db['password'])
+      if (SHA1($guid.':'.$pass) != $char_db['password'])
         $char->error->Form(501, $do);
       
       if ($old_mail != $char_db['mail'])
@@ -44,19 +49,23 @@ switch ($do)
       if (!eregi ("^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*$", $new_mail))
         $char->error->Form(511, $do);
       
-      $q = $adb->query("UPDATE `characters` SET `mail` = ?s WHERE `guid` = ?d", $new_mail ,$guid);
+      $q = $adb->query("UPDATE `characters` SET `mail` = ?s, `next_change` = ?d WHERE `guid` = ?d", $new_mail ,(time() + 259200) ,$guid);
       $msg = "Здравствуйте!\n";
       $msg .= DATE_NO_SEC." был сменен e-mail, указанный при регистрации персонажа $login он-лайн игры Анти Бойцовский Клуб.\n";
       $msg .= "Новый e-mail: $new_mail\n\n\n\n";
       $msg .= "С уважением, администрация Анти Бойцовского Клуба!";
       mail($char_db['mail'], "Смена e-mail у персонажа $login", $msg, 'From: Администрация АБК <admin@abk.ru>', 'admin@abk.ru');
+      
       if ($q)
         $char->error->Form(512, $do);
     }
-    else if (isset($_POST['changePass']))
+    else if (isset($_POST['changePsw']))
     {
       $new_pass = requestVar('new_pass');
       $new_pass2 = requestVar('new_pass2');
+      
+      if ($char_db['next_change'] != 0 && time() < $char_db['next_change'])
+        $char->error->Form(515, $do);
       
       if (!$pass || ($pass && !$new_pass))
         $char->error->Form(0, $do);
@@ -64,7 +73,7 @@ switch ($do)
       if ($pass && $new_pass && !$new_pass2)
         $char->error->Form(500, $do);
       
-      if (SHA1 ($guid.':'.$pass) != $char_db['password'])
+      if (SHA1($guid.':'.$pass) != $char_db['password'])
         $char->error->Form(501, $do);
       
       if ($new_pass != $new_pass2)
@@ -76,17 +85,46 @@ switch ($do)
       if (!ereg ("[a-zA-Zа-яА-Я0-9]$", $new_pass))
         $char->error->Form(506, $do);
       
-      $q = $adb->query("UPDATE `characters` 
-                         SET `password` = ?s 
-                         WHERE `guid` = ?d", SHA1 ($guid.':'.$new_pass) ,$guid);
+      $q = $adb->query("UPDATE `characters` SET `password` = ?s, `next_change` = ?d WHERE `guid` = ?d", SHA1($guid.':'.$new_pass) ,(time() + 259200) ,$guid);
       $msg = "Здраствуйте!\n";
       $msg .= DATE_NO_SEC." был сменен пароль к персонажу $login он-лайн игры Анти Бойцовский Клуб.\n";
       $msg .= "Новый пароль: $new_pass\n\n\n\n";
       $msg .= "С уважением, администрация Анти Бойцовского Клуба!";
       mail($char_db['mail'], "Смена пароля у персонажа $login", $msg, 'From: Администрация АБК <admin@abk.ru>', 'admin@abk.ru');
+      
       if ($q)
         $char->error->Form(504, $do);
     }
+    else if (isset($_POST['changeSqa']))
+    {
+      $secretquestion = requestVar('secretquestion');
+      $secretanswer = requestVar('secretanswer');
+      
+      if ($char_db['next_change'] != 0 && time() < $char_db['next_change'])
+        $char->error->Form(515, $do);
+      
+      if (!$pass)
+        $char->error->Form(507, $do);
+      
+      if (!$secretquestion)
+        $char->error->Form(513, $do);
+            
+      if (SHA1($guid.':'.$pass) != $char_db['password'])
+        $char->error->Form(501, $do);
+            
+      $q1 = $adb->query("UPDATE `character_info` SET `secretquestion` = ?s, `secretanswer` = ?s WHERE `guid` = ?d", $secretquestion ,$secretanswer ,$guid);
+      $q2 = $adb->query("UPDATE `characters` SET `next_change` = ?d WHERE `guid` = ?d", (time() + 259200) ,$guid);
+      $msg = "Здравствуйте!\n";
+      $msg .= DATE_NO_SEC." был сменен секретный вопрос/ответ, указанный при регистрации персонажа $login он-лайн игры Анти Бойцовский Клуб.\n";
+      $msg .= "Новый вопрос: $secretquestion\n";
+      $msg .= "Новый ответ: $secretanswer\n\n\n\n";
+      $msg .= "С уважением, администрация Анти Бойцовского Клуба!";
+      mail($char_db['mail'], "Смена секретного вопроса/ответа у персонажа $login", $msg, 'From: Администрация АБК <admin@abk.ru>', 'admin@abk.ru');
+      
+      if ($q1 && $q2)
+        $char->error->Form(514, $do);
+    }
+    $secretqa = $char->getChar('char_info', 'secretquestion');
 ?>
 <table width="100%" cellspacing="0" cellpadding="0" style="margin-bottom: -15px;">
 <tr>
@@ -104,80 +142,120 @@ switch ($do)
 <form action="main.php?action=form&do=passandmail" name="pass_form" method="post">
 <fieldset><legend><b>&nbsp;Сменить пароль</b></legend>
 <table>
-<tr><td align="right">Старый пароль:</td><td><input type="password" name="pass" size="15" maxlength="30"></td></tr>
-<tr><td align="right">Новый пароль:</td><td><input type="password" name="new_pass" size="15" maxlength="30"></td></tr>
-<tr><td align="right">Новый пароль (еще раз):</td><td><input type="password" name="new_pass2" size="15" maxlength="30"></td></tr>
-<tr><td colspan="2" align="center"><input type="submit" value="Сменить пароль" name="changePass"></td></tr>
+<tr><td align="right">Старый пароль:</td><td><input type="password" name="pass" size="15" maxlength="31"></td></tr>
+<tr><td align="right">Новый пароль:</td><td><input type="password" name="new_pass" size="15" maxlength="31"></td></tr>
+<tr><td align="right">Новый пароль (еще раз):</td><td><input type="password" name="new_pass2" size="15" maxlength="31"></td></tr>
+<tr><td colspan="2" align="center"><input type="submit" value="Сменить пароль" name="changePsw"></td></tr>
 </table>
 </fieldset>
 </form>
 <form action="main.php?action=form&do=passandmail" name="mail_form" method="post">
 <fieldset><legend><b>&nbsp;Сменить email</b></legend>
 <table>
-<tr><td align="right">Ваш пароль:</td><td><input type="password" name="pass" size="15" maxlength="30"></td></tr>
+<tr><td align="right">Ваш пароль:</td><td><input type="password" name="pass" size="15" maxlength="31"></td></tr>
 <tr><td align="right">Прежний email:</td><td><input type="text" name="old_mail" size="20" maxlength="50"></td></tr>
 <tr><td align="right">Новый email:</td><td><input type="text" name="new_mail" size="20" maxlength="50"></td></tr>
 <tr><td colspan="2" align="center"><input type="submit" value="Сменить email" name="changeMail"></td></tr>
 </table>
 </fieldset>
 </form>
+<form action="main.php?action=form&do=passandmail" name="secret_form" method="post">
+<fieldset><legend><b>&nbsp;Сменить секретный вопрос/ответ</b></legend>
+<table>
+<tr><td align="right">Ваш пароль:</td><td><input type="password" name="pass" size="15" maxlength="31"></td></tr>
+<tr><td align="right">Старый вопрос:</td><td><b><?echo $secretqa;?></b></td></tr>
+<tr><td align="right">Новый вопрос:</td><td><input type="text" name="secretquestion" size="40" maxlength="50"></td></tr>
+<tr><td align="right">Новый ответ:</td><td><input type="text" name="secretanswer" size="40" maxlength="50"></td></tr>
+<tr><td colspan="2" align="center"><input type="submit" value="Сменить" name="changeSqa"></td></tr>
+</table>
+</fieldset>
+</form>
+<u>Учтите</u>, вы не можете одновременно поменять email, пароль или секретные вопрос/ответ. Период должен составлять не менее трех суток.<br>
 <?
   break;
   case 'info':
     if (isset($_POST['changeInfo']))
     {
       $name = requestVar('name');
-      $town = (isset($_POST['town_n']) && $_POST['town_n'] != '') ?htmlspecialchars ($_POST['town_n']) :((isset($_POST['town'])) ?htmlspecialchars ($_POST['town']) :"");
+      $birth_day = requestVar('birth_day');
+      $birth_month = requestVar('birth_month');
+      $birth_year = requestVar('birth_year');
+      $birthday = $birth_day.'.'.$birth_month.'.'.$birth_year;
+      $town = (isset($_POST['town_n']) && $_POST['town_n'] != '') ?htmlspecialchars($_POST['town_n']) :((isset($_POST['town'])) ?htmlspecialchars($_POST['town']) :"");
       $icq = requestVar('icq');
       $hide_icq = requestVar('hide_icq', 0);
       $url = requestVar('url');
       $color = requestVar('color');
       $deviz = requestVar('deviz');
       $hobie = requestVar('hobie');
-      $hobie = str_replace ("\n", "<br>", $hobie);
+      $hobie = str_replace("\n", "<br>", $hobie);
       
-      if ($url == "http://")
-        $url = "";
-                  
-      $count_words = count (split (' ', $hobie));
+      $count_words = count(split(' ', $hobie));
       if ($count_words > 60)
-        $error = "Слишком большой размер поля \"Хобби, увлечения\". Максимальный размер: 60 слов.";
-      else if (strlen ($hobie) > 2500)
+        $error = "Слишком большой размер поля \"Хобби, увлечения\". Максимальное количество: 60 слов.";
+      else if (strlen($hobie) > 2500)
         $error = "Слишком большой размер поля \"Хобби, увлечения\". Максимальный размер: 2500 символов.";
       else
       {
         $q = $adb->query("UPDATE `character_info` 
-                           SET `name` = ?s, 
-                               `icq` = ?s, 
-                               `hide_icq` = ?d, 
-                               `url` = ?s, 
-                               `town` = ?s, 
-                               `color` = ?s, 
-                               `deviz` = ?s, 
-                               `hobie` = ?s 
-                           WHERE `guid` = ?d", $name ,$icq ,$hide_icq ,$url ,$town ,$color ,$deviz ,$hobie ,$guid);
+                          SET `name` = ?s, 
+                              `birthday` = ?s, 
+                              `icq` = ?s, 
+                              `hide_icq` = ?d, 
+                              `url` = ?s, 
+                              `town` = ?s, 
+                              `color` = ?s, 
+                              `deviz` = ?s, 
+                              `hobie` = ?s 
+                          WHERE `guid` = ?d", $name ,$birthday ,$icq ,$hide_icq ,$url ,$town ,$color ,$deviz ,$hobie ,$guid);
         if ($q)
           $error = "Сохранено удачно.";
       }
     }
-    $char_info = $char->getChar('char_info', 'name', 'icq', 'hide_icq', 'url', 'town', 'color', 'deviz', 'hobie');
+    
+    $char_info = $char->getChar('char_info', 'name', 'icq', 'hide_icq', 'url', 'town', 'birthday', 'color', 'deviz', 'hobie');
     ArrToVar($char_info, 's_');
-    $s_hobie = str_replace (array("<br>", '\&quot;', "\'"), array("\n", '"', "'"), $s_hobie);
-    $s_url = (!empty($s_url)) ?$s_url :"http://";
+    $s_hobie = str_replace(array("<br>", '\&quot;', "\'"), array("\n", '"', "'"), $s_hobie);
     $s_hide_icq = ($s_hide_icq) ?" checked" :"";
+    $s_birthday = split('\.', $s_birthday);
     
     if (!empty($error))
       echo "<font color='red'><b>$error</b></font>";
 ?>
-<table width="100%" cellspacing="0" cellpadding="0" align="center" style="margin-bottom: -15px;">
-<tr>
-  <td width="100%"><h3>Анкета персонажа "<?echo $login;?>"</h3></td>
+<table width="99%" cellspacing="0" cellpadding="0" align="center"><tr>
+  <td width="100%" style="padding-top: 15px;"><h3>Анкета персонажа "<?echo $login;?>"</h3></TD>
   <td valign="top"><input type="button" value="<?echo $lang['return'];?>" id="link" link="inv" class="nav"></td>
-</tr>
-</table>
+</tr></table>
 <table width="95%" border="0" align="center" cellpadding="3" cellspacing="1" bgcolor="#B2B2B2">
 <form name="info_form" action="main.php?action=form&do=info" method="post">
-<tr class="anketabg"><td>Ваше реальное имя: </td><td><input name="name" value="<?echo $s_name;?>" size="45" maxlength="90" /></td></tr>
+<tr class="anketabg"><td width="170">Ваше реальное имя: </td><td><input name="name" value="<?echo $s_name;?>" size="45" maxlength="90" /></td></tr>
+<tr class="anketabg">
+  <td>День рождения: </td>
+  <td>День: <select name="birth_day" class="inup">
+<?    for ($i = 1; $i <= 31; $i++)
+      {
+        $i = ($i < 10) ?"0".$i :$i;
+        $selected = ($s_birthday[0] == $i) ?" selected" :"";
+        echo "<option value='$i'$selected>$i</option>";
+      }
+?>  </select>
+    Месяц: <select name="birth_month" class="inup">
+<?    foreach ($data['month'] as $value => $name)
+      {
+        $selected = ($s_birthday[1] == $value) ?" selected" :"";
+        echo "<option value='$value'$selected>$name</option>";
+      }
+?>  </select>
+    Год: <select name="birth_year" class="inup">
+<?    for ($i = date('Y') - 72; $i <= (date('Y') - 10); $i++)
+      {
+        $selected = ($s_birthday[2] == $i) ?" selected" :"";
+        echo "<option value='$i'$selected>$i</option>";
+      }
+?>  </select>
+    <small><br><span class="style5">Внимание! </span><span class="style7">Дата рождения должна быть правильной, она используется в игровом процессе. Анкеты с неправильной датой будут удаляться без предупреждения.</span></small>
+  </td>
+</tr>
 <tr class="anketabg">
   <td>Город: </td>
   <td><select size="1" name="town_n">
@@ -197,10 +275,7 @@ switch ($do)
     &nbsp; &nbsp;другой&nbsp; &nbsp;<input type="text" value="<?echo $s_town;?>" name="town" size="20" maxlength="40" />
   </td>
 </tr>
-<tr class="anketabg">
-  <td>ICQ:</td>
-  <td><input value="<?echo $s_icq;?>" name="icq" size="10" maxlength="20" /> <input type="checkbox" name="hide_icq" value="1"<?echo $s_hide_icq;?> /> не отображать в инф. о персонаже.</td>
-</tr>
+<tr class="anketabg"><td>ICQ:</td><td><input value="<?echo $s_icq;?>" name="icq" size="10" maxlength="20" /> <input type="checkbox" name="hide_icq" value="1"<?echo $s_hide_icq;?> /> не отображать в инф. о персонаже.</td></tr>
 <tr class="anketabg"><td>Домашняя страница:</td><td><input value="<?echo $s_url;?>" name="url" size="35" maxlength="60" /></td></tr>
 <tr class="anketabg"><td>Девиз:</td><td><input value="<?echo $s_deviz;?>" name="deviz" size="60" maxlength="160" /></td></tr>
 <tr class="anketabg"><td colspan="2" align="left">Увлечения / хобби <small>(не более 60 слов)</small><br><textarea name="hobie" cols="60" rows="7" style="width: 100%;"><? echo $s_hobie;?></textarea></td></tr>
@@ -215,7 +290,7 @@ switch ($do)
 ?>    </select>
   </td>
 </tr>
-<tr class="anketabg"><td colspan="2" align="center"><input name="changeInfo" type="submit" value="Сохранить изменения" class="nav" /></td></tr>
+<tr class="anketabg" height="50"><td colspan="2" align="center"><input name="changeInfo" type="submit" value="Сохранить изменения" class="nav" /></td></tr>
 </form>
 </table>
 <?

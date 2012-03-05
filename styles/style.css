@@ -57,8 +57,9 @@ textarea,
 input         {border: solid 1pt #B0B0B0; font-family: MS Sans Serif; font-size: 10px; color: #191970; margin-bottom: 2px; margin-top: 1px;}
 .m            {background: #99CCCC; text-align: center;}
 .s            {background: #BBDDDD; text-align: center;}
-.active     {cursor: pointer;}
-.nonactive {opacity: 0.5; cursor: default;}
+.active        {cursor: pointer;}
+.nonactive {opacity: 0.3; cursor: default;}
+.show     {border: 0px; background-color: #dedede; font-weight: bold; width: 40px; text-align: right; font-size: 10pt; font-family: Verdana; margin: 0px; padding: 0px; cursor: default; color: black;}
 img.skill   {border: 0px; cursor: pointer;}
 td.skill       {font-weight: bold;}
 

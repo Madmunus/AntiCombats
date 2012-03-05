@@ -6,10 +6,10 @@ ini_set('error_reporting', E_ALL);
 
 define('AntiBK', true);
 
-include_once ("engline/config.php");
-include_once ("engline/dbsimple/Generic.php");
-include_once ("engline/data/data.php");
-include_once ("engline/functions/functions.php");
+include_once("engline/config.php");
+include_once("engline/dbsimple/Generic.php");
+include_once("engline/data/data.php");
+include_once("engline/functions/functions.php");
 
 $adb = DbSimple_Generic::connect($database['adb']);
 $adb->query("SET NAMES ? ",$database['db_encoding']);
@@ -121,9 +121,9 @@ $(function (){
   });
   $('form[name=regstep4]').live('submit', function (){
     var name = $('input[name=name]').val();
-    var birth_day = $('input[name=birth_day]').val();
-    var birth_month = $('input[name=birth_month]').val();
-    var birth_year = $('input[name=birth_year]').val();
+    var birth_day = $('select[name=birth_day]').val();
+    var birth_month = $('select[name=birth_month]').val();
+    var birth_year = $('select[name=birth_year]').val();
     var city = $('input[name=city]').val();
     var icq = $('input[name=icq]').val();
     var deviz = $('input[name=deviz]').val();
@@ -151,9 +151,9 @@ $(function (){
 });
 </script>
 <?
-$file = file ("regfail.dat");
-$file = split (',', $file[0]);
-$num = count ($file);
+$file = file("regfail.dat");
+$file = split(',', $file[0]);
+$num = count($file);
 $regfail = '';
 for ($i = 0; $i <= $num - 1; $i++)
 {    
@@ -223,7 +223,7 @@ echo "<script type='text/javascript'>$regfail</script>";
                 </form>
 <?      break;
         case 2:
-          if (!isset($_SESSION['reg_login'])) die ($error_text);
+          if (!isset($_SESSION['reg_login'])) die($error_text);
 ?>
                 <form name="regstep2" action="reg.php?step=3" class="norm" method="post">
                 <table class="g" align="center" border="0" cellpadding="0" cellspacing="0">
@@ -259,7 +259,7 @@ echo "<script type='text/javascript'>$regfail</script>";
                 </form>
 <?      break;
         case 3:
-          if (!$_POST['password'] || !$_POST['password_confirm']) die ($error_text);
+          if (!isset($_POST['password']) || !isset($_POST['password_confirm'])) die($error_text);
           $_SESSION['reg_password'] = $_POST['password'];
 ?>
                 <form name="regstep3" action="reg.php?step=4" class="norm" method="post">
@@ -294,11 +294,11 @@ echo "<script type='text/javascript'>$regfail</script>";
                 </form>
 <?      break;
         case 4:
-          if (!$_POST['email']) die ($error_text);
+          if (!isset($_POST['email'])) die($error_text);
           $email = $_POST['email'];
           $secretquestion = $_POST['secretquestion'];
           $secretanswer = $_POST['secretanswer'];
-          $code = rand (1000, 9999);
+          $code = rand(1000, 9999);
           $_SESSION['reg_email'] = $email;
           $_SESSION['secretquestion'] = $secretquestion;
           $_SESSION['secretanswer'] = $secretanswer;
@@ -319,7 +319,7 @@ echo "<script type='text/javascript'>$regfail</script>";
                       <option selected></option>
 <?                      for ($i = 1; $i <= 31; $i++)
                         {
-                          if ($i < 10) $i = "0".$i;
+                          $i = ($i < 10) ?"0".$i :$i;
                           echo "<option value='$i'>$i</option>";
                         }
 ?>                    </select>
@@ -330,7 +330,7 @@ echo "<script type='text/javascript'>$regfail</script>";
 ?>                    </select>
                       Год: <select name="birth_year" class="inup">
                       <option selected></option>
-<?                      for ($i = date ('Y') - 70; $i <= date ('Y'); $i++)
+<?                      for ($i = date('Y') - 72; $i <= (date('Y') - 10); $i++)
                           echo "<option value='$i'>$i</option>";
 ?>                    </select>
                     </td>
@@ -389,7 +389,7 @@ echo "<script type='text/javascript'>$regfail</script>";
                 </form>
 <?      break;
         case 5:
-          if (!$_POST['rules'] || !$_POST['name'] || !$_POST['sex'] || !$_POST['birth_day'] || !$_POST['birth_month'] || !$_POST['birth_year']) die ($error_text);
+          if (!isset($_POST['rules']) || !isset($_POST['name']) || !isset($_POST['sex']) || !isset($_POST['birth_day']) || !isset($_POST['birth_month']) || !isset($_POST['birth_year'])) die($error_text);
           $reg_login = $_SESSION['reg_login'];
           $password = $_SESSION['reg_password'];
           $email = $_SESSION['reg_email'];
@@ -398,9 +398,9 @@ echo "<script type='text/javascript'>$regfail</script>";
           $rules = $_POST['rules'];
           // $code = $_POST['secret_code'];
           // $code_loaded = $_POST['code_loaded'];
-          $name = $_POST['name'];
-          $sex = $_POST['sex'];
-          $icq = $_POST['icq'];
+          $name = requestVar('name');
+          $sex = requestVar('sex');
+          $icq = requestVar('icq');
           $hide_icq = requestVar('hide_icq', 0);
           $town = (isset($_POST['city_n']) && $_POST['city_n'] != '') ?htmlspecialchars($_POST['city_n']) :((isset($_POST['city'])) ?htmlspecialchars($_POST['city']) :"");
           $city = "dem";
@@ -408,25 +408,22 @@ echo "<script type='text/javascript'>$regfail</script>";
           $color = $_POST['color'];
           //elseif($code != $code_loaded){echo 'Ошибка при введении кода! <a href="?step=4">Назад</a><br>'; die();}
           $birthday = $_POST['birth_day'].".".$_POST['birth_month'].".".$_POST['birth_year'];
-          $shape = ($sex == "male") ?"m/1.gif" :"f/1.gif";
-          unset ($_SESSION['reg_login'], $_SESSION['reg_password'], $_SESSION['reg_email'], $_SESSION['secretquestion'], $_SESSION['secretanswer']);
+          $shape = ($sex == "male") ?"m/0.gif" :"f/0.gif";
+          unset($_SESSION['reg_login'], $_SESSION['reg_password'], $_SESSION['reg_email'], $_SESSION['secretquestion'], $_SESSION['secretanswer']);
           if ($adb->selectCell("SELECT COUNT(*) FROM `characters` WHERE `login` = ?s", $reg_login) == 0)
           {
             $guid = ($adb->selectCell("SELECT MAX(`guid`) FROM `characters`;")) + 1;
-            $password = SHA1 ($guid.':'.$password);
+            $reg_password = SHA1($guid.':'.$password);
             $char = Char::initialization($guid, $adb);
             // Основная база
             $adb->query("INSERT INTO `characters` (`guid`, `login`, `login_sec`, `password`, `mail`, `sex`, `city`, `shape`, `reg_ip`, `last_time`) 
-                         VALUES (?d, ?s, ?s, ?s, ?s, ?s, ?s, ?s, ?s, ?d);", $guid ,$reg_login ,$reg_login ,$password ,$email ,$sex ,$city ,$shape ,$_SERVER['REMOTE_ADDR'] ,time());
+                         VALUES (?d, ?s, ?s, ?s, ?s, ?s, ?s, ?s, ?s, ?d);", $guid ,$reg_login ,$reg_login ,$reg_password ,$email ,$sex ,$city ,$shape ,$_SERVER['REMOTE_ADDR'] ,time());
             // Характеристики
             $adb->query("INSERT INTO `character_stats` (`guid`) 
                          VALUES (?d);", $guid);
-            // Дополнительные характеристики
-            /* $adb->query("INSERT INTO `character_stats_plus` (`guid`) 
-                            VALUES (?d);", $guid); */
             // Дополнительная информация
             $adb->query("INSERT INTO `character_info` (`guid`, `name`, `icq`, `secretquestion`, `secretanswer`, `hide_icq`, `town`, `birthday`, `color`, `deviz`, `state`, `date`) 
-                         VALUES (?d, ?s, ?d, ?s, ?s, ?d, ?s, ?s, ?s, ?s, ?s, ?d);", $guid ,$name ,$icq ,$secretquestion ,$secretanswer ,$hide_icq ,$town ,$birthday ,$color ,$deviz ,$city ,time());
+                         VALUES (?d, ?s, ?s, ?s, ?s, ?d, ?s, ?s, ?s, ?s, ?s, ?d);", $guid ,$name ,$icq ,$secretquestion ,$secretanswer ,$hide_icq ,$town ,$birthday ,$color ,$deviz ,$city ,time());
             // Создание инвентаря
             $adb->query("INSERT INTO `character_equip` (`guid`) 
                          VALUES (?d);", $guid);
@@ -436,12 +433,14 @@ echo "<script type='text/javascript'>$regfail</script>";
             // Эффекты
             $adb->query("INSERT INTO `character_effects` (`guid`, `effect_entry`, `end_time`) 
                          VALUES (?d, '1', '0');", $guid);
+            $id = ($adb->selectCell("SELECT MAX(`guid`) FROM `characters`;")) + 1;
             // Предметы
-            $adb->query("INSERT INTO `character_inventory` (`guid`, `item_entry`, `wear`, `tear_max`, `made_in`, `last_update`) 
-                         VALUES (?d, '920', '1', '20', ?s, ?d),
-                                (?d, '1031', '1', '10', ?s, ?d);", $guid ,$city ,time() ,$guid ,$city ,time());
-            echo "Регистрация персонажа $reg_login, прошла успешно!<br>Авторизируйтесь с <a href='index.php' class='us2'>главной страницы</a>.";
+            $adb->query("INSERT INTO `character_inventory` (`id`, `guid`, `item_entry`, `wear`, `tear_max`, `made_in`, `last_update`) 
+                         VALUES (?d, ?d, '920', '1', '20', ?s, ?d),
+                                (?d, ?d, '1031', '1', '10', ?s, ?d);", $id ,$guid ,$city ,time() ,($id+1) ,$guid ,$city ,time());
+            $adb->query("UPDATE `character_equip` SET `pants` = ?d, `shirt` = ?d WHERE `guid` = ?d", $id ,($id+1) ,$guid);
             $char->history->authorization(2, $city);
+            echoScript("location.href = 'enter.php?login=$reg_login&password=$password';", true);
           }
           else
             echo "Вы уже создали персонажа с таким логином!";

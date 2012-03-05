@@ -16,7 +16,7 @@ function snow_start ()
 	{
 		for (var n = 0 ; n < snow_intensive ; n++)
 		{
-			setTimeout('snow_create()', i * 1500);
+			setTimeout(snow_create, i * 1500);
 		}
 	}
 }
