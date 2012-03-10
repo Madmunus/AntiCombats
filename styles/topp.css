@@ -6,7 +6,3 @@ body                                  {font-size: 10pt; margin: 0px; height: 100
 a.menutop:visited,
 a.menutop:active     {font-weight: bold; font-size: 10px; color: #3b3936; text-decoration: none;}
 a.menutop:hover       {color: #76726b;}
-.dem_bottom_line     {background: url(../img/city/top_lite_dem_11.gif) repeat-x bottom;}
-.dem_top_line            {background: url(../img/city/top_lite_dem_03.gif) repeat-x top;}
-.dem_menu_back          {background: url(../img/city/top_lite_dev_15.gif);}
-.top_menu                      {background: url(../img/city/top_lite_dem_20s.gif) repeat-x;}

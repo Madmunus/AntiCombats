@@ -435,7 +435,7 @@ class DbSimple_Generic_Database extends DbSimple_Generic_LastError
      * mixed _performFetch($resultResource)
      * Fetch ONE NEXT row from result-set.
      * Must return:
-     * - For SELECT queries: all the rows of the query (2d arrray).
+     * - For SELECT queries: all the rows of the query(2d arrray).
      * - For INSERT queries: ID of inserted row.
      * - For UPDATE queries: number of updated rows.
      * - For other  queries: query status (scalar).
@@ -495,7 +495,7 @@ class DbSimple_Generic_Database extends DbSimple_Generic_LastError
      * Returns marker for native database placeholder. E.g. in FireBird it is '?',
      * in PostgreSQL - '$1', '$2' etc.
      * 
-     * @param int $n Number of native placeholder from the beginning of the query (begins from 0!).
+     * @param int $n Number of native placeholder from the beginning of the query(begins from 0!).
      * @return string String representation of native placeholder marker (by default - '?').
      */
     function _performGetNativePlaceholderMarker($n)
@@ -588,7 +588,7 @@ class DbSimple_Generic_Database extends DbSimple_Generic_LastError
         if (null === $rows || true === $cache_it) {
             $this->_logQuery($query);
 
-            // Run the query (counting time).
+            // Run the query(counting time).
             $qStart = $this->_microtime();        
             $result = $this->_performQuery($query);
             $fetchTime = $firstFetchTime = 0;
@@ -1023,7 +1023,7 @@ class DbSimple_Generic_Database extends DbSimple_Generic_LastError
 
     /**
      * Replaces the last array in a multi-dimensional array $V by its first value.
-     * Used for selectCol(), when we need to transform (N+1)d resulting array
+     * Used for selectCol(), when we need to transForm(N+1)d resulting array
      * to Nd array (column).
      */
     function _shrinkLastArrayDimensionCallback(&$v)

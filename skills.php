@@ -5,7 +5,7 @@ $travm = $char_db['travm'];
 $stats = array();
 $up_text = '';
 
-if (isset($_POST['save_ability']) && !$travm)
+if (isset($_POST['save_ability']) && !$travm && $char_stats['ups'] > 0)
 {
   foreach ($behaviour as $key => $min_level)
   {
@@ -26,7 +26,7 @@ if (isset($_POST['save_ability']) && !$travm)
     $parameters = $up_text;
   }
 }
-else if (isset($_POST['save_skill']) && !$travm)
+else if (isset($_POST['save_skill']) && !$travm && $char_stats['skills'] > 0)
 {
   foreach ($mastery as $key => $min_level)
   {

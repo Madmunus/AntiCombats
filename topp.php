@@ -22,7 +22,8 @@ $char->test->Guid();
 
 $lang = $char->getLang();
 $mail = $adb->selectCell("SELECT COUNT(*) FROM `city_mail_items` WHERE `to` = ?d", $guid) | 0;
-$admin_level = $char->getChar('char_db', 'admin_level');
+$char_db = $char->getChar('char_db', 'admin_level', 'city');
+ArrToVar($char_db);
 ?>
 <html>
 <head>
@@ -52,10 +53,10 @@ $(function (){
 </script>
 </head>
 <body>
-<div class="dem_bottom_line">
-<table width="100%" border="0" cellspacing="0" cellpadding="0" class="dem_top_line">
+<div style="background: url(img/city/top_lite_<?echo $city;?>_11.gif) repeat-x bottom;">
+<table width="100%" border="0" cellspacing="0" cellpadding="0" style="background: url(img/city/top_lite_<?echo $city;?>_03.gif) repeat-x top;">
   <tr>
-    <td align="left"><img height="14" src="img/city/top_lite_dem_01.gif" width="64" /><span id="mail" style="position: absolute;"></span></td>
+    <td align="left"><img height="14" src="img/city/top_lite_<?echo $city;?>_01.gif" width="64" /><span id="mail" style="position: absolute;"></span></td>
     <td align="right">
       <table cellspacing="0" cellpadding="0" border="0" width="500">
         <tr valign="bottom">
@@ -81,11 +82,11 @@ $(function (){
     </td>
   </tr>
   <tr>
-    <td align="left"><img height="17" src="img/city/top_lite_dem_07.gif" width="15" /><img height="17" src="img/city/top_lite_dem_08.gif" width="152" /></td>
+    <td align="left"><img height="17" src="img/city/top_lite_<?echo $city;?>_07.gif" width="15" /><img height="17" src="img/city/top_lite_<?echo $city;?>_08.gif" width="152" /></td>
     <td align="right">
-      <table cellspacing="0" cellpadding="0" width="500" class="dem_menu_back" border="0">
+      <table cellspacing="0" cellpadding="0" width="500" border="0" style="background: url(img/city/top_lite_<?echo $city;?>_15.gif);">
         <tr>
-          <td align="left"><img height="17" src="img/city/top_lite_dev_13.gif" width="20" /></td>
+          <td align="left"><img height="17" src="img/city/top_lite_<?echo $city;?>_13.gif" width="20" /></td>
           <td valign="top">
             <table cellspacing="0" cellpadding="0" width="100%" border="0" align="right">
               <tr>
@@ -111,7 +112,7 @@ $(function (){
                   <span id="menu4" class="bottom_text">
                       <a class="menutop" onClick="top.linkAction('inv');" href="#">Инвентарь</a>
                     | <a class="menutop" onClick="top.linkAction('skills');" href="#"><?echo $lang['abilities'];?></a>
-                    | <a class="menutop" onClick="top.linkAction('zayavka');" href="#">Поединки</a>
+                    | <a class="menutop" onClick="top.linkAction('zayavka');" href="#"><?echo $lang['fights'];?></a>
                     | <a class="menutop" onclick="top.linkAction('form&do=info');" href="#"><?echo $lang['form'];?></a>
 <?
 if ($admin_level > 0)
@@ -122,18 +123,18 @@ if ($admin_level > 0)
               </tr>
             </table>
           </td>
-          <td align="right"><img height="17" src="img/city/top_lite_dev_18.gif" width="22" /></td>
+          <td align="right"><img height="17" src="img/city/top_lite_<?echo $city;?>_18.gif" width="22" /></td>
         </tr>
       </table>
     </td>
   </tr>
 </table>
 </div>
-<table width="100%"  border="0" cellspacing="0" cellpadding="0" valign="top" class="top_menu">
+<table width="100%"  border="0" cellspacing="0" cellpadding="0" valign="top" style="background: url(img/city/sand_top_20s.gif) repeat-x;">
   <tr valign="top">
-    <td><img src="img/city/top_lite_dem_20.gif" width="15" height="6" /><img src="img/city/top_lite_dem_21.gif" width="79" height="6" /></td>
-    <td width="100%"><img src="img/city/top_lite_dem_20s.gif" width="31" height="6" /></td>
-    <td><img src="img/city/top_lite_dem_27.gif" width="24" height="6" /></td>
+    <td><img src="img/city/sand_lit_20.gif" width="15" height="6" /><img src="img/city/sand_top_20s.gif" width="79" height="6" /></td>
+    <td width="100%"><img src="img/city/sand_top_20s.gif" width="31" height="6" /></td>
+    <td><img src="img/city/sand_lit_27.gif" width="24" height="6" /></td>
   </tr>
 </table>
 </body>

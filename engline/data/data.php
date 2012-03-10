@@ -1,7 +1,7 @@
 <?
 defined('AntiBK') or die("Доступ запрещен!");
 
-$data['colors'] = array (
+$data['colors'] = array(
   'black'     => 'Черный',
   'blue'      => 'Синий',
   'fuchsia'   => 'Розовый',
@@ -18,7 +18,7 @@ $data['colors'] = array (
   'sandybrown'=> 'Темно-оранжевый'
 );
 
-$data['month'] = array (
+$data['month'] = array(
   '01' => 'Январь',
   '02' => 'Февраль',
   '03' => 'Март',
@@ -33,7 +33,7 @@ $data['month'] = array (
   '12' => 'Декабрь'
 );
 
-$data['towns'] = array (
+$data['towns'] = array(
   'Москва', 'Санкт-Петербург', 'Абакан (Хакасия)', 'Азов', 'Аксай (Ростовская обл.)', 'Алания', 'Альметьевск', 'Амурск', 'Анадырь', 'Анапа', 'Ангарск (Иркутская обл.)',
   'Апатиты', 'Армавир', 'Архангельск', 'Асбест', 'Астрахань', 'Балашиха', 'Барнаул', 'Белгород', 'Беломорск (Карелия)', 'Березники (Пермская обл.)', 'Бийск',
   'Биробиджан', 'Благовещенск', 'Большой камень', 'Борисоглебск', 'Братск', 'Бронницы', 'Брянск', 'Ванино', 'Великие Луки', 'Великий Устюг', 'Верхняя Салда',
@@ -61,7 +61,7 @@ $data['towns'] = array (
   'Латвия', 'Литва', 'Таджикистан', 'Туркменистан', 'Узбекистан', 'Украина', 'Эстония', 'Германия/Germany', 'Израиль/Israel', 'Канада/Canada', 'США/USA',
 );
 
-$data['shop_flags'] = array (
+$data['shop_flags'] = array(
   'cap'  => 1,
   'drm'  => 2,
   'low'  => 4,
@@ -77,7 +77,7 @@ $data['shop_flags'] = array (
   'ap'   => 4096
 );
 
-$data['item_flags'] = array (
+$data['item_flags'] = array(
   1  => 'Sellable',
   2  => 'Repairable',
   4  => 'Artefact',
@@ -85,37 +85,37 @@ $data['item_flags'] = array (
   16 => 'Left Hand'
 );
 
-$data['sections'] = array (
+$data['sections'] = array(
   1 => 'item',
   2 => 'thing',
   3 => 'elix',
   4 => 'other'
 );
 
-$data['sections_shop'] = array (
-  'sell'        => array ('',     'NULL',        'shop_sell'),
-  'knife'       => array ('shop', 'shop_weapon', 'shop_weapon'),
-  'axe'         => array ('shop', 'shop_weapon', 'whitespace'),
-  'fail'        => array ('shop', 'shop_weapon', 'whitespace'),
-  'sword'       => array ('shop', 'shop_weapon', 'whitespace'),
-  'staff'       => array ('shop', 'shop_weapon', 'whitespace'),
-  'boots'       => array ('shop', 'shop_dress',  'shop_dress'),
-  'shirt'       => array ('shop', 'shop_dress',  'whitespace'),
-  'gloves'      => array ('shop', 'shop_dress',  'whitespace'),
-  'light_armor' => array ('shop', 'shop_dress',  'whitespace'),
-  'heavy_armor' => array ('shop', 'shop_dress',  'whitespace'),
-  'helmet'      => array ('shop', 'shop_dress',  'whitespace'),
-  'bracer'      => array ('shop', 'shop_dress',  'whitespace'),
-  'belt'        => array ('shop', 'shop_dress',  'whitespace'),
-  'pants'       => array ('shop', 'shop_dress',  'whitespace'),
-  'shield'      => array ('shop', 'NULL',        'NULL'),
-  'earring'     => array ('shop', 'shop_jewel',  'shop_jewel'),
-  'amulet'      => array ('shop', 'shop_jewel',  'whitespace'),
-  'ring'        => array ('shop', 'shop_jewel',  'whitespace'),
-  'scroll'      => array ('shop', 'NULL',        'NULL')
+$data['sections_shop'] = array(
+  'sell'        => array('',     'NULL',        'shop_sell'),
+  'knife'       => array('shop', 'shop_weapon', 'shop_weapon'),
+  'axe'         => array('shop', 'shop_weapon', 'whitespace'),
+  'fail'        => array('shop', 'shop_weapon', 'whitespace'),
+  'sword'       => array('shop', 'shop_weapon', 'whitespace'),
+  'staff'       => array('shop', 'shop_weapon', 'whitespace'),
+  'boots'       => array('shop', 'shop_dress',  'shop_dress'),
+  'shirt'       => array('shop', 'shop_dress',  'whitespace'),
+  'gloves'      => array('shop', 'shop_dress',  'whitespace'),
+  'light_armor' => array('shop', 'shop_dress',  'whitespace'),
+  'heavy_armor' => array('shop', 'shop_dress',  'whitespace'),
+  'helmet'      => array('shop', 'shop_dress',  'whitespace'),
+  'bracer'      => array('shop', 'shop_dress',  'whitespace'),
+  'belt'        => array('shop', 'shop_dress',  'whitespace'),
+  'pants'       => array('shop', 'shop_dress',  'whitespace'),
+  'shield'      => array('shop', 'NULL',        'NULL'),
+  'earring'     => array('shop', 'shop_jewel',  'shop_jewel'),
+  'amulet'      => array('shop', 'shop_jewel',  'whitespace'),
+  'ring'        => array('shop', 'shop_jewel',  'whitespace'),
+  'scroll'      => array('shop', 'NULL',        'NULL')
 );
 
-$behaviour = array (
+$behaviour = array(
 //Хар-ка  |Мин.лвл
   'str' => 0,
   'dex' => 0,
@@ -126,7 +126,7 @@ $behaviour = array (
   'spi' => 10
 );
 
-$mastery = array (
+$mastery = array(
   'phisic'   => 1,
   'sword'    => 1,
   'bow'      => 1,
@@ -144,7 +144,7 @@ $mastery = array (
   'dark'     => 4
 );
 
-define ("DATE_FULL", date('d.m.y H:i:s'));
-define ("DATE_NO_SEC", date('d.m.y H:i'));
-define ("DATE_TIME", date('H:i'));
+define("DATE_FULL", date('d.m.y H:i:s'));
+define("DATE_NO_SEC", date('d.m.y H:i'));
+define("DATE_TIME", date('H:i'));
 ?>

@@ -9,7 +9,7 @@ if (in_array (date('m'), array (12, 1, 2)))
   echo '<script src="scripts/snow.js" type="text/javascript"></script>';
 $online = $adb->selectCell("SELECT COUNT(*) FROM `online` WHERE `city` = ?s", $city);
 
-$night = (date ('H') > 20 || date ('H') < 7) ?1 :0;
+$night = (date('H') > 19 || date('H') < 8) ?1 :0;
 ?>
 <table width="100%" border="0" cellspacing="0" cellpadding="0"><tr>
   <td valign="top"><?include("char_map.php");?></td>
@@ -18,9 +18,12 @@ $night = (date ('H') > 20 || date ('H') < 7) ?1 :0;
     <font color='red' id='error'><?$char->error->getFormattedError($error, $parameters);?></font>
     <div align="right" class="map" id="ione">
 <?
-switch ($room)
+switch ($city)
 {
-    case 'centplosh':
+  case 'dem':
+    switch ($room)
+    {
+      case 'centplosh':
 ?>
       <img src="img/room/dem_bg1_<?echo $night;?>.jpg" border="1"/>
       <img src="img/room/dem_lsh.png" class="dem_lsh" />
@@ -47,8 +50,8 @@ switch ($room)
       <span class="buttons_under"><img src="img/links.gif" width="9" height="7" />&nbsp;<a href="#" id="dem_post" class="passage" alt="<?echo $char->city->getRoomOnline('mail', 'mini');?>" onclick="solo('mail')">Почтовое отделение</a></span>
       <span class="buttons_under"><img src="img/links.gif" width="9" height="7" />&nbsp;<a href="#" id="dem_right" class="passage" alt="<?echo $char->city->getRoomOnline('fairstreet', 'mini');?>" onclick="solo('fairstreet')">Страшилкина улица</a></span>
 <?
-    break;
-    case 'fairstreet':
+      break;
+      case 'fairstreet':
 ?>
       <img src="img/room/dem_bg2_<?echo $night;?>.jpg" border="1"/>
       <img id="passage" src="img/room/dem_bank.png" class="dem_bank" alt="<?echo $char->city->getRoomOnline('bank');?>" onclick="solo('bank')" />
@@ -64,7 +67,24 @@ switch ($room)
       <img id="passage" src="img/room/dem_right.png" class="dem_right2" alt="<?echo $char->city->getRoomOnline('Аллея Тьмы');?>" onclick="solo('o12')" />
       <div class="actionbar"><?getUpdateBar();?></div>
 <?
-    break;
+      break;
+    }
+  break;
+  case 'low':
+    switch ($room)
+    {
+      case 'centplosh':
+?>
+      
+<?
+      break;
+      case 'fairstreet':
+?>
+      
+<?
+      break;
+    }
+  break;
 }
 ?>
     </div>

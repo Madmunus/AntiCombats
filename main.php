@@ -70,13 +70,11 @@ else if ($login_mail)
 <script src="scripts/jquery.js" type="text/javascript"></script>
 <script src="scripts/jquery.color.js" type="text/javascript"></script>
 <script src="scripts/cookies.js" type="text/javascript"></script>
+<script src="scripts/visual.js" type="text/javascript"></script>
 <script src="scripts/main.js" type="text/javascript"></script>
 <script src="scripts/show.js" type="text/javascript"></script>
 <script src="scripts/dialog.js" type="text/javascript"></script>
-<script src="scripts/visual.js" type="text/javascript"></script>
-<script type="text/javascript">
-try {top.checkGame();} catch(e) {location.href = 'index.php';}
-</script>
+<script type="text/javascript">try {top.checkGame();} catch(e) {location.href = 'index.php';}</script>
 </head>
 <body>
 <div id="hint3"></div>
@@ -109,54 +107,8 @@ $name_s = $char_db['clan_short'];
 $clan  = $char_db['clan'];
 $orden = $char_db['orden'];
 
-$date = date ('d.m.y H:i:s', mktime(date ('H') - $GSM));
-
-$mtime = $char->city->getRoomGoTime();
-echoScript("var time_to_go = $mtime;");
-
 switch ($action)
 {
-  case 'go':
-    /* $file = file ("telegraf/telegraf.dat");
-    $num = count ($file);
-    for ($i = 0; $i <= $num - 1; $i++)
-    { 
-      $row = explode ("|", $file[$i]);
-      if (isset($row[2]) && $row[2] == $guid)
-      {
-        unset ($file[$i]);
-        $string = "&nbsp<span style='color: #DC143C; background-color: #FFFACD;'><small>".DATE_TIME."</small></span> <a href=javascript:top.SayTo(\'почтальон\');>(<b>почтальон</b>)</a> <span style='color: #000000;'> &nbsp;<i>персонаж «$row[1]» $row[0] передал вам телеграмму:</i> $row[3] </span><br>";
-      }
-    }
-    $fp1 = fopen ("telegraf/telegraf.dat", "w");
-    flock ($fp1, 2);
-    fwrite ($fp1, implode ("", $file));
-    flock ($fp1, 3);
-    fclose ($fp1); */
-    
-    if ($char_db['dnd'])
-      $adb->query("UPDATE `characters` SET `dnd` = '0', `message` = NULL WHERE `guid` = ?d", $guid);
-    
-    $char->test->Go($room_go);
-    
-    $adb->query("UPDATE `characters` SET `room` = ?s, `last_go` = ?d, `last_room` = ?s WHERE `guid` = ?d", $room_go ,time() ,$room ,$guid);
-    $adb->query("UPDATE `online` SET `room` = ?s WHERE `guid` = ?d", $room_go ,$guid);
-    echoScript("top.cleanChat(); parent.user.updateUsers(); parent.msg.updateMessagesGo(); location.href = 'main.php';");
-  break;
-  case 'return':
-    if ((time () - $char_db['last_return']) < $char_db['return_time'])
-      $char->error->Map(114);
-    
-    if ($char_db['dnd'])
-      $adb->query("UPDATE `characters` SET `dnd` = '0', `message` = NULL WHERE `guid` = ?d", $guid);
-    
-    $char->test->Go($char_db['last_room'], true);
-    
-    $adb->query("UPDATE `characters` SET `room` = ?s, `last_room` = ?s, `last_return` = ?d WHERE `guid` = ?d", $char_db['last_room'] ,$room ,time() ,$guid);
-    $adb->query("UPDATE `online` SET `room` = ?s WHERE `guid` = ?d", $char_db['last_room'] ,$guid);
-    echoScript("top.cleanChat(); parent.user.updateUsers(); parent.msg.updateMessagesGo();");
-    $char->error->Map();
-  break;
   case 'admin':
     if ($admin_level > 1)
       include("adminbar.php");
@@ -180,10 +132,10 @@ switch ($action)
     include("zayavka.php");
   break;
   case 'unwear_thing':
-    unwear_t ($guid, $item_id);
+    unwear_t($guid, $item_id);
   break;
   case 'wear_thing':
-    wear_t ($guid, $item_id);
+    wear_t($guid, $item_id);
   break;
   case 'perevod':
     include("give.php");
@@ -276,6 +228,8 @@ switch ($action)
   break;
   default:
   case 'none':
+  case 'go':
+  case 'return':
     include("room_detect.php");
   break;
 }

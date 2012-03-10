@@ -42,7 +42,7 @@ $lang = $char->getLang();
 
 $sex = ($sex == 'male') ?"Мужской" :"Женский";
 $orden_dis = ($orden == 1) ?"Орден Паладинов - " :(($orden == 2) ?"Армада - " :"");
-$date = ($admin_level > 0) ?"До начала времен" :date ('d.m.y H:i', $date);
+$date = ($admin_level > 0) ?"До начала времен" :date('d.m.y H:i', $date);
 $state = ($admin_level > 0) ?"Этого никто не знает" :$char->city->getCity($state, 'name');
 $room = $char->city->getRoom($room, $city, 'name');
 $city = $char->city->getCity($city, 'name');

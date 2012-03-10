@@ -433,7 +433,7 @@ echo "<script type='text/javascript'>$regfail</script>";
             // Эффекты
             $adb->query("INSERT INTO `character_effects` (`guid`, `effect_entry`, `end_time`) 
                          VALUES (?d, '1', '0');", $guid);
-            $id = ($adb->selectCell("SELECT MAX(`guid`) FROM `characters`;")) + 1;
+            $id = ($adb->selectCell("SELECT MAX(`id`) FROM `character_inventory`;")) + 1;
             // Предметы
             $adb->query("INSERT INTO `character_inventory` (`id`, `guid`, `item_entry`, `wear`, `tear_max`, `made_in`, `last_update`) 
                          VALUES (?d, ?d, '920', '1', '20', ?s, ?d),

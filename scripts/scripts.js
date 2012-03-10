@@ -182,3 +182,5 @@ function exit ()
 {
   frames.main.dialogconfirm('Подтверждение', "top.linkAction('exit')", '<center>Вы уверены что хотите выйти из игры?</center>', 6);
 }
+
+var time_to_go = 0;

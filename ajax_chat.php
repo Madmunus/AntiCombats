@@ -117,32 +117,32 @@ switch ($do)
                             and `city` = ?s", $last ,$room ,$city);
     foreach ($rows as $message)
     {
-      list ($msg, $sender, $to, $class, $_SESSION['last']) = array_values ($message);
-      $date = date ('H:i', $_SESSION['last']);
-      $sender2 = str_replace (" ", "%20", $sender);
-      $to2 = str_replace (" ", "%20", $to);
-      $smiles = split (':', $msg);
+      list($msg, $sender, $to, $class, $_SESSION['last']) = array_values($message);
+      $date = date('H:i', $_SESSION['last']);
+      $sender2 = str_replace(" ", "%20", $sender);
+      $to2 = str_replace(" ", "%20", $to);
+      $smiles = split(':', $msg);
       if ($class == 'private')
       {
         $sent = '';
-        $names = split (',', $to);
+        $names = split(',', $to);
         foreach ($names as $key => $name)
         {
-          $name_link = ($name == $login) ?str_replace (" ", "%20", $sender) :str_replace (" ", "%20", $name);
+          $name_link = ($name == $login) ?str_replace(" ", "%20", $sender) :str_replace(" ", "%20", $name);
           $name_title = ($name == $login) ?$sender :$name;
           if ($sent != '')
             $sent .= ', ';
           $sent .= "<a href=javascript:top.AddTo('$name_link'); title='$name_title'><span class='private'>$name</span></a>";
         }
-        $msg = preg_replace ("/private \[\]/", "<font class='private'>private [$sent]</font>", $msg, 1);
+        $msg = preg_replace("/private \[\]/", "<font class='private'>private [$sent]</font>", $msg, 1);
       }
-      $msg = preg_replace ("/private \[/", "<a href=javascript:top.AddTo('$to2'); title='$to'><font class='private'>private</font></a> [", $msg, 1);
+      $msg = preg_replace("/private \[/", "<a href=javascript:top.AddTo('$to2'); title='$to'><font class='private'>private</font></a> [", $msg, 1);
       $i = 0;
       foreach ($smiles as $key => $value)
       {
-        if (file_exists ("img/smiles/$value.gif") && $i < 3)
+        if (file_exists("img/smiles/$value.gif") && $i < 3)
         {
-          $msg = preg_replace ("/\:$value\:/", "<img src='img/smiles/$value.gif' border='0' style='cursor: pointer;'>", $msg, 1);
+          $msg = preg_replace("/\:$value\:/", "<img src='img/smiles/$value.gif' border='0' style='cursor: pointer;'>", $msg, 1);
           $i++;
         }
         else if ($i >= 3)

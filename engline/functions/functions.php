@@ -838,7 +838,7 @@ class Test extends Char
       $this->char->error->Map(104, $need_sex);
     }
     
-    if (!in_array ($char_db['room'], explode (',', $from)) && $char_db['room'] != $room_go)
+    if (!in_array($char_db['room'], explode(',', $from)) && $char_db['room'] != $room_go)
       $this->char->error->Map(102);
     
     if (($time - (time() - $char_db['last_go'])) > 0 && !$return)
@@ -2501,12 +2501,12 @@ function getUpdateBar ()
 {
   $return = "<table width='80' border='0' cellspacing='0' cellpadding='0'>"
           . "<tr>"
-          . "<td><a href='javascript:location.reload();'><img src='img/room/rel_1.png' width='15' height='16' alt='Обновить' border='0' /></a></td>"
+          . "<td><a href='?action=none'><img src='img/room/rel_1.png' width='15' height='16' alt='Обновить' border='0' /></a></td>"
           . "<td>"
           . "<table width='80' border='0' cellspacing='0' cellpadding='0'>"
-          . "<tr><td colspan='3' align='center'><img src='img/navigatin_462s.gif' width='80' height='3' /></td></tr>"
+          . "<tr><td colspan='3' align='center'><img src='img/room/navigatin_462s.gif' width='80' height='3' /></td></tr>"
           . "<tr width='80'>"
-          . "<td><img src='img/navigatin_481.gif' width='9' height='8' /></td>"
+          . "<td><img src='img/room/navigatin_481.gif' width='9' height='8' /></td>"
           . "<td width='100%' bgcolor='#000000' nowrap><div id='prcont' align='center' style='font-size: 4px; padding: 0px; border: solid black 0px; text-align: center;'>";
   for ($i = 1; $i <= 32; $i++)
   {
@@ -2515,9 +2515,9 @@ function getUpdateBar ()
       $return .= "&nbsp;";
   }
   $return .= "</div></td>"
-          . "<td><img src='img/navigatin_50s.gif' width='7' height='8' /></td>"
+          . "<td><img src='img/room/navigatin_50s.gif' width='7' height='8' /></td>"
           . "</tr>"
-          . "<tr><td colspan='3'><img src='img/navigatin_tt1_532.gif' width='80' height='5' /></td></tr>"
+          . "<tr><td colspan='3'><img src='img/room/navigatin_tt1_532.gif' width='80' height='5' /></td></tr>"
           . "</table></td></tr></table>";
   return print $return;
 }

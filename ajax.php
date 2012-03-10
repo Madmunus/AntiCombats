@@ -45,14 +45,14 @@ switch ($do)
   case 'getroomname':
     $room = requestVar('room');
     $name = $char->city->getRoom($room, $city, 'name');
-    $name = "Вы перейдете в: <strong>$name</strong> (<a href='#' class='nick' onclick='return clear_solo ();'>отмена</a>)";
+    $name = "Вы перейдете в: <strong>$name</strong> (<a href='#' class='nick' onclick='return clear_solo();'>отмена</a>)";
     returnAjax($name);
   break;
   case 'showshapes':
     $available = requestVar('available', 1);
     $sex = ($sex == "male") ?"m" :"f";
     $shapes = $adb->select("SELECT * FROM `player_shapes` WHERE `sex` = ?s ORDER BY `id`;", $sex);
-    $required = array ('str', 'dex', 'con', 'vit', 'fire', 'water', 'air', 'earth', 'dark', 'light', 'int', 'wis', 'level', 'sword', 'axe', 'fail', 'knife');
+    $required = array('str', 'dex', 'con', 'vit', 'fire', 'water', 'air', 'earth', 'dark', 'light', 'int', 'wis', 'level', 'sword', 'axe', 'fail', 'knife');
     $return = "<table cellspacing='0' cellpadding='0' border='0' align='center'><tr>";
     $i = 0;
     foreach ($shapes as $shape)
@@ -68,7 +68,7 @@ switch ($do)
         if (!$requirement)
           $requirement = "$lang[min_stat]<br>";
         
-        $title .= (compare ($shape[$key], $char_feat[$key], "&bull; $lang[$key] $shape[$key]"))."<br>";
+        $title .= (compare($shape[$key], $char_feat[$key], "&bull; $lang[$key] $shape[$key]"))."<br>";
       }
       if ($availabled)
       {
@@ -94,7 +94,7 @@ switch ($do)
       returnAjax('error', 215);
     
     $shape = ($sex == "male") ?"m/$shape.gif" :"f/$shape.gif";
-    $adb->query("UPDATE `characters` SET `shape` = ?s, `next_shape` = ?d WHERE `guid` = ?d", $shape ,time () + 86400 ,$guid);
+    $adb->query("UPDATE `characters` SET `shape` = ?s, `next_shape` = ?d WHERE `guid` = ?d", $shape ,time() + 86400 ,$guid);
     returnAjax('complete');
   break;
   /*Invetory*/
@@ -160,7 +160,7 @@ switch ($do)
     $i = 0;
     foreach ($items as $id => $value)
     {
-      $q1 = $adb->query("UPDATE `character_inventory` SET `last_update` = ?d WHERE `guid` = ?d and `id` = ?d", time () + $i ,$guid ,$id);
+      $q1 = $adb->query("UPDATE `character_inventory` SET `last_update` = ?d WHERE `guid` = ?d and `id` = ?d", time() + $i ,$guid ,$id);
       $i++;
     }
     returnAjax('complete');
@@ -225,17 +225,17 @@ switch ($do)
     }
     asort ($bars);
 
-    if ($bar && in_array ($bar, array_keys($bars)) && $type && count ($bars) != 1)
+    if ($bar && in_array($bar, array_keys($bars)) && $type && count($bars) != 1)
     {
-      $d_b_v = explode ('|', $bars[$bar]);
+      $d_b_v = explode('|', $bars[$bar]);
       list ($d_b_n, $d_b_s) = array_values($d_b_v);
       if (($type == 'down' & $d_b_n != count($bars)) || ($type == 'up' & $d_b_n != 1))
       {
         $c_b_a = ($type == 'down') ?array_slice($bars, $d_b_n, 1) :array_slice($bars, $d_b_n - 2, 1);
-        list ($c_b_k) = array_keys($c_b_a);
-        list ($c_b_v) = array_values($c_b_a);
+        list($c_b_k) = array_keys($c_b_a);
+        list($c_b_v) = array_values($c_b_a);
         $c_b_v = explode('|', $c_b_v);
-        list ($c_b_n, $c_b_s) = array_values($c_b_v);
+        list($c_b_n, $c_b_s) = array_values($c_b_v);
         $d_b_n += ($type == 'down') ?1 :-1;
         $c_b_n += ($type == 'down') ?-1 :1;
         if ($adb->query("UPDATE `character_bars` SET ?# = ?s, ?# = ?s WHERE `guid` = ?d", $bar ,$d_b_n."|".$d_b_s ,$c_b_k ,$c_b_n."|".$c_b_s ,$guid))
@@ -244,10 +244,10 @@ switch ($do)
           foreach ($bars as $key => $value)
           {
             if ($value == 0)
-              unset ($bars[$key]);
+              unset($bars[$key]);
           }
           asort($bars);
-          returnAjax('complete', $bar, $char->showInventoryBar($bar, $bars[$bar], count ($bars)), $c_b_k, ($char->showInventoryBar($c_b_k, $bars[$c_b_k], count ($bars))));
+          returnAjax('complete', $bar, $char->showInventoryBar($bar, $bars[$bar], count($bars)), $c_b_k, ($char->showInventoryBar($c_b_k, $bars[$c_b_k], count($bars))));
         }
       }
       else
@@ -287,7 +287,7 @@ switch ($do)
         unset($cur_set['hand_r_free'], $cur_set['hand_r_type'], $cur_set['hand_l_free'], $cur_set['hand_l_type']);
         $adb->query("DELETE FROM `character_sets` WHERE `guid` = ?d and `name` = ?s", $guid ,$name);
         $adb->query("INSERT INTO `character_sets` (?#) 
-                     VALUES (?a);", array_keys($cur_set), array_values($cur_set)) or die ("errorA_D222");
+                     VALUES (?a);", array_keys($cur_set), array_values($cur_set)) or returnAjax('error', 222);
         returnAjax('complete', $char->getSetRow($name));
       break;
       case 'delete':
@@ -338,7 +338,7 @@ switch ($do)
                                    `inc_count_p` = ?d, 
                                    `last_update` = ?d 
                                WHERE `guid` = ?d 
-                                 and `id` = ?d", 'inc_'.$stat ,$inc ,$inc_p ,time () ,$guid ,$item_id);
+                                 and `id` = ?d", 'inc_'.$stat ,$inc ,$inc_p ,time() ,$guid ,$item_id);
                   returnAjax('complete', $inc + $i_info['add_'.$stat], $inc_p);
         break;
         default:  returnAjax('error', 219);
@@ -357,7 +357,7 @@ switch ($do)
     if ($guid != $bank_info['guid'])
       returnAjax('error', 322);
     
-    if (SHA1 ($credit.':'.$pass) != $bank_info['password'])
+    if (SHA1($credit.':'.$pass) != $bank_info['password'])
       returnAjax('error', 302);
     
     $_SESSION['bankСredit'] = $credit;
@@ -508,37 +508,6 @@ switch ($do)
       $char->history->transfers('Sell', "$name ($sell_price екр)", $_SERVER['REMOTE_ADDR'], 'Shop');
       returnAjax('complete', getMoney($money_euro), $mass, 405, "$name|$sell_price");
     }
-  break;
-  /*Stats*/
-  case 'increasestat':
-    $stat = requestVar('stat');
-    $travm = $char_feat['travm'];
-    $s_stat = str_replace (':', '', $lang[$stat]);
-    if ($char_stats['ups'] > 0 && $travm == 0 && isset($behaviour[$stat]) && $char_feat['level'] >= $behaviour[$stat] && $char->changeStats($stat, 1))
-    {
-      $adb->query("UPDATE `character_stats` SET `ups` = `ups` - '1' WHERE `guid` = ?d", $guid);
-      returnAjax('complete', 200, $s_stat);
-    }
-    else
-      returnAjax('error', 199, $s_stat);
-  break;
-  /*Skills*/
-  case 'increaseskill':
-    $stat = requestVar('stat');
-    $travm = $char_feat['travm'];
-    $weapon = array ('sword', 'fail', 'staff', 'knife', 'axe');
-    $magic = array ('fire', 'water', 'air', 'earth', 'light', 'gray', 'dark');
-    $char->showStatAddition();
-    $s_stat = str_replace (':', '', $lang[$stat]);
-    if ($char_stats['skills'] > 0 && $travm == 0 && isset($mastery[$stat]) && $char_feat['level'] >= $mastery[$stat] && 
-       ((in_array($stat, $weapon) & ($char_feat[$stat] - $added[$stat]) < 5) || (in_array($stat, $magic) & ($char_feat[$stat] - $added[$stat]) < 10)))
-    {
-      if ($adb->query("UPDATE `character_stats` SET ?# = ?# + '1' WHERE `guid` = ?d", $stat ,$stat ,$guid))
-        $adb->query("UPDATE `character_stats` SET `skills` = `skills` - '1' WHERE `guid` = ?d", $guid);
-      returnAjax('complete', 200, $s_stat);
-    }
-    else
-      returnAjax('error', 199, $s_stat);
   break;
 }
 ?>

@@ -66,7 +66,7 @@ $hps = array('fiz', 'dgv', 'group', 'haos');
   <tr>
     <td class="m" width="40">&nbsp;<b>Бои:</b></td>
     <td class="<?echo ($boy == 'fiz') ?"s" :"m"?>"><a href="?action=zayavka&boy=fiz" class="nick">1 на 1</a></td>
-    <td class="m"><a href="?action=zayavka&boy=dgv" class="nick">Учебные</a></td>
+    <td class="<?echo ($boy == 'dgv') ?"s" :"m"?>"><a href="?action=zayavka&boy=dgv" class="nick">Учебные</a></td>
     <td class="<?echo ($boy == 'group') ?"s" :"m"?>"><a href="?action=zayavka&boy=group" class="nick">Групповые</a></td>
     <td class="<?echo ($boy == 'haos') ?"s" :"m"?>"><a href="?action=zayavka&boy=haos" class="nick">Хаотичные</a></td>
     <td class="<?echo ($boy == 'tklogs') ?"s" :"m"?>"><a href="?action=zayavka&boy=tklogs" class="nick">Текущие</a></td>
