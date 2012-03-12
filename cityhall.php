@@ -41,7 +41,7 @@ $(function (){
   <input type="button" class="b" value=" Правила " id="link" link="none&do=info">&nbsp; &nbsp; &nbsp;
   <input type="button" class="b" value=" Стили Боя " id="link" link="none&do=learn_style">&nbsp; &nbsp; &nbsp;
   <input type="button" class="b" value=" Архив " id="link" link="none&do=best_fighters">&nbsp; &nbsp; &nbsp;
-  <input type="button" class="b" value=" Выход " id="link" link="go&room_go=centplosh">
+  <input type="button" class="b" value=" Выход " id="link" link="go&room_go=centsquare">
 </div>
 <br>
 <div style="border: 2px solid #cccccc; -moz-border-radius: 15px; background: #cccccc; padding: 0 5px 5px 5px;">

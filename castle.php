@@ -1,7 +1,7 @@
 <?
 defined('AntiBK') or die("Доступ запрещен!");
 ?>
-<link rel="StyleSheet" href="styles/room.css" type="text/css">
+<link rel="StyleSheet" href="styles/castle.css" type="text/css">
 <script src="scripts/move_check.js" type="text/javascript"></script>
 <?
 $online = $adb->selectCell("SELECT COUNT(*) FROM `online` WHERE `city` = ?s", $city);
@@ -28,28 +28,28 @@ switch ($room)
       echo "<img src='img/room/navig.jpg' border='1' />";
       echo "<img src='img/room/map_bk.png' class='map_bk' alt='Бойцовский Клуб' />";
       echo "<img id='passage' src='img/room/map_klub2.png' class='map_klub2' alt='".$char->city->getRoomOnline('castle2')."' onclick=\"solo('castle2');\" />";
-      echo "<img id='passage' src='img/room/map_klub3.png' class='map_klub3' alt='".$char->city->getRoomOnline('km_2')."' onclick=\"solo('km_2');\" />";
-      echo "<img id='passage' src='img/room/map_klub4.png' class='map_klub4' alt='".$char->city->getRoomOnline('km_1')."' onclick=\"solo('km_1');\" />";
-      echo "<img id='passage' src='img/room/map_klub5.png' class='map_klub5' alt='".$char->city->getRoomOnline('km_3')."' onclick=\"solo('km_3');\" />";
-      echo "<img id='passage' src='img/room/map_klub6.png' class='map_klub6' alt='".$char->city->getRoomOnline('km_4')."' onclick=\"solo('km_4');\" />";
-      echo "<img id='passage' src='img/room/map_klub7.png' class='map_klub7' alt='".$char->city->getRoomOnline('centplosh')."' onclick=\"solo('centplosh');\" />";
+      echo "<img id='passage' src='img/room/map_klub3.png' class='map_klub3' alt='".$char->city->getRoomOnline('hall_2')."' onclick=\"solo('hall_2');\" />";
+      echo "<img id='passage' src='img/room/map_klub4.png' class='map_klub4' alt='".$char->city->getRoomOnline('hall_1')."' onclick=\"solo('hall_1');\" />";
+      echo "<img id='passage' src='img/room/map_klub5.png' class='map_klub5' alt='".$char->city->getRoomOnline('hall_3')."' onclick=\"solo('hall_3');\" />";
+      echo "<img id='passage' src='img/room/map_klub6.png' class='map_klub6' alt='".$char->city->getRoomOnline('boudoir')."' onclick=\"solo('boudoir');\" />";
+      echo "<img id='passage' src='img/room/map_klub7.png' class='map_klub7' alt='".$char->city->getRoomOnline('centsquare')."' onclick=\"solo('centsquare');\" />";
       echo "<div class='fl1' style='left: 240px; top: 124px;'>";
   break;
-  case 'perehod':
+  case 'passage':
       echo "<img src='img/room/navig2.jpg' border='1' />";
       echo "<img src='img/room/map_zal3.png' class='map_zal3' alt='Комната Перехода' />";
-      echo "<img id='passage' src='img/room/map_zal2.png' class='map_zal2' alt='".$char->city->getRoomOnline('km_0')."' onclick=\"solo('km_0');\" />";
-      echo "<img id='passage' src='img/room/map_zal1.png' class='map_zal1' alt='".$char->city->getRoomOnline('km_2')."' onclick=\"solo('km_2');\" />";
+      echo "<img id='passage' src='img/room/map_zal2.png' class='map_zal2' alt='".$char->city->getRoomOnline('novice')."' onclick=\"solo('novice');\" />";
+      echo "<img id='passage' src='img/room/map_zal1.png' class='map_zal1' alt='".$char->city->getRoomOnline('hall_2')."' onclick=\"solo('hall_2');\" />";
       echo "<div class='fl1' style='left: 115px; top: 72px;'>";
   break;
-  case 'km_0':
+  case 'novice':
       echo "<img src='img/room/navig2.jpg' border='1' />";
       echo "<img src='img/room/map_zal2.png' class='map_zal2' alt='Комната для новичков' />";
-      echo "<img id='passage' src='img/room/map_zal3.png' class='map_zal3' alt='".$char->city->getRoomOnline('perehod')."' onclick=\"solo('perehod');\" />";
+      echo "<img id='passage' src='img/room/map_zal3.png' class='map_zal3' alt='".$char->city->getRoomOnline('passage')."' onclick=\"solo('passage');\" />";
       echo "<img id='passage' src='img/room/map_zal1.png' class='map_zal1' alt='Вход через Комнату Перехода' onclick=\"alert('Вход через Комнату Перехода');\" />";
       echo "<div class='fl1' style='left: 349px; top: 139px;'>";
   break;
-  case 'km_1':
+  case 'hall_1':
       echo "<img src='img/room/navig.jpg' border='1' />";
       echo "<img src='img/room/map_klub4.png' class='map_klub4' alt='Зал воинов' />";
       echo "<img src='img/room/map_klub1.png' class='map_klub1' $prohod1 />";
@@ -61,7 +61,7 @@ switch ($room)
       echo "<img id='passage' src='img/room/map_bk.png' class='map_bk' alt='".$char->city->getRoomOnline('castle')."' onclick=\"solo('castle');\" />";
       echo "<div class='fl1' style='left: 113px; top: 194px;'>";
   break;
-  case 'km_2':
+  case 'hall_2':
       echo "<img src='img/room/navig.jpg' border='1' />";
       echo "<img src='img/room/map_klub3.png' class='map_klub3' alt='Зал воинов 2' />";
       echo "<img src='img/room/map_klub1.png' class='map_klub1' $prohod1 />";
@@ -73,7 +73,7 @@ switch ($room)
       echo "<img id='passage' src='img/room/map_bk.png' class='map_bk' alt='".$char->city->getRoomOnline('castle')."' onclick=\"solo('castle');\" />";
       echo "<div class='fl1' style='left: 395px; top: 142px;'>";
   break;
-  case 'km_3':
+  case 'hall_3':
       echo "<img src='img/room/navig.jpg' border='1' />";
       echo "<img src='img/room/map_klub5.png' class='map_klub5' alt='Зал воинов 3' />";
       echo "<img src='img/room/map_klub1.png' class='map_klub1' $prohod1 />";
@@ -85,7 +85,7 @@ switch ($room)
       echo "<img id='passage' src='img/room/map_bk.png' class='map_bk' alt='".$char->city->getRoomOnline('castle')."' onclick=\"solo('castle');\" />";
       echo "<div class='fl1' style='left: 364px; top: 76px;'>";
   break;
-  case 'km_4':
+  case 'boudoir':
       echo "<img src='img/room/navig.jpg' border='1' />";
       echo "<img src='img/room/map_klub6.png' class='map_klub6' alt='Будуар' />";
       echo "<img src='img/room/map_klub1.png' class='map_klub1' $prohod1 />";

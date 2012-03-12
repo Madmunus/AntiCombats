@@ -1441,7 +1441,7 @@ print "</td></tr>";
 <b>Заклинания</b><br />
 &nbsp&nbsp<a class=us2 href='?type=scroll'>Магические свитки</a><br />
 <br />
-&nbsp&nbsp<a class=us2 href='main.php?act=go&room_go=centplosh'>Выйти</a><br />
+&nbsp&nbsp<a class=us2 href='main.php?act=go&room_go=centsquare'>Выйти</a><br />
 
 </td>
 <td width="25px" background="img/index/t6.jpg"></td>

@@ -124,17 +124,22 @@ var TimerOnHP = -1;		// id таймера HP
 var TimerOnMP = -1;		// id таймера MP
 var nowHP, maxHP, nowMP, maxMP, hspeed, mspeed;
 
-function showHP (now, max, newspeed)
+function showHP (now, max, newspeed, mini)
 {
 	nowHP = now;
 	maxHP = max;
+  hspeed = newspeed;
+  
 	if (TimerOnHP >= 0)
 	{
 		clearTimeout(TimerOnHP);
 		TimerOnHP = -1;
 	}
-	hspeed = newspeed;
-	setHPlocal();
+  
+  if (mini)
+    setHPmini();
+  else
+    setHPlocal();
 }
 
 function setHPlocal ()
@@ -159,8 +164,8 @@ function setHPlocal ()
 		imag = 'img/icon/bk_life_green.gif';
 	var rhp = Math.round(nowHP) + "/" + maxHP;
   var alt = 'Уровень жизни'+((plusHP > 0 && (difHP = maxHP-nowHP) > 0) ?'<br>Осталось: '+top.getFormatedTime(Math.round(difHP*delay/(plusHP*10))) :'');
-	$('#HP').html("<table border='0' cellpadding='0' cellspacing='0' width='"+le+"' align='center' style='padding-top: 1px;'><tr>"+
-                "<td style='position: absolute; width: "+le+"px; font-size: 9px; color: white; font-weight: bold; margin-top: -2px; padding-left: 5px;' align='left' alt='"+alt+"'>"+rhp+"</td>"+
+	$('#HP').html("<table border='0' cellpadding='0' cellspacing='0' width='120' align='center' style='padding-top: 1px;'><tr>"+
+                "<td style='position: absolute; width: 120px; font-size: 9px; color: white; font-weight: bold; margin-top: -2px; padding-left: 5px;' align='left' alt='"+alt+"'>"+rhp+"</td>"+
                 "<td style='width: "+h1+"px; height: 10px; background: url("+imag+") repeat-x;'></td>"+
                 "<td style='width: "+h2+"px; height: 10px; background: url(img/icon/bk_life_loose.gif) repeat-x;'></td>"+
                 "</tr></table>");
@@ -214,19 +219,6 @@ function setMPlocal ()
 		TimerOnMP = setTimeout(setMPlocal, delay * 100);
 }
 
-function showHpmini (now, max, newspeed)
-{
-	nowHP = now;
-	maxHP = max;
-	if (TimerOnHP >= 0)
-	{
-		clearTimeout(TimerOnHP);
-		TimerOnHP = -1;
-	}
-	hspeed = newspeed;
-	setHPmini();
-}
-
 function setHPmini ()
 {
   var plusHP = 0;
@@ -249,7 +241,7 @@ function setHPmini ()
 		imag = 'img/icon/bk_life_green.gif';
 	var rhp = Math.round(nowHP) + "/" + maxHP;
   var alt = 'Уровень жизни'+((plusHP > 0 && (difHP = maxHP-nowHP) > 0) ?'<br>Осталось: '+top.getFormatedTime(Math.round(difHP*delay/(plusHP*10))) :'');
-	$('#HP').html(" <span style='font-size: 10px; cursor: default;' alt='"+alt+"'>"+rhp+"</span> <table border='0' cellpadding='0' cellspacing='0' width='"+le+"' style='display: inline; vertical-align: middle;'><tr>"+
+	$('#HP').html(" <span style='font-size: 10px; cursor: default;' alt='"+alt+"'>"+rhp+"</span> <table border='0' cellpadding='0' cellspacing='0' width='120' style='display: inline; vertical-align: middle;'><tr>"+
                 "<td style='width: "+h1+"px; height: 10px; background: url("+imag+") repeat-x;'></td>"+
                 "<td style='width: "+h2+"px; height: 10px; background: url(img/icon/bk_life_loose.gif) repeat-x;'></td>"+
                 "</tr></table>");
@@ -258,7 +250,7 @@ function setHPmini ()
 		TimerOnHP = setTimeout(setHPmini, delay * 100);
 }
 
-/**///-- Сломанные вещи
+//-- Сломанные вещи
 var broken = new Array ();
 var i = 1;
 

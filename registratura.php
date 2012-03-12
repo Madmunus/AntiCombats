@@ -96,7 +96,7 @@ if($act=="clan" or $act=="reg_clan" or $act=="archive"){
 &nbsp&nbsp&nbsp&nbsp&nbsp
 <input type=button class=b value=" Архив кланов " onClick="location.href='registratura.php?act=archive';">
 &nbsp&nbsp&nbsp&nbsp&nbsp
-<input type=button class=b value=" Выход " onClick="location.href='main.php?act=go&room_go=centplosh';">
+<input type=button class=b value=" Выход " onClick="location.href='main.php?act=go&room_go=centsquare';">
 <?
 }
 ?>

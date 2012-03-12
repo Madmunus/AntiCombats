@@ -1,9 +1,9 @@
 <?
 defined('AntiBK') or die ("Доступ запрещен!");
 
-$room_info = $char->city->getRoom($room, $city, 'shop', 'shop_section');
+$shop_section = $char->city->getRoom($room, $city, 'shop_section');
 $section_shop = requestVar('section_shop', '', 7);
-$section_shop = (array_key_exists($section_shop, $data['sections_shop'])) ?$section_shop :$room_info['shop_section'];
+$section_shop = (array_key_exists($section_shop, $data['sections_shop'])) ?$section_shop :$shop_section;
 ?>
 <script src="scripts/shop.js" type="text/javascript"></script>
 <script src="scripts/move_check.js" type="text/javascript"></script>
@@ -63,21 +63,18 @@ else
   <table width="148" align='right' border="0" cellpadding="0" cellspacing="1" bgcolor="#DEDEDE">
     <tr>
       <td bgcolor="#D3D3D3"><img src="img/links.gif" width="9" height="7" /></td>
-      <td bgcolor="#D3D3D3" nowrap><a href="?action=go&room_go=centplosh" class="passage" alt="<?echo $char->city->getRoomOnline('centplosh', 'mini');?>">Центральная Площадь</a></td>
+      <td bgcolor="#D3D3D3" nowrap><a href="?action=go&room_go=centsquare" class="passage" alt="<?echo $char->city->getRoomOnline('centsquare', 'mini');?>">Центральная Площадь</a></td>
     </tr>
   </table><br><br>
   <div align='right'><small>
   Масса: <b><?echo "<span id='mass'>$mass</span>/$maxmass";?></b><br>
   У вас в наличии: <b><font color='#339900' id='money'><?echo getMoney($money);?></font></b> кр.
-<?
-  if ($money_euro > 0) echo "<br> <b><font color='#339900' id='money_euro'>".getMoney($money_euro)."</font></b> екр.";
-?>
   </small></div>
 <div style="margin-left: 25px; margin-top: 10px;">
 <?
 if ($section_shop == 'sell')
 {
-  $link = (empty($_COOKIE['section_shop'])) ?$room_info['shop_section'] :$_COOKIE['section_shop'];
+  $link = (empty($_COOKIE['section_shop'])) ?$shop_section :$_COOKIE['section_shop'];
   echo "<input type='button' value='Купить вещи' id='link' link='none&section_shop=$link' class='nav'>";
 }
 else

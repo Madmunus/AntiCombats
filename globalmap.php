@@ -1,7 +1,7 @@
 <?
 defined('AntiBK') or die("Доступ запрещен!");
 ?>
-<link rel="StyleSheet" href="styles/room.css" type="text/css">
+<link rel="StyleSheet" href="styles/globalmap.css" type="text/css">
 <script src="scripts/fireworks.js" type="text/javascript"></script>
 <script src="scripts/move_check.js" type="text/javascript"></script>
 <?
@@ -23,7 +23,7 @@ switch ($city)
   case 'dem':
     switch ($room)
     {
-      case 'centplosh':
+      case 'centsquare':
 ?>
       <img src="img/room/dem_bg1_<?echo $night;?>.jpg" border="1"/>
       <img src="img/room/dem_lsh.png" class="dem_lsh" />
@@ -61,7 +61,7 @@ switch ($city)
       <img id="passage" src="img/room/dem_skam1.png" class="dem_skam1" alt="<?echo $char->city->getRoomOnline('Маленький камень');?>" onclick="solo('o4')" />
       <img id="passage" src="img/room/dem_skam2.png" class="dem_skam2" alt="<?echo $char->city->getRoomOnline('Средний камень');?>" onclick="solo('o5')" />
       <img id="passage" src="img/room/dem_skam3.png" class="dem_skam3" alt="<?echo $char->city->getRoomOnline('Большой камень');?>" onclick="solo('o6')" />
-      <img id="passage" src="img/room/dem_left.png" class="dem_left" alt="<?echo $char->city->getRoomOnline('centplosh');?>" onclick="solo('centplosh')" />
+      <img id="passage" src="img/room/dem_left.png" class="dem_left" alt="<?echo $char->city->getRoomOnline('centsquare');?>" onclick="solo('centsquare')" />
       <img id="passage" src="img/room/dem_hostel.png" class="dem_hostel" alt="<?echo $char->city->getRoomOnline('Общежитие');?>" onclick="solo('o10')" />
       <img id="passage" src="img/room/dem_soul_stone.png" class="dem_soul_stone" alt="Камень Души" onclick="solo('o11')">
       <img id="passage" src="img/room/dem_right.png" class="dem_right2" alt="<?echo $char->city->getRoomOnline('Аллея Тьмы');?>" onclick="solo('o12')" />
@@ -73,7 +73,22 @@ switch ($city)
   case 'low':
     switch ($room)
     {
-      case 'centplosh':
+      case 'centsquare':
+?>
+      
+<?
+      break;
+      case 'fairstreet':
+?>
+      
+<?
+      break;
+    }
+  break;
+    case 'drm':
+    switch ($room)
+    {
+      case 'centsquare':
 ?>
       
 <?

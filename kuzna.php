@@ -40,7 +40,7 @@ if($num == "1"){
 <tr>
 <td width=20% valign=top>
 &nbsp&nbsp&nbsp&nbsp<a href='?act=kuznaclose' class=us2>Уволится</a><br>
-&nbsp&nbsp&nbsp&nbsp<a href='main.php?act=go&room_go=centplosh' class=us2>Выход</a><br>
+&nbsp&nbsp&nbsp&nbsp<a href='main.php?act=go&room_go=centsquare' class=us2>Выход</a><br>
 </td>
 <td valign=top>
 
@@ -149,7 +149,7 @@ print "<td valign=top bgcolor=#fffbbb><span class=usuallyb>";
 <li>Вы сами выбераете класс вещи. <br>Но вы не можете выбирать саму вещь.</li>
 </ol>
 &nbsp&nbsp&nbsp&nbsp<a class=us2 href='?act=kuznaopen'>Устроится на работу</a><br>
-&nbsp&nbsp&nbsp&nbsp<a href='main.php?act=go&room_go=centplosh' class=us2>Выход</a><br>
+&nbsp&nbsp&nbsp&nbsp<a href='main.php?act=go&room_go=centsquare' class=us2>Выход</a><br>
 </td>
 <td valign=top>
 <?

@@ -174,7 +174,7 @@ switch (date('m'))
   break;
 }
 $login = ($server['login']) ?"return true;" :"alert ('Сервер оффлайн'); return false;";
-$registration = ($server['registration']) ?"window.location = 'reg.php';" :"alert ('Регистрация закрыта');";
+$registration = ($server['registration']) ?"window.location = 'register.php';" :"alert ('Регистрация закрыта');";
 $rpassword = ($server['password']) ?"pass.php" :"index.php";
 ?>
 <body>

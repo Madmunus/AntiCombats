@@ -61,20 +61,9 @@ $data['towns'] = array(
   'Латвия', 'Литва', 'Таджикистан', 'Туркменистан', 'Узбекистан', 'Украина', 'Эстония', 'Германия/Germany', 'Израиль/Israel', 'Канада/Canada', 'США/USA',
 );
 
-$data['shop_flags'] = array(
-  'cap'  => 1,
-  'drm'  => 2,
-  'low'  => 4,
-  'old'  => 8,
-  'ang'  => 16,
-  'dem'  => 32,
-  'dev'  => 64,
-  'sun'  => 128,
-  'em'   => 256,
-  'sand' => 512,
-  'moon' => 1024,
-  'nc'   => 2048,
-  'ap'   => 4096
+$data['room_flags'] = array(
+  1 => 'fights',
+  2 => 'shop'
 );
 
 $data['item_flags'] = array(

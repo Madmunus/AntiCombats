@@ -28,11 +28,11 @@ $step = requestVar('step');
 <script src="scripts/scripts.js" type="text/javascript"></script>
 <script type="text/javascript">
 var n, error = '';
-var regfail = new Array ();
+var regfail = new Array();
 
 function regcheck (login)
 {
-  var testwords = new Array ();
+  var testwords = new Array();
   for (var i in regfail)
   {
     if (regfail[i] != '')
@@ -61,6 +61,8 @@ $(function (){
     $(this).val($(this).val().replace(/[^a-zA-Zа-яА-Я\-_]/g, ''));
   });
   $('form[name=regstep1]').live('submit', function (){
+    error = '';
+    $("#error").hide().html('');
     var eng_log = false, rus_log = false, match = 1;
     var login = $('input[name=reg_login]').val();
     for (i = 1; i <= login.length; i++)
@@ -76,7 +78,7 @@ $(function (){
       error = 'Все вариации логина '+login+' запрещены.';
     else if ((/[\-]+[\-]/.test(login)))
       error = 'Запрещено использовать два разделительных символа подряд';
-    else if (regcheck (login))
+    else if (regcheck(login))
       error = 'Выберите, пожалуйста, другой ник.';
     else if (eng_log && rus_log)
       error = 'В логине разрешено использовать только буквы одного алфавита русского или английского. Нельзя смешивать.';
@@ -91,10 +93,12 @@ $(function (){
           $("#error").show().html('Логин '+login+' уже занят, выберите другой.');
       });
     }
-    $("#error").show().html(error);
+    if (error)
+      $("#error").show().html(error);
     return false;
   });
   $('form[name=regstep2]').live('submit', function (){
+    $("#error").hide().html('');
     var password = $('input[name=password]').val();
     var password_confirm = $('input[name=password_confirm]').val();
     if (password.length < 6 || password.length > 30)
@@ -109,6 +113,7 @@ $(function (){
     return false;
   });
   $('form[name=regstep3]').live('submit', function (){
+    $("#error").hide().html('');
     var email = $('input[name=email]').val();
     if (email.length < 6 || email.length > 50)
       error = 'Email не может быть короче 6-х символов и длинее 50-ти символов.';
@@ -120,6 +125,7 @@ $(function (){
     return false;
   });
   $('form[name=regstep4]').live('submit', function (){
+    $("#error").hide().html('');
     var name = $('input[name=name]').val();
     var birth_day = $('select[name=birth_day]').val();
     var birth_month = $('select[name=birth_month]').val();
@@ -197,11 +203,11 @@ echo "<script type='text/javascript'>$regfail</script>";
       default :
       case '':
 ?>
-                <form name="regstep1" action="reg.php?step=2" class="norm" method="post">
+                <form name="regstep1" action="?step=2" class="norm" method="post">
                 <table class="g" align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
                   <tr class="bg6">
                     <td><span class="style5">* </span>&nbsp;Имя вашего<br> &nbsp; &nbsp; персонажа (login):</td>
-                    <td><input type="text" name="reg_login" class="inup" size="25" maxlength="15" value=""> &nbsp;<input type="submit" class="btn" value="Продолжить"></td>
+                    <td><input type="text" name="reg_login" class="inup" size="25" maxlength="15" value="<?echo (isset($_SESSION['reg_login'])) ?$_SESSION['reg_login'] :'';?>"> &nbsp;<input type="submit" class="btn" value="Продолжить"></td>
                   </tr>
                   <tr>
                     <td colspan="2" style="padding: 5px 0 0 20px;">
@@ -225,7 +231,7 @@ echo "<script type='text/javascript'>$regfail</script>";
         case 2:
           if (!isset($_SESSION['reg_login'])) die($error_text);
 ?>
-                <form name="regstep2" action="reg.php?step=3" class="norm" method="post">
+                <form name="regstep2" action="?step=3" class="norm" method="post">
                 <table class="g" align="center" border="0" cellpadding="0" cellspacing="0">
                   <tr class="bg6">
                     <td width="500"><span class="style5">*</span><font style="margin-left: 20px;">Имя вашего персонажа:</font></td>
@@ -252,7 +258,7 @@ echo "<script type='text/javascript'>$regfail</script>";
                     </td>
                   </tr>
                   <tr>
-                    <td><input onclick="window.history.go(-1);" type="button" class="btn" value="Вернуться"></td>
+                    <td><input onclick="location.href='?step=1';" type="button" class="btn" value="Вернуться"></td>
                     <td><input type="submit" class="btn" value="Продолжить"></td>
                   </tr>
                 </table>
@@ -262,7 +268,7 @@ echo "<script type='text/javascript'>$regfail</script>";
           if (!isset($_POST['password']) || !isset($_POST['password_confirm'])) die($error_text);
           $_SESSION['reg_password'] = $_POST['password'];
 ?>
-                <form name="regstep3" action="reg.php?step=4" class="norm" method="post">
+                <form name="regstep3" action="?step=4" class="norm" method="post">
                 <table class="g" align="center" border="0" cellpadding="1" cellspacing="0">
                   <tr class="bg6">
                     <td width="500"><span class="style5">*</span><font style="margin-left: 15px;">Имя вашего персонажа:</font></td>
@@ -287,7 +293,7 @@ echo "<script type='text/javascript'>$regfail</script>";
                   </tr>
                   <tr><td colspan="2" style="padding: 5px 0 10px 27px;"><span class="style7"><small>(Если указаны вопрос и ответ, то высылка пароля на email будет производится лишь при правильном ответе)</small></span></td></tr>
                   <tr>
-                    <td><input onclick="window.history.go(-1);" type="button" class="btn" value="Вернуться"></td>
+                    <td><input onclick="location.href='?step=2';" type="button" class="btn" value="Вернуться"></td>
                     <td><input type="submit" class="btn" value="Продолжить"></td>
                   </tr>
                 </table>
@@ -298,12 +304,12 @@ echo "<script type='text/javascript'>$regfail</script>";
           $email = $_POST['email'];
           $secretquestion = $_POST['secretquestion'];
           $secretanswer = $_POST['secretanswer'];
-          $code = rand(1000, 9999);
+          //$code = rand(1000, 9999);
           $_SESSION['reg_email'] = $email;
           $_SESSION['secretquestion'] = $secretquestion;
           $_SESSION['secretanswer'] = $secretanswer;
 ?>
-                <form name="regstep4" action="reg.php?step=5" class="norm" method="post">
+                <form name="regstep4" action="?step=5" class="norm" method="post">
                 <table class="g" align="center" border="0" cellpadding="1" cellspacing="0" width="100%">
                   <tr class="bg6">
                     <td><span class="style5">*</span><font style="margin-left: 8px;">Имя вашего</font> <div style="margin-left: 17px;">персонажа:</div></td>
@@ -382,7 +388,7 @@ echo "<script type='text/javascript'>$regfail</script>";
 </td>
 </tr>  --->
                   <tr>
-                    <td><input onclick="window.history.go(-1);" type="button" class="btn" value="Вернуться"></td>
+                    <td><input onclick="location.href='?step=3';" type="button" class="btn" value="Вернуться"></td>
                     <td><input type="submit" class="btn" value="Продолжить"></td>
                   </tr>
                 </table>
@@ -395,7 +401,6 @@ echo "<script type='text/javascript'>$regfail</script>";
           $email = $_SESSION['reg_email'];
           $secretquestion = htmlspecialchars($_SESSION['secretquestion']);
           $secretanswer = htmlspecialchars($_SESSION['secretanswer']);
-          $rules = $_POST['rules'];
           // $code = $_POST['secret_code'];
           // $code_loaded = $_POST['code_loaded'];
           $name = requestVar('name');
@@ -404,10 +409,10 @@ echo "<script type='text/javascript'>$regfail</script>";
           $hide_icq = requestVar('hide_icq', 0);
           $town = (isset($_POST['city_n']) && $_POST['city_n'] != '') ?htmlspecialchars($_POST['city_n']) :((isset($_POST['city'])) ?htmlspecialchars($_POST['city']) :"");
           $city = "dem";
-          $deviz = $_POST['deviz'];
-          $color = $_POST['color'];
+          $deviz = requestVar('deviz');
+          $color = requestVar('color');
           //elseif($code != $code_loaded){echo 'Ошибка при введении кода! <a href="?step=4">Назад</a><br>'; die();}
-          $birthday = $_POST['birth_day'].".".$_POST['birth_month'].".".$_POST['birth_year'];
+          $birthday = requestVar('birth_day').".".requestVar('birth_month').".".requestVar('birth_year');
           $shape = ($sex == "male") ?"m/0.gif" :"f/0.gif";
           unset($_SESSION['reg_login'], $_SESSION['reg_password'], $_SESSION['reg_email'], $_SESSION['secretquestion'], $_SESSION['secretanswer']);
           if ($adb->selectCell("SELECT COUNT(*) FROM `characters` WHERE `login` = ?s", $reg_login) == 0)
@@ -442,8 +447,6 @@ echo "<script type='text/javascript'>$regfail</script>";
             $char->history->authorization(2, $city);
             echoScript("location.href = 'enter.php?login=$reg_login&password=$password';", true);
           }
-          else
-            echo "Вы уже создали персонажа с таким логином!";
         break;
     }
 ?>

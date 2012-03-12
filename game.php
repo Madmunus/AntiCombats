@@ -9,10 +9,10 @@
 <script type="text/javascript">
 $(function (){
   $('[name=menu]').attr('src', 'topp.php');
-  $('[name=main]').attr('src', 'main.php?action=enter');
   $('[name=msg]').attr('src', 'msg.php');
   $('[name=user]').attr('src', 'users.php');
   $('[name=talk]').attr('src', 'talk.php');
+  $('[name=main]').attr('src', 'main.php?action=enter');
 });
 </script>
 </head>

@@ -5,22 +5,23 @@ defined('AntiBK') or die ("Доступ запрещен!");
 body {background-color: #e2e0e0;}
 </style>
 <?
-switch ($do)
+switch ($action)
 {
   case 'shape':
-    echoScript("$(function (){showShapes (1);});");
+    echoScript("$(function (){showShapes(1);});");
+    
     if ($char_db['next_shape'] && $char_db['next_shape'] > time())
       $char->error->Inventory(111, getFormatedTime($char_db['next_shape']));
     
     echo "<table width='100%' cellspacing='0' cellpadding='0' border='0' style='margin-bottom: -10px;'><tr>";
-    echo "<td valign='top' nowrap><input type='submit' id='shape_a' value='Доступные' class='nav' style='background-color: #A9AFC0;' onclick='showShapes (1);'>&nbsp;<input type='submit' id='shape_na' value='Все образы' class='nav' onclick='showShapes (0);'></td>";
+    echo "<td valign='top' nowrap><input type='submit' id='shape_a' value='Доступные' class='nav' style='background-color: #A9AFC0;' onclick='showShapes(1);'>&nbsp;<input type='submit' id='shape_na' value='Все образы' class='nav' onclick='showShapes(0);'></td>";
     echo "<td width='100%' align='right'><h3>Выбрать образ персонажа \"$login\"</h3></td>";
     echo "<td valign='top' nowrap><input type='button' class='help' value='$lang[hint]' id='hint' link='image'>&nbsp;<input type='button' value='$lang[return]' id='link' link='inv' class='nav'></td>";
     echo "</tr></table>";
     echo "<font color='red' id='error'></font>";
     echo "<div id='shapes' style='width: 100%;'></div>";
   break;
-  case 'passandmail':
+  case 'security':
     $pass = requestVar('pass');
     
     if (isset($_POST['changeMail']))
@@ -139,7 +140,7 @@ switch ($do)
 2. Вводите логин и пароль только на титульной странице <a href="../" target="_blank" class="nick">www.combats.com</a> Ни на каких других сайтах, которые будут как две капли похожие на наш, и куда вас зазывают обещая на халяву предметы и кредиты, не вводите свой пароль! Иначе вы рискуете потерять своего персонажа.<br>
 Настоятельно рекомендуем прочесть заметку <a href="encicl/FAQ/afer.html" target="_blank" class="nick">Виды обмана в Бойцовском Клубе</a>.<br><br>
 Если вы играете из интернет кафе или компьютерного клуба, где шанс быть взломанным очень высокий, рекомендуем включить второй и третий уровень защиты (см. ниже)<br><br>
-<form action="main.php?action=form&do=passandmail" name="pass_form" method="post">
+<form action="main.php?action=security" name="pass_form" method="post">
 <fieldset><legend><b>&nbsp;Сменить пароль</b></legend>
 <table>
 <tr><td align="right">Старый пароль:</td><td><input type="password" name="pass" size="15" maxlength="31"></td></tr>
@@ -149,7 +150,7 @@ switch ($do)
 </table>
 </fieldset>
 </form>
-<form action="main.php?action=form&do=passandmail" name="mail_form" method="post">
+<form action="main.php?action=security" name="mail_form" method="post">
 <fieldset><legend><b>&nbsp;Сменить email</b></legend>
 <table>
 <tr><td align="right">Ваш пароль:</td><td><input type="password" name="pass" size="15" maxlength="31"></td></tr>
@@ -159,7 +160,7 @@ switch ($do)
 </table>
 </fieldset>
 </form>
-<form action="main.php?action=form&do=passandmail" name="secret_form" method="post">
+<form action="main.php?action=security" name="secret_form" method="post">
 <fieldset><legend><b>&nbsp;Сменить секретный вопрос/ответ</b></legend>
 <table>
 <tr><td align="right">Ваш пароль:</td><td><input type="password" name="pass" size="15" maxlength="31"></td></tr>
@@ -227,7 +228,7 @@ switch ($do)
   <td valign="top"><input type="button" value="<?echo $lang['return'];?>" id="link" link="inv" class="nav"></td>
 </tr></table>
 <table width="95%" border="0" align="center" cellpadding="3" cellspacing="1" bgcolor="#B2B2B2">
-<form name="info_form" action="main.php?action=form&do=info" method="post">
+<form name="info_form" action="main.php?action=info" method="post">
 <tr class="anketabg"><td width="170">Ваше реальное имя: </td><td><input name="name" value="<?echo $s_name;?>" size="45" maxlength="90" /></td></tr>
 <tr class="anketabg">
   <td>День рождения: </td>

@@ -88,9 +88,7 @@ switch ($do)
                           ORDER by `login_display`", $city ,$room);
     foreach ($rows as $online)
     {
-      if ((time() - $online['last_time']) > 100)
-        $adb->query("DELETE FROM `online` WHERE `guid` = ?d", $online['guid']);
-      else
+      if ($char->test->Online($online['guid']))
         $user_list .= $char->info->character('online', $online['guid']);
     }
     returnAjax($user_list);
@@ -103,6 +101,7 @@ switch ($do)
     $send = "";
 
     $last = (isset($_SESSION['last'])) ?$_SESSION['last'] :0;
+    
     if (!$last || $go)
       $last = $_SESSION['last'] = time() - 300;
 

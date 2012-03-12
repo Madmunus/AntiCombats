@@ -71,7 +71,7 @@ else if ($char_info['block'])
   die ("$top Внимание!!! Персонаж $login заблокирован!$bot");
 }
 
-if (session_is_registered ('guid'))
+if (session_is_registered('guid'))
 {
   deleteSession();
   $_SESSION['guid'] = $guid;
@@ -81,8 +81,8 @@ else
 
 $adb->query("DELETE FROM `online` WHERE `guid` = ?d", $guid);
 $adb->query("INSERT INTO `online` (`guid`, `login_display`, `ip`, `city`, `room`, `last_time`) 
-             VALUES (?d, ?s, ?s, ?s, ?s, ?d);", $guid ,$login ,$_SERVER['REMOTE_ADDR'] ,$char_info['city'] ,$char_info['room'] ,time ());
-$adb->query("UPDATE `characters` SET `last_go` = ?d WHERE `guid` = ?d", time () ,$guid);
+             VALUES (?d, ?s, ?s, ?s, ?s, ?d);", $guid ,$login ,$_SERVER['REMOTE_ADDR'] ,$char_info['city'] ,$char_info['room'] ,time());
+$adb->query("UPDATE `characters` SET `last_go` = ?d WHERE `guid` = ?d", time() ,$guid);
 $_SESSION['zayavka_c_m'] = 1;
 $_SESSION['zayavka_c_o'] = 1;
 $_SESSION['battle_ref']  = 0;

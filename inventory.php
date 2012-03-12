@@ -3,14 +3,13 @@ defined('AntiBK') or die ("Доступ запрещен!");
 ?>
 <script src="scripts/inventory.js" type="text/javascript"></script>
 <?
-if ($action == 'wear_item')
-  $char->equip->equipItem($item_id);
-else if ($action == 'unwear_item')
-  $char->equip->equipItem($item_slot, -1);
-else if ($action == 'unwear_full')
-  $char->equip->unWearAllItems();
-else if ($action == 'wear_set')
-  $char->equip->equipSet($set_name);
+switch ($action)
+{
+  case 'wear_item':   $char->equip->equipItem($item_id);       break;
+  case 'wear_set':    $char->equip->equipSet($set_name);       break;
+  case 'unwear_item': $char->equip->equipItem($item_slot, -1); break;
+  case 'unwear_full': $char->equip->unWearAllItems();          break;
+}
 
 $bars = $char->getChar('char_bars', 'stat', 'mod', 'power', 'def', 'btn', 'set');
 foreach ($bars as $key => $value)
@@ -86,7 +85,7 @@ echo ($orden == 1 || $orden == 2) ?"<strong>$orden_dis$stat_rang</strong><br></s
                     <tr>
                       <td background="im/menu-but.gif" height="25" align="right" valign="middle">
                         <font color='red' id='error'><?$char->error->getFormattedError($error, $parameters);?></font>
-                        <input type="button" class="nav" value="<?echo $lang['shape'];?>" title="<?echo $lang['shape_choose'];?>" id="link" link="form&do=shape">
+                        <input type="button" class="nav" value="<?echo $lang['shape'];?>" title="<?echo $lang['shape_choose'];?>" id="link" link="shape">
                         <input type="button" class="nav" value="<?echo $lang['abilities'];?>" id="link" link="skills">
                         <input type="button" class="nav" value="<?echo $lang['form'];?>" title="<?echo $lang['form'];?>" id="link" link="form&do=info">
                         <input type="button" class="nav" value="<?echo $lang['security'];?>" title="<?echo $lang['change_pass_mail'];?>" style="font-weight: bold;" id="link" link="form&do=passandmail">

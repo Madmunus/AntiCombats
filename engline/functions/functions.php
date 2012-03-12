@@ -20,7 +20,7 @@ class Char
     $object = new Char;
     $object->guid = $guid;
     $object->db = $adb;
-    $classes = array ('test', 'equip', 'city', 'mail', 'bank', 'chat', 'info', 'history', 'error');
+    $classes = array('test', 'equip', 'city', 'mail', 'bank', 'chat', 'info', 'history', 'error');
     foreach ($classes as $class)
     {
       $object->{$class} = new $class;
@@ -37,7 +37,7 @@ class Char
     $args = func_get_args();
     $args_num = func_num_args();
     
-    if (is_numeric ($args[$args_num-1]))
+    if (is_numeric($args[$args_num-1]))
     {
       $guid = $args[$args_num-1];
       unset($args[$args_num-1]);
@@ -54,7 +54,7 @@ class Char
       case 'char_bars':  $table = 'character_bars';  break;
     }
     
-    unset ($args[0]);
+    unset($args[0]);
     
     if ($args[1] == '*')
       return $this->db->selectRow("SELECT * FROM ?# WHERE `guid` = ?d", $table ,$guid);
@@ -379,7 +379,7 @@ class Char
           $content .= ($char_stats['mf_'.$key] != 0) ?"<span alt='".$lang[$key.'_p']."'>".$lang[$key.'_i']." +".$char_stats['mf_'.$key]."%</span><br>" :"";
       break;
       case 'def':        /*Защита*/
-        $ress = array ('sting', 'slash', 'crush', 'sharp', 'fire', 'water', 'air', 'earth', 'light', 'gray', 'dark');
+        $ress = array ('sting', 'slash', 'crush', 'sharp', 'fire', 'water', 'air', 'earth', 'light', 'dark', 'gray');
         foreach ($ress as $key)
           $content .= "<span alt='".$lang[$key.'_d']."'>".$lang[$key.'_i']." ".$char_stats['res_'.$key]."</span><br>";
       break;
@@ -551,8 +551,6 @@ class Test extends Char
   {
     if ($this->guid == 0 || !is_numeric($this->guid))
       toIndex($type, true, $loc);
-    else if ($type == 'info')
-      return;
     
     $char_db = $this->getChar('char_db', 'guid');
     $char_stats = $this->getChar('char_stats', 'guid');
@@ -632,7 +630,7 @@ class Test extends Char
     if ($_SESSION['zayavka_c_m'] == 0 && $zayavka_status == "confirm_mine")
     {
       $_SESSION['zayavka_c_m'] = 1;
-      echoScript("top.main.location.href = 'zayavka.php?boy=phisic';", true);
+      echoScript("top.main.location.href = 'zayavka.php';", true);
     }
     
     if ($_SESSION['zayavka_c_o'] == 0 && $t == 0)
@@ -810,12 +808,11 @@ class Test extends Char
     if (!$room_go)
       $this->char->error->Map(102);
     
-    $char_db = $this->getChar('char_db', 'room', 'city', 'sex', 'level', 'last_go', 'prision');
+    $char_db = $this->getChar('char_db', 'room', 'city', 'sex', 'level', 'prision');
     $char_stats = $this->getChar('char_stats', 'mass', 'maxmass');
-    $time = $this->char->city->getRoom($char_db['room'], $char_db['city'], 'time');
     $room_info = $this->char->city->getRoom($room_go, $char_db['city'], 'room', 'from', 'min_level', 'max_level', 'need_orden', 'sex') or $this->char->error->Map(102);
     
-    list ($room_go, $from, $min_level, $max_level, $need_orden, $need_sex) = array_values ($room_info);
+    list($room_go, $from, $min_level, $max_level, $need_orden, $need_sex) = array_values($room_info);
     
     if ($char_db['prision'] != 0)
       $this->char->error->Map(100);
@@ -841,7 +838,7 @@ class Test extends Char
     if (!in_array($char_db['room'], explode(',', $from)) && $char_db['room'] != $room_go)
       $this->char->error->Map(102);
     
-    if (($time - (time() - $char_db['last_go'])) > 0 && !$return)
+    if (($this->char->city->getRoomGoTime()) > 0 && !$return)
       $this->char->error->Map(110);
   }
   /*Проверка всех предметов*/
@@ -916,6 +913,21 @@ class Test extends Char
       if ($effect['end_time'] != 0 && time() > $effect['end_time'])
         $this->deleteEffect($effect['effect_entry']);
     }
+  }
+  /*Проверка онлайн*/
+  function Online ($guid = 0)
+  {
+    if ($guid == $this->guid)
+      return true;
+    
+    $last_time = $this->getChar('char_db', 'last_time', $guid);
+    
+    if ((time() - $last_time) > 100)
+    {
+      $this->db->query("DELETE FROM `online` WHERE `guid` = ?d", $guid);
+      return false;
+    }
+    return true;
   }
 }
 /*Функции работы с предметами*/
@@ -1029,7 +1041,7 @@ class Equip extends Char
     $this->char->history->transfers('Throw out', $name, $_SERVER['REMOTE_ADDR'], 'Dump');
   }
   /*Отображение снаряжения*/
-  function showCharacter($type = '', $guid = 0)
+  function showCharacter ($type = '', $guid = 0)
   {
     $guid = (!$guid) ?$this->guid :$guid;
     $char_equip = $this->getChar('char_equip', '*');
@@ -1043,10 +1055,6 @@ class Equip extends Char
       case 'inv':
         $char_feat['name'] = "alt='$char_feat[login] (Перейти в \"$lang[abilities]\")' id='link' link='skills'";
       break;
-      case 'info':
-        $char_type = 'info';
-        $char_feat['name'] = "alt='$char_feat[login]'";
-      break;
       default:
         $char_feat['name'] = "alt='$char_feat[login] (Перейти в \"Инвентарь\")' id='link' link='inv'";
       break;
@@ -1055,10 +1063,10 @@ class Equip extends Char
     $char_equip['hand_l_s'] = (!$char_equip['hand_l_free']) ?"hand_l" :"hand_l_f";
     
     echo $this->char->info->character($char_type);
-    echo ($type == 'info') ?"<div style='height: 9px;'></div>" :'';
     echo $this->getCharacterEquipped($char_equip, $char_feat, $type);
-    echoScript("showHP($char_feat[hp], $char_feat[hp_all], $char_feat[hp_regen]);".
-               "showMP($char_feat[mp], $char_feat[mp_all], $char_feat[mp_regen]);");
+    if ($type != 'smart')
+      echoScript("showHP($char_feat[hp], $char_feat[hp_all], $char_feat[hp_regen]);".
+                 "showMP($char_feat[mp], $char_feat[mp_all], $char_feat[mp_regen]);");
   }
   /*Получение одетых вещей*/
   function getCharacterEquipped ($char_equip, $char_feat, $type)
@@ -1066,7 +1074,7 @@ class Equip extends Char
     if (!$char_equip || !$char_feat)
       return;
     
-    $backup = ($type == 'info' || $type == 'smart') ?"<img src='img/items/slot_bottom0.gif' border='0'>" :"<img src='img/items/w20.gif' border='0' alt='Пустой правый карман'><img src='img/items/w20.gif' border='0' alt='Пустой карман'><img src='img/items/w20.gif' border='0' alt='Пустой левый карман'><img src='img/items/w21.gif' border='0' alt='Смена оружия'><img src='img/items/w21.gif' border='0' alt='Смена оружия'><img src='img/items/w21.gif' border='0' alt='Смена оружия'>";
+    $backup = ($type == 'smart') ?"<img src='img/items/slot_bottom0.gif' border='0'>" :"<img src='img/items/w20.gif' border='0' alt='Пустой правый карман'><img src='img/items/w20.gif' border='0' alt='Пустой карман'><img src='img/items/w20.gif' border='0' alt='Пустой левый карман'><img src='img/items/w21.gif' border='0' alt='Смена оружия'><img src='img/items/w21.gif' border='0' alt='Смена оружия'><img src='img/items/w21.gif' border='0' alt='Смена оружия'>";
     $equipped = "<table border='0' width='227' class='posit' cellspacing='0' cellpadding='0'>";
     
     if ($type != 'smart' && $char_feat['block'])
@@ -1170,7 +1178,7 @@ class Equip extends Char
       if ($i_info['def_'.$key.'_min'] > 0)
         $desc .= "<br>".$lang['def_'.$key]." ".$i_info['def_'.$key.'_min']."-".$i_info['def_'.$key.'_max']." ".$this->getFormatedBrick($i_info['def_'.$key.'_min'], $i_info['def_'.$key.'_max']);
     }
-    $desc .= "<br>$lang[durability] ".sprintf($tear_show, intval ($i_info['tear_cur'])."/".ceil ($i_info['tear_max']));
+    $desc .= "<br>$lang[durability] ".sprintf($tear_show, intval($i_info['tear_cur'])."/".ceil($i_info['tear_max']));
     return $desc;
   }
   /*Перечисление предметов нуждающихся в ремонте*/
@@ -1834,19 +1842,32 @@ class City extends Char
     $this->db = $object->db;
     $this->char = $object;
   }
+  /*Получение информации о городе*/
+  function getCity ()
+  {
+    $args = func_get_args();
+    $args_num = func_num_args();
+    $city = $args[0];
+    unset($args[0]);
+    
+    if ($args_num == 2)
+      return $this->db->selectCell("SELECT ?# FROM `server_cities` WHERE `city` = ?s", $args ,$city);
+    else
+      return $this->db->selectRow("SELECT ?# FROM `server_cities` WHERE `city` = ?s", $args ,$city);
+  }
   /*Получение информации о комнате*/
   function getRoom ()
   {
     $args = func_get_args();
     $args_num = func_num_args();
     $room = $args[0];
-    $city = $args[1];
+    $city = $this->getCity($args[1], 'flag');
     unset($args[0], $args[1]);
     
     if ($args_num == 3)
-      return $this->db->selectCell("SELECT ?# FROM `city_rooms` WHERE `room` = ?s and city = ?s", $args ,$room ,$city);
+      return $this->db->selectCell("SELECT ?# FROM `city_rooms` WHERE `room` = ?s and `city` & ?d", $args ,$room ,$city);
     else
-      return $this->db->selectRow("SELECT ?# FROM `city_rooms` WHERE `room` = ?s and city = ?s", $args ,$room ,$city);
+      return $this->db->selectRow("SELECT ?# FROM `city_rooms` WHERE `room` = ?s and `city` & ?d", $args ,$room ,$city);
   }
   /*Получение времени до возможности перехода*/
   function getRoomGoTime ()
@@ -1857,7 +1878,9 @@ class City extends Char
     if (!$time || !$char_db['room'])
       return 0;
     
-    return ($time - (time() - $char_db['last_go']));
+    $time_to_go = $time - (time() - $char_db['last_go']);
+    
+    return ($time_to_go >= 0) ?$time_to_go :0;
   }
   /*Получение кол-ва человек в комнате*/
   function getRoomOnline ($room, $type = 'full')
@@ -1874,19 +1897,6 @@ class City extends Char
       case 'mini':   return "Время перехода: $room_info[time] сек.<br>Сейчас в комнате: $online";
       default:       return "Bug";
     }
-  }
-  /*Получение информации о городе*/
-  function getCity ()
-  {
-    $args = func_get_args();
-    $args_num = func_num_args();
-    $city = $args[0];
-    unset($args[0]);
-    
-    if ($args_num == 2)
-      return $this->db->selectCell("SELECT ?# FROM `server_cities` WHERE city = ?s", $args ,$city);
-    else
-      return $this->db->selectRow("SELECT ?# FROM `server_cities` WHERE city = ?s", $args ,$city);
   }
   /*Информация по комнате на карте*/
   function showRoomOnMap ($id)
@@ -1946,7 +1956,7 @@ class City extends Char
         return $descs[$desc_num];
       }
     }
-    if ($room == 'km_0')
+    if ($room == 'novice')
       return sprintf($descs['desc3'], $char_db['login']);
     else
       return $descs['desc3'];
@@ -2299,35 +2309,6 @@ class Info extends Char
     $this->db = $object->db;
     $this->char = $object;
   }
-  /*Показ дополнительной информации по персонажу*/
-  function showInfDetail ($guid)
-  {
-    $char_db = $this->getChar('char_db', 'block', 'block_reason', 'chat_shut', 'prision', 'prision_reason', 'travm', 'travm_var', $guid);
-    /*Блок*/
-    if ($char_db['block'] && $char_db['block_reason'])
-      echo "Причина блока :<br><b><font class='private'>$char_db[block_reason]</font></b><br>";
-    /*Молчанка*/
-    if ($char_db['chat_shut'] != 0)
-      echo "<img src='img/icon/sleeps0.gif'><small>На персонажа наложено заклятие молчания. Будет молчать еще ".getFormatedTime($char_db['chat_shut'])."</small><br>";
-    /*Тюрьма*/
-    if ($char_db['prision'] != 0)
-    {
-      echo "<small>Персонаж находиться под стражей еще ".getFormatedTime($char_db['prision'])."</small><br>";
-      if ($char_db['prision_reason'] != "")
-        echo "Причина тюремного заключения :<br><b><font class='private'>$char_db[prision_reason]</font></b><br>";
-    }
-    /*Травма*/
-    if ($char_db['travm'] != 0)
-    {
-      switch ($char_db['travm_var'])
-      {
-        case 1: $travm_var = "легкая травма";  break;
-        case 2: $travm_var = "средняя травма"; break;
-        case 3: $travm_var = "тяжелая травма"; break;
-      }
-      echo "<img src='img/icon/travma2.gif'><small>У персонажа $travm_var, еще ".getFormatedTime($char_db['travm'])."</small>";
-    }
-  }
   /*Показ строки персонажа*/
   function character ($type = 'clan', $guid = 0)
   {
@@ -2358,7 +2339,6 @@ class Info extends Char
       case 'turn':   return $orden_img;
       case 'name':   return $login;
       case 'news':   return "$orden_img$clan<font class='header'>$login</font> [$level]$login_info";
-      case 'info':   return "<img src='img/icon/lock3.gif' border='0' onclick=window.opener.top.AddToPrivate('$login',true); style='cursor: pointer;'> $orden_img$clan<b>$login</b> [$level]$login_info";
       case 'mail':   return "<font color='red'>$login</font> $login_info";
       default:       return "";
     }
@@ -2713,9 +2693,6 @@ function toIndex ($type = 'main', $die = true, $loc = '')
       deleteSession();
       echoScript("location.href = '{$loc}index.php';", $die);
     break;
-    case 'info':
-      echoScript("location.href = '{$loc}index.php';", $die);
-    break;
     case 'ajax':
       die("ajax_error");
     break;
@@ -2732,6 +2709,19 @@ function getGuid ($type = 'main', $loc = '')
 /*Удаление переменных сессии*/
 function deleteSession ()
 {
-  unset($_SESSION['guid'], $_SESSION['bankСredit']);
+  unset($_SESSION['guid'], $_SESSION['bankСredit'], $_SESSION['last']);
+}
+/*Определение знака зодиака*/
+function getZodiac ($birthday)
+{
+  $b = split('\.', $birthday);
+  $zodiac = array('1.3.21.4.20', '2.4.21.5.20', '3.5.21.6.20', '4.6.21.7.22', '5.7.23.8.22', '6.8.23.9.23', '7.9.24.10.23', '8.10.24.11.21', '9.11.22.12.21', '10.12.22.1.19', '11.1.20.2.18', '12.2.19.3.20');
+  foreach ($zodiac as $value)
+  {
+    $d = split('\.', $value);
+    
+    if (($b[1] == $d[1] && $b[0] >= $d[2] && $b[0] <= 31) || ($b[1] == $d[3] && $b[0] >= 1 && $b[0] <= $d[4]))
+      return $d[0];
+  }
 }
 ?>

@@ -104,16 +104,16 @@ $(function (){
                     | <a class="menutop" href="stat.php" target="_blank">Рейтинг</a>
                   </span>
                   <span id="menu3" class="bottom_text">
-                      <a class="menutop" onclick="top.linkAction('form&do=passandmail');" href="#">Смена пароля</a>
+                      <a class="menutop" onclick="top.linkAction('security');" href="#">Смена пароля</a>
                     | <a class="menutop" onclick="top.linkAction('report');" href="#">Отчеты</a>
                     | <a class="menutop" href="encicl/FAQ/afer.html" target="_blank">Правила</a>
-                    | <a class="menutop" onclick="top.linkAction('form&do=passandmail');" href="#">Настройки</a>
+                    | <a class="menutop" onclick="top.linkAction('security');" href="#">Настройки</a>
                   </span>
                   <span id="menu4" class="bottom_text">
                       <a class="menutop" onClick="top.linkAction('inv');" href="#">Инвентарь</a>
                     | <a class="menutop" onClick="top.linkAction('skills');" href="#"><?echo $lang['abilities'];?></a>
                     | <a class="menutop" onClick="top.linkAction('zayavka');" href="#"><?echo $lang['fights'];?></a>
-                    | <a class="menutop" onclick="top.linkAction('form&do=info');" href="#"><?echo $lang['form'];?></a>
+                    | <a class="menutop" onclick="top.linkAction('info');" href="#"><?echo $lang['form'];?></a>
 <?
 if ($admin_level > 0)
     echo "| <a class='menutop' onclick=\"top.linkAction('admin');\" href='#'>Админка</a>";

@@ -36,9 +36,10 @@ function cMenu ()
   $('#oMenu').css('visibility', "hidden");
 }
 
-function updateMessagesGo ()
+function updateMessages (go)
 {
-  $.post('ajax_chat.php', 'do=refreshmessage&go=1', function (data){
+  var add_go = (go) ?'&go=1' :'';
+  $.post('ajax_chat.php', 'do=refreshmessage'+add_go, function (data){
     var messages = top.exploder(data);
     
     if (TimerMessage)
@@ -46,21 +47,7 @@ function updateMessagesGo ()
     
     $('#mes').append(messages[0]);
     $(window).scrollTop($('#mes').height());
-    TimerMessage = setTimeout(updateMessages, messages[1]*1000);
-	});
-}
-
-function updateMessages ()
-{
-  $.post('ajax_chat.php', 'do=refreshmessage', function (data){
-    var messages = top.exploder(data);
-    
-    if (TimerMessage)
-      clearTimeout(TimerMessage);
-    
-    $('#mes').append(messages[0]);
-    $(window).scrollTop($('#mes').height());
-    TimerMessage = setTimeout(updateMessages, messages[1]*1000);
+    TimerMessage = setTimeout('updateMessages()', messages[1]*1000);
 	});
 }
 

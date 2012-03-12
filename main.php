@@ -22,7 +22,6 @@ $char = Char::initialization($guid, $adb);
 $char->test->Guid();
 $char->test->Block();
 $char->test->Prision();
-$char->test->Battle();
 $char->test->Shut();
 $char->test->Travm();
 $char->test->Up();
@@ -31,6 +30,7 @@ $char->test->Regen();
 $char->test->Room();
 $char->test->WakeUp();
 $char->test->Effects();
+$char->test->Battle();
 
 $char_db = $char->getChar('char_db', '*');
 $char_stats = $char->getChar('char_stats', '*');
@@ -120,9 +120,9 @@ switch ($action)
   break;
   case 'inv':
   case 'wear_item':
+  case 'wear_set':
   case 'unwear_item':
   case 'unwear_full':
-  case 'wear_set':
     include("inventory.php");
   break;
   case 'skills':
@@ -146,7 +146,9 @@ switch ($action)
   case 'char':
     include("char.php");
   break;
-  case 'form':
+  case 'shape':
+  case 'security':
+  case 'info':
     include("form.php");
   break;
   case 'report':
@@ -161,9 +163,9 @@ switch ($action)
   case 'gift':
     $item_info = $adb->selectCell("SELECT `id` FROM `character_inventory` WHERE `guid` = ?d and `id` = ?d and `wear` = '0' and `mailed` = '0';", $guid ,$item_id) or $char->error->Inventory(213);
     $res = $adb->selectRow("SELECT `object_type`, 
-                                    `object_id` 
-                             FROM `character_inventory` 
-                             WHERE `id` = ?d", $item_id);
+                                   `object_id` 
+                            FROM `character_inventory` 
+                            WHERE `id` = ?d", $item_id);
     $obj_type = $res['object_type'];
     $obj_id = $res['object_id'];
     $name = $adb->selectCell("SELECT `name` FROM `$obj_type` WHERE `id` = ?d", $obj_id);
@@ -182,9 +184,9 @@ switch ($action)
   case 'give':
     $item_info = $adb->selectCell("SELECT `id` FROM `character_inventory` WHERE `guid` = ?d and `id` = ?d and `wear` = '0' and `mailed` = '0';", $guid ,$item_id) or $char->error->Inventory(213);
     $res = $adb->selectRow("SELECT `object_type`, 
-                                    `object_id` 
-                             FROM `character_inventory` 
-                             WHERE `id` = ?d", $item_id);
+                                   `object_id` 
+                            FROM `character_inventory` 
+                            WHERE `id` = ?d", $item_id);
     $obj_type = $res['object_type'];
     $obj_id = $res['object_id'];
     $name = $adb->selectCell("SELECT `name` FROM `$obj_type` WHERE `id` = ?d", $obj_id);
@@ -215,7 +217,6 @@ switch ($action)
     {
       $id = $adb->selectCell("SELECT `id` FROM `history_auth` WHERE `guid` = ?d ORDER BY `id` DESC", $guid) - 1;
       $auth = $adb->selectRow("SELECT `ip`, `date` FROM `history_auth` WHERE `guid` = ?d and `id` = ?d", $guid ,$id);
-      unset($_SESSION['bankСredit']);
       if ($id && $auth && $auth['ip'] != $_SERVER['REMOTE_ADDR'])
         $char->chat->say($guid, date('d.m.y H:i', $auth['date'])." <font color='red'><b>ВНИМАНИЕ!</b></font> В предыдущий раз этим персонажем заходили с другого компьютера.");
     }

@@ -381,13 +381,17 @@ switch ($do)
     returnAjax($lang[$data['sections_shop'][$section_shop][1]].$lang['shop_'.$section_shop]);
   break;
   case 'showshopsection':
-    $room_shop = $char->city->getRoom($room, $city, 'shop') or returnAjax("<table width='100%' cellspacing='1' cellpadding='2' bgcolor='#A5A5A5'><tr><td bgcolor='#E2E0E0' align='center'>$lang[shop_no]</td></tr></table>");
+    $flags = $char->city->getRoom($room, $city, 'flags');
+    
+    if (!($flags & 2))
+      returnAjax("<table width='100%' cellspacing='1' cellpadding='2' bgcolor='#A5A5A5'><tr><td bgcolor='#E2E0E0' align='center'>$lang[shop_no]</td></tr></table>");
+    
     $section_shop = requestVar('section_shop', '', 7);
     $level_filter = requestVar('level_filter', '', 7);
     $check_level = ($level_filter > 0 || $level_filter == '0');
     $name_filter = requestVar('name_filter', '', 7);
-    setCookie('level_filter', $level_filter,  time () + 3600);
-    setCookie('name_filter', $name_filter,  time () + 3600);
+    setCookie('level_filter', $level_filter,  time() + 3600);
+    setCookie('name_filter', $name_filter,  time() + 3600);
     $rows = $adb->select("SELECT * 
                           FROM `item_template` AS `i` 
                           LEFT JOIN `item_amount` AS `a` 
@@ -425,7 +429,11 @@ switch ($do)
     
     $buycount = 0;
     $amount = $city.'-'.$room;
-    $room_shop = $char->city->getRoom($room, $city, 'shop') or returnAjax('error', 403);
+    $flags = $char->city->getRoom($room, $city, 'flags');
+    
+    if (!($flags & 2))
+      returnAjax('error', 403);
+    
     $dat = $adb->selectRow("SELECT `i`.`name`, 
                                    `i`.`mass`, 
                                    `i`.`price`, 

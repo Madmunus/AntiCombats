@@ -5,57 +5,59 @@ ini_set('error_reporting', E_ALL);
 
 define('AntiBK', true);
 
-include_once ("engline/config.php");
-include_once ("engline/dbsimple/Generic.php");
-include_once ("engline/data/data.php");
-include_once ("engline/functions/functions.php");
+include_once("engline/config.php");
+include_once("engline/dbsimple/Generic.php");
+include_once("engline/data/data.php");
+include_once("engline/functions/functions_info.php");
+
+$log = requestVar('log', '', 1);
 
 if (empty($log))
-  toIndex('info');
+  toIndex();
 
 $adb = DbSimple_Generic::connect($database['adb']);
 $adb->query("SET NAMES ? ",$database['db_encoding']);
 $adb->setErrorHandler("databaseErrorHandler");
 
-$log = (isset($_GET['log']) && !preg_match('//u', $_GET['log'])) ?iconv("CP1251", "UTF-8", rawurldecode($_GET['log'])) :$_GET['log'];
+$log = (!preg_match('//u', $log)) ?iconv("CP1251", "UTF-8", rawurldecode($log)) :$log;
 
 $top = "Произошла ошибка:<br><br>";
-$bot = "<br><br><a href='javascript: window.history.go(-1);'>Назад</a><hr>";
+$bot = "<br><br><a href='javascript:window.history.go(-1);'>Назад</a><hr>";
 
 $guid = $adb->selectCell("SELECT `guid` FROM `characters` WHERE `login` = ?s", $log) or die("$top Указанный персонаж не найден.$bot");
 
-$char = Char::initialization($guid, $adb);
+$info = Info::initialization($guid, $adb);
 
-$char->test->Guid('info');
-$char->test->Prision();
-$char->test->Shut();
-$char->test->Travm();
-$char->test->Regen();
+$info->Guid();
+$info->Prision();
+$info->Shut();
+$info->Travm();
+$info->Regen();
+$info->Online();
 
-$char_db = $char->getChar('char_db', '*');
-$char_stats = $char->getChar('char_stats', 'str', 'dex', 'con', 'vit', 'int', 'wis', 'spi');
-$char_info = $char->getChar('char_info', 'name', 'icq', 'hide_icq', 'url', 'town', 'deviz', 'hobie', 'state', 'date');
+$char_db = $info->getChar('char_db', '*');
+$char_stats = $info->getChar('char_stats', 'str', 'dex', 'con', 'vit', 'int', 'wis', 'spi');
+$char_info = $info->getChar('char_info', 'name', 'icq', 'hide_icq', 'url', 'town', 'birthday', 'deviz', 'hobie', 'state', 'date');
 ArrToVar($char_db);
 ArrToVar($char_info);
 
-$lang = $char->getLang();
+$lang = $info->getLang();
 
 $sex = ($sex == 'male') ?"Мужской" :"Женский";
 $orden_dis = ($orden == 1) ?"Орден Паладинов - " :(($orden == 2) ?"Армада - " :"");
 $date = ($admin_level > 0) ?"До начала времен" :date('d.m.y H:i', $date);
-$state = ($admin_level > 0) ?"Этого никто не знает" :$char->city->getCity($state, 'name');
-$room = $char->city->getRoom($room, $city, 'name');
-$city = $char->city->getCity($city, 'name');
-if ((time() - $char_db['last_time']) > 100)
-  $adb->query("DELETE FROM `online` WHERE `guid` = ?d", $guid);
+$state = ($admin_level > 0) ?"Этого никто не знает" :$info->getCity($state, 'name');
+$room = $info->getRoom($room, $city, 'name');
+$city = $info->getCity($city, 'name');
 $online = $adb->selectCell("SELECT COUNT(*) FROM `online` WHERE `guid` = ?d", $guid);
+$birthday = getZodiac($birthday);
 
-$char->showStatAddition('info');
+$info->showStatAddition();
 ?>
 <html>
 <head>
 <link rel="SHORTCUT ICON" href="img/favicon.ico">
-<title>Анти Бойцовский Клуб - Информация о <?echo $login;?></title>
+<title>Информация о <?echo $login;?></title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <link rel="StyleSheet" href="styles/style.css" type="text/css">
 <script src="scripts/jquery.js" type="text/javascript"></script>
@@ -67,29 +69,27 @@ $char->showStatAddition('info');
 <table width="100%" border="0" cellpadding="1" cellspacing="2">
 <tr valign="top">
   <td align="center" width="227" style="padding-right: 10px;">
-<?  $char->equip->showCharacter('info');
+<?  $info->showCharacter();
     echo "<strong>$city</strong><br>";
-    echo ($online) ?"<small>Персонаж сейчас находится в клубе.<br>\"<strong>$room</strong>\"</small>" :(($admin_level > 0) ?"<small>Персонаж не в клубе</small>" :"<small>Персонаж не в клубе, но был тут:<br>".date ('d.m.y H:i', $last_time)." <img src='img/clok3_2.png' alt='Время сервера' border='0'><br> (".getFormatedTime($last_time)." назад)</small>");
-?>
-    <br>
-  </td>
-  <td align="left" style="padding-top: 10px;"><br>
-<?  foreach ($behaviour as $key => $min_level)
+    echo ($online) ?"<small>Персонаж сейчас находится в клубе.<br>\"<strong>$room</strong>\"</small>" :(($admin_level > 0) ?"<small>Персонаж не в клубе</small>" :"<small>Персонаж не в клубе, но был тут:<br>".date('d.m.y H:i', $last_time)." <img src='img/clok3_2.png' alt='Время сервера' border='0'><br> (".getFormatedTime($last_time)." назад)</small>");
+  echo "</td>";
+  echo "<td align='left' style='padding-top: 10px; background: url(img/icon/zodiac/$birthday.gif) no-repeat right 10%;'><br>";
+    foreach ($behaviour as $key => $min_level)
     {
       if ($level < $min_level)
         continue;
       
-      $stat_text = (in_array ($key, array ('str', 'dex', 'con', 'int'))) ?"<font style='color: ".getStatSkillColor($char_stats[$key], $added[$key]).";'>%s</font></b>".getBraces($char_stats[$key], $added[$key]) :"%s</b>";
+      $stat_text = (in_array($key, array ('str', 'dex', 'con', 'int'))) ?"<font style='color: ".getStatSkillColor($char_stats[$key], $added[$key]).";'>%s</font></b>".getBraces($char_stats[$key], $added[$key]) :"%s</b>";
       printf ($lang[$key]." <b>".$stat_text."<br>", $char_stats[$key]);
     }
-    echo "<hr align='left' width='300' size='1'>"
-       . "<small>$lang[level] $level<br>"
-       . "$lang[wins] <a href='stat.php' class='nick' style='font-size: 10px;'>$win</a><br>"
-       . "$lang[loses] $lose<br>"
-       . "$lang[draws] $draw<br>";
+    echo "<hr align='left' width='300' size='1'>";
+    echo "<small>$lang[level] $level<br>";
+    echo ($level > 1) ?"$lang[wins] <a href='stat.php' class='nick' style='font-size: 10px;'>$win</a><br>" :"$lang[wins] $win<br>";
+    echo "$lang[loses] $lose<br>";
+    echo "$lang[draws] $draw<br>";
     echo ($f_style) ?"$lang[style] <b>".$lang['style_'.$f_style]."</b><br>" :"";
     echo ($clan) ?"Клан: <strong><a href='clan_inf.php?clan=$clan_short' class='nick' target='_blank' style='font-size: 10px;'>$clan</a> - $chin</strong><br>" :"";
-    echo ($orden) ?"<strong>$orden_dis$stat_rang</strong><br>" :"$lang[status] <strong>".$lang['status_'.$status]."</strong><br>";
+    echo ($orden) ?"<strong>$orden_dis$stat_rang</strong><br>" :"";//$lang[status] <strong>".$lang['status_'.$status]."</strong><br>
     echo ($state) ?"Место рождения: <strong>$state</strong><br>" :"";
     echo ($date) ?"Дата рождения персонажа: $date</small><br>" :"";
     echo "<hr align='left' width='300' size='1'>";
@@ -112,7 +112,7 @@ $char->showStatAddition('info');
       }
       echo "<img src='img/dealer_$d_i.gif' width='35' height='24' alt='$d_d<br>Персонаж имеет право продавать услуги Анти Бойцовского Клуба.' border='0'>";
     }
-$char->info->showInfDetail($guid);
+$info->showInfDetail();
 ?>
   </td>
 </tr>
@@ -139,7 +139,7 @@ foreach ($rows as $dat_t)
                                       `msg` 
                                FROM `medal` 
                                WHERE `id` = ?d", $item_id);
-  list ($g_name, $img, $msg) = array_values ($obj_data);
+  list($g_name, $img, $msg) = array_values($obj_data);
   echo "<img src='$img' alt='$g_name<br>$msg<br>от $gift_author'>&nbsp";
 }
 ?>

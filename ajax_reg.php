@@ -6,25 +6,27 @@ ini_set('error_reporting', E_ALL);
 
 define('AntiBK', true);
 
-include_once ("engline/config.php");
-include_once ("engline/dbsimple/Generic.php");
-include_once ("engline/data/data.php");
-include_once ("engline/functions/functions.php");
+include_once("engline/config.php");
+include_once("engline/dbsimple/Generic.php");
+include_once("engline/data/data.php");
+include_once("engline/functions/functions.php");
 
 $adb = DbSimple_Generic::connect($database['adb']);
 $adb->query("SET NAMES ? ",$database['db_encoding']);
 $adb->setErrorHandler("databaseErrorHandler");
 
-switch ($_POST['do'])
+$do = requestVar('do');
+switch ($do)
 {
   case 'checklogin':
-    unset ($_SESSION['reg_login']);
-    $login_check = $adb->selectCell("SELECT `guid` FROM `characters` WHERE `login` = ?s", $_POST['login']);
+    unset($_SESSION['reg_login']);
+    $login = requestVar('login');
+    $login_check = $adb->selectCell("SELECT `guid` FROM `characters` WHERE `login` = ?s", $login);
     if ($login_check)
       die("occupy");
     else
     {
-      $_SESSION['reg_login'] = $_POST['login'];
+      $_SESSION['reg_login'] = $login;
       die("free");
     }
   break;

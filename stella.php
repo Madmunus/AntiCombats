@@ -1,5 +1,5 @@
 <?
-defined('AntiBK') or die ("Доступ запрещен!");
+defined('AntiBK') or die("Доступ запрещен!");
 
 $dat = $adb->selectRow("SELECT * FROM `city_stella_main` WHERE `city` = ?s", $city);
 $state = $adb->selectCell("SELECT `state` FROM `character_info` WHERE `guid` = ?d", $guid);
@@ -23,7 +23,7 @@ $vote = $adb->selectCell("SELECT `vote` FROM `characters` WHERE `guid` = ?d", $g
     <table width="148" border="0" cellpadding="0" cellspacing="1" bgcolor="#DEDEDE">
       <tr>
         <td bgcolor="#D3D3D3"><img src="img/links.gif" width="9" height="7" /></td>
-        <td bgcolor="#D3D3D3" nowrap><a href="main.php?action=go&room_go=centplosh" class="passage" alt="<?echo $char->city->getRoomOnline('centplosh', 'mini');?>">Центральная Площадь</a></td>
+        <td bgcolor="#D3D3D3" nowrap><a href="main.php?action=go&room_go=centsquare" class="passage" alt="<?echo $char->city->getRoomOnline('centsquare', 'mini');?>">Центральная Площадь</a></td>
       </tr>
     </table>
   </td>
@@ -53,7 +53,7 @@ else
 {
   foreach ($rows as $answers)
   {
-    $p = round (($answers['count'] / $count) * 100, 1);
+    $p = round(($answers['count'] / $count) * 100, 1);
     echo "&nbsp;&nbsp;<b>$answers[answer]</b> ($p%)<br>";
   }
 }

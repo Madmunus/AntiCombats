@@ -56,19 +56,19 @@ $char = Char::initialization(0, $adb);
                   </table>
 <?//
 $players = $adb->select("SELECT `guid`, 
-                                 `login`, 
-                                 `exp` 
-                          FROM `characters` 
-                          WHERE `admin_level` = '0' 
-                          ORDER BY `exp` DESC
-                          LIMIT 200;");
+                                `login`, 
+                                `exp` 
+                         FROM `characters` 
+                         WHERE `admin_level` = '0' 
+                         ORDER BY `exp` DESC
+                         LIMIT 200;");
 echo "<table width='100%' border='0' cellpadding='0' cellspacing='1' align='center'>";
 echo "<tr bgcolor='#ECDFAA'>";
 echo "<td align='left' width='2%'><b>№</b></td>";
 echo "<td>&nbsp;</td>";
 echo "<td align='right'><b>рейтинг</b></td>";
 echo "</tr>";
-for ($i = 0; $i < count ($players); $i++)
+for ($i = 0; $i < count($players); $i++)
 {
   $bg = (!($i % 2 === 0) || $i == 1) ?" bgcolor='#ECDFAA'" :"";
   echo "<tr$bg>";

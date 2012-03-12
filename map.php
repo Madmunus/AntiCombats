@@ -19,12 +19,12 @@ body {background-color: #e2e0e0;}
 switch ($room)
 {
   case 'castle':
-  case 'km_4':
-  case 'km_1':
-  case 'km_2':
-  case 'km_3':
-  case 'km_0':
-  case 'perehod':
+  case 'hall_1':
+  case 'hall_2':
+  case 'hall_3':
+  case 'boudoir':
+  case 'novice':
+  case 'passage':
     echo "Бойцовский Клуб. Карта";
   break;
   case 'castle2':
@@ -44,18 +44,18 @@ switch ($room)
 switch ($room)
 {
   case 'castle':
-  case 'km_4':
-  case 'km_1':
-  case 'km_2':
-  case 'km_3':
-  case 'perehod':
-  case 'km_0':
+  case 'hall_1':
+  case 'hall_2':
+  case 'hall_3':
+  case 'boudoir':
+  case 'passage':
+  case 'novice':
 ?>
 <table border="0" align="center" cellpadding="0" cellspacing="0">
   <tr align="center" valign="middle">
     <td>&nbsp;</td>
     <td>&nbsp;</td>
-    <td><div style="width: 90px; height: 60px;" class="clubitem"><?$char->city->showRoomOnMap('km_1')?></div></td>
+    <td><div style="width: 90px; height: 60px;" class="clubitem"><?$char->city->showRoomOnMap('hall_1')?></div></td>
     <td>&nbsp;</td>
     <td>&nbsp;</td>
     <td>&nbsp;</td>
@@ -75,7 +75,7 @@ switch ($room)
     <td>&nbsp;</td>
   </tr>
   <tr align="center" valign="middle">
-    <td><div style="width: 90px; height: 60px;" class="clubitem"><?$char->city->showRoomOnMap('km_4')?></div></td>
+    <td><div style="width: 90px; height: 60px;" class="clubitem"><?$char->city->showRoomOnMap('boudoir')?></div></td>
     <td><img src="img/icon/maparrh.gif" width="20" height="20" /></td>
     <td>
       <div style="width: 160px; height: 100px;" class="clubitem">
@@ -86,12 +86,12 @@ switch ($room)
       </div>
     </td>
     <td><img src="img/icon/maparrh.gif" width="20" height="20" /></td>
-    <td><div style="width: 90px; height: 60px;" class="clubitem"><?$char->city->showRoomOnMap('km_2')?></div></td>
+    <td><div style="width: 90px; height: 60px;" class="clubitem"><?$char->city->showRoomOnMap('hall_2')?></div></td>
     <td><img src="img/icon/maparrhl.gif" width="20" height="20" /></td>
     <td>
       <div style="width: 90px; height: 60px;" class="clubitem">
       <table cellpadding="0" cellspacing="0" width="100%" height="100%">
-        <tr valign="top"><td align="center" style="font-size: 10px;"><?$char->city->showRoomOnMap('perehod')?></td></tr>
+        <tr valign="top"><td align="center" style="font-size: 10px;"><?$char->city->showRoomOnMap('passage')?></td></tr>
         <tr valign="bottom"><td align="left" style="font-size: 10px;">Последний рубеж детства</td></tr>
       </table>
       </div>
@@ -100,7 +100,7 @@ switch ($room)
     <td>
       <div style="width: 90px; height: 100px;" class="clubitem">
       <table cellpadding="0" cellspacing="0" width="100%" height="100%">
-        <tr valign="top"><td align="center" style="font-size: 10px;"><?$char->city->showRoomOnMap('km_0')?></td></tr>
+        <tr valign="top"><td align="center" style="font-size: 10px;"><?$char->city->showRoomOnMap('novice')?></td></tr>
         <tr valign="bottom"><td align="left" style="font-size: 10px;">Уровень: <strong>0-3</strong></td></tr>
       </table>
       </div>
@@ -120,7 +120,7 @@ switch ($room)
   <tr align="center" valign="middle">
     <td>&nbsp;</td>
     <td>&nbsp;</td>
-    <td><div style="width: 90px; height: 60px;" class="clubitem"><?$char->city->showRoomOnMap('km_3')?></div></td>
+    <td><div style="width: 90px; height: 60px;" class="clubitem"><?$char->city->showRoomOnMap('hall_3')?></div></td>
     <td>&nbsp;</td>
     <td>&nbsp;</td>
     <td>&nbsp;</td>

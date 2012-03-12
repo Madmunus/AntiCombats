@@ -1,9 +1,0 @@
-body                {padding: 0px; margin: 0px;}
-#T1                  {white-space: nowrap; background: url(../img/talk/left.gif) no-repeat;}
-#T2, #T4       {white-space: nowrap; background: url(../img/talk/back_01.gif) repeat-x;}
-#T3                  {white-space: nowrap; background: url(../img/talk/back_01.gif) repeat-x;}
-#T5                  {white-space: nowrap; background: url(../img/talk/middle.gif) no-repeat;}
-#T6                  {white-space: nowrap; background: url(../img/talk/back_02.gif) repeat-x; text-align: right;}
-#T7                  {white-space: nowrap; background: url(../img/talk/right.gif) no-repeat;}
-#phrase         {margin-top: 6px; vertical-align: top; height: 17px;}
-img.button  {cursor: pointer; border: 0px;}

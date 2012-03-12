@@ -2,7 +2,7 @@
 defined('AntiBK') or die("Доступ запрещен!");
 
 $do = requestVar('do');
-$boy = requestVar('boy');
+$fight = requestVar('fight');
 $battle_type = requestVar('battle_type');
 $timeout = requestVar('timeout');
 $log = requestVar('log');
@@ -40,19 +40,19 @@ for ($i = 0; $i < $countrows; $i++)
 }
 if (empty($zayavka_status))
   $zayavka_status = "no";*/
-$fights = $char->city->getRoom($room, $city, 'fights');
+$flags = $char->city->getRoom($room, $city, 'flags');
 $hps = array('fiz', 'dgv', 'group', 'haos');
 ?>
 <table align="center" width="100%" border="0" cellspacing="0" cellpadding="0" style="padding-top: 10px;">
   <tr>
     <td align="left" valign="middle" width="50%" style="padding-bottom: 2px;">
 <?
-    if (in_array($boy, $hps))
+    if (in_array($fight, $hps))
     {
       echo $char->info->character('clan');
       echo "<span id='HP'></span>";
       echo "<img src='img/icon/heart_03.gif' width='10' height='10' alt='Уровень жизни' style='padding-left: 1px; vertical-align: middle;'>";
-      echoScript("showHpmini($char_stats[hp], $char_stats[hp_all], $char_stats[hp_regen]);");
+      echoScript("showHP($char_stats[hp], $char_stats[hp_all], $char_stats[hp_regen], 1);");
     }
 ?>
     </td>
@@ -65,19 +65,19 @@ $hps = array('fiz', 'dgv', 'group', 'haos');
 <table align="center" cellSpacing="1" cellPadding="1" width="100%">
   <tr>
     <td class="m" width="40">&nbsp;<b>Бои:</b></td>
-    <td class="<?echo ($boy == 'fiz') ?"s" :"m"?>"><a href="?action=zayavka&boy=fiz" class="nick">1 на 1</a></td>
-    <td class="<?echo ($boy == 'dgv') ?"s" :"m"?>"><a href="?action=zayavka&boy=dgv" class="nick">Учебные</a></td>
-    <td class="<?echo ($boy == 'group') ?"s" :"m"?>"><a href="?action=zayavka&boy=group" class="nick">Групповые</a></td>
-    <td class="<?echo ($boy == 'haos') ?"s" :"m"?>"><a href="?action=zayavka&boy=haos" class="nick">Хаотичные</a></td>
-    <td class="<?echo ($boy == 'tklogs') ?"s" :"m"?>"><a href="?action=zayavka&boy=tklogs" class="nick">Текущие</a></td>
-    <td class="<?echo ($boy == 'logs') ?"s" :"m"?>"><a href="?action=zayavka&boy=logs" class="nick">Завершенные</a></td>
+    <td class="<?echo ($fight == 'fiz') ?"s" :"m"?>"><a href="?action=zayavka&fight=fiz" class="nick">1 на 1</a></td>
+    <td class="<?echo ($fight == 'dgv') ?"s" :"m"?>"><a href="?action=zayavka&fight=dgv" class="nick">Учебные</a></td>
+    <td class="<?echo ($fight == 'group') ?"s" :"m"?>"><a href="?action=zayavka&fight=group" class="nick">Групповые</a></td>
+    <td class="<?echo ($fight == 'haos') ?"s" :"m"?>"><a href="?action=zayavka&fight=haos" class="nick">Хаотичные</a></td>
+    <td class="<?echo ($fight == 'tklogs') ?"s" :"m"?>"><a href="?action=zayavka&fight=tklogs" class="nick">Текущие</a></td>
+    <td class="<?echo ($fight == 'logs') ?"s" :"m"?>"><a href="?action=zayavka&fight=logs" class="nick">Завершенные</a></td>
   </tr>
 </table>
 <?
-switch ($boy)
+switch ($fight)
 {
   case 'fiz':
-    if (!$fights)
+    if (!($flags & 1))
       die("<br><br><center><b>В этой комнате невозможно подавать заявки</b></center>");
     
     echo "После подачи заявки, вам будет подобран случайный противник вашего уровня<br>";
@@ -89,13 +89,13 @@ switch ($boy)
   case 'group':
     if ($level < 2)
       die("<br><br><center><b>В групповые бои только со второго уровня.</b></center>");
-    else if (!$fights)
+    else if (!($flags & 1))
       die("<br><br><center><b>В этой комнате невозможно подавать заявки</b></center>");
   break;
   case 'haos':
     if ($level < 2)
       die("<br><br><center><b>В хаотичные бои только со второго уровня.</b></center>");
-    else if (!$fights)
+    else if (!($flags & 1))
       die("<br><br><center><b>В этой комнате невозможно подавать заявки</b></center>");
   break;
   case 'tklogs':
