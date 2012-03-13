@@ -71,7 +71,7 @@ switch ($do)
         continue;
       
       $size = ($field == 'name') ?20 :10;
-      $return .= "<td>".$lang[$field].":</td><td><input class='field' type='text' name='$field' size='$size'></td>";
+      $return .= "<td>$lang[$field]:</td><td><input class='field' type='text' name='$field' size='$size'></td>";
       $i++;
       if (!($i % 4))
         $return .= '</tr><tr>';
@@ -81,12 +81,12 @@ switch ($do)
   break;
   case 'createitem':
     $fields = requestVar('fields');
-    $sql = array ();
-    $field = explode ('A_D', $fields);
+    $sql = array();
+    $field = explode('A_D', $fields);
     unset ($field[count($field) - 1]);
     foreach ($field as $fill)
     {
-      $f = explode ('=', $fill);
+      $f = explode('=', $fill);
       $sql[$f[0]] = $f[1];
     }
     if ($adb->query("INSERT INTO `item_template` (?#) VALUES (?a);",array_keys($sql), array_values($sql)))

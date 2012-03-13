@@ -43,10 +43,10 @@ foreach ($online as $character)
      . "</tr>";
 }
 echo "</table>";
-$last = $char->info->character('clan', $adb->selectCell("SELECT `guid` FROM `online` ORDER BY `last_time` DESC;"));
+$last_user = $char->info->character('clan', $adb->selectCell("SELECT `guid` FROM `online` ORDER BY `last_time` DESC;"));
 $count = count ($online);
 if ($count > 0)
-  echo "<center><em><strong>Последний Зашедший юзер:</em> $last <em>Всего:</strong></em><strong> $count</strong></center>";
+  echo "<center><em><strong>Последний Зашедший юзер:</em> $last_user <em>Всего:</strong></em><strong> $count</strong></center>";
 else
   echo "<center><em><strong>Нету игроков онлайн.</strong></em></center>";
 ?>

@@ -23,7 +23,7 @@ $(function (){
     $(".field").each(function (){if ($(this).val()) fields += $(this).attr('name')+'='+$(this).val()+'A_D';});
     $.post('ajax.php', 'do=createitem&fields='+fields, function (data){
       if (data == 'complete')
-        alert ('Предмет создан');
+        alert('Предмет создан');
     });
     $('#fields').html('');
     $.post('ajax.php', 'do=showfields&type='+$("[name=type]").val(), function (data){

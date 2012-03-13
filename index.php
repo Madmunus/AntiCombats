@@ -5,9 +5,9 @@ ini_set('error_reporting', E_ALL);
 
 define('AntiBK', true);
 
-include_once ("engline/config.php");
-include_once ("engline/dbsimple/Generic.php");
-include_once ("engline/functions/functions.php");
+include_once("engline/config.php");
+include_once("engline/dbsimple/Generic.php");
+include_once("engline/functions/functions.php");
 
 $adb = DbSimple_Generic::connect($database['adb']);
 $adb->query("SET NAMES ? ",$database['db_encoding']);
@@ -15,10 +15,10 @@ $adb->setErrorHandler("databaseErrorHandler");
 
 $server = $adb->selectRow("SELECT * FROM `server_info`;");
 
-if (date ('d.m.y', $server['last_transfer']) != date ('d.m.y'))
+if (date('d.m.y', $server['last_transfer']) != date('d.m.y'))
 {
   $adb->query("UPDATE `characters` SET `transfers` = '200';");
-  $adb->query("UPDATE `server_info` SET `last_transfer` = ?d", time ());
+  $adb->query("UPDATE `server_info` SET `last_transfer` = ?d", time());
 }
 ?>
 <html>
@@ -70,20 +70,20 @@ function shKeypad (fl)
   spSim1 = spSim;
   if (fl)
   {
-    chRus1 = KeyCreate (chRus1);
-    chEng1 = KeyCreate (chEng1);
-    chDec1 = KeyCreate (chDec1);
-    spSim1 = KeyCreate (spSim1);
+    chRus1 = KeyCreate(chRus1);
+    chEng1 = KeyCreate(chEng1);
+    chDec1 = KeyCreate(chDec1);
+    spSim1 = KeyCreate(spSim1);
   }
   keytable = '<table align="center" border="0">';
-  keytable += '<tr>' + KeyShow (0, chEng1) + "<td colspan='7' align='right'><input id='erase' style='width: 164px;' type='button' class='btn' value='&larr;'></td></tr>";
-  keytable += '<tr>' + KeyShow (1, chEng1) + "<td colspan='7' align='right'><input id='clean' style='width: 164px;' type='button' class='btn' value='Очистить все'></td></tr>";
-  keytable += '<tr>' + KeyShow (0, chDec1) + "<td colspan='16' align='right'><input id='alphabet' style='width: 164px;' type='button' class='btn' value='По алфавиту'></td><td colspan='7' align='right'><input id='shuffle' style='width: 164px;' type='button' class='btn' value='Перемешать'></td></tr>";
+  keytable += '<tr>' + KeyShow(0, chEng1) + "<td colspan='7' align='right'><input id='erase' style='width: 164px;' type='button' class='btn' value='&larr;'></td></tr>";
+  keytable += '<tr>' + KeyShow(1, chEng1) + "<td colspan='7' align='right'><input id='clean' style='width: 164px;' type='button' class='btn' value='Очистить все'></td></tr>";
+  keytable += '<tr>' + KeyShow(0, chDec1) + "<td colspan='16' align='right'><input id='alphabet' style='width: 164px;' type='button' class='btn' value='По алфавиту'></td><td colspan='7' align='right'><input id='shuffle' style='width: 164px;' type='button' class='btn' value='Перемешать'></td></tr>";
   keytable += '<tr><td style="height: 8px;"></td></tr>';
-  keytable += '<tr>' + KeyShow (0, chRus1)+'</tr>';
-  keytable += '<tr>' + KeyShow (1, chRus1)+'</tr>';
+  keytable += '<tr>' + KeyShow(0, chRus1)+'</tr>';
+  keytable += '<tr>' + KeyShow(1, chRus1)+'</tr>';
   keytable += '<tr><td style="height: 8px;"></td></tr>';
-  keytable += '<tr>' + KeyShow (0, spSim1) +"</tr>";
+  keytable += '<tr>' + KeyShow(0, spSim1) +"</tr>";
   keytable += '</table>';
   $("#keypad").html(keytable);
 }
@@ -115,7 +115,7 @@ $(function (){
   });
   $('input#erase').live('click', function (){
     tt = $('input[name=password]').val();
-    $('input[name=password]').val(tt.substring (0, tt.length-1));
+    $('input[name=password]').val(tt.substring(0, tt.length-1));
   });
   $('input#clean').live('click', function (){
     $('input[name=password]').val('');
@@ -145,6 +145,9 @@ switch (date('m'))
     $best = "runet_5.jpg";
   break;
   case '03':
+    $back = "start_12spr_03.jpg";
+    $icon = "start_12spr_05.jpg";
+  break;
   case '04':
   case '05':
     $back = "start_10spr1_03.jpg";
@@ -156,7 +159,7 @@ switch (date('m'))
     $icon = "start_10sum1_05.jpg";
   break;
   case '08':
-    $random = rand (1, 2);
+    $random = rand(1, 2);
     $back = ($random == 1) ?"start_09sum1_03.jpg" :"start_09sum2_03.jpg";
     $icon = ($random == 1) ?"start_09sum1_05.jpg" :"start_09sum2_051.jpg";
   break;
@@ -174,7 +177,7 @@ switch (date('m'))
   break;
 }
 $login = ($server['login']) ?"return true;" :"alert ('Сервер оффлайн'); return false;";
-$registration = ($server['registration']) ?"window.location = 'register.php';" :"alert ('Регистрация закрыта');";
+$registration = ($server['registration']) ?"location.href = 'register.php';" :"alert('Регистрация закрыта');";
 $rpassword = ($server['password']) ?"pass.php" :"index.php";
 ?>
 <body>

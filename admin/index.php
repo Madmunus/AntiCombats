@@ -31,7 +31,7 @@ $rows = $adb->select("SELECT * FROM `admin_menu` ORDER BY `id`;");
 </head>
 <body bgColor="#3D3D3B">
 <table align="center" cellpadding="0" cellspacing="5" width="100%" height="100%">
-  <tr><td align="center" colspan="2"><img src="img/enter.gif"><?echo "<div align='right'>Здравствуйте, <strong>".$char->info->character()."</strong> (<a href='../game.php' onclick='this.blur ();' style='color: red; text-decoration: underline;'>Вернуться</a>)</div>";?></td></tr>
+  <tr><td align="center" colspan="2"><img src="img/enter.gif"><?echo "<div align='right'>Здравствуйте, <strong>".$char->info->character()."</strong> (<a href='javascript:window.close();' onclick='this.blur ();' style='color: red; text-decoration: underline;'>Выход</a>)</div>";?></td></tr>
   <tr>
     <td valign="top" width="270">
       <div class="block">
@@ -41,8 +41,8 @@ $rows = $adb->select("SELECT * FROM `admin_menu` ORDER BY `id`;");
 <?
 foreach ($rows as $menu)
 {
-  echo "<a href='main.php?act=$menu[href]' target='main' onclick='this.blur ();'>$menu[name]</a><br>";
-  if (in_array ($menu['href'], array('doc', 'coder', 'travm')))
+  echo "<a href='main.php?act=$menu[href]' target='main' onclick='this.blur();'>$menu[name]</a><br>";
+  if (in_array($menu['href'], array('doc', 'coder', 'travm')))
     echo "<hr>";
 }
 ?>

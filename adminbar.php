@@ -19,11 +19,9 @@ $(function (){
   $('#getSHA1').click(function (){
     $('#sha1text').val(SHA1($('#text').val()));
   });
-  $('div[name=content]').hide();
-  $('div[id=mainc]').show();
   $('input[name=changetype]').click(function (){
     $('div[name=content]').hide();
-    $('div[id='+$(this).attr('id')+'c]').show();
+    $('div#'+$(this).attr('id')+'c').show();
   });
   $('img.remove').click(function (){
     deleteChar($(this).attr('id'));
@@ -42,7 +40,7 @@ $(function (){
     </td>
     <td align="right">
       <input type="button" class="nav" value="Админ панель" onclick="window.open('admin/index.php', '', 'menubar=no,status=no');">
-      <input type="button" class="nav" value="<?echo $lang['refresh'];?>" id="refresh">
+      <input type="button" class="nav" value="<?echo $lang['refresh'];?>" id="link" link="admin">
       <input type="button" class="nav" value="<?echo $lang['return'];?>" id="link" link="inv">
     </td>
   </tr>
@@ -95,13 +93,8 @@ echo "<td>".date('d.m.y H:i:s', $char_db['last_time'])."</td>";
 </table>
 <font color='red'>SHA1:</font>
 <input type='text' id='text' style='width: 40%;'><input type='submit' id='getSHA1' value='Зашифровать'><input type='text' id='sha1text' readonly style='width: 40%;'><br>
-<?
-?>
 </div>
 <div id="charactersc" name="content" style="display: none;">
-<?
-$all_characters = $adb->select("SELECT * FROM `characters` ORDER BY `guid`;");
-?>
 <font color='red'>Персонажи:</font>
 <table border="1" cellspacing="0" cellpadding="0" width="100%">
 <tr style="font-weight: bold;">
@@ -109,21 +102,29 @@ $all_characters = $adb->select("SELECT * FROM `characters` ORDER BY `guid`;");
 <td>Login</td>
 <td>Level</td>
 <td>Exp</td>
+<td>Next Up</td>
 <td>Money</td>
+<td>Euro</td>
 <td>City</td>
 <td>Room</td>
 <td> </td>
 </tr>
 <tr>
 <?
+$all_characters = $adb->select("SELECT * FROM `characters` ORDER BY `guid`;");
+
 foreach ($all_characters as $one_character)
 {
-  echo "<tr id='$one_character[guid]'>";
+  $online = $adb->selectCell("SELECT `guid` FROM `online` WHERE `guid` = ?d", $one_character['guid']);
+  $bg = ($online) ?"#00FFAA"  :"#FFAAAA";
+  echo "<tr id='$one_character[guid]' style='background: $bg;'>";
   echo "<td>$one_character[guid]</td>";
   echo "<td>$one_character[login]</td>";
   echo "<td>$one_character[level]</td>";
   echo "<td>$one_character[exp]</td>";
-  echo "<td>$one_character[money]</td>";
+  echo "<td>$one_character[next_up]</td>";
+  echo "<td>".getMoney($one_character['money'])." кр.</td>";
+  echo "<td>".getMoney($one_character['money_euro'])." кр.</td>";
   echo "<td>$one_character[city]</td>";
   echo "<td>$one_character[room]</td>";
   echo "<td width='14'><img src='img/icon/clear.gif' width='14' height='14' border='0' alt='Удалить персонажа' id='$one_character[guid]' class='remove'></td>";

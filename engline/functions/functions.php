@@ -735,7 +735,11 @@ class Test extends Char
       $this->char->history->transfers('Get', "$next_money кр.", $_SERVER['REMOTE_ADDR'], 'Level');
     
     if ($next_level <= $char_db['level'])
+    {
+      if ($char_db['exp'] >= $next_exp)
+        $this->Up();
       return;
+    }
     
     $this->db->query("UPDATE `characters` 
                       SET `level` = ?d, 
@@ -751,6 +755,8 @@ class Test extends Char
         $this->db->query("UPDATE `character_bars` SET ?# = ?s WHERE `guid` = ?d", $value ,$bar_enums[$value]."|1" ,$this->guid);
       }
     }
+    if ($char_db['exp'] >= $next_exp)
+      $this->Up();
   }
   /*Проверка участия персонажа в походе*/
   function Move ()
@@ -2613,10 +2619,10 @@ function utf8_substr ($s, $offset, $len = 'all')
     
     $xlen = utf8_strlen($s) - $offset;
     $len = ($len > $xlen) ?$xlen :$len;
-    preg_match ('/^.{' . $offset . '}(.{0,'.$len.'})/us', $s, $tmp);
+    preg_match('/^.{' . $offset . '}(.{0,'.$len.'})/us', $s, $tmp);
   }
   else
-    preg_match ('/^.{' . $offset . '}(.*)/us', $s, $tmp);
+    preg_match('/^.{' . $offset . '}(.*)/us', $s, $tmp);
   return (isset($tmp[1])) ?$tmp[1] :false;
 }
 /*Экранирование запроса LIKE*/
@@ -2658,7 +2664,7 @@ define('LOCASE', 'абвгдеёжзийклмнопрстуфхцчшщъыьэ
 
 function mb_str_split ($str)
 {        
-    preg_match_all ('/.{1}|[^\x00]{1}$/us', $str, $ar);
+    preg_match_all('/.{1}|[^\x00]{1}$/us', $str, $ar);
     return $ar[0];
 }
 function mb_strtr ($str, $from, $to)
@@ -2677,7 +2683,7 @@ function uppercase ($arg = '')
 function returnAjax ()
 {
   $args = func_get_args();
-  $str = implode('A_D', $args);
+  $str = implode('$$', $args);
   die($str);
 }
 /*Получение место перехода*/

@@ -154,7 +154,7 @@ function exploder (data)
   if (data == '' || data == 'ajax_error')
     frames.main.location.href = 'main.php';
   
-  var variable = data.split('A_D');
+  var variable = data.split('$$');
   
   return variable;
 }
