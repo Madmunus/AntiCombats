@@ -302,9 +302,9 @@ $(function (){
   $('#forum').live('click', function (){
     window.open('/forum');
   });
-  $(document).mousemove(function (e){
-    pos.x = e.pageX;
-    pos.y = e.pageY;
+  $(document).live('mousemove', function (e){
+    pos.x = e.pageX - $(window).scrollLeft();
+    pos.y = e.pageY - $(window).scrollTop();
   });
   $('input[type=button], input[type=radio], input[type=submit], a').live('click', function (){
     $(this).blur();

@@ -1,5 +1,5 @@
 <?
-defined('AntiBK') or die ("Доступ запрещен!");
+defined('AntiBK') or die("Доступ запрещен!");
 
 $shop_section = $char->city->getRoom($room, $city, 'shop_section');
 $section_shop = requestVar('section_shop', '', 7);
@@ -12,21 +12,19 @@ $section_shop = (array_key_exists($section_shop, $data['sections_shop'])) ?$sect
 <td valign='top'>
 <center><h3>Магазин</h3></center>
   <font color='red' id='error'><?$char->error->getFormattedError($error, $parameters);?></font>
-  <table border='0' width='100%' cellpadding='0' cellspacing='0' bgcolor='#A5A5A5' style='margin-left: 2.5px;'>
+  <table border='0' width='100%' cellpadding='0' cellspacing='0' bgcolor='#A5A5A5'>
     <tr><td align='center'><b>Отдел "<span id="shop_title"><?echo $lang[$data['sections_shop'][$section_shop][1]].$lang['shop_'.$section_shop];?></span>"</b>
-<?    if ($section_shop == 'sell') echo "<br>Здесь вы можете продать свои вещи, за жалкие гроши...<br>У вас в наличии:";?>
+<?    echo ($section_shop == 'sell') ?"<br>Здесь вы можете продать свои вещи, за жалкие гроши...<br>У вас в наличии:" :"";?>
     </td></tr>
     <tr><td align='left'>
 <?if ($section_shop != 'sell'){?>
-      <form action="" method="post" style="display: inline;" onsubmit="shopSection (); return false;">
-        <table cellspacing='4' cellpadding='0' width='100%'><tr>
-          <td width='60'><b>Фильтр:</b>&nbsp;</td>
-          <td width='60'>ур.:<input type="text" name="level_filter" size="4" value='<?echo $level_filter;?>'></td>
-          <td width='180'>название:<input type="text" name="name_filter" value='<?echo $name_filter;?>'></td>
-          <td width='60'><input type="submit" value="Применить"></td>
-          <td align='right'><img id='loadbar' src='img/loadbar.gif' class='loadbar'></td>
-        </tr></table>
-      </form>
+      <table cellspacing='4' cellpadding='0' width='100%'><tr>
+        <td width='60'><b>Фильтр:</b>&nbsp;</td>
+        <td width='60'>ур.:<input type="text" name="level_filter" size="4" value='<?echo $level_filter;?>'></td>
+        <td width='180'>название:<input type="text" name="name_filter" value='<?echo $name_filter;?>'></td>
+        <td width='60'><input type="button" value="Применить" onclick="shopSection();"></td>
+        <td align='right'><img id='loadbar' src='img/loadbar.gif' class='loadbar'></td>
+      </tr></table>
 <?}?>
     </td></tr>
   </table>
@@ -72,13 +70,7 @@ else
   </small></div>
 <div style="margin-left: 25px; margin-top: 10px;">
 <?
-if ($section_shop == 'sell')
-{
-  $link = (empty($_COOKIE['section_shop'])) ?$shop_section :$_COOKIE['section_shop'];
-  echo "<input type='button' value='Купить вещи' id='link' link='none&section_shop=$link' class='nav'>";
-}
-else
-  echo "<input type='button' value='Продать вещи' id='link' link='none&section_shop=sell' class='nav'>";
+echo ($section_shop == 'sell') ?"<input type='button' value='Купить вещи' id='link' link='none' class='nav'>" :"<input type='button' value='Продать вещи' id='link' link='none&section_shop=sell' class='nav'>";
 ?>
 <div style="background-color: #A5A5A5; padding: 1px; font-weight: bold; text-align: center;">Отделы магазина</div>
 <?
@@ -90,13 +82,7 @@ foreach ($data['sections_shop'] as $key => $value)
     break;
   }
   $show_in = explode(',', $value[0]);
-  foreach ($show_in as $key2 => $value2)
-  {
-    if ($value2 != 'shop')
-      continue;
-    
-    echo "<div id='section_shop_$key'><a class='nick' href=\"javascript:shopSection('$key');\">".$lang[$value[2]].$lang['shop_'.$key]."</a><br></div>";
-  }
+  echo (in_array($room, $show_in)) ?"<div id='section_shop_$key'><a class='nick' href=\"javascript:shopSection('$key');\">".$lang[$value[2]].$lang['shop_'.$key]."</a><br></div>" :"";
 }
 ?>
 </div>

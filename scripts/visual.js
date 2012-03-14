@@ -10,7 +10,7 @@ var visual = {
                                     '<tr><td>Запомнить надетый комплект одежды, для быстрого переодевания. Подробнее об этой функции читайте в разделе <span id="hint" link="invent" class="nick">Подсказка</span>.<br>Введите название комплекта: <input type="text" name="set_name" maxlength="30"></td></tr>'+
                                     '<tr><td align="center"><input type="submit" value="Запомнить" onclick=\'workSets ("create");\'></td></tr>'+
                                   '</table>'+
-                                 '</td></tr></table>').css({left: pos.x - 200 + 'px', top: pos.y - 75 + 'px'});
+                                 '</td></tr></table>').css({left: pos.x - 200 + 'px', top: pos.y - 20 + 'px'});
               },
   hint_set: function (hint)
             {

@@ -79,12 +79,14 @@ switch ($do)
     $password = requestVar('password');
     $password_confirm = requestVar('password_confirm');
     
-    if (!isset($_SESSION['reg_login']))
+    if (!checks('reg_login'))
       returnAjax('error', 'Пройдите предыдущий шаг!');
     else if (utf8_strlen($password) < 6 || utf8_strlen($password) > 30)
       returnAjax('error', 'Длина пароля не может быть меньше 6 символов или более 30 символов.');
-    else if ($password != $password_confirm || $password_confirm == '')
-      returnAjax('error', 'В анкете пароль нужно ввести дважды, для проверки. Во второй раз вы его ввели неверно, будьте внимательнее...');
+    else if ($password_confirm == '')
+      returnAjax('error', 'В анкете пароль нужно ввести дважды, для проверки.');
+    else if ($password != $password_confirm)
+      returnAjax('error', 'Во второй раз вы ввели пароль неверно, будьте внимательнее...');
     else if (preg_match("/[^a-zA-Zа-яА-Я0-9_]/ui", $password))
       returnAjax('error', 'Пароль должен состоять только из букв русского и английского алфавита, а также из цифр.');
     else if ((preg_match("/[a-zA-Z]/ui", $password) && !preg_match("/[а-яА-Я0-9_]/ui", $password)) || (preg_match("/[а-яА-Я]/ui", $password) && !preg_match("/[a-zA-Z0-9_]/ui", $password)) || (preg_match("/[0-9_]/ui", $password) && !preg_match("/[a-zA-Zа-яА-Я]/ui", $password)))
@@ -101,7 +103,7 @@ switch ($do)
     $secretquestion = requestVar('secretquestion');
     $secretanswer = requestVar('secretanswer');
     
-    if (!isset($_SESSION['reg_login']) || !isset($_SESSION['reg_password']))
+    if (!checks('reg_login') || !checks('reg_password'))
       returnAjax('error', 'Пройдите предыдущий шаг!');
     else if (utf8_strlen($email) < 6 || utf8_strlen($email) > 50)
       returnAjax('error', 'Email не может быть короче 6-х символов и длинее 50-ти символов.');
@@ -127,7 +129,7 @@ switch ($do)
     $deviz = requestVar('deviz');
     $color = requestVar('color');
     
-    if (!isset($_SESSION['reg_login']) || !isset($_SESSION['reg_password']) || !isset($_SESSION['reg_email']) || !isset($_SESSION['reg_secretquestion']) || !isset($_SESSION['reg_secretanswer']))
+    if (!checks('reg_login') || !checks('reg_password') || !checks('reg_email') || !checks('reg_secretquestion') || !checks('reg_secretanswer'))
       returnAjax('error', 'Пройдите предыдущий шаг!');
     else if ($name == '' || preg_match("/[^a-zA-Zа-яА-Я0-9]/ui", $name))
       returnAjax('error', 'Вы не заполнили или не правильно заполнили обязательное поле "Ваше имя".');
@@ -157,7 +159,7 @@ switch ($do)
   case 'checkstep5':
     $rules = requestVar('rules');
     
-    if (!isset($_SESSION['reg_login']) || !isset($_SESSION['reg_password']) || !isset($_SESSION['reg_email']) || !isset($_SESSION['reg_secretquestion']) || !isset($_SESSION['reg_secretanswer']) || !isset($_SESSION['reg_name']) || !isset($_SESSION['reg_birth_day']) || !isset($_SESSION['reg_birth_month']) || !isset($_SESSION['reg_birth_year']) || !isset($_SESSION['reg_sex']) || !isset($_SESSION['reg_city']) || !isset($_SESSION['reg_icq']) || !isset($_SESSION['reg_hide_icq']) || !isset($_SESSION['reg_deviz']) || !isset($_SESSION['reg_color']))
+    if (!checks('reg_login') || !checks('reg_password') || !checks('reg_email') || !checks('reg_secretquestion') || !checks('reg_secretanswer') || !checks('reg_name') || !checks('reg_birth_day') || !checks('reg_birth_month') || !checks('reg_birth_year') || !checks('reg_sex') || !checks('reg_city') || !checks('reg_icq') || !checks('reg_hide_icq') || !checks('reg_deviz') || !checks('reg_color'))
       returnAjax('error', 'Пройдите предыдущий шаг!');
     else if ($rules == 'false')
       returnAjax('error', 'Извините, без принятия правил нашего клуба, вы не можете зарегистрировать своего персонажа.');
@@ -206,10 +208,10 @@ switch ($do)
     $id = ($adb->selectCell("SELECT MAX(`id`) FROM `character_inventory`;")) + 1;
     // Предметы
     $adb->query("INSERT INTO `character_inventory` (`id`, `guid`, `item_entry`, `wear`, `tear_max`, `made_in`, `last_update`) 
-                 VALUES (?d, ?d, '920', '1', '20', ?s, ?d),
-                        (?d, ?d, '1031', '1', '10', ?s, ?d);", $id ,$guid ,$city ,time() ,($id+1) ,$guid ,$city ,time());
-    $adb->query("UPDATE `character_equip` SET `pants` = ?d, `shirt` = ?d WHERE `guid` = ?d", $id ,($id+1) ,$guid);
-    $char->history->authorization(2, $city);
+                 VALUES ('1', ?d, '920', '1', '20', ?s, ?d),
+                        ('2', ?d, '1031', '1', '10', ?s, ?d);", $guid ,$city ,time() ,$guid ,$city ,time());
+    $adb->query("UPDATE `character_equip` SET `pants` = '1', `shirt` = '2' WHERE `guid` = ?d", $guid);
+    $char->history->Auth(2, $city);
     returnAjax('complete', $login, $password);
   break;
 }

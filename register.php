@@ -60,7 +60,7 @@ $error_text = 'Пройдите предыдущий шаг!<br><br><a href=\'ja
     {
       default :
       case '':
-        $reg_login = (isset($_SESSION['reg_login'])) ?$_SESSION['reg_login'] :'';
+        $reg_login = (checks('reg_login')) ?$_SESSION['reg_login'] :'';
 ?>              <table class="g" align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
                   <tr class="bg6">
                     <td><span class="style5">* </span>&nbsp;Имя вашего<br> &nbsp; &nbsp; персонажа (login):</td>
@@ -103,8 +103,8 @@ $error_text = 'Пройдите предыдущий шаг!<br><br><a href=\'ja
                 </table>
 <?    break;
       case 2:
-        if (!isset($_SESSION['reg_login'])) die($error_text);
-        $reg_password = (isset($_SESSION['reg_password'])) ?$_SESSION['reg_password'] :'';
+        if (!checks('reg_login')) die($error_text);
+        $reg_password = (checks('reg_password')) ?$_SESSION['reg_password'] :'';
 ?>              <table class="g" align="center" border="0" cellpadding="0" cellspacing="0">
                   <tr class="bg6">
                     <td width="500"><span class="style5">*</span><font style="margin-left: 20px;">Имя вашего персонажа:</font></td>
@@ -145,10 +145,10 @@ $error_text = 'Пройдите предыдущий шаг!<br><br><a href=\'ja
                 </table>
 <?    break;
       case 3:
-        if (!isset($_SESSION['reg_login']) || !isset($_SESSION['reg_password'])) die($error_text);
-        $reg_email = (isset($_SESSION['reg_email'])) ?$_SESSION['reg_email'] :'';
-        $reg_secretquestion = (isset($_SESSION['reg_secretquestion'])) ?$_SESSION['reg_secretquestion'] :'';
-        $reg_secretanswer = (isset($_SESSION['reg_secretanswer'])) ?$_SESSION['reg_secretanswer'] :'';
+        if (!checks('reg_login') || !checks('reg_password')) die($error_text);
+        $reg_email = (checks('reg_email')) ?$_SESSION['reg_email'] :'';
+        $reg_secretquestion = (checks('reg_secretquestion')) ?$_SESSION['reg_secretquestion'] :'';
+        $reg_secretanswer = (checks('reg_secretanswer')) ?$_SESSION['reg_secretanswer'] :'';
 ?>              <table class="g" align="center" border="0" cellpadding="1" cellspacing="0">
                   <tr class="bg6">
                     <td width="500"><span class="style5">*</span><font style="margin-left: 15px;">Имя вашего персонажа:</font></td>
@@ -179,12 +179,12 @@ $error_text = 'Пройдите предыдущий шаг!<br><br><a href=\'ja
                 </table>
 <?    break;
       case 4:
-        if (!isset($_SESSION['reg_login']) || !isset($_SESSION['reg_password']) || !isset($_SESSION['reg_email']) || !isset($_SESSION['reg_secretquestion']) || !isset($_SESSION['reg_secretanswer'])) die($error_text);
+        if (!checks('reg_login') || !checks('reg_password') || !checks('reg_email') || !checks('reg_secretquestion') || !checks('reg_secretanswer')) die($error_text);
         //$code = rand(1000, 9999);
-        $reg_name = (isset($_SESSION['reg_name'])) ?$_SESSION['reg_name'] :'';
-        $reg_birth_day = (isset($_SESSION['reg_birth_day'])) ?$_SESSION['reg_birth_day'] :'';
-        $reg_birth_month = (isset($_SESSION['reg_birth_month'])) ?$_SESSION['reg_birth_month'] :'';
-        $reg_birth_year = (isset($_SESSION['reg_birth_year'])) ?$_SESSION['reg_birth_year'] :'';
+        $reg_name = (checks('reg_name')) ?$_SESSION['reg_name'] :'';
+        $reg_birth_day = (checks('reg_birth_day')) ?$_SESSION['reg_birth_day'] :'';
+        $reg_birth_month = (checks('reg_birth_month')) ?$_SESSION['reg_birth_month'] :'';
+        $reg_birth_year = (checks('reg_birth_year')) ?$_SESSION['reg_birth_year'] :'';
 ?>              <table class="g" align="center" border="0" cellpadding="1" cellspacing="0" width="100%">
                   <tr class="bg6">
                     <td><span class="style5">*</span><font style="margin-left: 8px;">Имя вашего</font> <div style="margin-left: 17px;">персонажа:</div></td>
@@ -274,7 +274,7 @@ $error_text = 'Пройдите предыдущий шаг!<br><br><a href=\'ja
                 </table>
 <?    break;
       case 5:
-        if (!isset($_SESSION['reg_login']) || !isset($_SESSION['reg_password']) || !isset($_SESSION['reg_email']) || !isset($_SESSION['reg_secretquestion']) || !isset($_SESSION['reg_secretanswer']) || !isset($_SESSION['reg_name']) || !isset($_SESSION['reg_birth_day']) || !isset($_SESSION['reg_birth_month']) || !isset($_SESSION['reg_birth_year']) || !isset($_SESSION['reg_sex']) || !isset($_SESSION['reg_city']) || !isset($_SESSION['reg_icq']) || !isset($_SESSION['reg_hide_icq']) || !isset($_SESSION['reg_deviz']) || !isset($_SESSION['reg_color'])) die($error_text);
+        if (!checks('reg_login') || !checks('reg_password') || !checks('reg_email') || !checks('reg_secretquestion') || !checks('reg_secretanswer') || !checks('reg_name') || !checks('reg_birth_day') || !checks('reg_birth_month') || !checks('reg_birth_year') || !checks('reg_sex') || !checks('reg_city') || !checks('reg_icq') || !checks('reg_hide_icq') || !checks('reg_deviz') || !checks('reg_color')) die($error_text);
 ?>              <table class="g" align="center" border="0" cellpadding="1" cellspacing="0" width="100%">
                   <tr class="bg6">
                     <td><span class="style5">*</span><font style="margin-left: 8px;">Имя вашего персонажа:</font></td>

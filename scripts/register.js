@@ -9,7 +9,7 @@ function checkStep1 ()
 {
   $('#error').hide().html('');
   var login = $('input[name=reg_login]').val();
-  $.post('ajax_reg.php', 'do=checkstep1&login='+login, function (data){
+  $.post('ajax_index.php', 'do=checkstep1&login='+login, function (data){
     var check = exploder(data);
     if (check[0] == 'complete')
       location.href = '?step=2';
@@ -23,7 +23,7 @@ function checkStep2 ()
   $('#error').hide().html('');
   var password = $('input[name=password]').val();
   var password_confirm = $('input[name=password_confirm]').val();
-  $.post('ajax_reg.php', 'do=checkstep2&password='+password+'&password_confirm='+password_confirm, function (data){
+  $.post('ajax_index.php', 'do=checkstep2&password='+password+'&password_confirm='+password_confirm, function (data){
     var check = exploder(data);
     if (check[0] == 'complete')
       location.href = '?step=3';
@@ -38,7 +38,7 @@ function checkStep3 ()
   var email = $('input[name=email]').val();
   var secretquestion = $('input[name=secretquestion]').val();
   var secretanswer = $('input[name=secretanswer]').val();
-  $.post('ajax_reg.php', 'do=checkstep3&email='+email+'&secretquestion='+secretquestion+'&secretanswer='+secretanswer, function (data){
+  $.post('ajax_index.php', 'do=checkstep3&email='+email+'&secretquestion='+secretquestion+'&secretanswer='+secretanswer, function (data){
     var check = exploder(data);
     if (check[0] == 'complete')
       location.href = '?step=4';
@@ -61,7 +61,7 @@ function checkStep4 ()
   var hide_icq = $('input[name=hide_icq]').is(':checked');
   var deviz = $('input[name=deviz]').val();
   var color = $('select[name=color]').val();
-  $.post('ajax_reg.php', 'do=checkstep4&name='+name+'&birth_day='+birth_day+'&birth_month='+birth_month+'&birth_year='+birth_year+'&sex='+sex+'&city_n='+city_n+'&city='+city+'&icq='+icq+'&hide_icq='+hide_icq+'&deviz='+deviz+'&color='+color, function (data){
+  $.post('ajax_index.php', 'do=checkstep4&name='+name+'&birth_day='+birth_day+'&birth_month='+birth_month+'&birth_year='+birth_year+'&sex='+sex+'&city_n='+city_n+'&city='+city+'&icq='+icq+'&hide_icq='+hide_icq+'&deviz='+deviz+'&color='+color, function (data){
     var check = exploder(data);
     if (check[0] == 'complete')
       location.href = '?step=5';
@@ -74,7 +74,7 @@ function checkStep5 ()
 {
   $('#error').hide().html('');
   var rules = $('input[name=rules]').is(':checked');
-  $.post('ajax_reg.php', 'do=checkstep5&rules='+rules, function (data){
+  $.post('ajax_index.php', 'do=checkstep5&rules='+rules, function (data){
     var check = exploder(data);
     if (check[0] == 'complete')
       location.href = 'enter.php?login='+check[1]+'&password='+check[2];

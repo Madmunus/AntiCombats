@@ -10,7 +10,7 @@ function break_str (str, width, brk, cut)
 
 function updateMmoves (id, text)
 {
-  if (pos.x > $('#'+id).offset().left && pos.x < $('#'+id).offset().left + $('#'+id).width() && pos.y > $('#'+id).offset().top && pos.y < $('#'+id).offset().top + $('#'+id).height())
+  if ((pos.x + $(window).scrollLeft()) > $('#'+id).offset().left && (pos.x + $(window).scrollLeft()) < $('#'+id).offset().left + $('#'+id).width() && (pos.y + $(window).scrollTop()) > $('#'+id).offset().top && (pos.y + $(window).scrollTop()) < $('#'+id).offset().top + $('#'+id).height())
     $("#mmoves").html('<small>' + break_str(text, 50, '<br>') + '</small>');
 }
 

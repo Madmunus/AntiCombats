@@ -62,12 +62,12 @@ $char = Char::initialization($guid, $adb);
 
 if (SHA1 ($guid.':'.$password) != $char_info['password'])
 {
-  $char->history->authorization(0, $char_info['city'], 'wrong_password');
+  $char->history->Auth(0, $char_info['city'], 'wrong_password');
   die ("$top Неверный пароль для \"$login\". Введите логин/пароль на <a href='../combats'>титульной странице</a>$bot");
 }
 else if ($char_info['block'])
 {
-  $char->history->authorization(0, $char_info['city'], 'blocked');
+  $char->history->Auth(0, $char_info['city'], 'blocked');
   die ("$top Внимание!!! Персонаж $login заблокирован!$bot");
 }
 
@@ -86,7 +86,7 @@ $adb->query("UPDATE `characters` SET `last_go` = ?d WHERE `guid` = ?d", time() ,
 $_SESSION['zayavka_c_m'] = 1;
 $_SESSION['zayavka_c_o'] = 1;
 $_SESSION['battle_ref']  = 0;
-$char->history->authorization(1, $char_info['city']);
+$char->history->Auth(1, $char_info['city']);
 ?>
 Авторизация окончена...
 <script type="text/javascript">location.href = 'game.php';</script>

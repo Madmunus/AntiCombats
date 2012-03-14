@@ -38,7 +38,7 @@ switch ($do)
     $adb->query("DELETE FROM `characters` WHERE `guid` = ?d", $d_guid);
     $adb->query("DELETE FROM `history_auth` WHERE `guid` = ?d", $d_guid);
     $adb->query("DELETE FROM `history_mail` WHERE `guid` = ?d", $d_guid);
-    $adb->query("DELETE FROM `history_transfers` WHERE `guid` = ?d", $d_guid);
+    $adb->query("DELETE FROM `history_items` WHERE `guid` = ?d", $d_guid);
     returnAjax('complete');
   break;
 }

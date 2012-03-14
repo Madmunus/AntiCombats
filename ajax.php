@@ -23,7 +23,7 @@ $char->test->Guid('ajax');
 
 $char_db = $char->getChar('char_db', '*');
 $char_stats = $char->getChar('char_stats', '*');
-$char_feat = array_merge ($char_db, $char_stats);
+$char_feat = array_merge($char_db, $char_stats);
 
 $lang = $char->getLang();
 
@@ -176,25 +176,17 @@ switch ($do)
     {
       default:
       case 0:
-        $item_info = $adb->selectRow("SELECT `i`.`name`, 
-                                             `i`.`mass` 
-                                      FROM `character_inventory` AS `c` 
-                                      LEFT JOIN `item_template` AS `i` 
-                                      ON `c`.`item_entry` = `i`.`entry` 
-                                      WHERE `c`.`guid` = ?d 
-                                        and `c`.`id` = ?d 
-                                        and `c`.`wear` = '0' 
-                                        and `c`.`mailed` = '0';", $guid ,$item_id) or returnAjax('error', 213);
-        $mass = $char->changeMass(-$item_info['mass']);
-        $adb->query("DELETE FROM `character_inventory` WHERE `id` = ?d and `guid` = ?d", $item_id ,$guid);
-        $char->history->transfers('Throw out', $item_info['name'], $_SERVER['REMOTE_ADDR'], 'Dump');
-        returnAjax('complete', $mass, 1);
+        if ($char->equip->deleteItem($item_id))
+        {
+          $mass = $char->getChar('char_stats', 'mass');
+          returnAjax('complete', $mass, 1);
+        }
+        else
+          returnAjax('error', 213);
       break;
       case 1:
-        $item_entry = $adb->selectCell("SELECT `item_entry` FROM `character_inventory` WHERE `guid` = ?d and `id` = ?d and `wear` = '0' and `mailed` = '0';", $guid ,$item_id) or returnAjax('error', 213);
-        $items = $adb->select("SELECT `c`.`id`, 
-                                      `i`.`name`, 
-                                      `i`.`mass` 
+        $item_entry = $adb->selectCell("SELECT `item_entry` FROM `character_inventory` WHERE `guid` = ?d and `id` = ?d", $guid ,$item_id) or returnAjax('error', 213);
+        $items = $adb->select("SELECT `c`.`id` 
                                FROM `character_inventory` AS `c` 
                                LEFT JOIN `item_template` AS `i` 
                                ON `c`.`item_entry` = `i`.`entry` 
@@ -203,13 +195,17 @@ switch ($do)
                                  and `c`.`wear` = '0' 
                                  and `c`.`mailed` = '0';", $guid ,$item_entry) or returnAjax('error', 213);
         $i = 0;
-        foreach ($items as $item_info)
+        foreach ($items as $i_info)
         {
-          $mass = $char->changeMass(-$item_info['mass']);
-          $adb->query("DELETE FROM `character_inventory` WHERE `id` = ?d and `guid` = ?d", $item_info['id'] ,$guid);
-          $char->history->transfers('Throw out', $item_info['name'], $_SERVER['REMOTE_ADDR'], 'Dump');
-          $i++;
+          if ($char->equip->deleteItem($i_info['id']))
+          {
+            $i++;
+            continue;
+          }
+          
+          returnAjax('error', 213);
         }
+        $mass = $char->getChar('char_stats', 'mass');
         returnAjax('complete', $mass, $i, $item_entry);
       break;
     }
@@ -434,23 +430,18 @@ switch ($do)
     if (!($flags & 2))
       returnAjax('error', 403);
     
-    $dat = $adb->selectRow("SELECT `i`.`name`, 
-                                   `i`.`mass`, 
-                                   `i`.`price`, 
-                                   `i`.`price_euro`, 
-                                   `i`.`tear`, 
-                                   `i`.`inc_count`, 
-                                   `i`.`validity` 
-                            FROM `item_template` AS `i` 
-                            LEFT JOIN `item_amount` AS `a` 
-                            ON `i`.`entry` = `a`.`entry` 
-                            WHERE `i`.`entry` = ?d 
-                              and `a`.?# > '0';", $item_entry ,$amount) or returnAjax('error', 403);
-    list($name, $i_mass, $price, $price_euro, $tear, $inc_count, $validity) = array_values ($dat);
+    $i_info = $adb->selectRow("SELECT `i`.`name`, 
+                                      `i`.`price`, 
+                                      `i`.`price_euro` 
+                               FROM `item_template` AS `i` 
+                               LEFT JOIN `item_amount` AS `a` 
+                               ON `i`.`entry` = `a`.`entry` 
+                               WHERE `i`.`entry` = ?d 
+                                 and `a`.?# > '0';", $item_entry ,$amount) or returnAjax('error', 403);
+    list($name, $price, $price_euro) = array_values($i_info);
     
     for ($i = 1; $i <= $count; $i++)
     {
-      $time = ($validity > 0) ?time() + $validity * 3600 :0;
       $char->equip->getBuyValue($price);
       $char->equip->getBuyValue($price_euro);
       
@@ -459,17 +450,17 @@ switch ($do)
       
       $money = $money - $price;
       $money_euro = $money_euro - $price_euro;
-      $mass = $char->changeMass($i_mass);
-      //$adb->query("UPDATE `character_stats` SET `trade` = `trade` + '0.01' WHERE `guid` = ?d", $guid);
-      $adb->query("INSERT INTO `character_inventory` (`guid`, `item_entry`, `tear_max`, `inc_count_p`, `made_in`, `date`, `last_update`) 
-                   VALUES (?d, ?d, ?f, ?d, ?s, ?d, ?d)", $guid ,$item_entry ,$tear ,$inc_count ,$city ,$time ,time ());
+      
+      if (!($char->equip->addItem($item_entry)))
+        returnAjax('error', 403);
+      
+      if ($char_feat['trade'] < 10)
+        $adb->query("UPDATE `character_stats` SET `trade` = `trade` + '0.01' WHERE `guid` = ?d", $guid);
+      
       $adb->query("UPDATE `item_amount` SET ?# = ?# - '1' WHERE `entry` = ?d", $amount ,$amount ,$item_entry);
-      if ($price > 0)
-        $char->history->transfers('Buy', "$name ($price кр)", $_SERVER['REMOTE_ADDR'], $room);
-      else if ($price_euro > 0)
-        $char->history->transfers('Buy', "$name ($price_euro екр)", $_SERVER['REMOTE_ADDR'], $room);
       $buycount++;
     }
+    $mass = $char->getChar('char_stats', 'mass');
     if ($buycount != 0 && $price > 0)
       returnAjax('complete', getMoney($money), $mass, 400, "$name|".($price*$buycount)."|$buycount");
     else if ($buycount != 0 && $price_euro > 0)
@@ -483,39 +474,30 @@ switch ($do)
     if ($item_id == 0 || !is_numeric($item_id))
       returnAjax('error', 213);
     
-    $dat = $adb->selectRow("SELECT `i`.`name`, 
-                                   `i`.`mass`, 
-                                   `i`.`price`, 
-                                   `i`.`price_euro`, 
-                                   `c`.`tear_cur`, `c`.`tear_max`, 
-                                   `i`.`tear` 
-                            FROM `character_inventory` AS `c` 
-                            LEFT JOIN `item_template` AS `i` 
-                            ON `c`.`item_entry` = `i`.`entry` 
-                            WHERE (`i`.`item_flags` & '1') 
-                               and `c`.`id` = ?d 
-                               and `c`.`guid` = ?d 
-                               and `c`.`wear` = '0' 
-                               and `c`.`mailed` = '0';", $item_id ,$guid) or returnAjax('error', 213);
-    list($name, $i_mass, $price, $price_euro, $tear_cur, $tear_max, $tear) = array_values ($dat);
-    $sell_price = getSellValue($dat);
-    $mass = $char->changeMass(-$i_mass);
-    if ($price > 0)
+    $i_info = $adb->selectRow("SELECT `i`.`name`, 
+                                      `i`.`mass`, 
+                                      `i`.`price`, 
+                                      `i`.`price_euro`, 
+                                      `c`.`tear_cur`, `c`.`tear_max`, 
+                                      `i`.`tear` 
+                               FROM `character_inventory` AS `c` 
+                               LEFT JOIN `item_template` AS `i` 
+                               ON `c`.`item_entry` = `i`.`entry` 
+                               WHERE (`i`.`item_flags` & '1') 
+                                  and `c`.`id` = ?d 
+                                  and `c`.`guid` = ?d 
+                                  and `c`.`wear` = '0' 
+                                  and `c`.`mailed` = '0';", $item_id ,$guid) or returnAjax('error', 213);
+    $sell_price = $char->equip->getSellValue($i_info);
+    $char->changeMoney($sell_price);
+    $money = $money + $sell_price;
+    if ($char->equip->deleteItem($item_id, 'sell'))
     {
-      $char->changeMoney($sell_price);
-      $money = $money + $sell_price;
-      $adb->query("DELETE FROM `character_inventory` WHERE `id` = ?d and `guid` = ?d", $item_id ,$guid);
-      $char->history->transfers('Sell', "$name ($sell_price кр)", $_SERVER['REMOTE_ADDR'], 'Shop');
-      returnAjax('complete', getMoney($money), $mass, 404, "$name|$sell_price");
+      $mass = $char->getChar('char_stats', 'mass');
+      returnAjax('complete', getMoney($money), $mass, 404, "$$i_info[name]|$sell_price");
     }
-    else if ($price_euro > 0)
-    {
-      $char->changeMoney($sell_price, 'euro');
-      $money_euro = $money_euro + $sell_price_euro;
-      $adb->query("DELETE FROM `character_inventory` WHERE `id` = ?d and `guid` = ?d", $item_id ,$guid);
-      $char->history->transfers('Sell', "$name ($sell_price екр)", $_SERVER['REMOTE_ADDR'], 'Shop');
-      returnAjax('complete', getMoney($money_euro), $mass, 405, "$name|$sell_price");
-    }
+    else
+      returnAjax('error', 213);
   break;
 }
 ?>

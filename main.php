@@ -213,7 +213,7 @@ switch ($action)
     }
   break;
   case 'enter':
-    if (!isset($_SESSION['last']))
+    if (!checks('last'))
     {
       $id = $adb->selectCell("SELECT `id` FROM `history_auth` WHERE `guid` = ?d ORDER BY `id` DESC", $guid) - 1;
       $auth = $adb->selectRow("SELECT `ip`, `date` FROM `history_auth` WHERE `guid` = ?d and `id` = ?d", $guid ,$id);

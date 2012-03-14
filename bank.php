@@ -14,7 +14,7 @@ $(function (){
       return false;
     }
     else
-      return confirm ('Вы хотите положить на свой счет '+parseFloat($('input[name=add_sum]').val())+' кр. ?');
+      return confirm('Вы хотите положить на свой счет '+parseFloat($('input[name=add_sum]').val())+' кр. ?');
   });
   $('input[name=get_kredit]').live('click', function (){
     if (isNaN(parseFloat($('input[name=get_sum]').val())))
@@ -23,7 +23,7 @@ $(function (){
       return false;
     }
     else
-      return confirm ('Вы хотите снять со своего счета '+parseFloat($('input[name=get_sum]').val())+' кр. ?');
+      return confirm('Вы хотите снять со своего счета '+parseFloat($('input[name=get_sum]').val())+' кр. ?');
   });
   $('input[name=transfer_kredit]').live('click', function (){
     if (isNaN(parseFloat($('input[name=transfer_sum]').val())) || isNaN(parseInt($('input[name=id2]').val())))
@@ -32,7 +32,7 @@ $(function (){
       return false;
     }
     else
-      return confirm ('Вы хотите перевести со своего счета '+parseFloat($('input[name=transfer_sum]').val())+' кр. на счет номер #'+parseInt($('input[name=id2]').val())+' ?');
+      return confirm('Вы хотите перевести со своего счета '+parseFloat($('input[name=transfer_sum]').val())+' кр. на счет номер #'+parseInt($('input[name=id2]').val())+' ?');
   });
   $('input[name=convert_ekredit]').live('click', function (){
     if (isNaN(parseFloat($('input[name=convert_sum]').val())))
@@ -41,7 +41,7 @@ $(function (){
       return false;
     }
     else
-      return confirm ('Вы хотите обменять '+parseFloat($('input[name=convert_sum]').val())+' екр. на кредиты ?');
+      return confirm('Вы хотите обменять '+parseFloat($('input[name=convert_sum]').val())+' екр. на кредиты ?');
   });
   $('input[name=close]').live('click', function (){
     if (confirm('Если вы закроете счет, то для открытия нового счета вам придется снова заплатить 3.00 кр.\nЗакрыть счет?'))
@@ -68,8 +68,8 @@ switch ($do)
       $char->error->Map(300);
     
     $adb->query("INSERT INTO `character_bank` (`id`, `guid`, `password`) 
-                  VALUES (?d, ?d, ?s);", $id ,$guid ,SHA1 ($id.':'.$pass1));
-    $char->history->bank($id, '', '', '', 1);
+                 VALUES (?d, ?d, ?s);", $id ,$guid ,SHA1($id.':'.$pass1));
+    $char->history->Bank($id, '', '', '', 1);
     
     if (!($char->changeMoney(-3)))
       $char->error->Map(107);
@@ -84,12 +84,12 @@ switch ($do)
       $char->error->Map();
     
     $credit = $adb->selectRow("SELECT `id`, 
-                                       `cash`, 
-                                       `euro` 
-                                FROM `character_bank` 
-                                WHERE `id` = ?d 
-                                  and `guid` = ?d", $_SESSION['bankСredit'] ,$guid) or $char->error->Map(322);
-    list ($id, $cash, $euro) = array_values($credit);
+                                      `cash`, 
+                                      `euro` 
+                               FROM `character_bank` 
+                               WHERE `id` = ?d 
+                                 and `guid` = ?d", $_SESSION['bankСredit'] ,$guid) or $char->error->Map(322);
+    ArrToVar($credit);
     if (isset($_POST['add_kredit']))
     {
       $add_sum = requestVar('add_sum', 0, 11);
@@ -97,21 +97,22 @@ switch ($do)
       if (!($char->changeMoney(-$add_sum)))
         $char->error->Map(107);
       
-      $char->bank->bMoney(-$add_sum, $id);
-      $char->history->bank($id, '', $add_sum, '', 2);
+      $char->bank->Money(-$add_sum, $id);
+      $char->history->Bank($id, '', $add_sum, '', 2);
       $char->error->Map(319, "$add_sum|$id");
     }
     else if (isset($_POST['get_kredit']))
     {
       $get_sum = requestVar('get_sum', 0, 11);
-      $char->bank->bMoney($get_sum, $id);
+      $char->bank->Money($get_sum, $id);
       $char->changeMoney($get_sum);
-      $char->history->bank($id, '', $get_sum, '', 3);
+      $char->history->Bank($id, '', $get_sum, '', 3);
       $char->error->Map(320, "$get_sum|$id");
     }
     else if (isset($_POST['transfer_kredit']))
     {
       $trf_sum = requestVar('transfer_sum', 0, 11);
+      
       if ($level < 8)
         $char->error->Map(306);
       
@@ -122,17 +123,18 @@ switch ($do)
         $char->error->Map(309);
       
       $credit2_guid = $adb->selectCell("SELECT `guid` FROM `character_bank` WHERE `id` = ?d", $id2) or $char->error->Map(303);
-      $char->bank->bMoney($trf_sum, $id);
+      $char->bank->Money($trf_sum, $id);
       $trfed_sum = round ($trf_sum * 0.97, 2);
-      $char->bank->bMoney(-$trfed_sum, $id2, '', $credit2_guid);
-      $char->history->bank($id, $id2, $trfed_sum, '', 4);
-      $char->history->bank($id2, $id, $trfed_sum, '', 5);
+      $char->bank->Money(-$trfed_sum, $id2, '', $credit2_guid);
+      $char->history->Bank($id, $id2, $trfed_sum, '', 4);
+      $char->history->Bank($id2, $id, $trfed_sum, '', 5);
       $to_owner = $char->info->character('name', $credit2_guid);
       $char->error->Map(321, "$trfed_sum|$to_owner|$id2|$id");
     }
     else if (isset($_POST['convert_ekredit']))
     {
       $convert_sum = requestVar('convert_sum', 0, 11);
+      
       if ($convert_sum == 0 || !is_numeric($convert_sum))
         $char->error->Map(327);
       
@@ -140,15 +142,16 @@ switch ($do)
         $char->error->Map(310, $convert_sum);
       
       $converted_sum = $convert_sum * 30;
-      $char->bank->bMoney($convert_sum, $id, 'euro');
-      $char->bank->bMoney(-$converted_sum, $id);
-      $char->history->bank($id, '', $converted_sum, $convert_sum, 6);
+      $char->bank->Money($convert_sum, $id, 'euro');
+      $char->bank->Money(-$converted_sum, $id);
+      $char->history->Bank($id, '', $converted_sum, $convert_sum, 6);
       $char->error->Map(308, "$convert_sum|$id|$converted_sum");
     }
     else if (isset($_POST['change_psw']))
     {
       $new_psw = requestVar('new_psw');
       $new_psw2 = requestVar('new_psw2');
+      
       if ($new_psw == "")
         $char->error->Map(315);
       
@@ -177,7 +180,7 @@ switch ($do)
   case 'delete':
     $del1 = $adb->query("DELETE FROM `character_bank` WHERE `id` = ?d", $_SESSION['bankСredit']);
     $del2 = $adb->query("DELETE FROM `history_bank` WHERE `credit` = ?d", $_SESSION['bankСredit']);
-    unset ($_SESSION['bankСredit']);
+    unset($_SESSION['bankСredit']);
     $char->error->Map();
   break;
 }
@@ -227,11 +230,9 @@ if (empty($_SESSION['bankСredit']))
     <td>Номер счета</td>
     <td colspan="2">
       <select name="id" size="0" style="width: 90px;">
-<?
-        foreach ($rows as $num => $id)
+<?      foreach ($rows as $num => $id)
           echo "<option value='$id'>$id</option>";
-?>
-      </select>
+?>    </select>
     </td>
   </tr>
   <tr>
@@ -272,13 +273,13 @@ if (empty($_SESSION['bankСredit']))
 else
 {
   $bank_info = $adb->selectRow("SELECT `id`, 
-                                        `cash`, 
-                                        `euro` 
-                                 FROM `character_bank` 
-                                 WHERE `id` = ?d", $_SESSION['bankСredit']);
-  list ($id, $cash, $euro) = array_values ($bank_info);
+                                       `cash`, 
+                                       `euro` 
+                                FROM `character_bank` 
+                                WHERE `id` = ?d", $_SESSION['bankСredit']);
+  ArrToVar($bank_info);
   $note = $adb->selectCell("SELECT `bank_note` FROM `character_info` WHERE `guid` = ?d", $guid);
-  $note = str_replace (array("<br>", '\&quot;', "\'"), array("\n", '"', "'"), $note);
+  $note = str_replace(array("<br>", '\&quot;', "\'"), array("\n", '"', "'"), $note);
   $m_dis = ($money == 0) ?" disabled" :"";
   $g_dis = ($cash == 0) ?" disabled" :"";
   $e_dis = ($euro == 0) ?" disabled" :"";
@@ -366,10 +367,7 @@ else
         </tr>
       </table>
       <input type="submit" class="nav" name="change_psw" value="Сменить пароль"><br>
-<?if ($cash == 0){?>
-      <hr>
-      Т.к. ваш счет с нулевым балансом, вы можете его в любой момент закрыть <input class="nav" type="button" name="close" value="Закрыть счет"><br>
-<?}?>
+      <?echo ($cash == 0) ?'<hr>Т.к. ваш счет с нулевым балансом, вы можете его в любой момент закрыть <input class="nav" type="button" name="close" value="Закрыть счет"><br>' :"";?>
     </fieldset>
   </td>
   <td valign="top">
@@ -377,17 +375,17 @@ else
       <legend><b>Последние операции</b></legend>
         <table cellpadding="2" cellspacing="0" border="0">
 <?        $rows = $adb->select("SELECT `credit2`, 
-                                        `cash`, 
-                                        `euro`, 
-                                        `operation`, 
-                                        `date` 
-                                 FROM `history_bank` 
-                                 WHERE `credit` = ?d 
-                                 ORDER BY `id` DESC 
-                                 LIMIT 0, 10;", $_SESSION['bankСredit']);
+                                       `cash`, 
+                                       `euro`, 
+                                       `operation`, 
+                                       `date` 
+                                FROM `history_bank` 
+                                WHERE `credit` = ?d 
+                                ORDER BY `id` DESC 
+                                LIMIT 0, 10;", $_SESSION['bankСredit']);
           foreach ($rows as $hist)
           {
-            vprintf ("<tr><td><font class='date'>".date ('d.m.y H:i', $hist['date'])."</font> ".$lang['bank_'.$hist['operation']]."</td></tr>", $hist);
+            vprintf("<tr><td><font class='date'>".date('d.m.y H:i', $hist['date'])."</font> ".$lang['bank_'.$hist['operation']]."</td></tr>", $hist);
           }
 ?>
         </table>

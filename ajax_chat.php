@@ -100,7 +100,7 @@ switch ($do)
     $go = requestVar('go');
     $send = "";
 
-    $last = (isset($_SESSION['last'])) ?$_SESSION['last'] :0;
+    $last = (checks('last')) ?$_SESSION['last'] :0;
     
     if (!$last || $go)
       $last = $_SESSION['last'] = time() - 300;
