@@ -55,16 +55,16 @@ switch ($room)
   case 'centsquare':
   case 'fairstreet':           include("globalmap.php");
   break;
-  case 'castle':
+  case 'club':
   case 'passage':
   case 'novice':
   case 'hall_1':
   case 'hall_2':
   case 'hall_3':
   case 'boudoir':
-  case 'castle2':
+  case 'club2':
   case 'km_7':
-  case 'km_6':                 include("castle.php");
+  case 'km_6':                 include("club.php");
   break;
   case 'Комната Знахаря':      include("km_5.php");
   break;

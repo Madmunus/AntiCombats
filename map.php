@@ -18,7 +18,7 @@ body {background-color: #e2e0e0;}
 <?
 switch ($room)
 {
-  case 'castle':
+  case 'club':
   case 'hall_1':
   case 'hall_2':
   case 'hall_3':
@@ -27,7 +27,7 @@ switch ($room)
   case 'passage':
     echo "Бойцовский Клуб. Карта";
   break;
-  case 'castle2':
+  case 'club2':
     echo "Этаж 2. Карта";
   break;
 }
@@ -43,7 +43,7 @@ switch ($room)
 <?
 switch ($room)
 {
-  case 'castle':
+  case 'club':
   case 'hall_1':
   case 'hall_2':
   case 'hall_3':
@@ -80,7 +80,7 @@ switch ($room)
     <td>
       <div style="width: 160px; height: 100px;" class="clubitem">
         <table cellpadding="0" cellspacing="0" width="100%" height="100%">
-          <tr valign="top"><td align="center" style="font-size: 10px;"><?$char->city->showRoomOnMap('castle')?></td></tr>
+          <tr valign="top"><td align="center" style="font-size: 10px;"><?$char->city->showRoomOnMap('club')?></td></tr>
           <tr valign="bottom"><td align="left" style="font-size: 10px;">Переходы:<br><strong>&nbsp;Центральная площадь<br>&nbsp;Этаж 2</strong></td></tr>
         </table>
       </div>
@@ -131,7 +131,7 @@ switch ($room)
 </table>
 <?
     break;
-    case 'castle2':
+    case 'club2':
     case 'km_6':
     case 'km_7':
 ?>
@@ -168,7 +168,7 @@ switch ($room)
     <td>
       <div style="width: 120px; height: 80px;" class="clubitem">
       <table cellpadding="0" cellspacing="0" width="100%" height="100%">
-        <tr valign="top"><td align="center" style="font-size: 10px;"><?$char->city->showRoomOnMap('castle2')?></td></tr>
+        <tr valign="top"><td align="center" style="font-size: 10px;"><?$char->city->showRoomOnMap('club2')?></td></tr>
         <tr valign="bottom"><td align="left" style="font-size: 10px;">Переходы:<br><strong>&nbsp;Бойцовский Клуб<br>&nbsp;Этаж 3</strong></td></tr>
       </table>
       </div>

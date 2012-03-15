@@ -71,55 +71,9 @@ function ch_counter_color (color)
 }
 
 $(function (){
-	if ($('#ione'))
-		$('.buttons').appendTo('#ione');
-	
-	$('img#passage').hover(
-		function ()
-		{
-			var image = $(this).attr('class');
-			image = image.replace('right1', 'right');
-			image = image.replace('right2', 'right');
-			$(this).attr('src', "img/room/glow/"+image+".png");
-		},
-		function ()
-		{
-			var image = $(this).attr('class');
-			image = image.replace('right1', 'right');
-			image = image.replace('right2', 'right');
-			$(this).attr('src', "img/room/"+image+".png");
-		}
-	);
-	$('.buttons_on_image').hover(
-		function ()
-		{
-			$(this).css('color', 'white');
-		},
-		function ()
-		{
-			$(this).css('color', '#D8D8D8');
-		}
-	);
 	$('a.passage').live('click', function (){
 		return check_access();
-	}).hover(
-		function ()
-		{
-			if (!($(this).attr('id')))
-				return;
-			
-			var image = $('.'+$(this).attr('id'));
-			image.attr('src', "img/room/glow/"+$(this).attr('id')+".png");
-		},
-		function ()
-		{
-			if (!($(this).attr('id')))
-				return;
-			
-			var image = $('.'+$(this).attr('id'));
-			image.attr('src', "img/room/"+$(this).attr('id')+".png");
-		}
-	);
+	});
 	if (mtime > 0)
 	{
 		progress_clear();

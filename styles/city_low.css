@@ -1,0 +1,22 @@
+.map           {position: relative; padding-bottom: 5px; width: 500px; height: 268px; padding-right: 2px;}
+.shop         {position: absolute; z-index: 90; left: 30px; top: 175px; width: 60px; height: 62px;}
+.comission         {position: absolute; z-index: 90; left: 156px; top: 162px; width: 69px; height: 71px;}
+.station         {position: absolute; z-index: 90; left: 304px; top: 168px; width: 73px; height: 67px;}
+.temple         {position: absolute; z-index: 90; left: 428px; top: 34px; width: 62px; height: 103px;}
+.repare        {position: absolute; z-index: 90; left: 83px; top: 107px; width: 74px; height: 70px;}
+.post        {position: absolute; z-index: 90; left: 393px; top: 158px; width: 75px; height: 83px;}
+.club        {position: absolute; z-index: 90; left: 167px; top: 42px; width: 178px; height: 99px;}
+.arrow_right        {position: absolute; z-index: 90; left: 462px; top: 150px; width: 31px; height: 17px;}
+.arrow_left        {position: absolute; z-index: 90; left: 11px; top: 163px; width: 30px; height: 17px;}
+.stella        {position: absolute; z-index: 90; left: 7px; top: 73px; width: 71px; height: 85px;}
+.monument        {position: absolute; z-index: 90; left: 233px; top: 157px; width: 55px; height: 45px;}
+.dtower        {position: absolute; z-index: 90; left: 226px; top: 32px; width: 73px; height: 120px;}
+.bank        {position: absolute; z-index: 90; left: 334px; top: 110px; width: 74px; height: 63px;}
+.room_small        {position: absolute; z-index: 90; left: 331px; top: 178px; width: 27px; height: 29px;}
+.room_medium        {position: absolute; z-index: 90; left: 412px; top: 174px; width: 29px; height: 38px;}
+.room_big        {position: absolute; z-index: 90; left: 365px; top: 186px; width: 36px; height: 47px;}
+.arrow_left2        {position: absolute; z-index: 90; left: 20px; top: 200px; width: 30px; height: 17px;}
+.house        {position: absolute; z-index: 90; left: 56px; top: 75px; width: 95px; height: 90px;}
+.dung        {position: absolute; z-index: 90; left: 216px; top: 179px; width: 61px; height: 38px;}
+.zoo        {position: absolute; z-index: 90; left: 425px; top: 96px; width: 61px; height: 50px;}
+.flshop        {position: absolute; z-index: 90; left: 113px; top: 160px; width: 55px; height: 59px;}

@@ -184,3 +184,4 @@ function exit ()
 }
 
 var time_to_go = 0;
+var city = '';

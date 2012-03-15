@@ -1,0 +1,26 @@
+.map           {position: relative; padding-bottom: 5px; width: 500px; height: 268px; padding-right: 2px;}
+.club         {position: absolute; z-index: 90; left: 68px; top: 0px; width: 160px; height: 124px;}
+.shop         {position: absolute; z-index: 90; left: 226px; top: 31px; width: 71px; height: 99px;}
+.repair    {position: absolute; z-index: 90; left: 269px; top: 69px; width: 69px; height: 59px;}
+.optshop  {position: absolute; z-index: 90; left: 397px; top: 80px; width: 50px; height: 70px;}
+.dastman  {position: absolute; z-index: 90; left: 410px; top: 146px; width: 44px; height: 87px;}
+.station  {position: absolute; z-index: 90; left: 101px; top: 128px; width: 99px; height: 85px;}
+.lsh           {position: absolute; z-index: 91; left: 110px; top: 164px; width: 45px; height: 43px;}
+.dungeon  {position: absolute; z-index: 90; left: 337px; top: 48px; width: 42px; height: 35px;}
+.post         {position: absolute; z-index: 90; left: 187px; top: 119px; width: 61px; height: 80px;}
+.stella    {position: absolute; z-index: 90; left: 40px; top: 75px; width: 75px; height: 90px;}
+.comshop  {position: absolute; z-index: 90; left: 275px; top: 134px; width: 63px; height: 60px;}
+.temple    {position: absolute; z-index: 90; left: 350px; top: 85px; width: 57px; height: 83px;}
+.dustman_crushed{position: absolute; z-index: 90; left: 410px; top: 146px; width: 44px; height: 87px;}
+.right    {position: absolute; z-index: 90; left: 471px; top: 126px; width: 21px; height: 30px;}
+.bank       {position: absolute; z-index: 90; left: 113px; top: 92px; width: 81px; height: 64px;}
+.dtower  {position: absolute; z-index: 90; left: 204px; top: 5px; width: 73px; height: 159px;}
+.flshop  {position: absolute; z-index: 90; left: 323px; top: 136px; width: 34px; height: 38px;}
+.fire       {position: absolute; z-index: 90; left: 172px; top: 162px; width: 17px; height: 23px;}
+.skam1     {position: absolute; z-index: 90; left: 196px; top: 183px; width: 23px; height: 15px;}
+.skam2     {position: absolute; z-index: 90; left: 170px; top: 187px; width: 25px; height: 12px;}
+.skam3     {position: absolute; z-index: 90; left: 140px; top: 179px; width: 23px; height: 16px;}
+.left       {position: absolute; z-index: 90; left: 11px; top: 191px; width: 29px; height: 25px;}
+.hostel   {position: absolute; z-index: 90; left: 370px; top: 88px; width: 87px; height: 108px;}
+.soul_stone    {position: absolute; z-index: 90; left: 61px; top: 145px; width: 65px; height: 63px;}
+.right2             {position: absolute; z-index: 90; left: 474px; top: 206px; width: 21px; height: 30px;}

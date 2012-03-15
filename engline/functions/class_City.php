@@ -77,12 +77,12 @@ class City extends Char
     echo $flag."<strong>$name</strong> (<strong>".$this->getRoomOnline($id, 'map')."</strong>)";
   }
   /*Добавление кнопок в клубе*/
-  function addButtons ($loc = 'castle')
+  function addButtons ($loc = 'club')
   {
     $lang = $this->getLang();
     $char_db = $this->getChar('char_db', 'room', 'city', 'last_return', 'return_time');
     $return_status = ((time() - $char_db['last_return']) >= $char_db['return_time']) | false;
-    $format = ($loc == 'castle') ?'<input type="button" class="btn2" value="%1$s" %2$s /> ' :'<span class="buttons_on_image" %2$s>%1$s</span>&nbsp;';
+    $format = ($loc == 'club') ?'<input type="button" class="btn2" value="%1$s" %2$s /> ' :'<span class="buttons_on_image" %2$s>%1$s</span>&nbsp;';
     $arr = $this->getRoom($char_db['room'], $char_db['city'], 'buttons');
     $buttons = explode (',', $arr);
     foreach ($buttons as $button)
