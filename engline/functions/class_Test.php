@@ -45,15 +45,15 @@ class Test extends Char
     echoScript("top.main.location.href = 'main.php?action=exit';", true);
   }
   /*Проверка заключения персонажа*/
-  function Prision ()
+  function Prison ()
   {
-    $prision = $this->getChar('char_db', 'prision');
+    $prison = $this->getChar('char_db', 'prison');
     
-    if (!$prision || intval ($prision - time()) > 0)
+    if (!$prison || intval($prison - time()) > 0)
       return;
     
     $this->db->query("UPDATE `characters` 
-                      SET `prision` = '0', 
+                      SET `prison` = '0', 
                           `orden` = '0' 
                       WHERE `guid` = ?d", $this->guid);
   }
@@ -125,13 +125,13 @@ class Test extends Char
   /*Восстановление здоровья/маны*/
   function Regen ()
   {
-    $char_stats = $this->getChar('char_stats', 'hp', 'hp_cure', 'hp_all', 'hp_regen', 'mp', 'mp_cure', 'mp_all', 'mp_regen');
-    list($now["hp"], $cure["hp"], $all["hp"], $regen["hp"], $now["mp"], $cure["mp"], $all["mp"], $regen["mp"]) = array_values($char_stats);
     $battle = $this->getChar('char_db', 'battle');
     
     if ($battle != 0)
       return;
     
+    $char_stats = $this->getChar('char_stats', 'hp', 'hp_cure', 'hp_all', 'hp_regen', 'mp', 'mp_cure', 'mp_all', 'mp_regen');
+    list($now["hp"], $cure["hp"], $all["hp"], $regen["hp"], $now["mp"], $cure["mp"], $all["mp"], $regen["mp"]) = array_values($char_stats);
     foreach ($all as $key => $value)
     {
       if ($cure[$key] == 0 && $now[$key] < $value)
@@ -155,16 +155,12 @@ class Test extends Char
   /*Проверка травм у персонажа*/
   function Travm ()
   {
-    $char_db = $this->getChar('char_db', 'travm', 'travm_old_stat', 'travm_stat');
-    
-    if (!$char_db['travm'])
-      return;
-    
-    if (intval(($char_db['travm'] - time()) / 60) > 0)
-      return;
-    
-    $this->db->query("UPDATE `characters` SET `travm` = '0' WHERE `guid` = ?d" ,$this->guid);
-    $this->db->query("UPDATE `character_stats` SET ?# = ?d WHERE `guid` = ?d", $char_db['travm_stat'] ,$char_db['travm_old_stat'] ,$this->guid);
+    $travms = $this->db->select("SELECT `travm_id`, `end_time` FROM `character_travms` WHERE `guid` = ?d and `end_time` != 0;", $this->guid);
+    foreach ($travms as $travm)
+    {
+      if ($travm['end_time'] != 0 && time() > $travm['end_time'])
+        $this->workTravm($travm['travm_id'], -1);
+    }
   }
   /*Проверка на получение апа/уровня*/
   function Up ()
@@ -280,13 +276,13 @@ class Test extends Char
     if (!$room_go)
       $this->char->error->Map(102);
     
-    $char_db = $this->getChar('char_db', 'room', 'city', 'sex', 'level', 'prision');
+    $char_db = $this->getChar('char_db', 'room', 'city', 'sex', 'level', 'prison');
     $char_stats = $this->getChar('char_stats', 'mass', 'maxmass');
     $room_info = $this->char->city->getRoom($room_go, $char_db['city'], 'room', 'from', 'min_level', 'max_level', 'need_orden', 'sex') or $this->char->error->Map(102);
     
     list($room_go, $from, $min_level, $max_level, $need_orden, $need_sex) = array_values($room_info);
     
-    if ($char_db['prision'] != 0)
+    if ($char_db['prison'] != 0)
       $this->char->error->Map(100);
     
     if ($char_stats['mass'] > $char_stats['maxmass'])
@@ -379,11 +375,11 @@ class Test extends Char
   /*Проверка эффектов*/
   function Effects ()
   {
-    $effects = $this->db->select("SELECT * FROM `character_effects` WHERE `guid` = ?d", $this->guid);
+    $effects = $this->db->select("SELECT `effect_id`, `end_time` FROM `character_effects` WHERE `guid` = ?d and `end_time` != 0;", $this->guid);
     foreach ($effects as $effect)
     {
       if ($effect['end_time'] != 0 && time() > $effect['end_time'])
-        $this->deleteEffect($effect['effect_entry']);
+        $this->workEffect($effect['effect_id'], -1);
     }
   }
   /*Проверка онлайн*/

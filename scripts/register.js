@@ -77,7 +77,7 @@ function checkStep5 ()
   $.post('ajax_index.php', 'do=checkstep5&rules='+rules, function (data){
     var check = exploder(data);
     if (check[0] == 'complete')
-      location.href = 'enter.php?login='+check[1]+'&password='+check[2];
+      location.href = 'game.php';
     else if (check[0] == 'error')
       $('#error').show().html(check[1]);
   });

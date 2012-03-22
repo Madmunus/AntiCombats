@@ -59,15 +59,15 @@ var visual = {
   show_any: function (selector, str) {hideShow(selector, function (){$(selector).html(str);}, str);},
   set_create: function (name, str)
               {
-                closehint3 ();
-                if (!($('div[name='+name+']').length))
+                closehint3();
+                if (!($('div[name='+name.replace(' ', '_')+']').length))
                   $('#allsets').append(str);
-                $('div[name='+name+']').hide().fadeIn('10000');
+                $('div[name='+name.replace(' ', '_')+']').hide().fadeIn('10000');
                 checkWindow();
               },
   set_delete: function (name)
               {
-                $('div[name='+name+']').fadeOut('10000', function (){$(this).remove(); checkWindow();});
+                $('div[name='+name.replace(' ', '_')+']').fadeOut('10000', function (){$(this).remove(); checkWindow();});
               },
   item_buy: function (item)
             {
@@ -76,7 +76,7 @@ var visual = {
               else if (item[3] == 401)
                 this.show_any('#money_euro', item[1]);
               this.show_any('#mass', item[2]);
-              showError (item[3], item[4]);
+              showError(item[3], item[4]);
             },
   item_sell: function (id, item)
              {

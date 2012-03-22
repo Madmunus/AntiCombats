@@ -18,14 +18,7 @@ class Info
   {
     $args = func_get_args();
     $args_num = func_num_args();
-    
-    if (is_numeric($args[$args_num-1]))
-    {
-      $guid = $args[$args_num-1];
-      unset($args[$args_num-1]);
-    }
-    else
-      $guid = $this->guid;
+    $guid = $this->guid;
     
     switch ($args[0])
     {
@@ -40,7 +33,7 @@ class Info
     
     if ($args[1] == '*')
       return $this->db->selectRow("SELECT * FROM ?# WHERE `guid` = ?d", $table ,$guid);
-    else if ($args_num == 2 || ($args_num == 3 && $guid != $this->guid))
+    else if ($args_num == 2)
       return $this->db->selectCell("SELECT ?# FROM ?# WHERE `guid` = ?d", $args ,$table ,$guid);
     else
       return $this->db->selectRow("SELECT ?# FROM ?# WHERE `guid` = ?d", $args ,$table ,$guid);
@@ -48,7 +41,8 @@ class Info
   /*Получение информации о языке*/
   function getLang ()
   {
-    return $this->db->selectCol("SELECT `key` AS ARRAY_KEY, `text` FROM `server_language`;");
+    $lang = $this->db->selectCell("SELECT `language` FROM `server_info`;");
+    return $this->db->selectCol("SELECT `key` AS ARRAY_KEY, ?# FROM `server_language`;", $lang);
   }
   /*Проверка существования персонажа*/
   function Guid ()
@@ -64,15 +58,15 @@ class Info
       toIndex();
   }
   /*Проверка заключения персонажа*/
-  function Prision ()
+  function Prison ()
   {
-    $prision = $this->getChar('char_db', 'prision');
+    $prison = $this->getChar('char_db', 'prison');
     
-    if (!$prision || intval ($prision - time()) > 0)
+    if (!$prison || intval($prison - time()) > 0)
       return;
     
     $this->db->query("UPDATE `characters` 
-                      SET `prision` = '0', 
+                      SET `prison` = '0', 
                           `orden` = '0' 
                       WHERE `guid` = ?d", $this->guid);
   }
@@ -116,20 +110,6 @@ class Info
       }
     }
   }
-  /*Проверка травм у персонажа*/
-  function Travm ()
-  {
-    $char_db = $this->getChar('char_db', 'travm', 'travm_old_stat', 'travm_stat');
-    
-    if (!$char_db['travm'])
-      return;
-    
-    if (intval(($char_db['travm'] - time()) / 60) > 0)
-      return;
-    
-    $this->db->query("UPDATE `characters` SET `travm` = '0' WHERE `guid` = ?d" ,$this->guid);
-    $this->db->query("UPDATE `character_stats` SET ?# = ?d WHERE `guid` = ?d", $char_db['travm_stat'] ,$char_db['travm_old_stat'] ,$this->guid);
-  }
   /*Проверка онлайн*/
   function Online ()
   {
@@ -151,13 +131,25 @@ class Info
                                LEFT JOIN `item_template` AS `i` 
                                ON `c`.`item_entry` = `i`.`entry` 
                                WHERE `c`.`guid` = ?d 
-                                 and `c`.`wear` = '1'", $this->guid);
+                                 and `c`.`wear` = '1';", $this->guid);
     foreach ($rows as $dat)
     {
       $added['str'] += $dat['add_str'] + $dat['inc_str'];
       $added['dex'] += $dat['add_dex'] + $dat['inc_dex'];
       $added['con'] += $dat['add_con'] + $dat['inc_con'];
       $added['int'] += $dat['add_int'] + $dat['inc_int'];
+    }
+    $rows = $this->db->select("SELECT `stats` FROM `character_travms` WHERE `guid` = ?d and `stats` != '';", $this->guid);
+    foreach ($rows as $travm)
+    {
+      $stats = split(",", $travm['stats']);
+      foreach ($stats as $stat)
+      {
+        $stat = split("=", $stat);
+        
+        if (array_key_exists($stat[0], $added))
+          $added[$stat[0]] += -$stat[1];
+      }
     }
   }
   /*Отображение снаряжения*/
@@ -172,7 +164,7 @@ class Info
     $char_equip['armor'] = ($char_equip['cloak']) ?$char_equip['cloak'] :(($char_equip['armor']) ?$char_equip['armor'] :$char_equip['shirt']);
     $char_equip['hand_l_s'] = (!$char_equip['hand_l_free']) ?"hand_l" :"hand_l_f";
     
-    echo $this->character();
+    echo $this->getLogin();
     echo "<div style='height: 9px;'></div>";
     echo $this->getCharacterEquipped($char_equip, $char_feat);
     echoScript("showHP($char_feat[hp], $char_feat[hp_all], $char_feat[hp_regen]);".
@@ -313,10 +305,11 @@ class Info
     return;
   }
   /*Показ строки персонажа*/
-  function character ()
+  function getLogin ()
   {
-    $char_db = $this->getChar('char_db', 'login', 'level', 'orden', 'clan', 'clan_short', 'block', 'rang', 'chat_shut', 'afk', 'dnd', 'message', 'travm');
-    list($login, $level, $orden, $clan_f, $clan_s, $block, $rang, $chat_shut, $afk, $dnd, $message, $travm) = array_values($char_db);
+    $char_db = $this->getChar('char_db', 'login', 'level', 'orden', 'clan', 'clan_short', 'block', 'rang', 'chat_shut', 'afk', 'dnd', 'message');
+    list($login, $level, $orden, $clan_f, $clan_s, $block, $rang, $chat_shut, $afk, $dnd, $message) = array_values($char_db);
+    $travm = $this->db->selectCell("SELECT `guid` FROM `character_travms` WHERE `guid` = ?d", $this->guid);
     switch ($orden)
     {
       case 1:  $orden_img = "<img src='img/orden/pal/$rang.gif' width='12' height='15' border='0' title='Белое братство'>";  break;
@@ -329,39 +322,56 @@ class Info
     $clan = ($clan_s != '') ?"<img src='img/clan/$clan_s.gif' border='0' title='$clan_f'>" :"";
     $login_link = str_replace (" ", "%20", $login);
     $login_info = "<a href='info.php?log=$login_link' target='_blank'><img src='img/inf.gif' border='0' title='Инф. о $login'></a>";
-    $mol = ($chat_shut != 0) ?" <img src='img/sleep2.gif' title='Наложено заклятие молчания'>" :"&nbsp";
-    $travm = ($travm != 0) ?"<img src='img/travma2.gif' title='Инвалидность'>" :"&nbsp";
+    $mol = ($chat_shut) ?" <img src='img/sleep2.gif' title='Наложено заклятие молчания'>" :"&nbsp";
+    $travm = ($travm) ?"<img src='img/travma2.gif' title='Инвалидность'>" :"&nbsp";
     $banned = ($block) ?"<font color='red'><b>- Забанен</b></font>" :"";
     $afk = ($afk) ?"<font title='$message'><b>afk</b></font>&nbsp;" :(($dnd && $message) ?"<font title='$message'><b>dnd</b></font>&nbsp;" :'');
-    return "<img src='img/icon/lock3.gif' border='0' onclick=window.opener.top.AddToPrivate('$login',true); style='cursor: pointer;'> $orden_img$clan<b>$login</b> [$level]$login_info";
+    return "<img src='img/icon/lock3.gif' border='0' onclick=\"window.opener.top.AddToPrivate('$login',true);\" style='cursor: pointer;'> $orden_img$clan<b>$login</b> [$level]$login_info";
   }
   /*Показ дополнительной информации по персонажу*/
   function showInfDetail ()
   {
-    $char_db = $this->getChar('char_db', 'block', 'block_reason', 'chat_shut', 'prision', 'prision_reason', 'travm', 'travm_var');
+    $char_db = $this->getChar('char_db', 'block', 'block_reason', 'chat_shut', 'prison', 'prison_reason');
+    $lang = $this->getLang();
     /*Блок*/
     if ($char_db['block'] && $char_db['block_reason'])
       echo "Причина блока :<br><b><font class='private'>$char_db[block_reason]</font></b><br>";
     /*Молчанка*/
-    if ($char_db['chat_shut'] != 0)
+    if ($char_db['chat_shut'])
       echo "<img src='img/icon/sleeps0.gif'><small>На персонажа наложено заклятие молчания. Будет молчать еще ".getFormatedTime($char_db['chat_shut'])."</small><br>";
     /*Тюрьма*/
-    if ($char_db['prision'] != 0)
+    if ($char_db['prison'])
     {
-      echo "<small>Персонаж находиться под стражей еще ".getFormatedTime($char_db['prision'])."</small><br>";
-      if ($char_db['prision_reason'] != "")
-        echo "Причина тюремного заключения :<br><b><font class='private'>$char_db[prision_reason]</font></b><br>";
+      echo "<small>Персонаж находиться под стражей еще ".getFormatedTime($char_db['prison'])."</small><br>";
+      if ($char_db['prison_reason'] != "")
+        echo "Причина тюремного заключения :<br><b><font class='private'>$char_db[prison_reason]</font></b><br>";
     }
     /*Травма*/
-    if ($char_db['travm'] != 0)
+    $travms = $this->db->select("SELECT * 
+                                 FROM `character_travms` AS `c` 
+                                 LEFT JOIN `player_travms` AS `i` 
+                                 ON `c`.`travm_id` = `i`.`id` 
+                                 WHERE `c`.`guid` = ?d", $this->guid);
+    $format = '<br><img src="img/icon/travma2.gif"><small>%1$s</small>';
+    foreach ($travms as $travm)
     {
-      switch ($char_db['travm_var'])
+      switch ($travm['type'])
       {
-        case 1: $travm_var = "легкая травма";  break;
-        case 2: $travm_var = "средняя травма"; break;
-        case 3: $travm_var = "тяжелая травма"; break;
+        case 0:
+          if ($travm['id'] == 100)
+          {
+            printf($format, "Персонаж ослаблен из-за смерти в бою, еще ".getFormatedTime($travm['end_time']));
+            break;
+          }
+        break;
+        case 1:
+          $alt = ($travm['power'] == 5) ?"Не может драться, перемещаться и передавать предметы" :"Ослаблены характеристики";
+          printf($format, "<span alt='$alt'>У персонажа ".$lang['travm_p_'.$travm['power']]." - <b>\"$travm[name]\"</b> еще ".getFormatedTime($travm['end_time'])."</span>");
+        break;
+        case 2:
+          printf($format, "У персонажа магическая травма, еще ".getFormatedTime($travm['end_time']));
+        break;
       }
-      echo "<img src='img/icon/travma2.gif'><small>У персонажа $travm_var, еще ".getFormatedTime($char_db['travm'])."</small>";
     }
   }
   /*Получение информации о городе*/
@@ -423,12 +433,13 @@ function getRegeneratedValue ($all, $cure, $regen)
 function getFormatedTime ($timestamp)
 {
   if (!$timestamp)
-    return "Вечность";
+    return "0 сек.";
   
   if (!is_numeric($timestamp))
     $timestamp = time();
   
-  $seconds = abs($timestamp - time());
+  $seconds = $timestamp - time();
+  $seconds = ($seconds > 0) ?$seconds :0;
   $d = intval($seconds / 86400);
   $seconds %= 86400;
   $h = intval($seconds / 3600);

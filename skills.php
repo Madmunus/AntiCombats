@@ -1,11 +1,10 @@
 <?
 defined('AntiBK') or die("Доступ запрещен!");
 
-$travm = $char_db['travm'];
 $stats = array();
 $up_text = '';
 
-if (isset($_POST['save_ability']) && !$travm && $char_stats['ups'] > 0)
+if (isset($_POST['save_ability']) && $char_stats['ups'] > 0)
 {
   foreach ($behaviour as $key => $min_level)
   {
@@ -25,8 +24,9 @@ if (isset($_POST['save_ability']) && !$travm && $char_stats['ups'] > 0)
     $error = 1;
     $parameters = $up_text;
   }
+  $char_stats = $char->getChar('char_stats', '*');
 }
-else if (isset($_POST['save_skill']) && !$travm && $char_stats['skills'] > 0)
+else if (isset($_POST['save_skill']) && $char_stats['skills'] > 0)
 {
   foreach ($mastery as $key => $min_level)
   {
@@ -49,6 +49,7 @@ else if (isset($_POST['save_skill']) && !$travm && $char_stats['skills'] > 0)
     $error = 1;
     $parameters = $up_text;
   }
+  $char_stats = $char->getChar('char_stats', '*');
 }
 
 $dis_buttons = "<td><img src='img/minus.gif' class='nonactive' title='уменьшить'>&nbsp;<img src='img/plus.gif' class='nonactive' title='увеличить'></td>";
@@ -59,7 +60,7 @@ $char->showStatAddition();
 <font color='red' id='error'><?$char->error->getFormattedError($error, $parameters);?></font>
 <table width="100%">
   <tr>
-    <td>&nbsp; &nbsp;<?echo $char->info->character();?></td>
+    <td>&nbsp; &nbsp;<?echo $char->getLogin();?></td>
     <td valign="top" align="right">
       <input type="button" class="nav" value="<?echo $lang['refresh'];?>" id="link" link="skills">
       <input type="button" class="nav" value="<?echo $lang['return'];?>" id="link" link="inv">
@@ -230,9 +231,9 @@ if ($level > 0)
   $effects = $adb->select("SELECT * FROM `character_effects` WHERE `guid` = ?d", $guid);
   foreach ($effects as $effect)
   {
-    $effect_s = $adb->selectRow("SELECT * FROM `effect_template` WHERE `entry` = ?d", $effect['effect_entry']);
+    $effect_s = $adb->selectRow("SELECT * FROM `player_effects` WHERE `id` = ?d", $effect['effect_id']);
     $name = $effect_s['name'];
-    $effect_adds = array('add_hp', 'add_mp', 'mpcons', 'mpreco', 'res_magic', 'res_dmg', 'mf_magic', 'mf_dmg', 'add_hit_min', 'add_hit_max', 'mf_critp', 'mf_acrit', 'mf_dodge', 'mf_adodge');
+    $effect_adds = array('add_hp', 'add_mp', 'mp_regen', 'mp_cons', 'res_magic', 'res_dmg', 'mf_magic', 'mf_dmg', 'add_hit_min', 'add_hit_max', 'mf_critp', 'mf_acrit', 'mf_dodge', 'mf_adodge');
     echo "<b>$name</b><br>";
     foreach ($effect_adds as $key)
     {

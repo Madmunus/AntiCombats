@@ -15,10 +15,14 @@ $adb = DbSimple_Generic::connect($database['adb']);
 $adb->query("SET NAMES ? ",$database['db_encoding']);
 $adb->setErrorHandler("databaseErrorHandler");
 
+$register = $adb->selectCell("SELECT `registration` FROM `server_info`;");
+$register_error = 'Регистрация закрыта!<br><a href="index.php" class="us2">Вернуться на главную</a><br>';
 $do = requestVar('do');
 switch ($do)
 {
   case 'checkstep1':
+    if (!$register)
+      returnAjax('error', $register_error);
     unset($_SESSION['reg_login']);
     $login = requestVar('login');
     $login_check = $adb->selectCell("SELECT `guid` FROM `characters` WHERE `login` = ?s", $login);
@@ -75,6 +79,8 @@ switch ($do)
     returnAjax('complete');
   break;
   case 'checkstep2':
+    if (!$register)
+      returnAjax('error', $register_error);
     unset($_SESSION['reg_password']);
     $password = requestVar('password');
     $password_confirm = requestVar('password_confirm');
@@ -98,6 +104,8 @@ switch ($do)
     returnAjax('complete');
   break;
   case 'checkstep3':
+    if (!$register)
+      returnAjax('error', $register_error);
     unset($_SESSION['reg_email'], $_SESSION['reg_secretquestion'], $_SESSION['reg_secretanswer']);
     $email = requestVar('email');
     $secretquestion = requestVar('secretquestion');
@@ -116,6 +124,8 @@ switch ($do)
     returnAjax('complete');
   break;
   case 'checkstep4':
+    if (!$register)
+      returnAjax('error', $register_error);
     unset($_SESSION['reg_name'], $_SESSION['reg_birth_day'], $_SESSION['reg_birth_month'], $_SESSION['reg_birth_year'], $_SESSION['reg_sex'], $_SESSION['reg_city'], $_SESSION['reg_icq'], $_SESSION['reg_hide_icq'], $_SESSION['reg_deviz'], $_SESSION['reg_color']);
     $name = requestVar('name');
     $birth_day = requestVar('birth_day');
@@ -157,6 +167,8 @@ switch ($do)
     returnAjax('complete');
   break;
   case 'checkstep5':
+    if (!$register)
+      returnAjax('error', $register_error);
     $rules = requestVar('rules');
     
     if (!checks('reg_login') || !checks('reg_password') || !checks('reg_email') || !checks('reg_secretquestion') || !checks('reg_secretanswer') || !checks('reg_name') || !checks('reg_birth_day') || !checks('reg_birth_month') || !checks('reg_birth_year') || !checks('reg_sex') || !checks('reg_city') || !checks('reg_icq') || !checks('reg_hide_icq') || !checks('reg_deviz') || !checks('reg_color'))
@@ -190,12 +202,17 @@ switch ($do)
     // Основная база
     $adb->query("INSERT INTO `characters` (`guid`, `login`, `login_sec`, `password`, `mail`, `sex`, `city`, `shape`, `reg_ip`, `last_time`) 
                  VALUES (?d, ?s, ?s, ?s, ?s, ?s, ?s, ?s, ?s, ?d);", $guid ,$login ,$login ,$reg_password ,$email ,$sex ,$city ,$shape ,$_SERVER['REMOTE_ADDR'] ,time());
-    // Характеристики
-    $adb->query("INSERT INTO `character_stats` (`guid`) 
-                 VALUES (?d);", $guid);
     // Дополнительная информация
     $adb->query("INSERT INTO `character_info` (`guid`, `name`, `icq`, `secretquestion`, `secretanswer`, `hide_icq`, `town`, `birthday`, `color`, `deviz`, `state`, `date`) 
                  VALUES (?d, ?s, ?s, ?s, ?s, ?d, ?s, ?s, ?s, ?s, ?s, ?d);", $guid ,$name ,$icq ,$secretquestion ,$secretanswer ,$hide_icq ,$town ,$birthday ,$color ,$deviz ,$city ,time());
+    // Характеристики
+    $adb->query("INSERT INTO `character_stats` (`guid`) 
+                 VALUES (?d);", $guid);
+    $stats = $config['start']['stats'];
+    $items = $config['start']['items'];
+    unset($config['start']['stats'], $config['start']['items']);
+    $adb->query("UPDATE `character_stats` SET ?a WHERE `guid` = ?d", $config['start'] ,$guid);
+    $char->changeStats($stats);
     // Создание инвентаря
     $adb->query("INSERT INTO `character_equip` (`guid`) 
                  VALUES (?d);", $guid);
@@ -203,16 +220,32 @@ switch ($do)
     $adb->query("INSERT INTO `character_bars` (`guid`) 
                  VALUES (?d);", $guid);
     // Эффекты
-    $adb->query("INSERT INTO `character_effects` (`guid`, `effect_entry`, `end_time`) 
-                 VALUES (?d, '1', '0');", $guid);
-    $id = ($adb->selectCell("SELECT MAX(`id`) FROM `character_inventory`;")) + 1;
+    $char->workEffect(1);
     // Предметы
-    $adb->query("INSERT INTO `character_inventory` (`id`, `guid`, `item_entry`, `wear`, `tear_max`, `made_in`, `last_update`) 
-                 VALUES ('1', ?d, '920', '1', '20', ?s, ?d),
-                        ('2', ?d, '1031', '1', '10', ?s, ?d);", $guid ,$city ,time() ,$guid ,$city ,time());
-    $adb->query("UPDATE `character_equip` SET `pants` = '1', `shirt` = '2' WHERE `guid` = ?d", $guid);
+    $i = 1;
+    foreach ($items as $item)
+    {
+      $char->equip->addItem($item, 'get');
+      $char->equip->equipItem($i);
+      $i++;
+    }
     $char->history->Auth(2, $city);
-    returnAjax('complete', $login, $password);
+    
+    if (checks('guid'))
+    {
+      deleteSession();
+    }
+    
+    $adb->query("DELETE FROM `online` WHERE `guid` = ?d", $guid);
+    $adb->query("INSERT INTO `online` (`guid`, `login_display`, `ip`, `city`, `room`, `last_time`) 
+                 VALUES (?d, ?s, ?s, ?s, ?s, ?d);", $guid ,$login ,$_SERVER['REMOTE_ADDR'] ,$city ,'novice' ,time());
+    $adb->query("UPDATE `characters` SET `last_go` = ?d WHERE `guid` = ?d", time() ,$guid);
+    $_SESSION['guid'] = $guid;
+    $_SESSION['zayavka_c_m'] = 1;
+    $_SESSION['zayavka_c_o'] = 1;
+    $_SESSION['battle_ref']  = 0;
+    $char->history->Auth(1, $city);
+    returnAjax('complete');
   break;
 }
 ?>

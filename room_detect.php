@@ -20,7 +20,7 @@ if ($action == 'go' || $action == 'return')
   flock ($fp1, 3);
   fclose ($fp1); */
   
-  $room_return = ($action == 'go') ?false :true;
+  $room_return = ($action == 'return');
   $room_go = (!$room_return) ?$room_go :$char_db['last_room'];
   
   if ($room_go != $room)
@@ -66,17 +66,18 @@ switch ($room)
   case 'km_7':
   case 'km_6':                 include("club.php");
   break;
+  case 'bank':
+  case 'comok':
+  case 'stella':
+  case 'shop':
+  case 'prison':
+  case 'mail':                 include("$room.php");
+  break;
   case 'Комната Знахаря':      include("km_5.php");
   break;
   case 'Зал закона':           include("km_8.php");
   break;
-  case 'stella':               include("stella.php");
-  break;
   case 'Храм':                 include("brak.php");
-  break;
-  case 'comok':                include("comok.php");
-  break;
-  case 'bank':                 include("bank.php");
   break;
   case 'Подвал':               include("10x5.php");
   break;
@@ -90,49 +91,18 @@ switch ($room)
   break;
   case 'Ремонтная мастерская': include("rep.php");
   break;
-  case 'shop':                 include("shop.php");
-  break;
   case 'Регистратура кланов':  include("registratura.php");
   break;
-  case 'cityhall':             include("cityhall.php");
-  break;
-  case 'prision':              include("prison.php");
-  break;
   case 'работа':               include("zarabotok.php");
-  break;
-  case 'mail':                 include("mail.php");
   break;
   case 'Завод':                include("kuzna.php");
   break;
   case 'Пруд':                 include("river.php");
   break;
 }
-/* if($room=="Скупочный магазин"){
-include "sell.php";
-die();
-break;
-if($room=="Хибара скотовода"){
-include "catle.php";
-die();
-break;
-if($room=="Арена"){
-include "arena.php";
-die();
-break;
+/*
 if($room=="Лес"){
 include "cell.php";
 die();
 break;
-if($room=="Палатка знахаря"){
-include "znahar.php";
-die();
-break;
-if($room=="Домик лесоруба"){
-include "lesorub.php";
-die();
-break;
-if($room=="city1"){
-include "wheretogo.php";
-die();
-break; */
-?>
+?>*/

@@ -128,7 +128,7 @@ switch ($do)
       $char->bank->Money(-$trfed_sum, $id2, '', $credit2_guid);
       $char->history->Bank($id, $id2, $trfed_sum, '', 4);
       $char->history->Bank($id2, $id, $trfed_sum, '', 5);
-      $to_owner = $char->info->character('name', $credit2_guid);
+      $to_owner = $char->getLogin('name', $credit2_guid);
       $char->error->Map(321, "$trfed_sum|$to_owner|$id2|$id");
     }
     else if (isset($_POST['convert_ekredit']))

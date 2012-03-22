@@ -113,9 +113,9 @@ class Equip extends Char
   function showCharacter ($type = '', $guid = 0)
   {
     $guid = (!$guid) ?$this->guid :$guid;
-    $char_equip = $this->getChar('char_equip', '*');
-    $char_db = $this->getChar('char_db', 'login', 'shape', 'block');
-    $char_stats = $this->getChar('char_stats', 'hp', 'hp_all', 'hp_regen', 'mp', 'mp_all', 'mp_regen');
+    $char_equip = $this->getChar('char_equip', '*', $guid);
+    $char_db = $this->getChar('char_db', 'level', 'login', 'shape', 'block', $guid);
+    $char_stats = $this->getChar('char_stats', 'str', 'dex', 'con', 'vit', 'int', 'wis', 'spi', 'hp', 'hp_all', 'hp_regen', 'mp', 'mp_all', 'mp_regen', $guid);
     $char_feat = array_merge($char_db, $char_stats);
     $lang = $this->getLang();
     $char_type = 'clan';
@@ -124,6 +124,13 @@ class Equip extends Char
       case 'inv':
         $char_feat['name'] = "alt='$char_feat[login] (Перейти в \"$lang[abilities]\")' id='link' link='skills'";
       break;
+      case 'fight':
+        global $behaviour;
+        $char_feat['name'] = "alt='<b>$char_feat[login]</b>";
+        foreach ($behaviour as $key => $min_level)
+          $char_feat['name'] .= ($char_feat['level'] >= $min_level) ?"<br>$lang[$key] $char_feat[$key]" :"";
+        $char_feat['name'] .= "'";
+      break;
       default:
         $char_feat['name'] = "alt='$char_feat[login] (Перейти в \"Инвентарь\")' id='link' link='inv'";
       break;
@@ -131,18 +138,19 @@ class Equip extends Char
     $char_equip['armor'] = ($char_equip['cloak']) ?$char_equip['cloak'] :(($char_equip['armor']) ?$char_equip['armor'] :$char_equip['shirt']);
     $char_equip['hand_l_s'] = (!$char_equip['hand_l_free']) ?"hand_l" :"hand_l_f";
     
-    echo $this->char->info->character($char_type);
-    echo $this->getCharacterEquipped($char_equip, $char_feat, $type);
+    echo $this->getLogin($char_type, $guid);
+    echo $this->getCharacterEquipped($char_equip, $char_feat, $type, $guid);
     if ($type != 'smart')
       echoScript("showHP($char_feat[hp], $char_feat[hp_all], $char_feat[hp_regen]);".
                  "showMP($char_feat[mp], $char_feat[mp_all], $char_feat[mp_regen]);");
   }
   /*Получение одетых вещей*/
-  function getCharacterEquipped ($char_equip, $char_feat, $type)
+  function getCharacterEquipped ($char_equip, $char_feat, $type, $guid = 0)
   {
     if (!$char_equip || !$char_feat)
       return;
     
+    $guid = (!$guid) ?$this->guid :$guid;
     $backup = ($type == 'smart') ?"<img src='img/items/slot_bottom0.gif' border='0'>" :"<img src='img/items/w20.gif' border='0' alt='Пустой правый карман'><img src='img/items/w20.gif' border='0' alt='Пустой карман'><img src='img/items/w20.gif' border='0' alt='Пустой левый карман'><img src='img/items/w21.gif' border='0' alt='Смена оружия'><img src='img/items/w21.gif' border='0' alt='Смена оружия'><img src='img/items/w21.gif' border='0' alt='Смена оружия'>";
     $equipped = "<table border='0' width='227' class='posit' cellspacing='0' cellpadding='0'>";
     
@@ -151,11 +159,11 @@ class Equip extends Char
     
     $equipped .= "<tr bgColor='#dedede'>"
                . "<td width='60' align='left' valign='top'>"
-               . $this->getItemEquiped($char_equip['helmet'], "helmet", $type)
-               . $this->getItemEquiped($char_equip['bracer'], "bracer", $type)
-               . $this->getItemEquiped($char_equip['hand_r'], "hand_r", $type)
-               . $this->getItemEquiped($char_equip['armor'], "armor", $type)
-               . $this->getItemEquiped($char_equip['belt'], "belt", $type)
+               . $this->getItemEquiped($char_equip['helmet'], "helmet", $type, $guid)
+               . $this->getItemEquiped($char_equip['bracer'], "bracer", $type, $guid)
+               . $this->getItemEquiped($char_equip['hand_r'], "hand_r", $type, $guid)
+               . $this->getItemEquiped($char_equip['armor'], "armor", $type, $guid)
+               . $this->getItemEquiped($char_equip['belt'], "belt", $type, $guid)
                . "</td>"
                . "<td width='120' align='center' valign='middle'>"
                . "<table cellspacing='0' cellpadding='0' height='20'>"
@@ -164,28 +172,30 @@ class Equip extends Char
                . $backup
                . "</td>"
                . "<td width='60' align='right' valign='top'>"
-               . $this->getItemEquiped($char_equip['earring'], "earring", $type)
-               . $this->getItemEquiped($char_equip['amulet'], "amulet", $type)
-               . $this->getItemEquiped($char_equip['ring1'], "ring", $type)
-               . $this->getItemEquiped($char_equip['ring2'], "ring", $type)
-               . $this->getItemEquiped($char_equip['ring3'], "ring", $type)
-               . $this->getItemEquiped($char_equip['gloves'], "gloves", $type)
-               . $this->getItemEquiped($char_equip['hand_l'], $char_equip['hand_l_s'], $type)
-               . $this->getItemEquiped($char_equip['pants'], "pants", $type)
-               . $this->getItemEquiped($char_equip['boots'], "boots", $type)
+               . $this->getItemEquiped($char_equip['earring'], "earring", $type, $guid)
+               . $this->getItemEquiped($char_equip['amulet'], "amulet", $type, $guid)
+               . $this->getItemEquiped($char_equip['ring1'], "ring", $type, $guid)
+               . $this->getItemEquiped($char_equip['ring2'], "ring", $type, $guid)
+               . $this->getItemEquiped($char_equip['ring3'], "ring", $type, $guid)
+               . $this->getItemEquiped($char_equip['gloves'], "gloves", $type, $guid)
+               . $this->getItemEquiped($char_equip['hand_l'], $char_equip['hand_l_s'], $type, $guid)
+               . $this->getItemEquiped($char_equip['pants'], "pants", $type, $guid)
+               . $this->getItemEquiped($char_equip['boots'], "boots", $type, $guid)
                . "</td></tr></table>";
     return $equipped;
   }
   /*Получение изображения предмета, одетого на персонажа*/
-  function getItemEquiped ($item_id, $i_type, $type)
+  function getItemEquiped ($item_id, $i_type, $type, $guid = 0)
   {
+    $lang = $this->getLang();
+    $image = $this->db->selectRow("SELECT `width`, `height`, `default`, `low_level`, `level`  FROM `server_images` WHERE `name` = ?s", 'item_'.$i_type);
+    $default = "<img src='img/items/$image[default]' width='$image[width]' height='$image[height]' border='0' alt='".$lang[$i_type.'_f']."'>";
+    
     if (!is_numeric($item_id))
       return $default;
     
-    $lang = $this->getLang();
-    $level = $this->getChar('char_db', 'level');
-    $image = $this->db->selectRow("SELECT `width`, `height`, `default`, `low_level`, `level`  FROM `server_images` WHERE `name` = ?s", 'item_'.$i_type);
-    $default = "<img src='img/items/$image[default]' width='$image[width]' height='$image[height]' border='0' alt='".$lang[$i_type.'_f']."'>";
+    $guid = (!$guid) ?$this->guid :$guid;
+    $level = $this->getChar('char_db', 'level', $guid);
     
     if ($item_id == 0 && $level < $image['level'])
       return "<img src='img/items/$image[low_level]' width='$image[width]' height='$image[height]' border='0' alt='".$lang[$i_type.'_l']."'>";
@@ -194,7 +204,7 @@ class Equip extends Char
     
     $color = '';
     $img = $image['default'];
-    $desc = $this->getItemAlt($item_id, $type, $color, $img);
+    $desc = $this->getItemAlt($item_id, $type, $color, $img, $guid);
     
     if (!$desc)
       return $default;
@@ -204,11 +214,12 @@ class Equip extends Char
     return sprintf($return_format, "<img src='img/items/$img' width='$image[width]' height='$image[height]' border='0' alt='$desc'$color>");
   }
   /*Получение всплывающей подсказки о предмете*/
-  function getItemAlt ($item_id, $type, &$color = '', &$img = '')
+  function getItemAlt ($item_id, $type, &$color = '', &$img = '', $guid = 0)
   {
     if (!is_numeric($item_id) || $item_id == 0)
       return '';
     
+    $guid = (!$guid) ?$this->guid :$guid;
     $lang = $this->getLang();
     $i_info = $this->db->selectRow("SELECT `c`.`tear_cur`, `c`.`tear_max`, 
                                            `i`.`min_hit`, `i`.`max_hit`, 
@@ -222,7 +233,7 @@ class Equip extends Char
                                     LEFT JOIN `item_template` AS `i` 
                                     ON `c`.`item_entry` = `i`.`entry` 
                                     WHERE `c`.`guid` = ?d
-                                      and `c`.`id` = ?d", $this->guid ,$item_id);
+                                      and `c`.`id` = ?d", $guid ,$item_id);
     if (!$i_info)
       return '';
     
@@ -231,7 +242,7 @@ class Equip extends Char
     $tear_show = ($tear_check) ?'<font color=#990000>%s</font>' :'%s';
     $color = ($tear_check) ?" class='broken'" :'';
     $name = (($type == 'inv') ?"Снять " :'').$i_info['name'];
-    $protect = array ('h', 'a', 'b', 'l');
+    $protect = array('h', 'a', 'b', 'l');
     $desc = "$name";
     
     if ($i_info['min_hit'] > 0 || $i_info['max_hit'] > 0)
@@ -247,7 +258,7 @@ class Equip extends Char
       if ($i_info['def_'.$key.'_min'] > 0)
         $desc .= "<br>".$lang['def_'.$key]." ".$i_info['def_'.$key.'_min']."-".$i_info['def_'.$key.'_max']." ".$this->getFormatedBrick($i_info['def_'.$key.'_min'], $i_info['def_'.$key.'_max']);
     }
-    $desc .= "<br>$lang[durability] ".sprintf($tear_show, intval($i_info['tear_cur'])."/".ceil($i_info['tear_max']));
+    $desc .= "<br>$lang[durability] ".sprintf($tear_show, intval($i_info['tear_cur'])."/".intval($i_info['tear_max']));
     return $desc;
   }
   /*Перечисление предметов нуждающихся в ремонте*/
@@ -266,7 +277,7 @@ class Equip extends Char
       list ($tear_cur, $tear_max, $name) = array_values ($repair);
       
       if ($tear_cur >= $tear_max * 0.90)
-        $return .= "&nbsp;<b>$name</b> [<font color='#990000'>".intval ($tear_cur)."/".intval ($tear_max)."</font>] требуется ремонт<br>";
+        $return .= "&nbsp;<b>$name</b> [<font color='#990000'>".intval($tear_cur)."/".intval($tear_max)."</font>] требуется ремонт<br>";
     }
     return $return;
   }
@@ -304,6 +315,8 @@ class Equip extends Char
       else if ($i_info['price_euro'] > 0)
         $this->char->history->Items('Buy', "$i_info[name] за $i_info[price_euro] екр.", $room);
     }
+    else if ($type == 'get')
+      $this->char->history->Items('Get', $i_info['name'], '');
     return true;
   }
   /*Отображение предмета в инвентаре*/
@@ -405,7 +418,7 @@ class Equip extends Char
                        'mf_dark', 'mf_dmg', 'mf_sting', 'mf_slash', 'mf_crush', 'mf_sharp', 'all_magic', 'fire', 'water', 'air', 'earth', 'light', 'gray', 
                        'dark', 'all_mastery', 'sword', 'axe', 'fail', 'knife', 'staff', 'res_magic', 'res_fire', 'res_water', 'res_air', 
                        'res_earth', 'res_light', 'res_gray', 'res_dark', 'res_dmg', 'res_sting', 'res_slash', 'res_crush', 'res_sharp', 
-                       'add_hp', 'add_mp', 'mpcons', 'mpreco', 'hpreco', 'add_hit_min', 'add_hit_max');
+                       'add_hp', 'add_mp', 'mp_cons', 'mp_regen', 'hp_regen', 'add_hit_min', 'add_hit_max');
     $w_modifiers = array('mf_adodge', 'mf_crit', 'mf_critp', 'mf_sting', 'mf_slash', 'mf_crush', 'mf_sharp', 'sword', 'axe', 'fail', 'knife', 'mf_parmour');
     $chances = array('ch_sting', 'ch_slash', 'ch_crush', 'ch_sharp', 'ch_fire', 'ch_water', 'ch_air', 'ch_earth', 'ch_light', 'ch_dark');
     $features = array('res_dmg', 'res_sting', 'res_slash', 'res_crush', 'res_sharp');
@@ -419,7 +432,7 @@ class Equip extends Char
     $max_hit = $i_info['max_hit'];
     $block = $i_info['block'];
     $hands = $i_info['hands'];
-    $url = str_replace ('.gif', '.html', $i_info['img']);
+    $url = str_replace('.gif', '.html', $i_info['img']);
     $orden = "&nbsp;&nbsp;";
     $need_orden = $i_info['orden'];
     if ($need_orden != 0)
@@ -590,7 +603,7 @@ class Equip extends Char
   function equipItem ($item, $type = 1, $guid = 0)
   {
     $guid = (!$guid) ?$this->guid :$guid;
-    $item_id = ($type == 1) ?$item :$this->getChar('char_equip', $item);
+    $item_id = ($type == 1) ?$item :$this->getChar('char_equip', $item, $guid);
     
     if (!$item_id || $item_id == 0 || !is_numeric($item_id))
       return;
@@ -630,20 +643,20 @@ class Equip extends Char
               if ($i_info['item_flags'] & 16)
                 $slot = "hand_l";
               else
-                $this->equipItem('hand_r', -1);
+                $this->equipItem('hand_r', -1, $guid);
             }
             else if (!$char_equip['hand_r_free'] && !$char_equip['hand_l_free'])
-              $this->equipItem('hand_r', -1);
+              $this->equipItem('hand_r', -1, $guid);
           }
           else if ($i_hands == 2)
           {
             $slot = "hand_r";
             
             if (!$char_equip['hand_r_free'])
-              $this->equipItem('hand_r', -1);
+              $this->equipItem('hand_r', -1, $guid);
             
             if (!$char_equip['hand_l_free'])
-              $this->equipItem('hand_l', -1);
+              $this->equipItem('hand_l', -1, $guid);
           }
           $w_type = $i_type;
         break;
@@ -651,10 +664,10 @@ class Equip extends Char
           $slot = "hand_l";
           
           if ($char_equip['hand_l'])
-            $this->equipItem('hand_l', -1);
+            $this->equipItem('hand_l', -1, $guid);
           
           if ($char_equip['hand_r'] && !$char_equip['hand_l_free'])
-            $this->equipItem('hand_r', -1);
+            $this->equipItem('hand_r', -1, $guid);
           
           $w_type = $i_type;
         break;
@@ -668,13 +681,13 @@ class Equip extends Char
           else if (!$char_equip['ring3'])
             $slot = "ring3";
           else
-            $this->equipItem('ring1', -1);
+            $this->equipItem('ring1', -1, $guid);
         break;
         default:
           $slot = $i_type;
           
           if ($char_equip[$i_type])
-            $this->equipItem($i_type, -1);
+            $this->equipItem($i_type, -1, $guid);
         break;
       }
     }
@@ -759,13 +772,10 @@ class Equip extends Char
       $new_sql['def_'.$key.'_min'] = $i_info['def_'.$key.'_min'];
       $new_sql['def_'.$key.'_max'] = $i_info['def_'.$key.'_max'];
     }
-// Stats
-    $new_sql['cast'] = $i_info['add_cast'];
-    $new_sql['trade'] = $i_info['add_trade'];
-    $new_sql['walk'] = $i_info['add_walk'];
     //$new_sql['cost'] = $i_info['price'];
-    $new_sql['hp_regen'] = $i_info['hpreco'];
-    $new_sql['mp_regen'] = $i_info['mpreco'];
+    $new_sql['hp_regen'] = $i_info['hp_regen'];
+    $new_sql['mp_regen'] = $i_info['mp_regen'];
+    $new_sql['mp_cons'] = -$i_info['mp_cons'];
 // Hand
     switch ($slot)
     {
@@ -807,7 +817,7 @@ class Equip extends Char
     foreach ($char_hpmp as $key => $value)
     {
       if ($i_info['add_'.$key] != 0)
-        $this->setTimeToHPMP($value, $new_sql[$key.'_all'], $char_stats[$key.'_regen'], $key);
+        $this->setTimeToHPMP($value, $new_sql[$key.'_all'], $char_stats[$key.'_regen'], $key, $guid);
     }
     
     $stats = array ('str' => 0, 'dex' => 0, 'con' => 0, 'int' => 0);
@@ -840,7 +850,7 @@ class Equip extends Char
     if ($q1 && $q2)
     {
       $this->db->query("UPDATE `character_stats` SET ?a WHERE `guid` = ?d", $new_sql ,$guid);
-      $this->changeStats($stats);
+      $this->changeStats($stats, $guid);
       if ($type == 1)
       {
         if ($i_hands == 2)

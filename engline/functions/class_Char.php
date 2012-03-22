@@ -19,7 +19,7 @@ class Char
     $object = new Char;
     $object->guid = $guid;
     $object->db = $adb;
-    $classes = array('test', 'equip', 'city', 'mail', 'bank', 'chat', 'info', 'history', 'error');
+    $classes = array('test', 'equip', 'city', 'mail', 'bank', 'chat', 'history', 'error');
     foreach ($classes as $class)
     {
       $object->{$class} = new $class;
@@ -34,12 +34,13 @@ class Char
   function getChar ()
   {
     $args = func_get_args();
-    $args_num = func_num_args();
+    $a_num = func_num_args();
+    $m_guid = (isset($args[2])) ?$args[2] :"-";
     
-    if (is_numeric($args[$args_num-1]))
+    if (is_numeric($args[$a_num-1]))
     {
-      $guid = $args[$args_num-1];
-      unset($args[$args_num-1]);
+      $guid = $args[$a_num-1];
+      unset($args[$a_num-1]);
     }
     else
       $guid = $this->guid;
@@ -57,7 +58,7 @@ class Char
     
     if ($args[1] == '*')
       return $this->db->selectRow("SELECT * FROM ?# WHERE `guid` = ?d", $table ,$guid);
-    else if ($args_num == 2 || ($args_num == 3 && $guid != $this->guid))
+    else if ($a_num == 2 || ($a_num == 3 && is_numeric($m_guid)))
       return $this->db->selectCell("SELECT ?# FROM ?# WHERE `guid` = ?d", $args ,$table ,$guid);
     else
       return $this->db->selectRow("SELECT ?# FROM ?# WHERE `guid` = ?d", $args ,$table ,$guid);
@@ -65,14 +66,24 @@ class Char
   /*Получение информации о языке*/
   function getLang ()
   {
-    return $this->db->selectCol("SELECT `key` AS ARRAY_KEY, `text` FROM `server_language`;");
+    $lang = $this->db->selectCell("SELECT `language` FROM `server_info`;");
+    return $this->db->selectCol("SELECT `key` AS ARRAY_KEY, ?# FROM `server_language`;", $lang);
   }
   /*Увеличение/уменьшение характеристики*/
   function changeStats ()
   {
     $stats = func_get_args();
     $a_num = func_num_args();
-    $stats = ($a_num == 1 && is_array($stats[0])) ?$stats[0] :array($stats[0] => $stats[1]);
+    
+    if (is_numeric($stats[$a_num-1]))
+    {
+      $guid = $stats[$a_num-1];
+      unset($stats[$a_num-1]);
+    }
+    else
+      $guid = $this->guid;
+    
+    $stats = (is_array($stats[0])) ?$stats[0] :array($stats[0] => $stats[1]);
     foreach ($stats as $stat => $count)
     {
       switch ($stat)
@@ -82,7 +93,7 @@ class Char
                             SET `str` = `str` + ?d, 
                                 `hitmin` = `hitmin` + ?d, 
                                 `hitmax` = `hitmax` + ?d 
-                            WHERE `guid` = ?d", $count ,$count ,$count ,$this->guid);
+                            WHERE `guid` = ?d", $count ,$count ,$count ,$guid);
           $this->statsBonus($stat);
         break;
         case 'dex':
@@ -92,7 +103,7 @@ class Char
                             SET `dex` = `dex` + ?d, 
                                 `mf_dodge` = `mf_dodge` + ?d, 
                                 `mf_adodge` = `mf_adodge` + ?d 
-                            WHERE `guid` = ?d", $count ,$mf_dodge ,$mf_adodge ,$this->guid);
+                            WHERE `guid` = ?d", $count ,$mf_dodge ,$mf_adodge ,$guid);
           $this->statsBonus($stat);
         break;
         case 'con':
@@ -102,7 +113,7 @@ class Char
                             SET `con` = `con` + ?d, 
                                 `mf_crit` = `mf_crit` + ?d, 
                                 `mf_acrit` = `mf_acrit` + ?d 
-                            WHERE `guid` = ?d", $count ,$mf_crit ,$mf_acrit ,$this->guid);
+                            WHERE `guid` = ?d", $count ,$mf_crit ,$mf_acrit ,$guid);
           $this->statsBonus($stat);
         break;
         case 'vit':
@@ -124,7 +135,7 @@ class Char
                                 `res_light` = `res_light` + ?f, 
                                 `res_gray` = `res_gray` + ?f, 
                                 `res_dark` = `res_dark` + ?f 
-                            WHERE `guid` = ?d", $count ,$hp ,$hp ,$count ,$bron ,$bron ,$bron ,$bron ,$bron ,$bron ,$bron ,$bron ,$bron ,$bron ,$bron ,$this->guid);
+                            WHERE `guid` = ?d", $count ,$hp ,$hp ,$count ,$bron ,$bron ,$bron ,$bron ,$bron ,$bron ,$bron ,$bron ,$bron ,$bron ,$bron ,$guid);
           $this->statsBonus($stat);
         break;
         case 'int':
@@ -138,7 +149,7 @@ class Char
                                 `mf_light` = `mf_light` + ?f, 
                                 `mf_gray` = `mf_gray` + ?f, 
                                 `mf_dark` = `mf_dark` + ?f 
-                            WHERE `guid` = ?d", $count ,$mf ,$mf ,$mf ,$mf ,$mf ,$mf ,$mf ,$this->guid);
+                            WHERE `guid` = ?d", $count ,$mf ,$mf ,$mf ,$mf ,$mf ,$mf ,$mf ,$guid);
           $this->statsBonus($stat);
         break;
         case 'wis':
@@ -147,13 +158,13 @@ class Char
                             SET `wis` = `wis` + ?d, 
                                 `mp` = `mp` + ?d, 
                                 `mp_all` = `mp_all` + ?d 
-                            WHERE `guid` = ?d", $count ,$mp ,$mp ,$this->guid);
+                            WHERE `guid` = ?d", $count ,$mp ,$mp ,$guid);
           $this->statsBonus($stat);
         break;
         case 'spi':
           $this->db->query("UPDATE `character_stats` 
                             SET `spi` = `spi` + ?d 
-                            WHERE `guid` = ?d", $count ,$this->guid);
+                            WHERE `guid` = ?d", $count ,$guid);
         break;
         default:
           return false;
@@ -167,7 +178,7 @@ class Char
     if (!is_numeric($sum))
       return false;
     
-    $sum = round ($sum, 2);
+    $sum = round($sum, 2);
     
     if ($sum == 0)
       return false;
@@ -205,14 +216,15 @@ class Char
     return true;
   }
   /*Время востановления здоровья*/
-  function setTimeToHPMP ($now, $all, $regen, $type)
+  function setTimeToHPMP ($now, $all, $regen, $type, $guid = 0)
   {
+    $guid = (!$guid) ?$this->guid :$guid;
     if ($now > $all)
-      $this->db->query("UPDATE `character_stats` SET ?# = ?d, ?# = '0' WHERE `guid` = ?d", $type ,$all ,$type.'_cure' ,$this->guid);
+      $this->db->query("UPDATE `character_stats` SET ?# = ?d, ?# = '0' WHERE `guid` = ?d", $type ,$all ,$type.'_cure' ,$guid);
     else
     {
       getCureValue($now, $all, $regen, $cure);
-      $this->db->query("UPDATE `character_stats` SET ?# = ?d WHERE `guid` = ?d", $type.'_cure' ,$cure ,$this->guid);
+      $this->db->query("UPDATE `character_stats` SET ?# = ?d WHERE `guid` = ?d", $type.'_cure' ,$cure ,$guid);
     }
   }
   /*Отображение дополнительной характеристики*/
@@ -277,7 +289,7 @@ class Char
     
     $char_db = $this->getChar('char_db', 'level', 'sex', 'next_shape');
     $char_stats = $this->getChar('char_stats', 'str', 'dex', 'con', 'vit', 'int', 'wis', 'sword', 'axe', 'fail', 'knife', 'fire', 'water', 'air', 'earth', 'light', 'dark');
-    $char_feat = array_merge ($char_db, $char_stats);
+    $char_feat = array_merge($char_db, $char_stats);
     $sex = ($char_feat['sex'] == "male") ?"m" :"f";
     
     if ($char_feat['next_shape'] && $char_feat['next_shape'] > time())
@@ -286,7 +298,7 @@ class Char
     if ($shape['sex'] != $sex)
       return false;
     
-    unset ($char_feat['sex'], $char_feat['next_shape']);
+    unset($char_feat['sex'], $char_feat['next_shape']);
     foreach ($char_feat as $key => $value)
     {
       if ($shape[$key] > 0 && $shape[$key] > $value)
@@ -298,11 +310,11 @@ class Char
   function showInventoryBar ($bar, $value, $max_num)
   {
     global $behaviour;
-    $flag = explode ('|', $value);
+    $flag = explode('|', $value);
     $lang = $this->getLang();
     $char_stats = $this->getChar('char_stats', '*');
     $char_equip = $this->getChar('char_equip', 'hand_r', 'hand_l', 'hand_r', 'hand_r_type', 'hand_l_type');
-    list ($hand_r, $hand_l, $hand_r_type, $hand_l_type) = array_values($char_equip);
+    list($hand_r, $hand_l, $hand_r_type, $hand_l_type) = array_values($char_equip);
     $content = '';
     $link_text = '';
     $link = '';
@@ -364,17 +376,19 @@ class Char
         $content .= ($hand_r != 0 || $hand_l != 0) ?"<span alt='$lang[mastery_m]'>$lang[mastery] $show_r_mastery$show_l_mastery</span><br>" :"";
       break;
       case 'power':      /*Мощность*/
-        $mf_damage = array ('sting', 'slash', 'crush', 'sharp');
-        $mf_magic = array ('fire', 'water', 'air', 'earth', 'light', 'gray', 'dark');
+        $mf_damage = array('sting', 'slash', 'crush', 'sharp');
+        $mf_magic = array('fire', 'water', 'air', 'earth', 'light', 'gray', 'dark');
         foreach ($mf_damage as $key)
         {
-          $show_r[$key] = ($this->equip->checkHandStatus('r')) ?$char_stats['hand_r_'.$key] + $char_stats['mf_'.$key] :"";
-          $show_l[$key] = ($this->equip->checkHandStatus('l')) ?(($hand_r != 0) ?"% / +" :"").($char_stats['hand_l_'.$key] + $char_stats['mf_'.$key]) :"";
+          $plus_r = $char_stats['hand_r_'.$key] + $char_stats['mf_'.$key];
+          $plus_l = $char_stats['hand_l_'.$key] + $char_stats['mf_'.$key];
+          $show_r[$key] = ($this->equip->checkHandStatus('r')) ?(($plus_r > 0) ?'+' :'')."$plus_r" :"";
+          $show_l[$key] = ($this->equip->checkHandStatus('l')) ?(($hand_r != 0) ?"% / ".(($plus_l > 0) ?'+' :'') :"").$plus_l :"";
         }
         foreach ($mf_damage as $key)
-          $content .= ($char_stats['mf_'.$key] != 0 || $char_stats['hand_r_'.$key] != 0 || $char_stats['hand_l_'.$key] != 0) ?"<span alt='".$lang[$key.'_p']."'>".$lang[$key.'_i']." +$show_r[$key]$show_l[$key]%</span><br>" :"";
+          $content .= ($char_stats['mf_'.$key] != 0 || $char_stats['hand_r_'.$key] != 0 || $char_stats['hand_l_'.$key] != 0) ?"<span alt='".$lang[$key.'_p']."'>".$lang[$key.'_i']." $show_r[$key]$show_l[$key]%</span><br>" :"";
         foreach ($mf_magic as $key)
-          $content .= ($char_stats['mf_'.$key] != 0) ?"<span alt='".$lang[$key.'_p']."'>".$lang[$key.'_i']." +".$char_stats['mf_'.$key]."%</span><br>" :"";
+          $content .= ($char_stats['mf_'.$key] != 0) ?"<span alt='".$lang[$key.'_p']."'>".$lang[$key.'_i']." ".(($char_stats['mf_'.$key] > 0) ?'+' :'')."".$char_stats['mf_'.$key]."%</span><br>" :"";
       break;
       case 'def':        /*Защита*/
         $ress = array ('sting', 'slash', 'crush', 'sharp', 'fire', 'water', 'air', 'earth', 'light', 'dark', 'gray');
@@ -422,27 +436,29 @@ class Char
   function getSetRow ($name)
   {
     $lang = $this->getLang();
-    return "<div name='$name'><img width='200' height='1' src='img/1x1.gif'><br>&nbsp;&nbsp;<img src='img/icon/inf2.gif' width='10' height='10' alt='Просмотр' onclick=\"workSets ('show', '$name');\" style='cursor: pointer;'><img src='img/icon/close2.gif' width='9' height='9' alt='$lang[set_delete]' onclick=\"if (confirm('$lang[set_delete] $name?')) {workSets ('delete', '$name');}\" style='cursor: pointer;'> <a href='main.php?action=wear_set&set_name=$name' class='nick'><small>$lang[equip] \"$name\"</small></a></div>";
+    return "<div name='".str_replace(" ", "_", $name)."'><img width='200' height='1' src='img/1x1.gif'><br>&nbsp;&nbsp;<img src='img/icon/inf2.gif' width='10' height='10' alt='Просмотр' onclick=\"workSets('show', '$name');\" style='cursor: pointer;'><img src='img/icon/close2.gif' width='9' height='9' alt='$lang[set_delete]' onclick=\"if (confirm('$lang[set_delete] $name?')) {workSets('delete', '$name');}\" style='cursor: pointer;'> <a href='main.php?action=wear_set&set_name=$name' class='nick'><small>$lang[equip] \"$name\"</small></a></div>";
   }
   /*Добавление/Обновление/Удаление эффекта*/
-  function workEffect ($effect, $type = 1)
+  function workEffect ($effect, $type = 1, $guid = 0)
   {
+    $guid = (!$guid) ?$this->guid :$guid;
+    
     if (!$effect || $effect == 0 || !is_numeric($effect))
       return;
     
-    $char_eff = $this->db->selectCell("SELECT `guid` FROM `character_effects` WHERE `effect_entry` = ?d and `guid` = ?d", $effect ,$this->guid);
+    $char_eff = $this->db->selectCell("SELECT `guid` FROM `character_effects` WHERE `effect_id` = ?d and `guid` = ?d", $effect ,$guid);
     
     if ((($type == -1 || $type == 0) && !$char_eff) || ($type == 1 && $char_eff))
       return;
     
-    $e_info = $this->db->selectRow("SELECT * FROM `effect_template` WHERE `entry` = ?d", $effect);
+    $e_info = $this->db->selectRow("SELECT * FROM `player_effects` WHERE `id` = ?d", $effect);
     
-    $char_e = $this->db->selectCell("SELECT `c`.`effect_entry` 
+    $char_e = $this->db->selectCell("SELECT `c`.`effect_id` 
                                      FROM `character_effects` AS `c` 
-                                     LEFT JOIN `effect_template` AS `i` 
-                                     ON `c`.`effect_entry` = `i`.`entry` 
+                                     LEFT JOIN `player_effects` AS `i` 
+                                     ON `c`.`effect_id` = `i`.`id` 
                                      WHERE `c`.`guid` = ?d 
-                                       and `i`.`set` = ?s", $this->guid ,$e_info['set']);
+                                       and `i`.`set` = ?s", $guid ,$e_info['set']);
     
     if ($char_e && $char_e != $effect)
       $this->workEffect($char_e, -1);
@@ -451,14 +467,14 @@ class Char
     {
       if ($char_eff)
       {
-        $this->db->query("UPDATE `character_effects` SET `end_time` = ?d WHERE `guid` = ?d", (time() + $e_info['duration']) ,$this->guid);
+        $this->db->query("UPDATE `character_effects` SET `end_time` = ?d WHERE `guid` = ?d", (time() + $e_info['duration']) ,$guid);
         return;
       }
       else
         $type = 1;
     }
     
-    $char_stats = $this->getChar('char_stats', '*', $this->guid);
+    $char_stats = $this->getChar('char_stats', '*', $guid);
     
     $new_sql = array();
     $new_sql['res_sting'] = $e_info['res_dmg'];
@@ -486,9 +502,10 @@ class Char
     $new_sql['mf_dodge'] = $e_info['mf_dodge'];
     $new_sql['hitmin'] = $e_info['add_hit_min'];
     $new_sql['hitmax'] = $e_info['add_hit_max'];
-    $new_sql['mp_regen'] = $e_info['mpreco'];
     $new_sql['hp_all'] = $e_info['add_hp'];
     $new_sql['mp_all'] = $e_info['add_mp'];
+    $new_sql['mp_regen'] = $e_info['mp_regen'];
+    $new_sql['mp_cons'] = -$e_info['mp_cons'];
     
     foreach ($new_sql as $key => $value)
     {
@@ -496,22 +513,22 @@ class Char
       $new_sql[$key] += $char_stats[$key];
     }
     
-    $char_hpmp = $this->getChar('char_stats', 'hp', 'mp', $this->guid);
+    $char_hpmp = $this->getChar('char_stats', 'hp', 'mp', $guid);
     foreach ($char_hpmp as $key => $value)
     {
       if ($e_info['add_'.$key] != 0)
-        $this->setTimeToHPMP($value, $new_sql[$key.'_all'], $char_stats[$key.'_regen'], $key);
+        $this->setTimeToHPMP($value, $new_sql[$key.'_all'], $char_stats[$key.'_regen'], $key, $guid);
     }
     
     if ($type == 1)
     {
       $time = ($e_info['duration'] == 0) ?0 :time() + $e_info['duration'];
-      $this->db->query("INSERT INTO `character_effects` (`guid`, `effect_entry`, `end_time`) 
-                        VALUES (?d, ?d, ?d)", $this->guid ,$effect ,$time);
+      $this->db->query("INSERT INTO `character_effects` (`guid`, `effect_id`, `end_time`) 
+                        VALUES (?d, ?d, ?d)", $guid ,$effect ,$time);
     }
     else if ($type == -1)
-      $this->db->query("DELETE FROM `character_effects` WHERE `guid` = ?d and `effect_entry` = ?d", $this->guid ,$effect);
-    $this->db->query("UPDATE `character_stats` SET ?a WHERE `guid` = ?d", $new_sql ,$this->guid);
+      $this->db->query("DELETE FROM `character_effects` WHERE `guid` = ?d and `effect_id` = ?d", $guid ,$effect);
+    $this->db->query("UPDATE `character_stats` SET ?a WHERE `guid` = ?d", $new_sql ,$guid);
   }
   /*Бонусные эффекты от статов*/
   function statsBonus ($stat)
@@ -528,8 +545,156 @@ class Char
     else if ($stat_value >= 125 && $stat_value < 150) $power = 5;
     else if ($stat_value >= 150)                      $power = 6;
     
-    $entry = $this->db->selectCell("SELECT `entry` FROM `effect_template` WHERE `set` = ?s and `power` = ?d", $stat ,$power);
+    $entry = $this->db->selectCell("SELECT `id` FROM `player_effects` WHERE `set` = ?s and `power` = ?d", $stat ,$power);
     $this->workEffect($entry, 1);
+  }
+  /*Добавление/Удаление травмы*/
+  function workTravm ($travm, $type = 1, $guid = 0)
+  {
+    $guid = (!$guid) ?$this->guid :$guid;
+    
+    if (!$travm || $travm == 0 || !is_numeric($travm))
+      return;
+    
+    $char_trm = $this->db->selectCell("SELECT `guid` FROM `character_travms` WHERE `travm_id` = ?d and `guid` = ?d", $travm ,$guid);
+    
+    if (($type == -1 && !$char_trm) || ($type == 1 && $char_trm))
+      return;
+    
+    if ($type == 1)
+    {
+      $t_info = $this->db->selectRow("SELECT * FROM `player_travms` WHERE `id` = ?d", $travm);
+    }
+    else
+    {
+      $t_info = $this->db->selectRow("SELECT * 
+                                      FROM `character_travms` AS `c` 
+                                      LEFT JOIN `player_travms` AS `i` 
+                                      ON `c`.`travm_id` = `i`.`id` 
+                                      WHERE `c`.`guid` = ?d 
+                                        and `c`.`travm_id` = ?d", $guid ,$travm);
+    }
+    
+    $level = $this->getChar('char_db', 'level', $guid);
+    $char_stats = $this->getChar('char_stats', '*', $guid);
+    
+    $stats = array('str' => 0, 'dex' => 0, 'con' => 0);
+    $new_sql = array();
+    
+    if ($type == 1)
+    {
+      $t_info['stats'] = '';
+      $check = $this->db->selectCell("SELECT `travm_id` FROM `character_travms` WHERE `guid` = ?d and `stats` != '' and `travm_id` != '100';", $guid);
+      switch ($t_info['type'])
+      {
+        case 0:
+          if ($t_info['id'] == 100)
+          {
+            $t_info['stats'] = "mf_fire=50,mf_water=50,mf_air=50,mf_earth=50,mf_light=50,mf_gray=50,mf_dark=50,mf_sting=50,mf_slash=50,mf_crush=50,mf_sharp=50";
+            break;
+          }
+        break;
+        case 1:
+          if ($t_info['id'] == 1)
+            break;
+          
+          if ($check)
+            return;
+          
+          $shuffle = shuffle_arr($stats);
+          foreach ($shuffle as $key => $value)
+          {
+            $stats[$key] = $char_stats[$key];
+            $minus = $level*$t_info['power'];
+            if ($char_stats[$key] > $minus)
+            {
+              $t_info['stats'] = "$key=$minus";
+              break;
+            }
+          }
+          
+          if (!$t_info['stats'])
+          {
+            arsort($stats);
+            foreach ($stats as $key => $value)
+            {
+              $minus = $char_stats[$key]-1;
+              $t_info['stats'] = "$key=$minus";
+              break;
+            }
+          }
+        break;
+        case 2:
+          if ($check)
+            return;
+          
+          $minus = 25*$t_info['power'];
+          $t_info['stats'] = "mp_regen=$minus";
+        break;
+      }
+      $stats = array('str' => 0, 'dex' => 0, 'con' => 0);
+    }
+    
+    if ($t_info['stats'])
+    {
+      $modifiers = split(",", $t_info['stats']);
+      foreach ($modifiers as $modifier)
+      {
+        $stat = split("=", $modifier);
+        
+        if (array_key_exists($stat[0], $stats))
+          $stats[$stat[0]] = -$stat[1]*$type;
+        else
+          $new_sql[$stat[0]] = -$stat[1]*$type + $char_stats[$stat[0]];
+      }
+      $this->changeStats($stats, $guid);
+      if ($new_sql)
+        $this->db->query("UPDATE `character_stats` SET ?a WHERE `guid` = ?d", $new_sql ,$guid);
+    }
+    
+    if ($type == 1)
+    {
+      $time = ($t_info['dur_max'] == 0) ?0 :time() + rand($t_info['dur_min'], $t_info['dur_max']);
+      $this->db->query("INSERT INTO `character_travms` (`guid`, `travm_id`, `stats`, `end_time`) 
+                        VALUES (?d, ?d, ?s, ?d)", $guid ,$travm ,$t_info['stats'] ,$time);
+    }
+    else if ($type == -1)
+      $this->db->query("DELETE FROM `character_travms` WHERE `guid` = ?d and `travm_id` = ?d", $guid ,$travm);
+  }
+  /*Показ строки персонажа*/
+  function getLogin ($type = 'clan', $guid = 0)
+  {
+    $guid = (!$guid) ?$this->guid :$guid;
+    $char_db = $this->getChar('char_db', 'login', 'level', 'orden', 'clan', 'clan_short', 'block', 'rang', 'chat_shut', 'afk', 'dnd', 'message', $guid);
+    list($login, $level, $orden, $clan_f, $clan_s, $block, $rang, $chat_shut, $afk, $dnd, $message) = array_values($char_db);
+    $travm = $this->db->selectCell("SELECT `guid` FROM `character_travms` WHERE `guid` = ?d and `travm_id` != '100' and `travm_id` != '1';", $guid);
+    switch ($orden)
+    {
+      case 1:  $orden_img = "<img src='img/orden/pal/$rang.gif' width='12' height='15' border='0' title='Белое братство'>";  break;
+      case 2:  $orden_img = "<img src='img/orden/arm/$rang.gif' width='12' height='15' border='0' title='Темное братство'>"; break;
+      case 3:  $orden_img = "<img src='img/orden/3.gif' width='12' height='15' border='0' title='Нейтральное братство'>";    break;
+      case 4:  $orden_img = "<img src='img/orden/4.gif' width='12' height='15' border='0' title='Алхимик'>";                 break;
+      case 5:  $orden_img = "<img src='img/orden/5.gif' width='12' height='15' border='0' title='Хаос'>";                    break;
+      default: $orden_img = "";                                                                                              break;
+    }
+    $clan = ($clan_s != '') ?"<img src='img/clan/$clan_s.gif' border='0' title='$clan_f'>" :"";
+    $login_link = str_replace(" ", "%20", $login);
+    $login_info = "<a href='info.php?log=$login_link' target='_blank'><img src='img/inf.gif' border='0' title='Инф. о $login'></a>";
+    $mol = ($chat_shut) ?" <img src='img/sleep2.gif' title='Наложено заклятие молчания'>" :"&nbsp";
+    $travm = ($travm) ?"<img src='img/travma2.gif' title='Инвалидность'>" :"&nbsp";
+    $banned = ($block) ?"<font color='red'><b>- Забанен</b></font>" :"";
+    $afk = ($afk) ?"<font title='$message'><b>afk</b></font>&nbsp;" :(($dnd && $message) ?"<font title='$message'><b>dnd</b></font>&nbsp;" :'');
+    switch ($type)
+    {
+      case 'online': return "&nbsp;<a href=javascript:top.AddToPrivate('$login_link',true);><img border='0' src='img/lock.gif' title='Приват'></a>&nbsp;&nbsp;$afk$orden_img$clan<a href=javascript:top.AddTo('$login_link'); class='nick'><b>$login</b></a>[$level]$login_info$mol$travm<br>";
+      case 'mults':  return "$orden_img$clan<b>$login</b> [$level]$login_info $banned <br>";
+      case 'clan':   return "$orden_img$clan<b>$login</b> [$level]$login_info";
+      case 'turn':   return $orden_img;
+      case 'name':   return $login;
+      case 'news':   return "$orden_img$clan<font class='header'>$login</font> [$level]$login_info";
+      case 'mail':   return "<font color='red'>$login</font> $login_info";
+      default:       return "";
+    }
   }
 }
 ?>

@@ -85,8 +85,10 @@ function spoilerBar (bar)
 function workSets (type, name)
 {
 	clearError();
+  
 	if (!name)
 	  name = $("input[name=set_name]").val();
+  
 	$.post('ajax.php', {'do': 'worksets', 'name': name, 'type': type}, function (data){
 	  var set = top.exploder(data);
 	  if (type == 'create' && set[0] == 'complete')

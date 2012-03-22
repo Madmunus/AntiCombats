@@ -9,13 +9,13 @@ $second_time = mktime(0, 0, 0, $split[0], date("t", $first_time), $split[1]);
 $rows = $adb->select("SELECT `action`, 
                              `date`, 
                              `ip`, 
+                             `city`, 
                              `comment` 
                       FROM `history_auth` 
-                      WHERE `city` = ?s 
-                        and `date` <= ?d 
+                      WHERE `date` <= ?d 
                         and `date` >= ?d 
                         and `guid` = ?d 
-                      ORDER BY `id`;", $city ,$second_time ,$first_time ,$guid);
+                      ORDER BY `id`;", $second_time ,$first_time ,$guid);
 ?>
 <style>
 body {background-color: #e2e0e0;}
@@ -38,16 +38,15 @@ if (count($rows) == 0)
 $reports = '';
 foreach ($rows as $auth)
 {
-  list($action, $date_a, $ip, $comment) = array_values($auth);
+  list($action, $date_a, $ip, $city, $comment) = array_values($auth);
   $date_a = date('d.m.y H:i', $date_a);
-  $city = $char->city->getCity($city, 'name');
   
-  if (!$reports)
-    $reports = "<h4>$city</h4>";
+  if (!$reports || (isset($e_city) && $e_city != $city))
+    $reports .= "<h4>".$char->city->getCity($city, 'name')."</h4>";
   
   switch ($action)
   {
-    case 1:                    $reports .= "$date_a Входит \"$login\", $ip<br>";            break;
+    case 1:                    $reports .= "$date_a Входит \"$login\" $ip.<br>";            break;
     case 0:
       switch ($comment)
       {
@@ -56,6 +55,7 @@ foreach ($rows as $auth)
       }
     break;
   }
+  $e_city = $city;
 }
 echo $reports;
 ?>

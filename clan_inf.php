@@ -28,7 +28,7 @@ $glava = $db['glava'];
 if (empty($clan))     die("$top Неверный запрос.$bot");
 else if (!$name_s)    die("$top Нет информации о клане $name_s.$bot");
 
-$orden = $char->info->character('turn', $glava);
+$orden = $char->getLogin('turn', $glava);
 ?>
 <html>
 <head>
@@ -58,7 +58,7 @@ $orden = $char->info->character('turn', $glava);
   <tr>
     <td width="50%" valign="top">
 <?
-      echo "Глава клана: {$char->info->character('clan', $glava)}";
+      echo "Глава клана: {$char->getLogin('clan', $glava)}";
 ?>
     </td>
     <td width="50%" valign="top">
@@ -69,7 +69,7 @@ $orden = $char->info->character('turn', $glava);
                               WHERE `clan_short` = ?s 
                               ORDER BY `exp` DESC", $name_s); 
     foreach ($rows as $num => $clan_player)
-        echo $char->info->character('clan', $clan_player)."<br>";
+        echo $char->getLogin('clan', $clan_player)."<br>";
     echo "Всего: <b>".count ($rows)."</b>";
 ?>
     </td>

@@ -90,8 +90,8 @@ switch ($city)
       <img id="passage" src="img/room/dem/repair.png" class="repair" alt="<?echo $char->city->getRoomOnline('rep');?>" onclick="solo('rep');" />
       <img id="passage" src="img/room/dem/temple.png" class="temple" alt="<?echo $char->city->getRoomOnline('brak');?>" onclick="solo('brak');" />
       <img id="passage" src="img/room/dem/optshop.png" class="optshop" alt="<?echo $char->city->getRoomOnline('Оптовый магазин');?>" onclick="solo('o3');" />
-      <img id="passage" src="img/room/dem/station.png" class="station" alt="<?echo $char->city->getRoomOnline('cityhall');?>" onclick="solo('cityhall');" />
-      <img id="passage" src="img/room/dem/dungeon.png" class="dungeon" alt="<?echo $char->city->getRoomOnline('prision');?>" onclick="solo('prision');" />
+      <img id="passage" src="img/room/dem/station.png" class="station" alt="<?echo $char->city->getRoomOnline('station');?>" onclick="solo('station');" />
+      <img id="passage" src="img/room/dem/dungeon.png" class="dungeon" alt="<?echo $char->city->getRoomOnline('dungeon');?>" onclick="solo('dungeon');" />
       <img id="passage" src="img/room/dem/comshop.png" class="comshop" alt="<?echo $char->city->getRoomOnline('comok');?>" onclick="solo('comok');" />
       <img id="passage" src="img/room/dem/right.png" class="right" alt="<?echo $char->city->getRoomOnline('fairstreet');?>" onclick="solo('fairstreet');" />
       <div class="actionbar"><?getUpdateBar();?></div>
@@ -100,7 +100,7 @@ switch ($city)
       <span class="buttons_under"><img src="img/links.gif" width="9" height="7" />&nbsp;<a href="#" id="club" class="passage" alt="<?echo $char->city->getRoomOnline('club', 'mini');?>" onclick="solo('club');">Бойцовский Клуб</a></span>
       <span class="buttons_under"><img src="img/links.gif" width="9" height="7" />&nbsp;<a href="#" id="shop" class="passage" alt="<?echo $char->city->getRoomOnline('shop', 'mini');?>" onclick="solo('shop');">Магазин</a></span>
       <span class="buttons_under"><img src="img/links.gif" width="9" height="7" />&nbsp;<a href="#" id="repair" class="passage" alt="<?echo $char->city->getRoomOnline('s', 'mini');?>">Ремонтная мастерская</a></span>
-      <span class="buttons_under"><img src="img/links.gif" width="9" height="7" />&nbsp;<a href="#" id="station" class="passage" alt="<?echo $char->city->getRoomOnline('cityhall', 'mini');?>" onclick="solo('cityhall');">Академия</a></span>
+      <span class="buttons_under"><img src="img/links.gif" width="9" height="7" />&nbsp;<a href="#" id="station" class="passage" alt="<?echo $char->city->getRoomOnline('station', 'mini');?>" onclick="solo('station');">Вокзал</a></span>
       <span class="buttons_under"><img src="img/links.gif" width="9" height="7" />&nbsp;<a href="#" id="comshop" class="passage" alt="<?echo $char->city->getRoomOnline('c', 'mini');?>">Комиссионка</a></span>
       <span class="buttons_under"><img src="img/links.gif" width="9" height="7" />&nbsp;<a href="#" id="post" class="passage" alt="<?echo $char->city->getRoomOnline('mail', 'mini');?>" onclick="solo('mail');">Почтовое отделение</a></span>
       <span class="buttons_under"><img src="img/links.gif" width="9" height="7" />&nbsp;<a href="#" id="right" class="passage" alt="<?echo $char->city->getRoomOnline('fairstreet', 'mini');?>" onclick="solo('fairstreet');">Страшилкина улица</a></span>

@@ -176,9 +176,9 @@ switch (date('m'))
     $best = "runet_5.jpg";
   break;
 }
-$login = ($server['login']) ?"return true;" :"alert ('Сервер оффлайн'); return false;";
+$login = ($server['login']) ?"return true;" :"alert('Сервер оффлайн'); return false;";
 $registration = ($server['registration']) ?"location.href = 'register.php';" :"alert('Регистрация закрыта');";
-$rpassword = ($server['password']) ?"pass.php" :"index.php";
+$rpassword = ($server['password']) ?"pass.php" :"alert('Система отключена');";
 ?>
 <body>
 <table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0">
@@ -230,7 +230,7 @@ $rpassword = ($server['password']) ?"pass.php" :"index.php";
       <a href="forum" target="_blank">Форум</a> &nbsp;
       <a href="#">Скроллы</a> &nbsp;    
       <a href="stat.php" target="_blank">Рейтинг</a> &nbsp;
-      <a href="<?print $rpassword;?>">Забыли пароль?</a> &nbsp;
+      <a href="<?echo $rpassword;?>">Забыли пароль?</a> &nbsp;
       <a href="#">Подтверждения</a>
     </td>
   </tr>

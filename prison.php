@@ -1,15 +1,15 @@
 <?
 defined('AntiBK') or die("Доступ запрещен!");
 
-$xaos = $adb->selectCell("SELECT COUNT(*) FROM `characters` WHERE `prision` != '0';");
+$prisoners = $adb->selectCell("SELECT COUNT(*) FROM `characters` WHERE `prison` != '0';");
 ?>
 <table>
   <tr>
-    <td><img src="img/prison.jpg"><br>Всего в тюрьме: <b><?echo $xaos;?></b></td>
+    <td><img src="img/prison.jpg"><br>Всего в тюрьме: <b><?echo $prisoners;?></b></td>
     <td width="100%" valign="top">
     <center>Тюрьма - место покоя тех, кто был глуп и наивен.</center>
 <?
-if (!$char_db['prision'])
+if (!$char_db['prison'])
 {
 ?>
 <table width="148" align="right" border="0" cellpadding="0" cellspacing="1" bgcolor="#DEDEDE">
@@ -22,12 +22,12 @@ if (!$char_db['prision'])
 }
 else
 {
-  $time = getFormatedTime($char_db['prision']);
+  $time = getFormatedTime($char_db['prison']);
   echo "<span class='small'><center><font color='#FF0000'><b>Вам осталось сидеть $time</b><br>";
-  if ($char_db['prision_reason'])
+  if ($char_db['prison_reason'])
   {
     echo "Причина тюремного заключения:<br>";
-    echo $char_db['prision_reason'];
+    echo $char_db['prison_reason'];
   }
   echo "</font></center></span>";
 }

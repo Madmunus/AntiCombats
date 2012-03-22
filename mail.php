@@ -31,7 +31,7 @@ switch ($do)
     <table width="100%" cellspacing="0" cellpadding="4" bgcolor="#d2d2d2">
     <tr>
       <td class="pH3">&nbsp; &nbsp; Почтовое отделение<?echo (isset($lang['mail_'.$do])) ?$lang['mail_'.$do] :"";?></td>
-      <td align="right" valign="top"><?echo $char->info->character();?></td>
+      <td align="right" valign="top"><?echo $char->getLogin();?></td>
     </tr>
     </table>
     <font color='red' id='error'><?$char->error->getFormattedError($error, $parameters);?></font>
@@ -69,7 +69,7 @@ switch ($do)
                                   WHERE `login` = ?s or `guid` = ?s", $login_mail ,$login_mail) or $char->error->Map(203, $login_mail);
     $login_mail = $mail_info['guid'];
 ?>
-    К кому передавать: <?echo $char->info->character('mail', $login_mail);?> &nbsp;<input type="button" value="Сменить" onclick="findLogin('Почтовые услуги', 'main.php', 'login_mail', '', '', '<input type=hidden value=items name=do>', 0); return false;" class="nav"><br>
+    К кому передавать: <?echo $char->getLogin('mail', $login_mail);?> &nbsp;<input type="button" value="Сменить" onclick="findLogin('Почтовые услуги', 'main.php', 'login_mail', '', '', '<input type=hidden value=items name=do>', 0); return false;" class="nav"><br>
 <?
     if ($city == $mail_info['city'])
       echo "Находится в этом городе";
@@ -109,7 +109,7 @@ $(function (){
                                   WHERE `login` = ?s or `guid` = ?d", $login_mail ,$login_mail) or $char->error->Map(203, $login_mail);
     $login_mail = $mail_info['guid'];
 ?>
-    К кому передавать: <?echo $char->info->character('mail', $login_mail);?> &nbsp;<input type="button" value="Сменить" onclick="findLogin('Почтовые услуги', 'main.php', 'login_mail', '', '', '<input type=hidden value=money name=do>', 0); return false;" class="nav"><br>
+    К кому передавать: <?echo $char->getLogin('mail', $login_mail);?> &nbsp;<input type="button" value="Сменить" onclick="findLogin('Почтовые услуги', 'main.php', 'login_mail', '', '', '<input type=hidden value=money name=do>', 0); return false;" class="nav"><br>
 <?
     if ($city == $mail_info['city'])
       echo "Находится в этом городе";

@@ -73,7 +73,7 @@ for ($i = 0; $i < count($players); $i++)
   $bg = (!($i % 2 === 0) || $i == 1) ?" bgcolor='#ECDFAA'" :"";
   echo "<tr$bg>";
   echo "<td align='right'>".($i + 1).".</td>";
-  echo "<td>".$char->info->character('clan', $players[$i]['guid'])."</td>";
+  echo "<td>".$char->getLogin('clan', $players[$i]['guid'])."</td>";
   echo "<td align='right'><b>".getExp($players[$i]['exp'])."</b></td>";
   echo "</tr>";
 }

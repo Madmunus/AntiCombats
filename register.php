@@ -16,11 +16,11 @@ $adb->query("SET NAMES ? ",$database['db_encoding']);
 $adb->setErrorHandler("databaseErrorHandler");
 
 $step = requestVar('step');
-$error_text = 'Пройдите предыдущий шаг!<br><br><a href=\'javascript:location.href="?step='.($step-1).'";\' class="us2">Назад</a>';
+$error_text = 'Пройдите предыдущий шаг!<br><br><a href="?step='.($step-1).'" class="us2">Назад</a>';
 ?>
 <html>
 <head>
-<link rel="SHORTCUT ICON" href="img/favicon.ico">
+<link rel="SHORTCUT ICON" href="img/favicon.ico" />
 <title>Анти Бойцовский Клуб</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link href="styles/main.css" rel="stylesheet" type="text/css" />
@@ -32,7 +32,7 @@ $error_text = 'Пройдите предыдущий шаг!<br><br><a href=\'ja
   <thead><tr><td background="img/site/sitebk_02.jpg" align="center"><img src="img/site/sitebk_03.gif" width="194" height="135"></td></tr></thead>
   <tfoot>
     <tr><td width="100%" height="13" background="img/site/sitebk_07.jpg"></td></tr>
-    <tr><td width="100%" bgColor="#000" height="20" align="center" class="copyright">Copyright © 2002—2010 Dragon Server</td></tr>
+    <tr><td width="100%" bgColor="#000" height="20" align="center" class="copyright">Copyright © 2002—2012 Dragon Server</td></tr>
   </tfoot>
   <tbody>
   <tr>
@@ -56,7 +56,10 @@ $error_text = 'Пройдите предыдущий шаг!<br><br><a href=\'ja
                 <div id="error" readonly cols="100" rows="1" style="color: red; font-weight: bold; background-color: #f2e5b1; border: 0; display: none;"></div></p></td>
               </tr>
               <tr><td>
-<?  switch ($step)
+<?  
+if (!($adb->selectCell("SELECT `registration` FROM `server_info`;")))
+  die('Регистрация закрыта!<br><br><a href="index.php" class="us2">Вернуться на главную</a>');
+    switch ($step)
     {
       default :
       case '':

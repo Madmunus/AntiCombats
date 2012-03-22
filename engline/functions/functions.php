@@ -15,8 +15,6 @@ include("class_Mail.php");
 include("class_Bank.php");
 /*Функции чата*/
 include("class_Chat.php");
-/*Функции информации*/
-include("class_Info.php");
 /*Функции истории*/
 include("class_History.php");
 /*Функции ошибок*/
@@ -76,12 +74,13 @@ function getRegeneratedValue ($all, $cure, $regen)
 function getFormatedTime ($timestamp)
 {
   if (!$timestamp)
-    return "Вечность";
+    return "0 сек.";
   
   if (!is_numeric($timestamp))
     $timestamp = time();
   
-  $seconds = abs($timestamp - time());
+  $seconds = $timestamp - time();
+  $seconds = ($seconds > 0) ?$seconds :0;
   $d = intval($seconds / 86400);
   $seconds %= 86400;
   $h = intval($seconds / 3600);
@@ -258,4 +257,10 @@ function deleteSession ()
 {
   unset($_SESSION['guid'], $_SESSION['bankСredit'], $_SESSION['last']);
 }
+function shuffle_arr ($array)
+{
+  $keys = array_keys($array);
+  shuffle($keys);
+  return array_merge(array_flip($keys), $array);
+} 
 ?>

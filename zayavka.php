@@ -49,7 +49,7 @@ $hps = array('fiz', 'dgv', 'group', 'haos');
 <?
     if (in_array($fight, $hps))
     {
-      echo $char->info->character('clan');
+      echo $char->getLogin('clan');
       echo "<span id='HP'></span>";
       echo "<img src='img/icon/heart_03.gif' width='10' height='10' alt='Уровень жизни' style='padding-left: 1px; vertical-align: middle;'>";
       echoScript("showHP($char_stats[hp], $char_stats[hp_all], $char_stats[hp_regen], 1);");

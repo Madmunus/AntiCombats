@@ -14,8 +14,9 @@ $adb = DbSimple_Generic::connect($database['adb']);
 $adb->query("SET NAMES ? ",$database['db_encoding']);
 $adb->setErrorHandler("databaseErrorHandler");
 
-$login = requestVar('login', '', 3);
-$password = requestVar('password', '', 3);
+$login = requestVar('login', '', 2);
+$password = requestVar('password', '', 2);
+$enter = $adb->selectCell("SELECT `login` FROM `server_info`;");
 ?>
 <html>
 <head>
@@ -37,15 +38,20 @@ if (!($.browser.mozilla))
 $top = "Произошла ошибка:<br><pre>";
 $bot = "</pre><a href='javascript: window.history.go(-1);'><b>Назад</b></a><hr>";
 
-if (empty($login))
+if (!$enter)
 {
   echoScript("$('title').html('Произошла ошибка');");
-  die ("$top Вы не ввели логин$bot");
+  die("$top Сервер оффлайн$bot");
+}
+else if (empty($login))
+{
+  echoScript("$('title').html('Произошла ошибка');");
+  die("$top Вы не ввели логин$bot");
 }
 else if (empty($password))
 {
   echoScript("$('title').html('Произошла ошибка');");
-  die ("$top Укажите пароль$bot");
+  die("$top Укажите пароль$bot");
 }
 
 $char_info = $adb->selectRow("SELECT `guid`, 
@@ -55,40 +61,37 @@ $char_info = $adb->selectRow("SELECT `guid`,
                                      `room`, 
                                      `city` 
                               FROM `characters` 
-                              WHERE `login` = ?s", $login) or die ("$top Логин \"$login\" не найден в базе.$bot");
+                              WHERE `login` = ?s", $login) or die("$top Логин \"$login\" не найден в базе.$bot");
 $guid = $char_info['guid'];
 
 $char = Char::initialization($guid, $adb);
 
-if (SHA1 ($guid.':'.$password) != $char_info['password'])
+if (SHA1($guid.':'.$password) != $char_info['password'])
 {
   $char->history->Auth(0, $char_info['city'], 'wrong_password');
-  die ("$top Неверный пароль для \"$login\". Введите логин/пароль на <a href='../combats'>титульной странице</a>$bot");
+  die("$top Неверный пароль для \"$login\". Введите логин/пароль на <a href='index.php'>титульной странице</a>$bot");
 }
 else if ($char_info['block'])
 {
   $char->history->Auth(0, $char_info['city'], 'blocked');
-  die ("$top Внимание!!! Персонаж $login заблокирован!$bot");
+  die("$top Внимание!!! Персонаж $login заблокирован!$bot");
 }
 
-if (session_is_registered('guid'))
+if (checks('guid'))
 {
   deleteSession();
-  $_SESSION['guid'] = $guid;
 }
-else
-  $_SESSION['guid'] = $guid;
 
 $adb->query("DELETE FROM `online` WHERE `guid` = ?d", $guid);
 $adb->query("INSERT INTO `online` (`guid`, `login_display`, `ip`, `city`, `room`, `last_time`) 
              VALUES (?d, ?s, ?s, ?s, ?s, ?d);", $guid ,$login ,$_SERVER['REMOTE_ADDR'] ,$char_info['city'] ,$char_info['room'] ,time());
 $adb->query("UPDATE `characters` SET `last_go` = ?d WHERE `guid` = ?d", time() ,$guid);
+$_SESSION['guid'] = $guid;
 $_SESSION['zayavka_c_m'] = 1;
 $_SESSION['zayavka_c_o'] = 1;
 $_SESSION['battle_ref']  = 0;
 $char->history->Auth(1, $char_info['city']);
+echoScript("location.href = 'game.php';");
 ?>
-Авторизация окончена...
-<script type="text/javascript">location.href = 'game.php';</script>
 </body>
 </html>

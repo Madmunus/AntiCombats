@@ -49,13 +49,13 @@ switch ($do)
       }
     }
     
-    $h = str_replace ("\n", "", $h);
-    $to = split (']', str_replace (array('to [', 'private ['), "]", $h));
+    $h = str_replace("\n", "", $h);
+    $to = split(']', str_replace(array('to [', 'private ['), "]", $h));
     
     if (isset ($to[1]))
     {
-      $h = preg_replace ("/private \[$to[1]/", "private [", $h, 1);
-      $to = str_replace (", ", ",", $to[1]);
+      $h = preg_replace("/private \[$to[1]/", "private [", $h, 1);
+      $to = str_replace(", ", ",", $to[1]);
     }
     else
       $to = '';
@@ -89,7 +89,7 @@ switch ($do)
     foreach ($rows as $online)
     {
       if ($char->test->Online($online['guid']))
-        $user_list .= $char->info->character('online', $online['guid']);
+        $user_list .= $char->getLogin('online', $online['guid']);
     }
     returnAjax($user_list);
   break;

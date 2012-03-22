@@ -21,16 +21,16 @@ $char = Char::initialization($guid, $adb);
 
 $char->test->Guid();
 $char->test->Block();
-$char->test->Prision();
+$char->test->Prison();
 $char->test->Shut();
 $char->test->Travm();
+$char->test->Battle();
 $char->test->Up();
 $char->test->Items();
 $char->test->Regen();
 $char->test->Room();
 $char->test->WakeUp();
 $char->test->Effects();
-$char->test->Battle();
 
 $char_db = $char->getChar('char_db', '*');
 $char_stats = $char->getChar('char_stats', '*');
@@ -101,7 +101,6 @@ $maxmass = $char_stats['maxmass'];
 
 $chin = $char_db['chin'];
 $status = $char_db['status'];
-$f_style = $char_db['f_style'];
 $stat_rang = $char_db['stat_rang'];
 $name_s = $char_db['clan_short'];
 $clan  = $char_db['clan'];

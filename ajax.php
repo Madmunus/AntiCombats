@@ -283,7 +283,7 @@ switch ($do)
         unset($cur_set['hand_r_free'], $cur_set['hand_r_type'], $cur_set['hand_l_free'], $cur_set['hand_l_type']);
         $adb->query("DELETE FROM `character_sets` WHERE `guid` = ?d and `name` = ?s", $guid ,$name);
         $adb->query("INSERT INTO `character_sets` (?#) 
-                     VALUES (?a);", array_keys($cur_set), array_values($cur_set)) or returnAjax('error', 222);
+                     VALUES (?a);", array_keys($cur_set), array_values($cur_set));
         returnAjax('complete', $char->getSetRow($name));
       break;
       case 'delete':

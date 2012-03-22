@@ -29,9 +29,8 @@ $guid = $adb->selectCell("SELECT `guid` FROM `characters` WHERE `login` = ?s", $
 $info = Info::initialization($guid, $adb);
 
 $info->Guid();
-$info->Prision();
+$info->Prison();
 $info->Shut();
-$info->Travm();
 $info->Regen();
 $info->Online();
 
@@ -80,14 +79,13 @@ $info->showStatAddition();
         continue;
       
       $stat_text = (in_array($key, array ('str', 'dex', 'con', 'int'))) ?"<font style='color: ".getStatSkillColor($char_stats[$key], $added[$key]).";'>%s</font></b>".getBraces($char_stats[$key], $added[$key]) :"%s</b>";
-      printf ($lang[$key]." <b>".$stat_text."<br>", $char_stats[$key]);
+      printf($lang[$key]." <b>".$stat_text."<br>", $char_stats[$key]);
     }
     echo "<hr align='left' width='300' size='1'>";
     echo "<small>$lang[level] $level<br>";
     echo ($level > 1) ?"$lang[wins] <a href='stat.php' class='nick' style='font-size: 10px;'>$win</a><br>" :"$lang[wins] $win<br>";
     echo "$lang[loses] $lose<br>";
     echo "$lang[draws] $draw<br>";
-    echo ($f_style) ?"$lang[style] <b>".$lang['style_'.$f_style]."</b><br>" :"";
     echo ($clan) ?"Клан: <strong><a href='clan_inf.php?clan=$clan_short' class='nick' target='_blank' style='font-size: 10px;'>$clan</a> - $chin</strong><br>" :"";
     echo ($orden) ?"<strong>$orden_dis$stat_rang</strong><br>" :"";//$lang[status] <strong>".$lang['status_'.$status]."</strong><br>
     echo ($state) ?"Место рождения: <strong>$state</strong><br>" :"";
