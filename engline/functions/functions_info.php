@@ -176,6 +176,7 @@ class Info
     if (!$char_equip || !$char_feat)
       return;
     
+    $effects = $this->getEffects();
     $equipped = "<table border='0' width='227' class='posit' cellspacing='0' cellpadding='0'>";
     
     if ($char_feat['block'])
@@ -189,12 +190,11 @@ class Info
                . $this->getItemEquiped($char_equip['armor'], "armor")
                . $this->getItemEquiped($char_equip['belt'], "belt")
                . "</td>"
-               . "<td width='120' align='center' valign='middle'>"
-               . "<table cellspacing='0' cellpadding='0' height='20'>"
-               . "<tr><td style='font-size: 9px; position: relative;'><div id='HP'></div><div id='MP'></div></td></tr>"
-               . "</table><img src='img/chars/$char_feat[shape]' $char_feat[name]><br>"
-               . "<img src='img/items/slot_bottom0.gif' border='0'>"
-               . "</td>"
+               . "<td width='120' height='220' align='center' valign='middle'><table cellspacing='0' cellpadding='0'>"
+               . "<tr height='20'><td style='font-size: 9px; position: relative;'><div id='HP'></div><div id='MP'></div></td></tr>"
+               . "<tr height='220'><td><div style='position: relative; z-index: 1; width: 120px; height: 220px;'><img src='img/chars/$char_feat[shape]' $char_feat[name]>$effects</div></td></tr>"
+               . "<tr height='40'><td><img src='img/items/slot_bottom0.gif' border='0'></td></tr>"
+               . "</table></td>"
                . "<td width='60' align='right' valign='top'>"
                . $this->getItemEquiped($char_equip['earring'], "earring")
                . $this->getItemEquiped($char_equip['amulet'], "amulet")
@@ -207,6 +207,40 @@ class Info
                . $this->getItemEquiped($char_equip['boots'], "boots")
                . "</td></tr></table>";
     return $equipped;
+  }
+  /*Получение отображаемых эффектов*/
+  function getEffects ()
+  {
+    $i = 1;
+    $left = 0;
+    $top = 0;
+    $return = '';
+    $lang = $this->getLang();
+    $travms = $this->db->select("SELECT * FROM `character_travms` AS `c` LEFT JOIN `player_travms` AS `i` ON `c`.`travm_id` = `i`.`id` WHERE `c`.`guid` = ?d and `c`.`stats` != '';", $this->guid);
+    foreach ($travms as $travm)
+    {
+      $name = (isset($lang['travm_p_'.$travm['power']])) ?$lang['travm_p_'.$travm['power']].' ('.$travm['name'].')' :$travm['name'];
+      $stats = ($travm['type'] == 1) ?'<br>У персонажа '.lowercase($lang['travm_p_'.$travm['power']]).' - ослаблены характеристики.' :'';
+      $modifiers = split(",", $travm['stats']);
+      foreach ($modifiers as $modifier)
+      {
+        $stat = split("=", $modifier);
+        $stats .= '<br>'.$lang[$stat[0]].' -'.$stat[1];
+      }
+      $end_time = 'Осталось: '.getFormatedTime($travm['end_time']);
+      $img = ($travm['type'] == 0) ?'' :$travm['power'];
+      $return .= "<img src='img/icon/effects/eff_travma$img.gif' style='position: absolute; left: {$left}px; top: {$top}px; z-index: 100;' alt='<u><b>$name</b></u> (Эффект)<br>$end_time<br>$stats' width='36' height='23'>";
+      $left += 36;
+      
+      if ($i % 3 == 0)
+      {
+        $top += 23;
+        $left = 0;
+      }
+      
+      $i++;
+    }
+    return $return;
   }
   /*Получение изображения предмета, одетого на персонажа*/
   function getItemEquiped ($item_id, $i_type)
@@ -307,9 +341,8 @@ class Info
   /*Показ строки персонажа*/
   function getLogin ()
   {
-    $char_db = $this->getChar('char_db', 'login', 'level', 'orden', 'clan', 'clan_short', 'block', 'rang', 'chat_shut', 'afk', 'dnd', 'message');
-    list($login, $level, $orden, $clan_f, $clan_s, $block, $rang, $chat_shut, $afk, $dnd, $message) = array_values($char_db);
-    $travm = $this->db->selectCell("SELECT `guid` FROM `character_travms` WHERE `guid` = ?d", $this->guid);
+    $char_db = $this->getChar('char_db', 'login', 'level', 'orden', 'clan', 'clan_short', 'rang');
+    list($login, $level, $orden, $clan_f, $clan_s, $rang) = array_values($char_db);
     switch ($orden)
     {
       case 1:  $orden_img = "<img src='img/orden/pal/$rang.gif' width='12' height='15' border='0' title='Белое братство'>";  break;
@@ -322,10 +355,6 @@ class Info
     $clan = ($clan_s != '') ?"<img src='img/clan/$clan_s.gif' border='0' title='$clan_f'>" :"";
     $login_link = str_replace (" ", "%20", $login);
     $login_info = "<a href='info.php?log=$login_link' target='_blank'><img src='img/inf.gif' border='0' title='Инф. о $login'></a>";
-    $mol = ($chat_shut) ?" <img src='img/sleep2.gif' title='Наложено заклятие молчания'>" :"&nbsp";
-    $travm = ($travm) ?"<img src='img/travma2.gif' title='Инвалидность'>" :"&nbsp";
-    $banned = ($block) ?"<font color='red'><b>- Забанен</b></font>" :"";
-    $afk = ($afk) ?"<font title='$message'><b>afk</b></font>&nbsp;" :(($dnd && $message) ?"<font title='$message'><b>dnd</b></font>&nbsp;" :'');
     return "<img src='img/icon/lock3.gif' border='0' onclick=\"window.opener.top.AddToPrivate('$login',true);\" style='cursor: pointer;'> $orden_img$clan<b>$login</b> [$level]$login_info";
   }
   /*Показ дополнительной информации по персонажу*/
@@ -352,23 +381,23 @@ class Info
                                  LEFT JOIN `player_travms` AS `i` 
                                  ON `c`.`travm_id` = `i`.`id` 
                                  WHERE `c`.`guid` = ?d", $this->guid);
-    $format = '<br><img src="img/icon/travma2.gif"><small>%1$s</small>';
     foreach ($travms as $travm)
     {
+      $format = '<br><img src="img/icon/travma2.gif"><small>%1$s</small>';
       switch ($travm['type'])
       {
         case 0:
           if ($travm['id'] == 100)
-          {
             printf($format, "Персонаж ослаблен из-за смерти в бою, еще ".getFormatedTime($travm['end_time']));
-            break;
-          }
+          else if ($travm['id'] == 1)
+            printf($format, "<span alt='Не может драться, перемещаться и передавать предметы'>У персонажа тяжелая травма, <b>\"$travm[name]\"</b> еще ".getFormatedTime($travm['end_time'])."</span>");
         break;
         case 1:
           $alt = ($travm['power'] == 5) ?"Не может драться, перемещаться и передавать предметы" :"Ослаблены характеристики";
-          printf($format, "<span alt='$alt'>У персонажа ".$lang['travm_p_'.$travm['power']]." - <b>\"$travm[name]\"</b> еще ".getFormatedTime($travm['end_time'])."</span>");
+          printf($format, "<span alt='$alt'>У персонажа ".lowercase($lang['travm_p_'.$travm['power']])." - <b>\"$travm[name]\"</b> еще ".getFormatedTime($travm['end_time'])."</span>");
         break;
         case 2:
+          $format = '<br><img src="img/icon/mtravma2.gif"><small>%1$s</small>';
           printf($format, "У персонажа магическая травма, еще ".getFormatedTime($travm['end_time']));
         break;
       }
@@ -506,6 +535,27 @@ function requestVar ($var, $stand = '', $flags = 3)
 function toIndex ()
 {
   echoScript("location.href = 'index.php';", true);
+}
+/*Преобразование русско-язычной строки в нижний и верхний регистр*/
+define('UPCASE', 'АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯABCDEFGHIKLMNOPQRSTUVWXYZ');
+define('LOCASE', 'абвгдеёжзийклмнопрстуфхцчшщъыьэюяabcdefghiklmnopqrstuvwxyz');
+
+function mb_str_split ($str)
+{        
+    preg_match_all('/.{1}|[^\x00]{1}$/us', $str, $ar);
+    return $ar[0];
+}
+function mb_strtr ($str, $from, $to)
+{
+  return str_replace(mb_str_split($from), mb_str_split($to), $str);
+}
+function lowercase ($arg = '')
+{
+  return mb_strtr($arg, UPCASE, LOCASE);
+}
+function uppercase ($arg = '')
+{
+  return mb_strtr($arg, LOCASE, UPCASE);
 }
 /*Определение знака зодиака*/
 function getZodiac ($birthday)

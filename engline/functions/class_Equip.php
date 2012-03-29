@@ -114,7 +114,7 @@ class Equip extends Char
   {
     $guid = (!$guid) ?$this->guid :$guid;
     $char_equip = $this->getChar('char_equip', '*', $guid);
-    $char_db = $this->getChar('char_db', 'level', 'login', 'shape', 'block', $guid);
+    $char_db = $this->getChar('char_db', 'level', 'login', 'shape', $guid);
     $char_stats = $this->getChar('char_stats', 'str', 'dex', 'con', 'vit', 'int', 'wis', 'spi', 'hp', 'hp_all', 'hp_regen', 'mp', 'mp_all', 'mp_regen', $guid);
     $char_feat = array_merge($char_db, $char_stats);
     $lang = $this->getLang();
@@ -151,38 +151,69 @@ class Equip extends Char
       return;
     
     $guid = (!$guid) ?$this->guid :$guid;
-    $backup = ($type == 'smart') ?"<img src='img/items/slot_bottom0.gif' border='0'>" :"<img src='img/items/w20.gif' border='0' alt='Пустой правый карман'><img src='img/items/w20.gif' border='0' alt='Пустой карман'><img src='img/items/w20.gif' border='0' alt='Пустой левый карман'><img src='img/items/w21.gif' border='0' alt='Смена оружия'><img src='img/items/w21.gif' border='0' alt='Смена оружия'><img src='img/items/w21.gif' border='0' alt='Смена оружия'>";
-    $equipped = "<table border='0' width='227' class='posit' cellspacing='0' cellpadding='0'>";
-    
-    if ($type != 'smart' && $char_feat['block'])
-      $equipped .= "<tr><td colspan='3' align='center'><b><font color='#FF0000'>Персонаж заблокирован!</font></b></td></tr>";
-    
-    $equipped .= "<tr bgColor='#dedede'>"
-               . "<td width='60' align='left' valign='top'>"
-               . $this->getItemEquiped($char_equip['helmet'], "helmet", $type, $guid)
-               . $this->getItemEquiped($char_equip['bracer'], "bracer", $type, $guid)
-               . $this->getItemEquiped($char_equip['hand_r'], "hand_r", $type, $guid)
-               . $this->getItemEquiped($char_equip['armor'], "armor", $type, $guid)
-               . $this->getItemEquiped($char_equip['belt'], "belt", $type, $guid)
-               . "</td>"
-               . "<td width='120' align='center' valign='middle'>"
-               . "<table cellspacing='0' cellpadding='0' height='20'>"
-               . "<tr><td style='font-size: 9px; position: relative;'>".(($type != 'smart') ?"<div id='HP'></div><div id='MP'></div>" :'')."</td></tr>"
-               . "</table><img src='img/chars/$char_feat[shape]' $char_feat[name]><br>"
-               . $backup
-               . "</td>"
-               . "<td width='60' align='right' valign='top'>"
-               . $this->getItemEquiped($char_equip['earring'], "earring", $type, $guid)
-               . $this->getItemEquiped($char_equip['amulet'], "amulet", $type, $guid)
-               . $this->getItemEquiped($char_equip['ring1'], "ring", $type, $guid)
-               . $this->getItemEquiped($char_equip['ring2'], "ring", $type, $guid)
-               . $this->getItemEquiped($char_equip['ring3'], "ring", $type, $guid)
-               . $this->getItemEquiped($char_equip['gloves'], "gloves", $type, $guid)
-               . $this->getItemEquiped($char_equip['hand_l'], $char_equip['hand_l_s'], $type, $guid)
-               . $this->getItemEquiped($char_equip['pants'], "pants", $type, $guid)
-               . $this->getItemEquiped($char_equip['boots'], "boots", $type, $guid)
-               . "</td></tr></table>";
+    $backup = ($type == 'smart') ?"<img src='img/items/slot_bottom0.gif' border='0'>" :"<img src='img/items/w20.gif' border='0' alt='Пустой правый карман'><img src='img/items/w20.gif' border='0' alt='Пустой карман'><img src='img/items/w20.gif' border='0' alt='Пустой левый карман'><br><img src='img/items/w21.gif' border='0' alt='Смена оружия'><img src='img/items/w21.gif' border='0' alt='Смена оружия'><img src='img/items/w21.gif' border='0' alt='Смена оружия'>";
+    $effects = $this->getEffects($type, $guid);
+    $equipped = "<table border='0' width='227' class='posit' cellspacing='0' cellpadding='0'>"
+              . "<tr bgColor='#dedede'>"
+              . "<td width='60' align='left' valign='top'>"
+              . $this->getItemEquiped($char_equip['helmet'], "helmet", $type, $guid)
+              . $this->getItemEquiped($char_equip['bracer'], "bracer", $type, $guid)
+              . $this->getItemEquiped($char_equip['hand_r'], "hand_r", $type, $guid)
+              . $this->getItemEquiped($char_equip['armor'], "armor", $type, $guid)
+              . $this->getItemEquiped($char_equip['belt'], "belt", $type, $guid)
+              . "</td>"
+              . "<td width='120' height='220' align='center' valign='middle'><table cellspacing='0' cellpadding='0'>"
+              . "<tr height='20'><td style='font-size: 9px; position: relative;'>".(($type != 'smart') ?"<div id='HP'></div><div id='MP'></div>" :'')."</td></tr>"
+              . "<tr height='220'><td><div style='position: relative; z-index: 1; width: 120px; height: 220px;'><img src='img/chars/$char_feat[shape]' $char_feat[name]>$effects</div></td></tr>"
+              . "<tr height='40'><td>$backup</td></tr>"
+              . "</table></td>"
+              . "<td width='60' align='right' valign='top'>"
+              . $this->getItemEquiped($char_equip['earring'], "earring", $type, $guid)
+              . $this->getItemEquiped($char_equip['amulet'], "amulet", $type, $guid)
+              . $this->getItemEquiped($char_equip['ring1'], "ring", $type, $guid)
+              . $this->getItemEquiped($char_equip['ring2'], "ring", $type, $guid)
+              . $this->getItemEquiped($char_equip['ring3'], "ring", $type, $guid)
+              . $this->getItemEquiped($char_equip['gloves'], "gloves", $type, $guid)
+              . $this->getItemEquiped($char_equip['hand_l'], $char_equip['hand_l_s'], $type, $guid)
+              . $this->getItemEquiped($char_equip['pants'], "pants", $type, $guid)
+              . $this->getItemEquiped($char_equip['boots'], "boots", $type, $guid)
+              . "</td></tr></table>";
     return $equipped;
+  }
+  /*Получение отображаемых эффектов*/
+  function getEffects ($type, $guid = 0)
+  {
+    $guid = (!$guid) ?$this->guid :$guid;
+    $i = 1;
+    $left = 0;
+    $top = 0;
+    $return = '';
+    $lang = $this->getLang();
+    $travms = $this->db->select("SELECT * FROM `character_travms` AS `c` LEFT JOIN `player_travms` AS `i` ON `c`.`travm_id` = `i`.`id` WHERE `c`.`guid` = ?d and `c`.`stats` != '';", $guid);
+    foreach ($travms as $travm)
+    {
+      $name = (isset($lang['travm_p_'.$travm['power']])) ?$lang['travm_p_'.$travm['power']].' ('.$travm['name'].')' :$travm['name'];
+      $stats = ($travm['type'] == 1) ?'<br>У персонажа '.lowercase($lang['travm_p_'.$travm['power']]).' - ослаблены характеристики.' :'';
+      $modifiers = split(",", $travm['stats']);
+      foreach ($modifiers as $modifier)
+      {
+        $stat = split("=", $modifier);
+        $stats .= '<br>'.$lang[$stat[0]].' -'.$stat[1];
+      }
+      $end_time = 'Осталось: '.getFormatedTime($travm['end_time']);
+      $img = ($travm['type'] == 0) ?'' :$travm['power'];
+      $return .= "<img src='img/icon/effects/eff_travma$img.gif' style='position: absolute; left: {$left}px; top: {$top}px; z-index: 100;' alt='<u><b>$name</b></u> (Эффект)<br>$end_time<br>$stats' width='36' height='23'>";
+      $left += 36;
+      
+      if ($i % 3 == 0)
+      {
+        $top += 23;
+        $left = 0;
+      }
+      
+      $i++;
+    }
+    return $return;
   }
   /*Получение изображения предмета, одетого на персонажа*/
   function getItemEquiped ($item_id, $i_type, $type, $guid = 0)

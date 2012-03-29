@@ -104,5 +104,5 @@ switch ($room)
 if($room=="Лес"){
 include "cell.php";
 die();
-break;
-?>*/
+break;*/
+?>

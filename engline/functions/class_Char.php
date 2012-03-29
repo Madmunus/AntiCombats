@@ -232,26 +232,26 @@ class Char
   {
     global $added;
     $added = array('str' => 0, 'dex' => 0, 'con' => 0, 'int' => 0, 'sword' => 0, 'bow' => 0, 'crossbow' => 0, 'axe' => 0, 'fail' => 0, 'knife' => 0, 'staff' => 0, 'fire' => 0, 'water' => 0, 'air' => 0, 'earth' => 0, 'light' => 0, 'gray' => 0, 'dark' => 0);
-    $rows = $this->db->select("SELECT `i`.`add_str`, `c`.`inc_str`, 
-                                      `i`.`add_dex`, `c`.`inc_dex`, 
-                                      `i`.`add_con`, `c`.`inc_con`, 
-                                      `i`.`add_int`, `c`.`inc_int`, 
-                                      `i`.`all_mastery`, 
-                                      `i`.`sword`, `i`.`axe`, 
-                                      `i`.`bow`, `i`.`crossbow`,
-                                      `i`.`fail`, `i`.`knife`, 
-                                      `i`.`staff`, 
-                                      `i`.`all_magic`, 
-                                      `i`.`fire`, `i`.`water`, 
-                                      `i`.`air`, `i`.`earth`, 
-                                      `i`.`light`, `i`.`gray`, 
-                                      `i`.`dark` 
-                               FROM `character_inventory` AS `c` 
-                               LEFT JOIN `item_template` AS `i` 
-                               ON `c`.`item_entry` = `i`.`entry` 
-                               WHERE `c`.`guid` = ?d 
-                                 and `c`.`wear` = '1'", $this->guid);
-    foreach ($rows as $dat)
+    $items = $this->db->select("SELECT `i`.`add_str`, `c`.`inc_str`, 
+                                       `i`.`add_dex`, `c`.`inc_dex`, 
+                                       `i`.`add_con`, `c`.`inc_con`, 
+                                       `i`.`add_int`, `c`.`inc_int`, 
+                                       `i`.`all_mastery`, 
+                                       `i`.`sword`, `i`.`axe`, 
+                                       `i`.`bow`, `i`.`crossbow`,
+                                       `i`.`fail`, `i`.`knife`, 
+                                       `i`.`staff`, 
+                                       `i`.`all_magic`, 
+                                       `i`.`fire`, `i`.`water`, 
+                                       `i`.`air`, `i`.`earth`, 
+                                       `i`.`light`, `i`.`gray`, 
+                                       `i`.`dark` 
+                                FROM `character_inventory` AS `c` 
+                                LEFT JOIN `item_template` AS `i` 
+                                ON `c`.`item_entry` = `i`.`entry` 
+                                WHERE `c`.`guid` = ?d 
+                                  and `c`.`wear` = '1';", $this->guid);
+    foreach ($items as $dat)
     {
       $added['str'] += $dat['add_str'] + $dat['inc_str'];
       $added['dex'] += $dat['add_dex'] + $dat['inc_dex'];
@@ -259,10 +259,23 @@ class Char
       $added['int'] += $dat['add_int'] + $dat['inc_int'];
     }
     
+    $travms = $this->db->select("SELECT `stats` FROM `character_travms` WHERE `guid` = ?d and `stats` != '';", $this->guid);
+    foreach ($travms as $travm)
+    {
+      $stats = split(",", $travm['stats']);
+      foreach ($stats as $stat)
+      {
+        $stat = split("=", $stat);
+        
+        if (array_key_exists($stat[0], $added))
+          $added[$stat[0]] += -$stat[1];
+      }
+    }
+    
     if ($type != 'skills')
       return;
     
-    foreach ($rows as $dat)
+    foreach ($items as $dat)
     {
       $added['sword'] += $dat['sword'] + $dat['all_mastery'];
       $added['bow'] += $dat['bow'] + $dat['all_mastery'];
@@ -562,18 +575,14 @@ class Char
       return;
     
     if ($type == 1)
-    {
       $t_info = $this->db->selectRow("SELECT * FROM `player_travms` WHERE `id` = ?d", $travm);
-    }
     else
-    {
       $t_info = $this->db->selectRow("SELECT * 
                                       FROM `character_travms` AS `c` 
                                       LEFT JOIN `player_travms` AS `i` 
                                       ON `c`.`travm_id` = `i`.`id` 
                                       WHERE `c`.`guid` = ?d 
                                         and `c`.`travm_id` = ?d", $guid ,$travm);
-    }
     
     $level = $this->getChar('char_db', 'level', $guid);
     $char_stats = $this->getChar('char_stats', '*', $guid);
@@ -584,28 +593,21 @@ class Char
     if ($type == 1)
     {
       $t_info['stats'] = '';
-      $check = $this->db->selectCell("SELECT `travm_id` FROM `character_travms` WHERE `guid` = ?d and `stats` != '' and `travm_id` != '100';", $guid);
       switch ($t_info['type'])
       {
         case 0:
           if ($t_info['id'] == 100)
-          {
-            $t_info['stats'] = "mf_fire=50,mf_water=50,mf_air=50,mf_earth=50,mf_light=50,mf_gray=50,mf_dark=50,mf_sting=50,mf_slash=50,mf_crush=50,mf_sharp=50";
-            break;
-          }
+            $t_info['stats'] = "mf_sting=50,mf_slash=50,mf_crush=50,mf_sharp=50,mf_fire=50,mf_water=50,mf_air=50,mf_earth=50,mf_light=50,mf_gray=50,mf_dark=50";
         break;
         case 1:
-          if ($t_info['id'] == 1)
-            break;
-          
-          if ($check)
+          if ($this->db->selectRow("SELECT * FROM `character_travms` AS `c` LEFT JOIN `player_travms` AS `i` ON `c`.`travm_id` = `i`.`id` WHERE `c`.`guid` = ?d and `i`.`type` = '1';", $guid))
             return;
           
           $shuffle = shuffle_arr($stats);
           foreach ($shuffle as $key => $value)
           {
             $stats[$key] = $char_stats[$key];
-            $minus = $level*$t_info['power'];
+            $minus = ($t_info['power'] == 1) ?$level*$t_info['power'] :$level*($t_info['power'] + 2);
             if ($char_stats[$key] > $minus)
             {
               $t_info['stats'] = "$key=$minus";
@@ -625,7 +627,7 @@ class Char
           }
         break;
         case 2:
-          if ($check)
+          if ($this->db->selectRow("SELECT * FROM `character_travms` AS `c` LEFT JOIN `player_travms` AS `i` ON `c`.`travm_id` = `i`.`id` WHERE `c`.`guid` = ?d and `i`.`type` = '2';", $guid))
             return;
           
           $minus = 25*$t_info['power'];
@@ -667,7 +669,7 @@ class Char
     $guid = (!$guid) ?$this->guid :$guid;
     $char_db = $this->getChar('char_db', 'login', 'level', 'orden', 'clan', 'clan_short', 'block', 'rang', 'chat_shut', 'afk', 'dnd', 'message', $guid);
     list($login, $level, $orden, $clan_f, $clan_s, $block, $rang, $chat_shut, $afk, $dnd, $message) = array_values($char_db);
-    $travm = $this->db->selectCell("SELECT `guid` FROM `character_travms` WHERE `guid` = ?d and `travm_id` != '100' and `travm_id` != '1';", $guid);
+    $travm = $this->db->select("SELECT `c`.`travm_id` FROM `character_travms` AS `c` LEFT JOIN `player_travms` AS `i` ON `c`.`travm_id` = `i`.`id` WHERE `c`.`guid` = ?d and (`i`.`type` = '1' or `i`.`type` = '2');", $guid);
     switch ($orden)
     {
       case 1:  $orden_img = "<img src='img/orden/pal/$rang.gif' width='12' height='15' border='0' title='Белое братство'>";  break;
@@ -681,7 +683,7 @@ class Char
     $login_link = str_replace(" ", "%20", $login);
     $login_info = "<a href='info.php?log=$login_link' target='_blank'><img src='img/inf.gif' border='0' title='Инф. о $login'></a>";
     $mol = ($chat_shut) ?" <img src='img/sleep2.gif' title='Наложено заклятие молчания'>" :"&nbsp";
-    $travm = ($travm) ?"<img src='img/travma2.gif' title='Инвалидность'>" :"&nbsp";
+    $travm = ($travm) ?"<img src='img/travma.gif' title='Инвалидность'>" :"&nbsp";
     $banned = ($block) ?"<font color='red'><b>- Забанен</b></font>" :"";
     $afk = ($afk) ?"<font title='$message'><b>afk</b></font>&nbsp;" :(($dnd && $message) ?"<font title='$message'><b>dnd</b></font>&nbsp;" :'');
     switch ($type)

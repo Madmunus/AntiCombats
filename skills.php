@@ -141,10 +141,10 @@ if ($level > 1)
 <table border="0" cellspacing="1" cellpadding="0" width="100%">
   <td width="100%" style="padding-left: 7px;">
 <div class="dtz" id="dL1">
-<form action="?action=skills" name="SaveAbilityPoints" method="post">
 <?
 if ($level > 0)
 {
+  echo "<form action='?action=skills' name='SaveAbilityPoints' method='post'>";
   $weapon = array('sword', 'bow', 'crossbow', 'fail', 'staff', 'knife', 'axe');
   $magic = array('fire', 'water', 'air', 'earth', 'light', 'gray', 'dark');
   $wmax = ($level < 5) ?$level :5;
@@ -185,9 +185,9 @@ if ($level > 0)
   }
   echo "<tr><td><input name='save_skill' type='submit' value='сохранить' disabled id='save_button1' class='nonactive'><input type='checkbox' onClick='ChangeButtonState(1)' style='vertical-align: middle;'></td></tr>";
   echo "</table>";
+  echo "</form>";
 }
 ?>
-</form>
 </div>
 <div class="dtz" id="dL2">
 </div>
@@ -228,7 +228,7 @@ if ($level > 0)
 <b>Эффекты:</b><br>
 <div style='padding-left: 10'>
 <?
-  $effects = $adb->select("SELECT * FROM `character_effects` WHERE `guid` = ?d", $guid);
+  $effects = $adb->select("SELECT * FROM `character_effects` WHERE `guid` = ?d and `end_time` = '0';", $guid);
   foreach ($effects as $effect)
   {
     $effect_s = $adb->selectRow("SELECT * FROM `player_effects` WHERE `id` = ?d", $effect['effect_id']);

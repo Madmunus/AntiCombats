@@ -278,8 +278,8 @@ class Test extends Char
     
     $char_db = $this->getChar('char_db', 'room', 'city', 'sex', 'level', 'prison');
     $char_stats = $this->getChar('char_stats', 'mass', 'maxmass');
+    $travm = $this->db->select("SELECT `c`.`travm_id` FROM `character_travms` AS `c` LEFT JOIN `player_travms` AS `i` ON `c`.`travm_id` = `i`.`id` WHERE `c`.`guid` = ?d and (`i`.`power` = '3' or `i`.`power` = '2') and `i`.`type` != '2';", $this->guid);
     $room_info = $this->char->city->getRoom($room_go, $char_db['city'], 'room', 'from', 'min_level', 'max_level', 'need_orden', 'sex') or $this->char->error->Map(102);
-    
     list($room_go, $from, $min_level, $max_level, $need_orden, $need_sex) = array_values($room_info);
     
     if ($char_db['prison'] != 0)
@@ -308,6 +308,9 @@ class Test extends Char
     
     if (($this->char->city->getRoomGoTime()) > 0 && !$return)
       $this->char->error->Map(110);
+    
+    if ($travm)
+      $this->char->error->Map(115);
   }
   /*Проверка всех предметов*/
   function Items ()

@@ -134,5 +134,5 @@ foreach ($all_characters as $one_character)
 </tr></table>
 </div>
 <?
-$char->workTravm(51);
+$char->workTravm(100);
 ?>
