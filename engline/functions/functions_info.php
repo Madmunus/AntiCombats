@@ -20,15 +20,7 @@ class Info
     $args_num = func_num_args();
     $guid = $this->guid;
     
-    switch ($args[0])
-    {
-      case 'char_db':    $table = 'characters';      break;
-      case 'char_stats': $table = 'character_stats'; break;
-      case 'char_info':  $table = 'character_info';  break;
-      case 'char_equip': $table = 'character_equip'; break;
-      case 'char_bars':  $table = 'character_bars';  break;
-    }
-    
+    $table = getTable($args[0]);
     unset($args[0]);
     
     if ($args[1] == '*')
@@ -47,7 +39,7 @@ class Info
   /*Проверка существования персонажа*/
   function Guid ()
   {
-    if ($this->guid == 0 || !is_numeric($this->guid))
+    if (checki($this->guid))
       toIndex();
     
     $char_db = $this->getChar('char_db', 'guid');
@@ -245,13 +237,14 @@ class Info
   /*Получение изображения предмета, одетого на персонажа*/
   function getItemEquiped ($item_id, $i_type)
   {
+    $lang = $this->getLang();
+    $image = $this->db->selectRow("SELECT `width`, `height`, `default`, `low_level`, `level`  FROM `server_images` WHERE `name` = ?s", 'item_'.$i_type);
+    $default = "<img src='img/items/$image[default]' width='$image[width]' height='$image[height]' border='0' alt='".$lang[$i_type.'_f']."'>";
+    
     if (!is_numeric($item_id))
       return $default;
     
-    $lang = $this->getLang();
     $level = $this->getChar('char_db', 'level');
-    $image = $this->db->selectRow("SELECT `width`, `height`, `default`, `low_level`, `level`  FROM `server_images` WHERE `name` = ?s", 'item_'.$i_type);
-    $default = "<img src='img/items/$image[default]' width='$image[width]' height='$image[height]' border='0' alt='".$lang[$i_type.'_f']."'>";
     
     if ($item_id == 0 && $level < $image['level'])
       return "<img src='img/items/$image[low_level]' width='$image[width]' height='$image[height]' border='0' alt='".$lang[$i_type.'_l']."'>";
@@ -271,7 +264,7 @@ class Info
   /*Получение всплывающей подсказки о предмете*/
   function getItemAlt ($item_id, &$color = '', &$img = '')
   {
-    if (!is_numeric($item_id) || $item_id == 0)
+    if (checki($item_id))
       return '';
     
     $lang = $this->getLang();
@@ -327,7 +320,7 @@ class Info
   /*Получение слота в который одет предмет*/
   function getItemSlot ($item_id)
   {
-    if ($item_id == 0 || !is_numeric($item_id))
+    if (checki($item_id))
       return;
     
     $char_equip = $this->getChar('char_equip', 'helmet', 'bracer', 'hand_r', 'armor', 'shirt', 'cloak', 'belt', 'earring', 'amulet', 'ring1', 'ring2', 'ring3', 'gloves', 'hand_l', 'pants', 'boots');
@@ -486,7 +479,7 @@ function getFormatedTime ($timestamp)
                      return "$s сек.";
 }
 /*Получение цвета улучшения*/
-function getStatSkillColor ($cur, $add)
+function getColor ($cur, $add)
 {
   $diff = ($add > 0) ?(1 - (($cur - $add) / $cur)) * 255 :($add < 0) ?(1 -(($cur - $add*(-1)) / $cur)) * 255 :-50;
   $diff = abs (intval ($diff)) + 50;
@@ -516,7 +509,7 @@ function databaseErrorHandler ($message, $info)
   echo "</table>";
 }
 /*Получение переменной GET, POST и COOKIE*/
-function requestVar ($var, $stand = '', $flags = 3)
+function getVar ($var, $stand = '', $flags = 3)
 {
   if (isset($_GET[$var]) && ($flags & 1))
     $value = $_GET[$var];
@@ -535,6 +528,23 @@ function requestVar ($var, $stand = '', $flags = 3)
 function toIndex ()
 {
   echoScript("location.href = 'index.php';", true);
+}
+/*Проверка существования и правильного формата числа*/
+function checki ($int)
+{
+  return (!is_numeric($int) || $int == 0);
+}
+/*Получение названия таблицы*/
+function getTable ($name)
+{
+  switch ($name)
+  {
+    case 'char_db':    return 'characters';
+    case 'char_stats': return 'character_stats';
+    case 'char_info':  return 'character_info';
+    case 'char_equip': return 'character_equip';
+    case 'char_bars':  return 'character_bars';
+  }
 }
 /*Преобразование русско-язычной строки в нижний и верхний регистр*/
 define('UPCASE', 'АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯABCDEFGHIKLMNOPQRSTUVWXYZ');

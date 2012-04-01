@@ -36,23 +36,23 @@ $char_db = $char->getChar('char_db', '*');
 $char_stats = $char->getChar('char_stats', '*');
 $lang = $char->getLang();
 
-$action = requestVar('action', 'none');
-$do = requestVar('do');
-$section = requestVar('section', 1, 7);
-$credit = requestVar('credit');
-$pass = requestVar('pass');
-$item_id = requestVar('item_id', 0);
-$item_slot = requestVar('item_slot');
-$room_go = requestVar('room_go');
-$stat = requestVar('stat');
-$error = requestVar('error', 0);
-$set_name = requestVar('set_name');
-$parameters = requestVar('parameters');
-$level_filter = requestVar('level_filter', -1, 7);
-$name_filter = requestVar('name_filter', '', 7);
+$action = getVar('action', 'none');
+$do = getVar('do');
+$section = getVar('section', 1, 7);
+$credit = getVar('credit');
+$pass = getVar('pass');
+$item_id = getVar('item_id', 0);
+$item_slot = getVar('item_slot');
+$room_go = getVar('room_go');
+$stat = getVar('stat');
+$error = getVar('error', 0);
+$set_name = getVar('set_name');
+$parameters = getVar('parameters');
+$level_filter = getVar('level_filter', -1, 7);
+$name_filter = getVar('name_filter', '', 7);
 $level_filter = ($level_filter < 0) ?'' :$level_filter;
 
-$login_mail = requestVar('login_mail', '', 5);
+$login_mail = getVar('login_mail', '', 5);
 if ($action == 'enter')
 {
   $login_mail = '';
@@ -223,7 +223,7 @@ switch ($action)
   break;
   case 'exit':
     $adb->query("DELETE FROM `online` WHERE `guid` = ?d", $guid);
-    $adb->query("UPDATE `characters` SET `last_time` = ?d WHERE `guid` = ?d", time() ,$guid);
+    $char->setChar('char_db', array('last_time' => time()));
     toIndex('main');
   break;
   default:

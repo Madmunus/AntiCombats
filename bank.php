@@ -1,8 +1,8 @@
 <?
 defined('AntiBK') or die ("Доступ запрещен!");
 
-$id = requestVar('id', 0);
-$id2 = requestVar('id2', 0);
+$id = getVar('id', 0);
+$id2 = getVar('id2', 0);
 ?>
 <script src="scripts/move_check.js" type="text/javascript"></script>
 <script type="text/javascript">
@@ -53,8 +53,8 @@ $(function (){
 switch ($do)
 {
   case 'create':
-    $pass1 = requestVar('pass1');
-    $pass2 = requestVar('pass2');
+    $pass1 = getVar('pass1');
+    $pass2 = getVar('pass2');
     if ($money < 3)
       $char->error->Map(323, 3);
     
@@ -92,7 +92,7 @@ switch ($do)
     ArrToVar($credit);
     if (isset($_POST['add_kredit']))
     {
-      $add_sum = requestVar('add_sum', 0, 11);
+      $add_sum = getVar('add_sum', 0, 11);
       
       if (!($char->changeMoney(-$add_sum)))
         $char->error->Map(107);
@@ -103,7 +103,7 @@ switch ($do)
     }
     else if (isset($_POST['get_kredit']))
     {
-      $get_sum = requestVar('get_sum', 0, 11);
+      $get_sum = getVar('get_sum', 0, 11);
       $char->bank->Money($get_sum, $id);
       $char->changeMoney($get_sum);
       $char->history->Bank($id, '', $get_sum, '', 3);
@@ -111,7 +111,7 @@ switch ($do)
     }
     else if (isset($_POST['transfer_kredit']))
     {
-      $trf_sum = requestVar('transfer_sum', 0, 11);
+      $trf_sum = getVar('transfer_sum', 0, 11);
       
       if ($level < 8)
         $char->error->Map(306);
@@ -133,9 +133,9 @@ switch ($do)
     }
     else if (isset($_POST['convert_ekredit']))
     {
-      $convert_sum = requestVar('convert_sum', 0, 11);
+      $convert_sum = getVar('convert_sum', 0, 11);
       
-      if ($convert_sum == 0 || !is_numeric($convert_sum))
+      if (checki($convert_sum))
         $char->error->Map(327);
       
       if ($euro < $convert_sum)
@@ -149,8 +149,8 @@ switch ($do)
     }
     else if (isset($_POST['change_psw']))
     {
-      $new_psw = requestVar('new_psw');
-      $new_psw2 = requestVar('new_psw2');
+      $new_psw = getVar('new_psw');
+      $new_psw2 = getVar('new_psw2');
       
       if ($new_psw == "")
         $char->error->Map(315);
@@ -161,14 +161,14 @@ switch ($do)
       if ($new_psw != $new_psw2)
         $char->error->Map(317);
       
-      $to_credit = $adb->query("UPDATE `character_bank` SET `password` = ?s WHERE `id` = ?d", SHA1 ($id.':'.$new_psw) ,$id) or $char->error->Map(312);
+      $adb->query("UPDATE `character_bank` SET `password` = ?s WHERE `id` = ?d", SHA1 ($id.':'.$new_psw) ,$id) or $char->error->Map(312);
       $char->error->Map(311);
     }
     else if (isset($_POST['save_notepad']))
     {
-      $notepad = requestVar('notepad');
+      $notepad = getVar('notepad');
       $notepad = str_replace ("\n", "<br>", $notepad);
-      $to_credit = $adb->query("UPDATE `character_info` SET `bank_note` = ?s WHERE `guid` = ?d", $notepad ,$guid) or $char->error->Map(314);
+      $char->setChar('char_info', array('bank_note' => $notepad)) or $char->error->Map(314);
       $char->error->Map(313);
     }
     $char->error->Map();
@@ -203,7 +203,7 @@ switch ($do)
 <?
 if (empty($_SESSION['bankСredit']))
 {
-  $deist = requestVar('deist');
+  $deist = getVar('deist');
   if ($deist != "new")
   {
     $rows = $adb->selectCol("SELECT `id` FROM `character_bank` WHERE `guid` = ?d", $guid);

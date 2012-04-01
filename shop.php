@@ -2,7 +2,7 @@
 defined('AntiBK') or die("Доступ запрещен!");
 
 $shop_section = $char->city->getRoom($room, $city, 'shop_section');
-$section_shop = requestVar('section_shop', '', 7);
+$section_shop = getVar('section_shop', '', 7);
 $section_shop = (array_key_exists($section_shop, $data['sections_shop'])) ?$section_shop :$shop_section;
 ?>
 <script src="scripts/shop.js" type="text/javascript"></script>

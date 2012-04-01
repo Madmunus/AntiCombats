@@ -13,7 +13,7 @@ $adb = DbSimple_Generic::connect($database['adb']);
 $adb->query("SET NAMES ? ",$database['db_encoding']);
 $adb->setErrorHandler("databaseErrorHandler");
 
-$login = requestVar('login', '', 2);
+$login = getVar('login', '', 2);
 ?>
 <html>
 <head>

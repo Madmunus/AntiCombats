@@ -1,7 +1,7 @@
 <?
 defined('AntiBK') or die ("Доступ запрещен!");
 
-$sort = requestVar('sort', 1);
+$sort = getVar('sort', 1);
 $sort_c = array (
   1 => 'login_display',
   2 => 'last_time',

@@ -35,7 +35,7 @@ $room = $char_feat['room'];
 $money = $char_feat['money'];
 $money_euro = $char_feat['money_euro'];
 
-$do = requestVar('do');
+$do = getVar('do');
 switch ($do)
 {
   case 'geterror':
@@ -43,13 +43,13 @@ switch ($do)
     die();
   break;
   case 'getroomname':
-    $room = requestVar('room');
+    $room = getVar('room');
     $name = $char->city->getRoom($room, $city, 'name');
     $name = "Вы перейдете в: <strong>$name</strong> (<a href='#' class='nick' onclick='return clear_solo();'>отмена</a>)";
     returnAjax($name);
   break;
   case 'showshapes':
-    $available = requestVar('available', 1);
+    $available = getVar('available', 1);
     $sex = ($sex == "male") ?"m" :"f";
     $shapes = $adb->select("SELECT * FROM `player_shapes` WHERE `sex` = ?s ORDER BY `id`;", $sex);
     $required = array('str', 'dex', 'con', 'vit', 'fire', 'water', 'air', 'earth', 'dark', 'light', 'int', 'wis', 'level', 'sword', 'axe', 'fail', 'knife');
@@ -88,20 +88,20 @@ switch ($do)
     returnAjax($return);
   break;
   case 'chooseshape':
-    $shape = requestVar('shape', 0);
+    $shape = getVar('shape', 0);
     
     if (!$shape || !($char->checkShape($shape)))
       returnAjax('error', 215);
     
     $shape = ($sex == "male") ?"m/$shape.gif" :"f/$shape.gif";
-    $adb->query("UPDATE `characters` SET `shape` = ?s, `next_shape` = ?d WHERE `guid` = ?d", $shape ,time() + 86400 ,$guid);
+    $char->setChar('char_db', array('shape' => $shape, 'next_shape' => (time() + 86400)));
     returnAjax('complete');
   break;
   /*Invetory*/
   case 'showinventory':
-    $mail_guid = requestVar('mail_guid');
-    $section = requestVar('section', 1);
-    $type = requestVar('type');
+    $mail_guid = getVar('mail_guid');
+    $section = getVar('section', 1);
+    $type = getVar('type');
     switch ($type)
     {
       default:
@@ -145,8 +145,8 @@ switch ($do)
       returnAjax("<table width='100%' cellspacing='1' cellpadding='2' bgcolor='#A5A5A5'><tr><td bgcolor='#E2E0E0' align='center'>$lang[empty]</td></tr></table>");
   break;
   case 'sortinventory':
-    $type = requestVar('type');
-    $section = requestVar('section', 1, 7);
+    $type = getVar('type');
+    $section = getVar('section', 1, 7);
     $sort = ($_POST['num']) ?' DESC' :'';
     $items = $adb->selectCol("SELECT `c`.`id` AS ARRAY_KEY, `i`.?# 
                               FROM `character_inventory` AS `c` 
@@ -160,16 +160,16 @@ switch ($do)
     $i = 0;
     foreach ($items as $id => $value)
     {
-      $q1 = $adb->query("UPDATE `character_inventory` SET `last_update` = ?d WHERE `guid` = ?d and `id` = ?d", time() + $i ,$guid ,$id);
+      $adb->query("UPDATE `character_inventory` SET `last_update` = ?d WHERE `guid` = ?d and `id` = ?d", time() + $i ,$guid ,$id);
       $i++;
     }
     returnAjax('complete');
   break;
   case 'deleteitem':
-    $item_id = requestVar('id', 0);
-    $dropall = requestVar('dropall', 0);
+    $item_id = getVar('id', 0);
+    $dropall = getVar('dropall', 0);
     
-    if ($item_id == 0 || !is_numeric($item_id))
+    if (checki($item_id))
       returnAjax('error', 213);
     
     switch ($dropall)
@@ -211,9 +211,9 @@ switch ($do)
     }
   break;
   case 'switchbars':
-    $bar = requestVar('bar');
-    $type = requestVar('type');
-    $bars = $adb->selectRow("SELECT `stat`, `mod`, `power`, `def`, `btn`, `set` FROM `character_bars` WHERE `guid` = ?d", $guid) or returnAjax('error');
+    $bar = getVar('bar');
+    $type = getVar('type');
+    $bars = $char->getChar('char_bars', 'stat', 'mod', 'power', 'def', 'btn', 'set') or returnAjax('error');
     foreach ($bars as $key => $value)
     {
       if ($value == 0)
@@ -234,9 +234,9 @@ switch ($do)
         list($c_b_n, $c_b_s) = array_values($c_b_v);
         $d_b_n += ($type == 'down') ?1 :-1;
         $c_b_n += ($type == 'down') ?-1 :1;
-        if ($adb->query("UPDATE `character_bars` SET ?# = ?s, ?# = ?s WHERE `guid` = ?d", $bar ,$d_b_n."|".$d_b_s ,$c_b_k ,$c_b_n."|".$c_b_s ,$guid))
+        if ($char->setChar('char_bars', array($bar => $d_b_n.'|'.$d_b_s, $c_b_k => $c_b_n.'|'.$c_b_s)))
         {
-          $bars = $adb->selectRow("SELECT `stat`, `mod`, `power`, `def`, `btn`, `set` FROM `character_bars` WHERE `guid` = ?d", $guid);
+          $bars = $char->getChar('char_bars', 'stat', 'mod', 'power', 'def', 'btn', 'set');
           foreach ($bars as $key => $value)
           {
             if ($value == 0)
@@ -253,24 +253,24 @@ switch ($do)
       returnAjax('error');
   break;
   case 'spoilerbar':
-    $bar = requestVar('bar');
-    $barr = $adb->selectCell("SELECT ?# FROM `character_bars` WHERE `guid` = ?d", $bar ,$guid) or returnAjax('error');
+    $bar = getVar('bar');
+    $barr = $char->getChar('char_bars', $bar) or returnAjax('error');
     $bar_v = explode('|', $barr);
     list($bar_n, $bar_s) = array_values($bar_v);
     if ($bar_s == 1)
     {
-      $adb->query("UPDATE `character_bars` SET ?# = ?s WHERE `guid` = ?d", $bar ,$bar_n."|0" ,$guid);
+      $char->setChar('char_bars', $bar, $bar_n.'|0');
       returnAjax('hide');
     }
     else if ($bar_s == 0)
     {
-      $adb->query("UPDATE `character_bars` SET ?# = ?s WHERE `guid` = ?d", $bar ,$bar_n."|1" ,$guid);
+      $char->setChar('char_bars', $bar, $bar_n.'|1');
       returnAjax('show');
     }
   break;
   case 'worksets':
-    $type = requestVar('type');
-    $name = requestVar('name');
+    $type = getVar('type');
+    $name = getVar('name');
     
     if ($name == '')
       returnAjax('error', 222);
@@ -278,7 +278,7 @@ switch ($do)
     switch ($type)
     {
       case 'create':
-        $cur_set = $adb->selectRow("SELECT * FROM `character_equip` WHERE `guid` = ?d", $guid) or returnAjax('error', 221);
+        $cur_set = $char->getChar('char_equip', '*') or returnAjax('error', 221);
         $cur_set['name'] = $name;
         unset($cur_set['hand_r_free'], $cur_set['hand_r_type'], $cur_set['hand_l_free'], $cur_set['hand_l_type']);
         $adb->query("DELETE FROM `character_sets` WHERE `guid` = ?d and `name` = ?s", $guid ,$name);
@@ -301,11 +301,11 @@ switch ($do)
     }
   break;
   case 'increaseitemstat':
-    $item_id = requestVar('id', 0);
-    $stat = requestVar('stat');
-    $count = requestVar('count', 1);
+    $item_id = getVar('id', 0);
+    $stat = getVar('stat');
+    $count = getVar('count', 1);
     
-    if ($item_id == 0 || !is_numeric($item_id))
+    if (checki($item_id))
       returnAjax('error', 213);
     
     $i_info = $adb->selectRow("SELECT `c`.`inc_count_p`, 
@@ -341,9 +341,9 @@ switch ($do)
         break;
     }
   break;
-  case 'inventoryloginbank':
-    $credit = requestVar('credit', 0);
-    $pass = requestVar('pass');
+  case 'loginbank':
+    $credit = getVar('credit', 0);
+    $pass = getVar('pass');
     $bank_info = $adb->selectRow("SELECT `guid`, 
                                          `password`, 
                                          `cash`, 
@@ -357,11 +357,11 @@ switch ($do)
       returnAjax('error', 302);
     
     $_SESSION['bankСredit'] = $credit;
-    returnAjax('complete', "<b>".getMoney($bank_info['cash'])."</b>кр. <b>".getMoney($bank_info['euro'])."</b>екр.<a href='javascript:inventoryUnLoginbank();'><img border='0' valign='bottom' width='13' height='9' title='$lang[credit_exit]' src='img/icon/close_bank.gif'></a>");
+    returnAjax('complete', "<b>".getMoney($bank_info['cash'])."</b>кр. <b>".getMoney($bank_info['euro'])."</b>екр.<a href='javascript:UnLoginbank();'><img border='0' valign='bottom' width='13' height='9' title='$lang[credit_exit]' src='img/icon/close_bank.gif'></a>");
   break;
-  case 'inventoryunloginbank':
+  case 'unloginbank':
     unset ($_SESSION['bankСredit']);
-    $bank = $adb->selectCol("SELECT `id` FROM `character_bank` WHERE `guid` = ?d", $guid) or die ("error");
+    $bank = $adb->selectCol("SELECT `id` FROM `character_bank` WHERE `guid` = ?d", $guid) or returnAjax('error');
     foreach ($bank as $num => $bank_id)
     {
       if (empty($credits))
@@ -369,11 +369,11 @@ switch ($do)
       else
         $credits .= ",".$bank_id;
     }
-    returnAjax("<a href=\"javascript:bank_open ('$credits');\" class='nick' style='font-size: 7pt;'>$lang[credit_choose]</a>");
+    returnAjax("<a href=\"javascript:bank_open('$credits');\" class='nick' style='font-size: 7pt;'>$lang[credit_choose]</a>");
   break;
   /*Shop*/
   case 'getshoptitle':
-    $section_shop = requestVar('section_shop');
+    $section_shop = getVar('section_shop');
     returnAjax($lang[$data['sections_shop'][$section_shop][1]].$lang['shop_'.$section_shop]);
   break;
   case 'showshopsection':
@@ -382,10 +382,10 @@ switch ($do)
     if (!($flags & 2))
       returnAjax("<table width='100%' cellspacing='1' cellpadding='2' bgcolor='#A5A5A5'><tr><td bgcolor='#E2E0E0' align='center'>$lang[shop_no]</td></tr></table>");
     
-    $section_shop = requestVar('section_shop', '', 7);
-    $level_filter = requestVar('level_filter', '', 7);
+    $section_shop = getVar('section_shop', '', 7);
+    $level_filter = getVar('level_filter', '', 7);
     $check_level = ($level_filter > 0 || $level_filter == '0');
-    $name_filter = requestVar('name_filter', '', 7);
+    $name_filter = getVar('name_filter', '', 7);
     setCookie('level_filter', $level_filter,  time() + 3600);
     setCookie('name_filter', $name_filter,  time() + 3600);
     $rows = $adb->select("SELECT * 
@@ -417,10 +417,10 @@ switch ($do)
       returnAjax("<table width='100%' cellspacing='1' cellpadding='2' bgcolor='#A5A5A5'><tr><td bgcolor='#E2E0E0' align='center'>$lang[shop_empty]</td></tr></table>");
   break;
   case 'buyitem':
-    $item_entry = requestVar('entry', 0);
-    $count = requestVar('count', 1);
+    $item_entry = getVar('entry', 0);
+    $count = getVar('count', 1);
     
-    if ($item_entry == 0 || !is_numeric($item_entry))
+    if (checki($item_entry))
       returnAjax('error', 403);
     
     $buycount = 0;
@@ -469,9 +469,9 @@ switch ($do)
       returnAjax('error', 107);
   break;
   case 'sellitem':
-    $item_id = requestVar('id', 0);
+    $item_id = getVar('id', 0);
     
-    if ($item_id == 0 || !is_numeric($item_id))
+    if (checki($item_id))
       returnAjax('error', 213);
     
     $i_info = $adb->selectRow("SELECT `i`.`name`, 

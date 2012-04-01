@@ -1,17 +1,17 @@
 <?
 defined('AntiBK') or die("Доступ запрещен!");
 
-$do = requestVar('do');
-$fight = requestVar('fight');
-$battle_type = requestVar('battle_type');
-$timeout = requestVar('timeout');
-$log = requestVar('log');
-$ac = requestVar('ac');
-$accept = requestVar('accept');
-$accept2 = requestVar('accept2');
-$otkaz = requestVar('otkaz');
-$id = requestVar('id');
-$denie = requestVar('denie');
+$do = getVar('do');
+$fight = getVar('fight');
+$battle_type = getVar('battle_type');
+$timeout = getVar('timeout');
+$log = getVar('log');
+$ac = getVar('ac');
+$accept = getVar('accept');
+$accept2 = getVar('accept2');
+$otkaz = getVar('otkaz');
+$id = getVar('id');
+$denie = getVar('denie');
 
 /*
 $dat = $adb->select("SELECT * FROM `zayavka`;");

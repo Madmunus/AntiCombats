@@ -29,14 +29,14 @@ if ($action == 'go' || $action == 'return')
       $char->error->Map(114);
     
     if ($char_db['dnd'])
-      $adb->query("UPDATE `characters` SET `dnd` = '0', `message` = NULL WHERE `guid` = ?d", $guid);
+      $char->setChar('char_db', array('dnd' => 0, 'message' => ''));
     
     $char->test->Go($room_go, $room_return);
     
-    $adb->query("UPDATE `characters` SET `room` = ?s, `last_go` = ?d, `last_room` = ?s WHERE `guid` = ?d", $room_go ,time() ,$room ,$guid);
+    $char->setChar('char_db', array('room' => $room_go, 'last_go' => time(), 'last_room' => $room));
     if ($room_return)
-      $adb->query("UPDATE `characters` SET `last_return` = ?d WHERE `guid` = ?d", time() ,$guid);
-    $adb->query("UPDATE `online` SET `room` = ?s WHERE `guid` = ?d", $room_go ,$guid);
+      $char->setChar('char_db', array('last_return' => time()));
+    $char->setChar('online', 'room', $room_go);
     echoScript("top.cleanChat(); parent.user.updateUsers(); parent.msg.updateMessages(1);");
   }
 }

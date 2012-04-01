@@ -108,7 +108,7 @@ function getExp ($exp)
   return number_format($exp, 0, "", " ");
 }
 /*Получение цвета улучшения*/
-function getStatSkillColor ($cur, $add)
+function getColor ($cur, $add)
 {
   $diff = ($add > 0) ?(1 - (($cur - $add) / $cur)) * 255 :($add < 0) ?(1 -(($cur - $add*(-1)) / $cur)) * 255 :-50;
   $diff = abs (intval ($diff)) + 50;
@@ -178,7 +178,7 @@ function databaseErrorHandler ($message, $info)
   echo "</table>";
 }
 /*Получение переменной GET, POST и COOKIE*/
-function requestVar ($var, $stand = '', $flags = 3)
+function getVar ($var, $stand = '', $flags = 3)
 {
   if (isset($_GET[$var]) && ($flags & 1))
     $value = $_GET[$var];
@@ -194,9 +194,25 @@ function requestVar ($var, $stand = '', $flags = 3)
   else                                          return $stand;
 }
 /*Проверка существования переменной SESSION*/
-function checks ($arr)
+function checks ()
 {
-  return isset($_SESSION[$arr]);
+  $args = func_get_args();
+  $a_num = func_num_args();
+  
+  if ($a_num == 1)
+    return isset($_SESSION[$args[0]]);
+  
+  foreach ($args as $arg)
+  {
+    if (!isset($_SESSION[$arg]))
+      return false;
+  }
+  return true;
+}
+/*Проверка существования и правильного формата числа*/
+function checki ($int)
+{
+  return (!is_numeric($int) || $int == 0);
 }
 /*Преобразование русско-язычной строки в нижний и верхний регистр*/
 define('UPCASE', 'АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯABCDEFGHIKLMNOPQRSTUVWXYZ');
@@ -252,11 +268,25 @@ function getGuid ($type = 'main', $loc = '')
   
   return $_SESSION['guid'];
 }
+/*Получение названия таблицы*/
+function getTable ($name)
+{
+  switch ($name)
+  {
+    case 'char_db':    return 'characters';
+    case 'char_stats': return 'character_stats';
+    case 'char_info':  return 'character_info';
+    case 'char_equip': return 'character_equip';
+    case 'char_bars':  return 'character_bars';
+    case 'online':     return 'online';
+  }
+}
 /*Удаление переменных сессии*/
 function deleteSession ()
 {
   unset($_SESSION['guid'], $_SESSION['bankСredit'], $_SESSION['last']);
 }
+/*Смешивает порядок ключей массива сохраняя значения*/
 function shuffle_arr ($array)
 {
   $keys = array_keys($array);

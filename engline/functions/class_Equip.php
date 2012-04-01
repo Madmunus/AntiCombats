@@ -40,7 +40,7 @@ class Equip extends Char
   /*Проверка характеристик предмета и персонажа*/
   function checkItemStats ($item_id)
   {
-    if ($item_id == 0 || !is_numeric($item_id))
+    if (checki($item_id))
       return false;
     
     $dat = $this->db->selectRow("SELECT `i`.`min_level`, 
@@ -84,7 +84,7 @@ class Equip extends Char
   /*Проверка годности предмета*/
   function checkItemValidity ($item_id)
   {
-    if ($item_id == 0 || !is_numeric($item_id))
+    if (checki($item_id))
       return false;
     
     $date = $this->db->selectCell("SELECT `date` FROM `character_inventory` WHERE `guid` = ?d and `id` = ?d", $this->guid ,$item_id);
@@ -112,7 +112,7 @@ class Equip extends Char
   /*Отображение снаряжения*/
   function showCharacter ($type = '', $guid = 0)
   {
-    $guid = (!$guid) ?$this->guid :$guid;
+    $guid = $this->getGuid($guid);
     $char_equip = $this->getChar('char_equip', '*', $guid);
     $char_db = $this->getChar('char_db', 'level', 'login', 'shape', $guid);
     $char_stats = $this->getChar('char_stats', 'str', 'dex', 'con', 'vit', 'int', 'wis', 'spi', 'hp', 'hp_all', 'hp_regen', 'mp', 'mp_all', 'mp_regen', $guid);
@@ -150,7 +150,7 @@ class Equip extends Char
     if (!$char_equip || !$char_feat)
       return;
     
-    $guid = (!$guid) ?$this->guid :$guid;
+    $guid = $this->getGuid($guid);
     $backup = ($type == 'smart') ?"<img src='img/items/slot_bottom0.gif' border='0'>" :"<img src='img/items/w20.gif' border='0' alt='Пустой правый карман'><img src='img/items/w20.gif' border='0' alt='Пустой карман'><img src='img/items/w20.gif' border='0' alt='Пустой левый карман'><br><img src='img/items/w21.gif' border='0' alt='Смена оружия'><img src='img/items/w21.gif' border='0' alt='Смена оружия'><img src='img/items/w21.gif' border='0' alt='Смена оружия'>";
     $effects = $this->getEffects($type, $guid);
     $equipped = "<table border='0' width='227' class='posit' cellspacing='0' cellpadding='0'>"
@@ -183,7 +183,7 @@ class Equip extends Char
   /*Получение отображаемых эффектов*/
   function getEffects ($type, $guid = 0)
   {
-    $guid = (!$guid) ?$this->guid :$guid;
+    $guid = $this->getGuid($guid);
     $i = 1;
     $left = 0;
     $top = 0;
@@ -225,7 +225,7 @@ class Equip extends Char
     if (!is_numeric($item_id))
       return $default;
     
-    $guid = (!$guid) ?$this->guid :$guid;
+    $guid = $this->getGuid($guid);
     $level = $this->getChar('char_db', 'level', $guid);
     
     if ($item_id == 0 && $level < $image['level'])
@@ -247,10 +247,10 @@ class Equip extends Char
   /*Получение всплывающей подсказки о предмете*/
   function getItemAlt ($item_id, $type, &$color = '', &$img = '', $guid = 0)
   {
-    if (!is_numeric($item_id) || $item_id == 0)
+    if (checki($item_id))
       return '';
     
-    $guid = (!$guid) ?$this->guid :$guid;
+    $guid = $this->getGuid($guid);
     $lang = $this->getLang();
     $i_info = $this->db->selectRow("SELECT `c`.`tear_cur`, `c`.`tear_max`, 
                                            `i`.`min_hit`, `i`.`max_hit`, 
@@ -315,9 +315,9 @@ class Equip extends Char
   /*Добавление предмета*/
   function addItem ($item_entry, $type = 'buy', $guid = 0)
   {
-    $guid = (!$guid) ?$this->guid :$guid;
+    $guid = $this->getGuid($guid);
     
-    if (!$item_entry || $item_entry == 0 || !is_numeric($item_entry))
+    if (checki($item_entry))
       return false;
     
     $i_info = $this->db->selectRow("SELECT `name`, 
@@ -633,10 +633,10 @@ class Equip extends Char
   /*Одеть/Снять предмет*/
   function equipItem ($item, $type = 1, $guid = 0)
   {
-    $guid = (!$guid) ?$this->guid :$guid;
+    $guid = $this->getGuid($guid);
     $item_id = ($type == 1) ?$item :$this->getChar('char_equip', $item, $guid);
     
-    if (!$item_id || $item_id == 0 || !is_numeric($item_id))
+    if (checki($item_id))
       return;
     
     $error_id = ($type == 1) ?213 :214;
@@ -867,7 +867,7 @@ class Equip extends Char
                                   `last_update` = ?d 
                               WHERE `guid` = ?d 
                                 and `id` = ?d", time() ,$guid ,$i_id);
-      $q2 = $this->db->query("UPDATE `character_equip` SET ?# = ?d WHERE `guid` = ?d", $slot ,$i_id ,$guid);
+      $q2 = $this->setChar('char_equip', $slot, $i_id, $guid);
     }
     else if ($type == -1)
     {
@@ -876,7 +876,7 @@ class Equip extends Char
                                   `last_update` = ?d 
                               WHERE `guid` = ?d 
                                 and `id` = ?d", time() ,$guid ,$i_id);
-      $q2 = $this->db->query("UPDATE `character_equip` SET ?# = '0' WHERE `guid` = ?d", $slot ,$guid);
+      $q2 = $this->setChar('char_equip', $slot, 0, $guid);
     }
     if ($q1 && $q2)
     {
@@ -885,34 +885,16 @@ class Equip extends Char
       if ($type == 1)
       {
         if ($i_hands == 2)
-          $this->db->query("UPDATE `character_equip` 
-                            SET `hand_r_type` = ?s, 
-                                `hand_r_free` = '0', 
-                                `hand_l_free` = '0' 
-                            WHERE `guid` = ?d", $w_type ,$guid);
+          $this->setChar('char_equip', array('hand_r_type' => $w_type, 'hand_r_free' => 0, 'hand_l_free' => 0), $guid);
         else if ($i_hands == 1)
-        {
-          $this->db->query("UPDATE `character_equip` 
-                            SET ?# = ?s, 
-                                ?# = '0' 
-                            WHERE `guid` = ?d", $slot.'_type' ,$w_type ,$slot.'_free' ,$guid);
-        }
+          $this->setChar('char_equip', array($slot.'_type' => $w_type, $slot.'_free' => 0), $guid);
       }
       else if ($type == -1)
       {
         if ($i_hands == 2)
-          $this->db->query("UPDATE `character_equip` 
-                            SET `hand_r_type` = 'phisic', 
-                                `hand_r_free` = '1', 
-                                `hand_l_free` = '1' 
-                            WHERE `guid` = ?d", $guid);
+          $this->setChar('char_equip', array('hand_r_type' => 'phisic', 'hand_r_free' => 1, 'hand_l_free' => 1), $guid);
         else if ($i_hands == 1)
-        {
-          $this->db->query("UPDATE `character_equip` 
-                            SET ?# = 'phisic', 
-                                ?# = '1' 
-                            WHERE `guid` = ?d", $slot.'_type' ,$slot.'_free' ,$guid);
-        }
+          $this->setChar('char_equip', array($slot.'_type' => 'phisic', $slot.'_free' => 1), $guid);
       }
     }
   }
@@ -929,9 +911,9 @@ class Equip extends Char
   /*Удаление предмета*/
   function deleteItem ($item_id, $type = 'delete', $guid = 0)
   {
-    $guid = (!$guid) ?$this->guid :$guid;
+    $guid = $this->getGuid($guid);
     
-    if (!$item_id || $item_id == 0 || !is_numeric($item_id))
+    if (checki($item_id))
       return false;
     
     $i_info = $this->db->selectRow("SELECT `i`.`name`, 
@@ -964,7 +946,7 @@ class Equip extends Char
   /*Получение слота в который одет предмет*/
   function getItemSlot ($item_id)
   {
-    if ($item_id == 0 || !is_numeric($item_id))
+    if (checki($item_id))
       return;
     
     $char_equip = $this->getChar('char_equip', 'helmet', 'bracer', 'hand_r', 'armor', 'shirt', 'cloak', 'belt', 'earring', 'amulet', 'ring1', 'ring2', 'ring3', 'gloves', 'hand_l', 'pants', 'boots');

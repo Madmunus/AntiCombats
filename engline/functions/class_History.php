@@ -22,7 +22,7 @@ class History extends Char
   /*История покупки/продажи/передачи предмета*/
   function Items ($action, $val, $to, $guid = 0)
   {
-    $guid = (!$guid) ?$this->guid :$guid;
+    $guid = $this->getGuid($guid);
     $id = ($this->db->selectCell("SELECT MAX(`id`) FROM `history_items` WHERE `guid` = ?d", $guid)) + 1;
     $this->db->query("INSERT INTO `history_items` (`id`, `guid`, `receive`, `action`, `item`, `date`)
                       VALUES (?d, ?d, ?s, ?s, ?s, ?d)", $id ,$guid ,$to ,$action ,$val ,time());
@@ -30,7 +30,7 @@ class History extends Char
   /*История отправки/получения/возврата предмета по почте*/
   function Mail ($action, $val, $to, $guid = 0)
   {
-    $guid = (!$guid) ?$this->guid :$guid;
+    $guid = $this->getGuid($guid);
     $id = ($this->db->selectCell("SELECT MAX(`id`) FROM `history_mail` WHERE `guid` = ?d", $guid)) + 1;
     $this->db->query("INSERT INTO `history_mail` (`id`, `guid`, `receive`, `action`, `item`, `date`)
                       VALUES (?d, ?d, ?s, ?s, ?s, ?d)", $id ,$guid ,$to ,$action ,$val ,time());

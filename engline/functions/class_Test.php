@@ -15,7 +15,7 @@ class Test extends Char
   /*Проверка существования персонажа*/
   function Guid ($type = 'main', $loc = '')
   {
-    if ($this->guid == 0 || !is_numeric($this->guid))
+    if (checki($this->guid))
       toIndex($type, true, $loc);
     
     $char_db = $this->getChar('char_db', 'guid');
@@ -39,10 +39,8 @@ class Test extends Char
   {
     $block = $this->getChar('char_db', 'block');
     
-    if (!$block)
-      return;
-    
-    echoScript("top.main.location.href = 'main.php?action=exit';", true);
+    if ($block)
+      echoScript("top.main.location.href = 'main.php?action=exit';", true);
   }
   /*Проверка заключения персонажа*/
   function Prison ()
@@ -52,10 +50,7 @@ class Test extends Char
     if (!$prison || intval($prison - time()) > 0)
       return;
     
-    $this->db->query("UPDATE `characters` 
-                      SET `prison` = '0', 
-                          `orden` = '0' 
-                      WHERE `guid` = ?d", $this->guid);
+    $this->setChar('char_db', array('prison' => 0, 'orden' => 0));
   }
   /*Проверка участия персонажа в заявке*/
   function Zayavka ()
@@ -120,7 +115,7 @@ class Test extends Char
     if (!$chat_shut || $chat_shut > time())
       return;
     
-    $this->db->query("UPDATE `characters` SET `chat_shut` = '0' WHERE `guid` = ?d", $this->guid);
+    $this->setChar('char_db', array('chat_shut' => 0));
   }
   /*Восстановление здоровья/маны*/
   function Regen ()
@@ -137,17 +132,17 @@ class Test extends Char
       if ($cure[$key] == 0 && $now[$key] < $value)
       {
         getCureValue($now[$key], $value, $regen[$key], $cure[$key]);
-        $this->db->query("UPDATE `character_stats` SET ?# = ?d WHERE `guid` = ?d", $key.'_cure' ,$cure[$key] ,$this->guid);
+        $this->setChar('char_stats', array($key.'_cure' => $cure[$key]));
       }
       else if ($cure[$key] == 0)
         continue;
       
       $regenerated = getRegeneratedValue($value, ($cure[$key] - time()), $regen[$key]);
       if ($regenerated >= 0 && $regenerated < $value)
-        $this->db->query("UPDATE `character_stats` SET ?# = ?d WHERE `guid` = ?d", $key ,$regenerated ,$this->guid);
+        $this->setChar('char_stats', array($key => $regenerated));
       else
       {
-        $this->db->query("UPDATE `character_stats` SET ?# = ?d, ?# = '0' WHERE `guid` = ?d", $key ,$value ,$key.'_cure' ,$this->guid);
+        $this->setChar('char_stats', array($key => $value, $key.'_cure' => 0));
         continue;
       }
     }
@@ -203,10 +198,7 @@ class Test extends Char
       return;
     }
     
-    $this->db->query("UPDATE `characters` 
-                      SET `level` = ?d, 
-                          `status` = ?s 
-                      WHERE `guid` = ?d", $next_level ,$next_status ,$this->guid);
+    $this->setChar('char_db', array('level' => $next_level, 'status' => $next_status));
     $this->db->query("UPDATE `character_stats` SET `maxmass` = `maxmass` + ?f, `hp_regen` = `hp_regen` - ?d WHERE `guid` = ?d", 40 ,$next_hpr ,$this->guid);
     if ($next_bars)
     {
@@ -214,7 +206,7 @@ class Test extends Char
       $next_bars = explode(',', $next_bars);
       foreach ($next_bars as $key => $value)
       {
-        $this->db->query("UPDATE `character_bars` SET ?# = ?s WHERE `guid` = ?d", $value ,$bar_enums[$value]."|1" ,$this->guid);
+        $this->setChar('char_bars', $value, $bar_enums[$value]."|1");
       }
     }
     if ($char_db['exp'] >= $next_exp)
@@ -261,10 +253,7 @@ class Test extends Char
       if ($des_g == 'mountown_forest' || $des_g == 'Mountown')
         $room = "forest";
       
-      $this->db->query("UPDATE `characters` 
-                        SET `city` = ?s, 
-                            `room` = ?s 
-                        WHERE `guid` = ?d", $dest ,$room ,$this->guid);
+      $this->setChar('char_db', array('city' => $dest, 'room' => $room));
       $this->db->query("UPDATE `character_stats` SET `walk` = `walk` + ?d WHERE `guid` = ?d", $walk_coef ,$this->guid);
       $this->db->query("DELETE FROM `goers` WHERE `guid` = ?d", $this->guid);
       echoScript("location.href = 'main.php?action=go&room_go=$room';", true);
@@ -365,7 +354,7 @@ class Test extends Char
       return;
     
     if ((time () - $char_db['last_time']) >= 300 && !$char_db['dnd'])
-      $this->db->query("UPDATE `characters` SET `afk` = '1', `message` = 'away from keyboard' WHERE `guid` = ?d", $this->guid);
+      $this->setChar('char_db', array('afk' => 1, 'message' => 'away from keyboard'));
   }
   /*Обновление состояния персонажа*/
   function WakeUp ()
@@ -373,7 +362,7 @@ class Test extends Char
     $char_db = $this->getChar('char_db', 'afk', 'message');
     
     if ($char_db['afk'] && $char_db['message'] == 'away from keyboard')
-      $this->db->query("UPDATE `characters` SET `afk` = '0', `message` = NULL WHERE `guid` = ?d", $this->guid);
+      $this->setChar('char_db', array('afk' => 0, 'message' => ''));
   }
   /*Проверка эффектов*/
   function Effects ()

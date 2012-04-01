@@ -80,7 +80,7 @@ $char->showStatAddition();
               if ($level < $min_level)
                 continue;
               
-              $stat_text = (in_array($key, array('str', 'dex', 'con', 'int'))) ?"style='color: ".getStatSkillColor($char_stats[$key], $added[$key]).";'></td><td>".getBraces($char_stats[$key], $added[$key], $key)."&nbsp;</td>" :"></td><td></td>";
+              $stat_text = (in_array($key, array('str', 'dex', 'con', 'int'))) ?"style='color: ".getColor($char_stats[$key], $added[$key]).";'></td><td>".getBraces($char_stats[$key], $added[$key], $key)."&nbsp;</td>" :"></td><td></td>";
               echo "<tr>";
               echo "<td>&bull; $lang[$key]&nbsp;&nbsp;&nbsp;</td>";
               printf("<td align='right'><input name='base_$key' type='text' readonly value='$char_stats[$key]' class='show' onFocus='this.blur();' %s", $stat_text);
@@ -156,7 +156,7 @@ if ($level > 0)
     $dif = $char_stats[$key] - $added[$key];
     echo "<tr>";
     echo "<td>&nbsp;&bull; $lang[$key]</td>";
-    echo "<td width='40' class='skill' align='right'><input name='base_$key' type='text' readonly value='$char_stats[$key]' class='show' style='color: ".getStatSkillColor($char_stats[$key], $added[$key]).";' onFocus='this.blur();'></td>";
+    echo "<td width='40' class='skill' align='right'><input name='base_$key' type='text' readonly value='$char_stats[$key]' class='show' style='color: ".getColor($char_stats[$key], $added[$key]).";' onFocus='this.blur();'></td>";
     echo "<td>".getBraces($char_stats[$key], $added[$key], $key)."</td>";
     
     if ($char_stats['skills'] > 0 && $dif < 5 && $level >= $mastery[$key])
@@ -174,7 +174,7 @@ if ($level > 0)
       $dif = $char_stats[$key] - $added[$key];
       echo "<tr>";
       echo "<td>&nbsp;&bull; $lang[$key]</td>";
-      echo "<td width='40' class='skill' align='right'><input name='base_$key' type='text' readonly value='$char_stats[$key]' class='show' style='color: ".getStatSkillColor($char_stats[$key], $added[$key]).";' onFocus='this.blur();'></td>";
+      echo "<td width='40' class='skill' align='right'><input name='base_$key' type='text' readonly value='$char_stats[$key]' class='show' style='color: ".getColor($char_stats[$key], $added[$key]).";' onFocus='this.blur();'></td>";
       echo "<td>".getBraces($char_stats[$key], $added[$key], $key)."</td>";
       if ($char_stats['skills'] > 0 && $dif < 10)
         echo "<td><img id='minus_$key' src='img/minus.gif' class='nonactive' onclick=\"ChangeAbility('$key', -1, $dif, $mmax)\" title='уменьшить' />&nbsp;<img id='plus_$key' src='img/plus.gif' class='skill' onclick=\"ChangeAbility('$key', 1, $dif, $mmax)\" title='увеличить' /></td>";

@@ -64,7 +64,7 @@ if ($bank)
   else if (!empty($_SESSION['bankСredit']))
   {
     $bank_info = $adb->selectRow("SELECT `cash`, `euro` FROM `character_bank` WHERE `id` = ?d", $_SESSION['bankСredit']);
-    echo "<b>".getMoney($bank_info['cash'])."</b>кр. <b>".getMoney($bank_info['euro'])."</b>екр.<a href='javascript:inventoryUnLoginbank();'><img border='0' valign='bottom' width='13' height='9' title='$lang[credit_exit]' src='img/icon/close_bank.gif'></a>";
+    echo "<b>".getMoney($bank_info['cash'])."</b>кр. <b>".getMoney($bank_info['euro'])."</b>екр.<a href='javascript:UnLoginbank();'><img border='0' valign='bottom' width='13' height='9' title='$lang[credit_exit]' src='img/icon/close_bank.gif'></a>";
   }
   echo "</span>";
 }

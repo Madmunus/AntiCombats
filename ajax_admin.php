@@ -21,12 +21,12 @@ $char = Char::initialization($guid, $adb);
 $char->test->Guid('ajax');
 $char->test->Admin('ajax');
 
-$do = requestVar('do');
+$do = getVar('do');
 switch ($do)
 {
   /*Удаление персонажа*/
   case 'delete_char':
-    $d_guid = requestVar('d_guid');
+    $d_guid = getVar('d_guid');
     $adb->query("DELETE FROM `character_bank` WHERE `guid` = ?d", $d_guid);
     $adb->query("DELETE FROM `character_bars` WHERE `guid` = ?d", $d_guid);
     $adb->query("DELETE FROM `character_effects` WHERE `guid` = ?d", $d_guid);

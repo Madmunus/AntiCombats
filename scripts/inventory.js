@@ -36,12 +36,12 @@ function increaseItemStat (id, stat)
 	});
 }
 
-function inventoryLoginbank()
+function Loginbank()
 {
 	clearError();
 	var credit = $('select[name=credit]').val();
 	var pass = $('input[name=pass]').val();
-	$.post('ajax.php', {'do': 'inventoryloginbank', 'credit': credit, 'pass': pass}, function (data){
+	$.post('ajax.php', {'do': 'loginbank', 'credit': credit, 'pass': pass}, function (data){
 	  closehint3();
 	  var bank = top.exploder(data);
 	  if (bank[0] == 'complete')
@@ -51,10 +51,10 @@ function inventoryLoginbank()
 	});
 }
 
-function inventoryUnLoginbank()
+function UnLoginbank()
 {
 	clearError();
-	$.post('ajax.php', {'do': 'inventoryunloginbank'}, function (data){
+	$.post('ajax.php', {'do': 'unloginbank'}, function (data){
     var unlogin = top.exploder(data);
     visual.show_any('#loginbank', unlogin[0]);
 	});

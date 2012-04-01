@@ -14,8 +14,8 @@ $adb = DbSimple_Generic::connect($database['adb']);
 $adb->query("SET NAMES ? ",$database['db_encoding']);
 $adb->setErrorHandler("databaseErrorHandler");
 
-$login = requestVar('login', '', 2);
-$password = requestVar('password', '', 2);
+$login = getVar('login', '', 2);
+$password = getVar('password', '', 2);
 $enter = $adb->selectCell("SELECT `login` FROM `server_info`;");
 ?>
 <html>
@@ -78,14 +78,12 @@ else if ($char_info['block'])
 }
 
 if (checks('guid'))
-{
   deleteSession();
-}
 
 $adb->query("DELETE FROM `online` WHERE `guid` = ?d", $guid);
 $adb->query("INSERT INTO `online` (`guid`, `login_display`, `ip`, `city`, `room`, `last_time`) 
              VALUES (?d, ?s, ?s, ?s, ?s, ?d);", $guid ,$login ,$_SERVER['REMOTE_ADDR'] ,$char_info['city'] ,$char_info['room'] ,time());
-$adb->query("UPDATE `characters` SET `last_go` = ?d WHERE `guid` = ?d", time() ,$guid);
+$char->setChar('char_db', array('last_go' => time()));
 $_SESSION['guid'] = $guid;
 $_SESSION['zayavka_c_m'] = 1;
 $_SESSION['zayavka_c_o'] = 1;

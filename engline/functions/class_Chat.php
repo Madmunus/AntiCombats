@@ -28,9 +28,9 @@ class Chat extends Char
     echoScript("try {top.msg.updateMessages();} catch(e) {}");
   }
   /*Выполнение комманд в чате*/
-  function executeCommand ($name, $message, $guid)
+  function executeCommand ($name, $message)
   {
-    $char_db = $this->getChar('char_db', 'afk', 'login', 'room', 'city', $guid);
+    $char_db = $this->getChar('char_db', 'afk', 'login', 'room', 'city', $this->guid);
     switch ($name)
     {
       case '/afk':
@@ -40,16 +40,16 @@ class Chat extends Char
           return false;
         
         $message = (isset($message[1])) ?preg_replace("/ /", "", $message, 1) :'away from keyboard';
-        $this->db->query("UPDATE `characters` SET `afk` = '1', `dnd` = '0', `message` = ?s WHERE `guid` = ?d", $message ,$guid);
+        $this->setChar('char_db', array('afk' => 1, 'dnd' => 0, 'message' => $message));
         return true;
       break;
       case '/dnd':
-        $message = str_replace ('/dnd', '', $message);
+        $message = str_replace('/dnd', '', $message);
         
         if ($message == '' || (isset($message[0]) && $message[0] != ' ') || !isset($message[1]))
           return false;
         
-        $this->db->query("UPDATE `characters` SET `afk` = '0', `dnd` = '1', `message` = ?s WHERE `guid` = ?d", $message ,$guid);
+        $this->setChar('char_db', array('afk' => 0, 'dnd' => 1, 'message' => $message));
         return true;
       break;
         case '/e':

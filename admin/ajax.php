@@ -22,12 +22,12 @@ $char = Char::initialization($guid, $adb);
 $char->test->Guid('ajax', '../');
 $char->test->Admin('ajax', '../');
 
-$do = requestVar('do');
+$do = getVar('do');
 
 switch ($do)
 {
   case 'showtypes':
-    $section = requestVar('section');
+    $section = getVar('section');
     
     if (!$section)
       die ('');
@@ -41,7 +41,7 @@ switch ($do)
     die ($return);
   break;
   case 'showfields':
-    $type = requestVar('type');
+    $type = getVar('type');
     
     if (!$type)
       die ('');
@@ -80,7 +80,7 @@ switch ($do)
     die ($return);
   break;
   case 'createitem':
-    $fields = requestVar('fields');
+    $fields = getVar('fields');
     $sql = array();
     $field = explode('A_D', $fields);
     unset ($field[count($field) - 1]);

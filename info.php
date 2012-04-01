@@ -10,7 +10,7 @@ include_once("engline/dbsimple/Generic.php");
 include_once("engline/data/data.php");
 include_once("engline/functions/functions_info.php");
 
-$log = requestVar('log', '', 1);
+$log = getVar('log', '', 1);
 
 if (empty($log))
   toIndex();
@@ -36,7 +36,7 @@ $info->Online();
 
 $char_db = $info->getChar('char_db', '*');
 $char_stats = $info->getChar('char_stats', 'str', 'dex', 'con', 'vit', 'int', 'wis', 'spi');
-$char_info = $info->getChar('char_info', 'name', 'icq', 'hide_icq', 'url', 'town', 'birthday', 'deviz', 'hobie', 'state', 'date');
+$char_info = $info->getChar('char_info', 'name', 'icq', 'hide_icq', 'url', 'town', 'birthday', 'motto', 'hobie', 'state', 'date');
 ArrToVar($char_db);
 ArrToVar($char_info);
 
@@ -78,7 +78,7 @@ $info->showStatAddition();
       if ($level < $min_level)
         continue;
       
-      $stat_text = (in_array($key, array ('str', 'dex', 'con', 'int'))) ?"<font style='color: ".getStatSkillColor($char_stats[$key], $added[$key]).";'>%s</font></b>".getBraces($char_stats[$key], $added[$key]) :"%s</b>";
+      $stat_text = (in_array($key, array ('str', 'dex', 'con', 'int'))) ?"<font style='color: ".getColor($char_stats[$key], $added[$key]).";'>%s</font></b>".getBraces($char_stats[$key], $added[$key]) :"%s</b>";
       printf($lang[$key]." <b>".$stat_text."<br>", $char_stats[$key]);
     }
     echo "<hr align='left' width='300' size='1'>";
@@ -155,7 +155,7 @@ foreach ($rows as $dat_t)
       echo ($icq && !$hide_icq) ?"<br>ICQ: $icq" :"";
       echo ($url) ?"<br>Домашняя страница: <a href='$url' target='_blank' class='nick'>$url</a>" :"";
       echo ($town) ?"<br>Город: $town" :"";
-      echo ($deviz) ?"<br>Девиз: <code>$deviz</code>" :"";
+      echo ($motto) ?"<br>Девиз: <code>$motto</code>" :"";
       echo ($hobie) ?"<br>Увлечения / хобби:<br><code>".str_replace (array("\'", '\&quot;'), array("'", '"'), $hobie)."</code>" :"";
 ?>
     </td>

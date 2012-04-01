@@ -22,7 +22,7 @@ $char = Char::initialization($guid, $adb);
 $char->test->Guid('main', '../');
 $char->test->Admin('main', '../');
 
-$act = requestVar('act', 'none');
+$act = getVar('act', 'none');
 $name = $adb->selectCell("SELECT `name` FROM `admin_menu` WHERE `href` = ?s", $act);
 ?>
 <head>

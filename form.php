@@ -22,12 +22,12 @@ switch ($action)
     echo "<div id='shapes' style='width: 100%;'></div>";
   break;
   case 'security':
-    $pass = requestVar('pass');
+    $pass = getVar('pass');
     
     if (isset($_POST['changeMail']))
     {
-      $old_mail = requestVar('old_mail');
-      $new_mail = requestVar('new_mail');
+      $old_mail = getVar('old_mail');
+      $new_mail = getVar('new_mail');
       
       if ($char_db['next_change'] != 0 && time() < $char_db['next_change'])
         $char->error->Form(515, $do);
@@ -50,7 +50,7 @@ switch ($action)
       if (!eregi ("^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*$", $new_mail))
         $char->error->Form(511, $do);
       
-      $q = $adb->query("UPDATE `characters` SET `mail` = ?s, `next_change` = ?d WHERE `guid` = ?d", $new_mail ,(time() + 259200) ,$guid);
+      $q = $char->setChar('char_db', array('mail' => $new_mail, 'next_change' => (time() + 259200)));
       $msg = "Здравствуйте!\n";
       $msg .= DATE_NO_SEC." был сменен e-mail, указанный при регистрации персонажа $login он-лайн игры Анти Бойцовский Клуб.\n";
       $msg .= "Новый e-mail: $new_mail\n\n\n\n";
@@ -62,8 +62,8 @@ switch ($action)
     }
     else if (isset($_POST['changePsw']))
     {
-      $new_pass = requestVar('new_pass');
-      $new_pass2 = requestVar('new_pass2');
+      $new_pass = getVar('new_pass');
+      $new_pass2 = getVar('new_pass2');
       
       if ($char_db['next_change'] != 0 && time() < $char_db['next_change'])
         $char->error->Form(515, $do);
@@ -86,7 +86,7 @@ switch ($action)
       if (!ereg ("[a-zA-Zа-яА-Я0-9]$", $new_pass))
         $char->error->Form(506, $do);
       
-      $q = $adb->query("UPDATE `characters` SET `password` = ?s, `next_change` = ?d WHERE `guid` = ?d", SHA1($guid.':'.$new_pass) ,(time() + 259200) ,$guid);
+      $q = $char->setChar('char_db', array('password' => SHA1($guid.':'.$new_pass), 'next_change' => (time() + 259200)));
       $msg = "Здраствуйте!\n";
       $msg .= DATE_NO_SEC." был сменен пароль к персонажу $login он-лайн игры Анти Бойцовский Клуб.\n";
       $msg .= "Новый пароль: $new_pass\n\n\n\n";
@@ -98,8 +98,8 @@ switch ($action)
     }
     else if (isset($_POST['changeSqa']))
     {
-      $secretquestion = requestVar('secretquestion');
-      $secretanswer = requestVar('secretanswer');
+      $secretquestion = getVar('secretquestion');
+      $secretanswer = getVar('secretanswer');
       
       if ($char_db['next_change'] != 0 && time() < $char_db['next_change'])
         $char->error->Form(515, $do);
@@ -113,8 +113,8 @@ switch ($action)
       if (SHA1($guid.':'.$pass) != $char_db['password'])
         $char->error->Form(501, $do);
             
-      $q1 = $adb->query("UPDATE `character_info` SET `secretquestion` = ?s, `secretanswer` = ?s WHERE `guid` = ?d", $secretquestion ,$secretanswer ,$guid);
-      $q2 = $adb->query("UPDATE `characters` SET `next_change` = ?d WHERE `guid` = ?d", (time() + 259200) ,$guid);
+      $q1 = $char->setChar('char_info', array('secretquestion' => $secretquestion, 'secretanswer' => $secretanswer));
+      $q2 = $char->setChar('char_db', array('next_change' => (time() + 259200)));
       $msg = "Здравствуйте!\n";
       $msg .= DATE_NO_SEC." был сменен секретный вопрос/ответ, указанный при регистрации персонажа $login он-лайн игры Анти Бойцовский Клуб.\n";
       $msg .= "Новый вопрос: $secretquestion\n";
@@ -177,18 +177,18 @@ switch ($action)
   case 'info':
     if (isset($_POST['changeInfo']))
     {
-      $name = requestVar('name');
-      $birth_day = requestVar('birth_day');
-      $birth_month = requestVar('birth_month');
-      $birth_year = requestVar('birth_year');
+      $name = getVar('name');
+      $birth_day = getVar('birth_day');
+      $birth_month = getVar('birth_month');
+      $birth_year = getVar('birth_year');
       $birthday = $birth_day.'.'.$birth_month.'.'.$birth_year;
       $town = (isset($_POST['town_n']) && $_POST['town_n'] != '') ?htmlspecialchars($_POST['town_n']) :((isset($_POST['town'])) ?htmlspecialchars($_POST['town']) :"");
-      $icq = requestVar('icq');
-      $hide_icq = requestVar('hide_icq', 0);
-      $url = requestVar('url');
-      $color = requestVar('color');
-      $deviz = requestVar('deviz');
-      $hobie = requestVar('hobie');
+      $icq = getVar('icq');
+      $hide_icq = getVar('hide_icq', 0);
+      $url = getVar('url');
+      $color = getVar('color');
+      $motto = getVar('motto');
+      $hobie = getVar('hobie');
       $hobie = str_replace("\n", "<br>", $hobie);
       
       $count_words = count(split(' ', $hobie));
@@ -198,23 +198,13 @@ switch ($action)
         $error = "Слишком большой размер поля \"Хобби, увлечения\". Максимальный размер: 2500 символов.";
       else
       {
-        $q = $adb->query("UPDATE `character_info` 
-                          SET `name` = ?s, 
-                              `birthday` = ?s, 
-                              `icq` = ?s, 
-                              `hide_icq` = ?d, 
-                              `url` = ?s, 
-                              `town` = ?s, 
-                              `color` = ?s, 
-                              `deviz` = ?s, 
-                              `hobie` = ?s 
-                          WHERE `guid` = ?d", $name ,$birthday ,$icq ,$hide_icq ,$url ,$town ,$color ,$deviz ,$hobie ,$guid);
+        $q = $char->setChar('char_info', array('name' => $name, 'birthday' => $birthday, 'icq' => $icq, 'hide_icq' => $hide_icq, 'url' => $url, 'town' => $town, 'color' => $color, 'motto' => $motto, 'hobie' => $hobie));
         if ($q)
           $error = "Сохранено удачно.";
       }
     }
     
-    $char_info = $char->getChar('char_info', 'name', 'icq', 'hide_icq', 'url', 'town', 'birthday', 'color', 'deviz', 'hobie');
+    $char_info = $char->getChar('char_info', 'name', 'icq', 'hide_icq', 'url', 'town', 'birthday', 'color', 'motto', 'hobie');
     ArrToVar($char_info, 's_');
     $s_hobie = str_replace(array("<br>", '\&quot;', "\'"), array("\n", '"', "'"), $s_hobie);
     $s_hide_icq = ($s_hide_icq) ?" checked" :"";
@@ -278,7 +268,7 @@ switch ($action)
 </tr>
 <tr class="anketabg"><td>ICQ:</td><td><input value="<?echo $s_icq;?>" name="icq" size="10" maxlength="20" /> <input type="checkbox" name="hide_icq" value="1"<?echo $s_hide_icq;?> /> не отображать в инф. о персонаже.</td></tr>
 <tr class="anketabg"><td>Домашняя страница:</td><td><input value="<?echo $s_url;?>" name="url" size="35" maxlength="60" /></td></tr>
-<tr class="anketabg"><td>Девиз:</td><td><input value="<?echo $s_deviz;?>" name="deviz" size="60" maxlength="160" /></td></tr>
+<tr class="anketabg"><td>Девиз:</td><td><input value="<?echo $s_motto;?>" name="motto" size="60" maxlength="160" /></td></tr>
 <tr class="anketabg"><td colspan="2" align="left">Увлечения / хобби <small>(не более 60 слов)</small><br><textarea name="hobie" cols="60" rows="7" style="width: 100%;"><? echo $s_hobie;?></textarea></td></tr>
 <tr class="anketabg">
   <td>Цвет сообщений в чате:</td>

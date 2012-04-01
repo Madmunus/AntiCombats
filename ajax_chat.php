@@ -25,12 +25,12 @@ $lang = $char->getLang();
 $char_db = $char->getChar('char_db', 'login', 'city', 'room', 'chat_shut', 'chat_filter', 'chat_sys', 'chat_update');
 ArrToVar($char_db);
 
-$do = requestVar('do');
+$do = getVar('do');
 switch ($do)
 {
   /*Talk*/
   case 'sendmessage':
-    $h = requestVar('h');
+    $h = getVar('h');
     
     $commands = $adb->selectCol("SELECT `name` FROM `server_commands`;");
     $command = false;
@@ -44,7 +44,7 @@ switch ($do)
     {
       foreach ($commands as $num => $name)
       {
-        if (utf8_substr($h, 0, utf8_strlen($name)) == $name && $char->chat->executeCommand($name, $h, $guid))
+        if (utf8_substr($h, 0, utf8_strlen($name)) == $name && $char->chat->executeCommand($name, $h))
           returnAjax('complete');
       }
     }
@@ -67,7 +67,7 @@ switch ($do)
     else
       $class = 'all';
     
-    $adb->query("UPDATE `characters` SET `afk` = '0' WHERE `guid` = ?d", $guid);
+    $char->setChar('char_db', array('afk' => 0));
     if ($adb->query("INSERT INTO `city_chat` (`sender`, `to`, `room`, `msg`, `class`, `date_stamp`, `city`) 
                      VALUES (?s, ?s, ?s, ?s, ?s, ?d, ?s)", $login ,$to ,$room ,"<font color=$color>$h</font>" ,$class ,time() ,$city))
       returnAjax('complete');
@@ -95,9 +95,9 @@ switch ($do)
   break;
   /*Msg*/
   case 'refreshmessage':
-    $adb->query("UPDATE `characters` SET `last_time` = ?d WHERE `guid` = ?d", time() ,$guid);
-    $adb->query("UPDATE `online` SET `last_time` = ?d WHERE `guid` = ?d", time() ,$guid);
-    $go = requestVar('go');
+    $char->setChar('char_db', array('last_time' => time()));
+    $char->setChar('online', array('last_time' => time()));
+    $go = getVar('go');
     $send = "";
 
     $last = (checks('last')) ?$_SESSION['last'] :0;
@@ -199,8 +199,8 @@ switch ($do)
     returnAjax($send, $chat_update);
   break;
   case 'change_button':
-    $but = requestVar('but');
-    $val = requestVar('val');
+    $but = getVar('but');
+    $val = getVar('val');
     switch ($but)
     {
       default:
@@ -211,7 +211,7 @@ switch ($do)
         $but = 'update';
       break;
     }
-    $adb->query("UPDATE `characters` SET ?# = ?d WHERE `guid` = ?d", 'chat_'.$but ,$val ,$guid);
+    $char->setChar('char_db', array('chat_'.$but => $val));
     returnAjax('complete');
   break;
 }

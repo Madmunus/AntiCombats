@@ -40,7 +40,7 @@ class Bank extends Char
   /*Увеличение/уменьшение денег в банке у персонажа*/
   function Money ($sum, $id, $type = '', $guid = 0)
   {
-    if ($id == 0 || !is_numeric($sum) || !is_numeric($id))
+    if (checki($id) || !is_numeric($sum))
       $this->char->error->Map(326);
     
     $sum = round($sum, 2);
@@ -48,7 +48,7 @@ class Bank extends Char
     if ($sum == 0)
       $this->char->error->Map(325);
     
-    $guid = (!$guid) ?$this->guid :$guid;
+    $guid = $this->getGuid($guid);
     switch ($type)
     {
       case 'euro':

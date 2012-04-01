@@ -11,7 +11,6 @@ class Char
   public $mail;
   public $bank;
   public $chat;
-  public $info;
   public $history;
   public $error;
   function& initialization ($guid, $adb)
@@ -45,15 +44,7 @@ class Char
     else
       $guid = $this->guid;
     
-    switch ($args[0])
-    {
-      case 'char_db':    $table = 'characters';      break;
-      case 'char_stats': $table = 'character_stats'; break;
-      case 'char_info':  $table = 'character_info';  break;
-      case 'char_equip': $table = 'character_equip'; break;
-      case 'char_bars':  $table = 'character_bars';  break;
-    }
-    
+    $table = getTable($args[0]);
     unset($args[0]);
     
     if ($args[1] == '*')
@@ -62,6 +53,28 @@ class Char
       return $this->db->selectCell("SELECT ?# FROM ?# WHERE `guid` = ?d", $args ,$table ,$guid);
     else
       return $this->db->selectRow("SELECT ?# FROM ?# WHERE `guid` = ?d", $args ,$table ,$guid);
+  }
+  /*Обновление информации о персонаже*/
+  function setChar ()
+  {
+    $args = func_get_args();
+    $a_num = func_num_args();
+    
+    if (is_numeric($args[$a_num-1]))
+    {
+      $guid = $args[$a_num-1];
+      unset($args[$a_num-1]);
+    }
+    else
+      $guid = $this->guid;
+    
+    $table = getTable($args[0]);
+    unset($args[0]);
+    
+    if ($a_num == 4 || ($a_num == 3 && !is_array($args[1])))
+      return $this->db->query("UPDATE ?# SET ?# = ? WHERE `guid` = ?d", $table ,$args[1] ,$args[2] ,$guid);
+    else
+      return $this->db->query("UPDATE ?# SET ?a WHERE `guid` = ?d", $table ,$args[1] ,$guid);
   }
   /*Получение информации о языке*/
   function getLang ()
@@ -183,7 +196,7 @@ class Char
     if ($sum == 0)
       return false;
     
-    $guid = (!$guid) ?$this->guid :$guid;
+    $guid = $this->getGuid($guid);
     switch ($type)
     {
       case 'euro':
@@ -192,7 +205,7 @@ class Char
         if (($money_euro = $money_euro + $sum) < 0)
           return false;
         
-        $this->db->query("UPDATE `characters` SET `money_euro` = ?f WHERE `guid` = ?d", $money_euro ,$guid);
+        $this->setChar('char_db', array('money_euro' => $money_euro), $guid);
       break;
       default:
         $money = $this->getChar('char_db', 'money');
@@ -200,7 +213,7 @@ class Char
         if (($money = $money + $sum) < 0)
           return false;
         
-        $this->db->query("UPDATE `characters` SET `money` = ?f WHERE `guid` = ?d", $money ,$guid);
+        $this->setChar('char_db', array('money' => $money), $guid);
       break;
     }
     return true;
@@ -208,23 +221,23 @@ class Char
   /*Увеличение/уменьшение переносимой массы персонажем*/
   function changeMass ($mass, $guid = 0)
   {
-    if (!is_numeric($mass) || $mass == 0)
+    if (checki($mass))
       return false;
     
-    $guid = (!$guid) ?$this->guid :$guid;
+    $guid = $this->getGuid($guid);
     $this->db->query("UPDATE `character_stats` SET `mass` = `mass` + ?f WHERE `guid` = ?d", $mass ,$guid);
     return true;
   }
   /*Время востановления здоровья*/
   function setTimeToHPMP ($now, $all, $regen, $type, $guid = 0)
   {
-    $guid = (!$guid) ?$this->guid :$guid;
+    $guid = $this->getGuid($guid);
     if ($now > $all)
-      $this->db->query("UPDATE `character_stats` SET ?# = ?d, ?# = '0' WHERE `guid` = ?d", $type ,$all ,$type.'_cure' ,$guid);
+      $this->setChar('char_stats', array($type => $all, $type.'_cure' => 0), $guid);
     else
     {
       getCureValue($now, $all, $regen, $cure);
-      $this->db->query("UPDATE `character_stats` SET ?# = ?d WHERE `guid` = ?d", $type.'_cure' ,$cure ,$guid);
+      $this->setChar('char_stats', $type.'_cure', $cure, $guid);
     }
   }
   /*Отображение дополнительной характеристики*/
@@ -297,6 +310,7 @@ class Char
   function checkShape ($id)
   {
     $shape = $this->db->selectRow("SELECT * FROM `player_shapes` WHERE `id` = ?d", $id);
+    
     if (!$shape)
       return false;
     
@@ -454,9 +468,9 @@ class Char
   /*Добавление/Обновление/Удаление эффекта*/
   function workEffect ($effect, $type = 1, $guid = 0)
   {
-    $guid = (!$guid) ?$this->guid :$guid;
+    $guid = $this->getGuid($guid);
     
-    if (!$effect || $effect == 0 || !is_numeric($effect))
+    if (checki($effect))
       return;
     
     $char_eff = $this->db->selectCell("SELECT `guid` FROM `character_effects` WHERE `effect_id` = ?d and `guid` = ?d", $effect ,$guid);
@@ -480,7 +494,7 @@ class Char
     {
       if ($char_eff)
       {
-        $this->db->query("UPDATE `character_effects` SET `end_time` = ?d WHERE `guid` = ?d", (time() + $e_info['duration']) ,$guid);
+        $this->db->query("UPDATE `character_effects` SET `end_time` = ?d WHERE `guid` = ?d and `effect_id` = ?d", (time() + $e_info['duration']) ,$guid ,$effect);
         return;
       }
       else
@@ -541,7 +555,7 @@ class Char
     }
     else if ($type == -1)
       $this->db->query("DELETE FROM `character_effects` WHERE `guid` = ?d and `effect_id` = ?d", $guid ,$effect);
-    $this->db->query("UPDATE `character_stats` SET ?a WHERE `guid` = ?d", $new_sql ,$guid);
+    $this->setChar('char_stats', $new_sql, $guid);
   }
   /*Бонусные эффекты от статов*/
   function statsBonus ($stat)
@@ -564,9 +578,9 @@ class Char
   /*Добавление/Удаление травмы*/
   function workTravm ($travm, $type = 1, $guid = 0)
   {
-    $guid = (!$guid) ?$this->guid :$guid;
+    $guid = $this->getGuid($guid);
     
-    if (!$travm || $travm == 0 || !is_numeric($travm))
+    if (checki($travm))
       return;
     
     $char_trm = $this->db->selectCell("SELECT `guid` FROM `character_travms` WHERE `travm_id` = ?d and `guid` = ?d", $travm ,$guid);
@@ -651,7 +665,7 @@ class Char
       }
       $this->changeStats($stats, $guid);
       if ($new_sql)
-        $this->db->query("UPDATE `character_stats` SET ?a WHERE `guid` = ?d", $new_sql ,$guid);
+        $this->setChar('char_stats', $new_sql, $guid);
     }
     
     if ($type == 1)
@@ -666,7 +680,7 @@ class Char
   /*Показ строки персонажа*/
   function getLogin ($type = 'clan', $guid = 0)
   {
-    $guid = (!$guid) ?$this->guid :$guid;
+    $guid = $this->getGuid($guid);
     $char_db = $this->getChar('char_db', 'login', 'level', 'orden', 'clan', 'clan_short', 'block', 'rang', 'chat_shut', 'afk', 'dnd', 'message', $guid);
     list($login, $level, $orden, $clan_f, $clan_s, $block, $rang, $chat_shut, $afk, $dnd, $message) = array_values($char_db);
     $travm = $this->db->select("SELECT `c`.`travm_id` FROM `character_travms` AS `c` LEFT JOIN `player_travms` AS `i` ON `c`.`travm_id` = `i`.`id` WHERE `c`.`guid` = ?d and (`i`.`type` = '1' or `i`.`type` = '2');", $guid);
@@ -697,6 +711,11 @@ class Char
       case 'mail':   return "<font color='red'>$login</font> $login_info";
       default:       return "";
     }
+  }
+  /*Распознает наличие гайда*/
+  function getGuid ($guid)
+  {
+    return (!$guid) ?$this->guid :$guid;
   }
 }
 ?>

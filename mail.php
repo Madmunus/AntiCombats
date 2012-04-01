@@ -1,7 +1,7 @@
 <?
-$mail_to = requestVar('mail_to', 0);
-$mail_id = requestVar('mail_id', 0);
-$send_sum = requestVar('send_sum', 0);
+$mail_to = getVar('mail_to', 0);
+$mail_id = getVar('mail_id', 0);
+$send_sum = getVar('send_sum', 0);
 ?>
 <script src="scripts/mail.js" type="text/javascript"></script>
 <script src="scripts/move_check.js" type="text/javascript"></script>

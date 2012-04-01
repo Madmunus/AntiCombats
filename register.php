@@ -15,7 +15,7 @@ $adb = DbSimple_Generic::connect($database['adb']);
 $adb->query("SET NAMES ? ",$database['db_encoding']);
 $adb->setErrorHandler("databaseErrorHandler");
 
-$step = requestVar('step');
+$step = getVar('step');
 $error_text = 'Пройдите предыдущий шаг!<br><br><a href="?step='.($step-1).'" class="us2">Назад</a>';
 ?>
 <html>
@@ -148,7 +148,7 @@ if (!($adb->selectCell("SELECT `registration` FROM `server_info`;")))
                 </table>
 <?    break;
       case 3:
-        if (!checks('reg_login') || !checks('reg_password')) die($error_text);
+        if (!checks('reg_login', 'reg_password')) die($error_text);
         $reg_email = (checks('reg_email')) ?$_SESSION['reg_email'] :'';
         $reg_secretquestion = (checks('reg_secretquestion')) ?$_SESSION['reg_secretquestion'] :'';
         $reg_secretanswer = (checks('reg_secretanswer')) ?$_SESSION['reg_secretanswer'] :'';
@@ -182,7 +182,7 @@ if (!($adb->selectCell("SELECT `registration` FROM `server_info`;")))
                 </table>
 <?    break;
       case 4:
-        if (!checks('reg_login') || !checks('reg_password') || !checks('reg_email') || !checks('reg_secretquestion') || !checks('reg_secretanswer')) die($error_text);
+        if (!checks('reg_login', 'reg_password', 'reg_email', 'reg_secretquestion', 'reg_secretanswer')) die($error_text);
         //$code = rand(1000, 9999);
         $reg_name = (checks('reg_name')) ?$_SESSION['reg_name'] :'';
         $reg_birth_day = (checks('reg_birth_day')) ?$_SESSION['reg_birth_day'] :'';
@@ -254,7 +254,7 @@ if (!($adb->selectCell("SELECT `registration` FROM `server_info`;")))
                   </tr>
                   <tr>
                     <td style="padding-left: 16px;">Девиз:</td>
-                    <td><input type="text" name="deviz" class="inup" size="60" maxlength="160"></td>
+                    <td><input type="text" name="motto" class="inup" size="60" maxlength="160"></td>
                   </tr>
                   <tr style="padding-bottom: 27px;">
                     <td style="padding-left: 16px; padding-bottom: 20px;">Цвет сообщений в<br> чате:</td>
@@ -277,7 +277,7 @@ if (!($adb->selectCell("SELECT `registration` FROM `server_info`;")))
                 </table>
 <?    break;
       case 5:
-        if (!checks('reg_login') || !checks('reg_password') || !checks('reg_email') || !checks('reg_secretquestion') || !checks('reg_secretanswer') || !checks('reg_name') || !checks('reg_birth_day') || !checks('reg_birth_month') || !checks('reg_birth_year') || !checks('reg_sex') || !checks('reg_city') || !checks('reg_icq') || !checks('reg_hide_icq') || !checks('reg_deviz') || !checks('reg_color')) die($error_text);
+        if (!checks('reg_login', 'reg_password', 'reg_email', 'reg_secretquestion', 'reg_secretanswer', 'reg_name', 'reg_birth_day', 'reg_birth_month', 'reg_birth_year', 'reg_sex', 'reg_city', 'reg_icq', 'reg_hide_icq', 'reg_motto', 'reg_color')) die($error_text);
 ?>              <table class="g" align="center" border="0" cellpadding="1" cellspacing="0" width="100%">
                   <tr class="bg6">
                     <td><span class="style5">*</span><font style="margin-left: 8px;">Имя вашего персонажа:</font></td>

@@ -17,14 +17,15 @@ $adb->setErrorHandler("databaseErrorHandler");
 
 $register = $adb->selectCell("SELECT `registration` FROM `server_info`;");
 $register_error = 'Регистрация закрыта!<br><a href="index.php" class="us2">Вернуться на главную</a><br>';
-$do = requestVar('do');
+$do = getVar('do');
 switch ($do)
 {
   case 'checkstep1':
     if (!$register)
       returnAjax('error', $register_error);
+    
     unset($_SESSION['reg_login']);
-    $login = requestVar('login');
+    $login = getVar('login');
     $login_check = $adb->selectCell("SELECT `guid` FROM `characters` WHERE `login` = ?s", $login);
     $match = false;
     $file = file("regfail.dat");
@@ -81,9 +82,10 @@ switch ($do)
   case 'checkstep2':
     if (!$register)
       returnAjax('error', $register_error);
+    
     unset($_SESSION['reg_password']);
-    $password = requestVar('password');
-    $password_confirm = requestVar('password_confirm');
+    $password = getVar('password');
+    $password_confirm = getVar('password_confirm');
     
     if (!checks('reg_login'))
       returnAjax('error', 'Пройдите предыдущий шаг!');
@@ -106,12 +108,13 @@ switch ($do)
   case 'checkstep3':
     if (!$register)
       returnAjax('error', $register_error);
-    unset($_SESSION['reg_email'], $_SESSION['reg_secretquestion'], $_SESSION['reg_secretanswer']);
-    $email = requestVar('email');
-    $secretquestion = requestVar('secretquestion');
-    $secretanswer = requestVar('secretanswer');
     
-    if (!checks('reg_login') || !checks('reg_password'))
+    unset($_SESSION['reg_email'], $_SESSION['reg_secretquestion'], $_SESSION['reg_secretanswer']);
+    $email = getVar('email');
+    $secretquestion = getVar('secretquestion');
+    $secretanswer = getVar('secretanswer');
+    
+    if (!checks('reg_login', 'reg_password'))
       returnAjax('error', 'Пройдите предыдущий шаг!');
     else if (utf8_strlen($email) < 6 || utf8_strlen($email) > 50)
       returnAjax('error', 'Email не может быть короче 6-х символов и длинее 50-ти символов.');
@@ -126,20 +129,21 @@ switch ($do)
   case 'checkstep4':
     if (!$register)
       returnAjax('error', $register_error);
-    unset($_SESSION['reg_name'], $_SESSION['reg_birth_day'], $_SESSION['reg_birth_month'], $_SESSION['reg_birth_year'], $_SESSION['reg_sex'], $_SESSION['reg_city'], $_SESSION['reg_icq'], $_SESSION['reg_hide_icq'], $_SESSION['reg_deviz'], $_SESSION['reg_color']);
-    $name = requestVar('name');
-    $birth_day = requestVar('birth_day');
-    $birth_month = requestVar('birth_month');
-    $birth_year = requestVar('birth_year');
-    $sex = requestVar('sex');
-    $city_n = requestVar('city_n');
-    $city = requestVar('city');
-    $icq = requestVar('icq');
-    $hide_icq = requestVar('hide_icq');
-    $deviz = requestVar('deviz');
-    $color = requestVar('color');
     
-    if (!checks('reg_login') || !checks('reg_password') || !checks('reg_email') || !checks('reg_secretquestion') || !checks('reg_secretanswer'))
+    unset($_SESSION['reg_name'], $_SESSION['reg_birth_day'], $_SESSION['reg_birth_month'], $_SESSION['reg_birth_year'], $_SESSION['reg_sex'], $_SESSION['reg_city'], $_SESSION['reg_icq'], $_SESSION['reg_hide_icq'], $_SESSION['reg_motto'], $_SESSION['reg_color']);
+    $name = getVar('name');
+    $birth_day = getVar('birth_day');
+    $birth_month = getVar('birth_month');
+    $birth_year = getVar('birth_year');
+    $sex = getVar('sex');
+    $city_n = getVar('city_n');
+    $city = getVar('city');
+    $icq = getVar('icq');
+    $hide_icq = getVar('hide_icq');
+    $motto = getVar('motto');
+    $color = getVar('color');
+    
+    if (!checks('reg_login', 'reg_password', 'reg_email', 'reg_secretquestion', 'reg_secretanswer'))
       returnAjax('error', 'Пройдите предыдущий шаг!');
     else if ($name == '' || preg_match("/[^a-zA-Zа-яА-Я0-9]/ui", $name))
       returnAjax('error', 'Вы не заполнили или не правильно заполнили обязательное поле "Ваше имя".');
@@ -162,16 +166,17 @@ switch ($do)
     $_SESSION['reg_city'] = ($city_n) ?$city_n :$city;
     $_SESSION['reg_icq'] = $icq;
     $_SESSION['reg_hide_icq'] = ($hide_icq == 'true') ?1 :0;
-    $_SESSION['reg_deviz'] = $deviz;
+    $_SESSION['reg_motto'] = $motto;
     $_SESSION['reg_color'] = $color;
     returnAjax('complete');
   break;
   case 'checkstep5':
     if (!$register)
       returnAjax('error', $register_error);
-    $rules = requestVar('rules');
     
-    if (!checks('reg_login') || !checks('reg_password') || !checks('reg_email') || !checks('reg_secretquestion') || !checks('reg_secretanswer') || !checks('reg_name') || !checks('reg_birth_day') || !checks('reg_birth_month') || !checks('reg_birth_year') || !checks('reg_sex') || !checks('reg_city') || !checks('reg_icq') || !checks('reg_hide_icq') || !checks('reg_deviz') || !checks('reg_color'))
+    $rules = getVar('rules');
+    
+    if (!checks('reg_login', 'reg_password', 'reg_email', 'reg_secretquestion', 'reg_secretanswer', 'reg_name', 'reg_birth_day', 'reg_birth_month', 'reg_birth_year', 'reg_sex', 'reg_city', 'reg_icq', 'reg_hide_icq', 'reg_motto', 'reg_color'))
       returnAjax('error', 'Пройдите предыдущий шаг!');
     else if ($rules == 'false')
       returnAjax('error', 'Извините, без принятия правил нашего клуба, вы не можете зарегистрировать своего персонажа.');
@@ -187,11 +192,11 @@ switch ($do)
     $town = $_SESSION['reg_city'];
     $icq = $_SESSION['reg_icq'];
     $hide_icq = $_SESSION['reg_hide_icq'];
-    $deviz = $_SESSION['reg_deviz'];
+    $motto = $_SESSION['reg_motto'];
     $color = $_SESSION['reg_color'];
     $city = (rand(1,2) == 1) ?'drm' :'low';
     $shape = ($sex == "male") ?"m/0.gif" :"f/0.gif";
-    unset($_SESSION['reg_login'], $_SESSION['reg_password'], $_SESSION['reg_email'], $_SESSION['reg_secretquestion'], $_SESSION['reg_secretanswer'], $_SESSION['reg_name'], $_SESSION['reg_birth_day'], $_SESSION['reg_birth_month'], $_SESSION['reg_birth_year'], $_SESSION['reg_sex'], $_SESSION['reg_city'], $_SESSION['reg_icq'], $_SESSION['reg_hide_icq'], $_SESSION['reg_deviz'], $_SESSION['reg_color']);
+    unset($_SESSION['reg_login'], $_SESSION['reg_password'], $_SESSION['reg_email'], $_SESSION['reg_secretquestion'], $_SESSION['reg_secretanswer'], $_SESSION['reg_name'], $_SESSION['reg_birth_day'], $_SESSION['reg_birth_month'], $_SESSION['reg_birth_year'], $_SESSION['reg_sex'], $_SESSION['reg_city'], $_SESSION['reg_icq'], $_SESSION['reg_hide_icq'], $_SESSION['reg_motto'], $_SESSION['reg_color']);
     
     if ($adb->selectCell("SELECT COUNT(*) FROM `characters` WHERE `login` = ?s", $login) != 0)
       returnAjax('error', 'Персонаж уже создан.');
@@ -203,15 +208,15 @@ switch ($do)
     $adb->query("INSERT INTO `characters` (`guid`, `login`, `login_sec`, `password`, `mail`, `sex`, `city`, `shape`, `reg_ip`, `last_time`) 
                  VALUES (?d, ?s, ?s, ?s, ?s, ?s, ?s, ?s, ?s, ?d);", $guid ,$login ,$login ,$reg_password ,$email ,$sex ,$city ,$shape ,$_SERVER['REMOTE_ADDR'] ,time());
     // Дополнительная информация
-    $adb->query("INSERT INTO `character_info` (`guid`, `name`, `icq`, `secretquestion`, `secretanswer`, `hide_icq`, `town`, `birthday`, `color`, `deviz`, `state`, `date`) 
-                 VALUES (?d, ?s, ?s, ?s, ?s, ?d, ?s, ?s, ?s, ?s, ?s, ?d);", $guid ,$name ,$icq ,$secretquestion ,$secretanswer ,$hide_icq ,$town ,$birthday ,$color ,$deviz ,$city ,time());
+    $adb->query("INSERT INTO `character_info` (`guid`, `name`, `icq`, `secretquestion`, `secretanswer`, `hide_icq`, `town`, `birthday`, `color`, `motto`, `state`, `date`) 
+                 VALUES (?d, ?s, ?s, ?s, ?s, ?d, ?s, ?s, ?s, ?s, ?s, ?d);", $guid ,$name ,$icq ,$secretquestion ,$secretanswer ,$hide_icq ,$town ,$birthday ,$color ,$motto ,$city ,time());
     // Характеристики
     $adb->query("INSERT INTO `character_stats` (`guid`) 
                  VALUES (?d);", $guid);
     $stats = $config['start']['stats'];
     $items = $config['start']['items'];
     unset($config['start']['stats'], $config['start']['items']);
-    $adb->query("UPDATE `character_stats` SET ?a WHERE `guid` = ?d", $config['start'] ,$guid);
+    $char->setChar('char_stats', $config['start']);
     $char->changeStats($stats);
     // Создание инвентаря
     $adb->query("INSERT INTO `character_equip` (`guid`) 
@@ -232,14 +237,12 @@ switch ($do)
     $char->history->Auth(2, $city);
     
     if (checks('guid'))
-    {
       deleteSession();
-    }
     
     $adb->query("DELETE FROM `online` WHERE `guid` = ?d", $guid);
     $adb->query("INSERT INTO `online` (`guid`, `login_display`, `ip`, `city`, `room`, `last_time`) 
                  VALUES (?d, ?s, ?s, ?s, ?s, ?d);", $guid ,$login ,$_SERVER['REMOTE_ADDR'] ,$city ,'novice' ,time());
-    $adb->query("UPDATE `characters` SET `last_go` = ?d WHERE `guid` = ?d", time() ,$guid);
+    $char->setChar('char_db', array('last_go' => time()));
     $_SESSION['guid'] = $guid;
     $_SESSION['zayavka_c_m'] = 1;
     $_SESSION['zayavka_c_o'] = 1;

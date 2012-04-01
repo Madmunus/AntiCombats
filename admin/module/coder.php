@@ -1,8 +1,8 @@
 <?
 defined('AntiBK') or die ("Доступ запрещен!");
 
-$tac = requestVar('tac');
-$tot = requestVar('tot');
+$tac = getVar('tac');
+$tot = getVar('tot');
 ?>
 <table>
   <form method="post">
