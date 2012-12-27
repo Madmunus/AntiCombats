@@ -4,7 +4,7 @@ function showShopSection (section_shop)
   var level_filter = $("input[name=level_filter]").val();
   var name_filter = $("input[name=name_filter]").val();
   $("#loadbar").show();
-  $.post('ajax.php', 'do=showshopsection&section_shop='+section_shop+'&level_filter='+level_filter+'&name_filter='+name_filter, function (data){
+  $.post('ajax.php', {'do': 'showshopsection', 'section_shop': section_shop, 'level_filter': level_filter, 'name_filter': name_filter}, function (data){
     var section = top.exploder(data);
     visual.show_section(section[0]);
   });
@@ -18,7 +18,7 @@ function shopSection (section_shop)
     $("#section_shop_"+cur_section_shop+", #section_shop_knife").css('backgroundColor', '');
     $("#section_shop_"+section_shop).css('backgroundColor', '#C7C7C7');
     setCookie('section_shop', section_shop, getTimePlusHour());
-    $.post('ajax.php', 'do=getshoptitle&section_shop='+section_shop, function (data){
+    $.post('ajax.php', {'do': 'getshoptitle', 'section_shop': section_shop}, function (data){
       var title = top.exploder(data);
       visual.show_any('#shop_title', title[0]);
     });
@@ -30,7 +30,7 @@ function shopSection (section_shop)
 function buyItem (entry)
 {
   var count = ($('input[name=count]').val()) ?$('input[name=count]').val() :1;
-  $.post('ajax.php', 'do=buyitem&entry='+entry+'&count='+count, function (data){
+  $.post('ajax.php', {'do': 'buyitem', 'entry': entry, 'count': count}, function (data){
     var item = top.exploder(data);
     closehint3 ();
     $('html, body').animate({scrollTop: 0}, 500);
@@ -43,7 +43,7 @@ function buyItem (entry)
 
 function sellItem (id)
 {
-  $.post('ajax.php', 'do=sellitem&id='+id, function (data){
+  $.post('ajax.php', {'do': 'sellitem', 'id': id}, function (data){
     var item = top.exploder(data);
     if (item[0] == 'complete')
       visual.item_sell(id, item);

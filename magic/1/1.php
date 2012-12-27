@@ -31,7 +31,7 @@ else {print "<form name='shut_up' action='main.php?act=orden&ord=1&spell=1' meth
 else if($db["orden"]==1 && $db["admin_level"]>=1 or $db["login"]=='Смотритель' or $db["login"]=='Мироздатель' or $db["orden"]==2 && $db["admin_level"]>=1){
 
 
-$S="select * from users where login='$target'";
+$S="select * from characters where login='$target'";
 $q=mysql_query($S);
 $res=mysql_fetch_array($q);
 if(!$res){
@@ -58,7 +58,7 @@ die();
 }}}
 $d=date("d.m.y H:i");
 $time2=time()+$timer*60;
-$sql = "UPDATE users SET shut='$time2' WHERE login='$target'";
+$sql = "UPDATE characters SET shut='$time2' WHERE login='$target'";
 $result = mysql_query($sql);
 
 $hours=floor($timer/60);
@@ -87,26 +87,26 @@ $prefix="";
 if($db["orden"]==2){$opr="Тарман";}
 else {$opr="Персонаж";}
 if ($db["orden"]==1){$opr="Паладин";}
-	$city = $db["city_game"];
+    $city = $db["city_game"];
         $time = time();
         $room = $db["room"];
 $masseg= "<i>$opr &quot$login&quot наложил$prefix заклятие молчания на персонажа &quot$target&quot, сроком $hours_d $minutes_d.</i>";
         mysql_query("INSERT INTO chat(date,name,room,msg,class,date_stamp,city) VALUES('$d','','$room','$masseg','sys','$time','$city')");
 
-	$time_d = "$hours_d  $minutes_d";
-	$S2 = mysql_query("INSERT INTO protocol(login,templier,type,reason,time) VALUES('$target','$login','shut','$reason','$time_d')");
+    $time_d = "$hours_d  $minutes_d";
+    $S2 = mysql_query("INSERT INTO protocol(login,templier,type,reason,time) VALUES('$target','$login','shut','$reason','$time_d')");
 
-	$shut_say = array();
-	$shut_say[0] = "<font color=red>А я его предупреждал - помалкивай!</font>";
-	$shut_say[1] = "<font color=red>А кто много говорит, с теми так всегда поступают...</font>";	
-	$shut_say[2] = "<font color=red>Эх, помолчу-ка и я...</font>";
-	$shut_say[3] = "<font color=red>Строго, но по закону!</font>";
-	$shut_say[4] = "<font color=red>Стоило рот раскрывать...</font>";
-	$shut_say[5] = "<font color=red>Вот и договорились)</font>";
-	$shut_say[6] = "<font color=red>А вот раньше просто кляпом рот затыкали.</font>";
-	$shut_say[7] = "<font color=red>А еще раз можешь? ;) </font>";
-	$shut_say[8] = "<font color=red>А раньше все не так было</font>";
-	$shut_say[9] = "<font color=red>Будете много говорить и с Вами такое случится...</font>";
+    $shut_say = array();
+    $shut_say[0] = "<font color=red>А я его предупреждал - помалкивай!</font>";
+    $shut_say[1] = "<font color=red>А кто много говорит, с теми так всегда поступают...</font>";    
+    $shut_say[2] = "<font color=red>Эх, помолчу-ка и я...</font>";
+    $shut_say[3] = "<font color=red>Строго, но по закону!</font>";
+    $shut_say[4] = "<font color=red>Стоило рот раскрывать...</font>";
+    $shut_say[5] = "<font color=red>Вот и договорились)</font>";
+    $shut_say[6] = "<font color=red>А вот раньше просто кляпом рот затыкали.</font>";
+    $shut_say[7] = "<font color=red>А еще раз можешь? ;) </font>";
+    $shut_say[8] = "<font color=red>А раньше все не так было</font>";
+    $shut_say[9] = "<font color=red>Будете много говорить и с Вами такое случится...</font>";
     $shut_say[10] = "<font color=red>Значит, есть еще порядок в этом мире </font>";
     $shut_say[11] = "<font color=red>Молчание - золото. Ощути себя богатым.</font>";
     $shut_say[12] = "<font color=red>Будете много говорить и с Вами такое случится...</font>";
@@ -117,19 +117,19 @@ $masseg= "<i>$opr &quot$login&quot наложил$prefix заклятие мол
     $shut_say[17] = "<font color=red>Прям как рыбка теперь, только рот открывается. </font>";
     $shut_say[18] = "<font color=red>Тебе повезло, что не навсегда. </font>";
     $shut_say[19] = "<font color=red>А культурный человек сказал бы Заткнись, пожалуйста </font>";
-	$shut_say[20] = "<font color=red>Безобразие куда цензура смотрит?</font>";
-	$shut_say[21] = "<font color=red>  В Клубе жесткие законы... Только не надо тосковать по беззаконью </font>";
+    $shut_say[20] = "<font color=red>Безобразие куда цензура смотрит?</font>";
+    $shut_say[21] = "<font color=red>  В Клубе жесткие законы... Только не надо тосковать по беззаконью </font>";
 
 
 
 
 
 
-	$shut = $shut_say[rand(0,count($shut_say)-1)];
+    $shut = $shut_say[rand(0,count($shut_say)-1)];
 
-	$dname=date("H:i");	
+    $dname=date("H:i");    
 
-	$city = $db["city_game"];
+    $city = $db["city_game"];
         $room = $db["room"];
         $time = time();
         $sender = "Смотритель";

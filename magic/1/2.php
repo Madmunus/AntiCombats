@@ -18,7 +18,7 @@ else {print "<form name='shut_up' action='main.php?act=orden&ord=1&spell=2' meth
 <?
 }
 else if($db["orden"]==1 && $db["admin_level"]>=2 or $db["login"]=='Смотритель' or $db["login"]=='Мироздатель' or $db["orden"]==2 && $db["admin_level"]>=2){
-$S="select * from users where login='$target'";
+$S="select * from characters where login='$target'";
 $q=mysql_query($S);
 $res=mysql_fetch_array($q);
 if(!$res){
@@ -43,7 +43,7 @@ if($res["admin_level"]>=$db["admin_level"] or $res["login"]==Мироздате�
 print "Вы не можете снять заклинание молчания с этого персонажа.";
 die();
 }}}
-$sql = "UPDATE users SET shut='0' WHERE login='$target'";
+$sql = "UPDATE characters SET shut='0' WHERE login='$target'";
 $result = mysql_query($sql);
 $pref=$db["sex"];
 if($pref=="female"){
@@ -56,7 +56,7 @@ if($db["orden"]==2){$opr="Тарман";}
 else {$opr="Персонаж";}
 if ($db["orden"]==1){$opr="Паладин";}
         $d=date("d.m.y H:i");
-	$city = $db["city_game"];
+    $city = $db["city_game"];
         $time = time();
         $room = $db["room"];
 $S2 = mysql_query("INSERT INTO protocol(login,templier,type) VALUES('$target','$login','unshut')");

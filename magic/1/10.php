@@ -3,32 +3,32 @@ $S = mysql_query("SELECT * FROM clan_zayavka");
 $i = 0;
 if($conf == ''){$conf="2";}
 if($conf == 0){
-	if(empty($otkaz_msg)){
-	print "Вы не ввели причину отказа!<BR>";
-	}
-	else{
-	$S = mysql_query("DELETE FROM clan_zayavka WHERE name_short='$clan_s'");
-	$GL = mysql_query("SELECT mail FROM users WHERE login='$glava'");
-	$GL_DAT = mysql_fetch_array($GL);
-	$mail = $GL_DAT["mail"];
-	$msg = "Здраствуйте, ув. $glava!\n";
-	$msg .= "Паладинский отдел регистрации кланов рассмотрел Вашу заявку и отказал Вам по причине:\n\n";
-	$msg .= "$otkaz_msg\n\n";
-	$msg .= "Если Вы не согласны с решением отдела, обратитесь на форум в соответствующий раздел.\n";
-	$msg .= "\nС Уважением Паладинский отдел регистрации кланов.\n";
-	$msg .= "\n\n\n\nЭто письмо сгенерированно автоматически, не надо отвечать на него!";
-	mail($mail, "Паладинский отдел регистрации кланов. Отказ.", $msg); 
-	print "Заявка на создание клана $clan_s отказана.";
-	die();
-	}
+    if(empty($otkaz_msg)){
+    print "Вы не ввели причину отказа!<BR>";
+    }
+    else{
+    $S = mysql_query("DELETE FROM clan_zayavka WHERE name_short='$clan_s'");
+    $GL = mysql_query("SELECT mail FROM characters WHERE login='$glava'");
+    $GL_DAT = mysql_fetch_array($GL);
+    $mail = $GL_DAT["mail"];
+    $msg = "Здраствуйте, ув. $glava!\n";
+    $msg .= "Паладинский отдел регистрации кланов рассмотрел Вашу заявку и отказал Вам по причине:\n\n";
+    $msg .= "$otkaz_msg\n\n";
+    $msg .= "Если Вы не согласны с решением отдела, обратитесь на форум в соответствующий раздел.\n";
+    $msg .= "\nС Уважением Паладинский отдел регистрации кланов.\n";
+    $msg .= "\n\n\n\nЭто письмо сгенерированно автоматически, не надо отвечать на него!";
+    mail($mail, "Паладинский отдел регистрации кланов. Отказ.", $msg); 
+    print "Заявка на создание клана $clan_s отказана.";
+    die();
+    }
 }
 
 if($conf == 1){
-	$GL = mysql_query("SELECT mail,money FROM users WHERE login='$glava'");
-	$GL_DAT = mysql_fetch_array($GL);
-	$mail = $GL_DAT["mail"];
-	$g_money = $GL_DAT["money"];
-	if($g_money>10000){
+    $GL = mysql_query("SELECT mail,money FROM characters WHERE login='$glava'");
+    $GL_DAT = mysql_fetch_array($GL);
+    $mail = $GL_DAT["mail"];
+    $g_money = $GL_DAT["money"];
+    if($g_money>10000){
 $S2 = mysql_query("SELECT * FROm clan_zayavka Where name_short='$clan_s'");
 $DATS = mysql_fetch_array($S2);
 $name = $DATS["name"];
@@ -41,9 +41,9 @@ $sovet2 = $DATS["sovet2"];
 if($orden == 0){$orden = '';}
 $ADD = mysql_query("INSERT INTO clan(name,name_short,glava,site,story,orden) VALUES('$name','$name_short','$glava','$site','$history','$orden')");
 
-$GL_U = mysql_query("UPDATE users SET clan='$name',clan_short='$name_short',orden='$orden',glava='1',clan_take='1',money=money-10000,chin='глава' WHERE login='$glava'");
-$S1_U = mysql_query("UPDATE users SET clan='$name',clan_short='$name_short',orden='$orden',chin='Советник' WHERE login='$sovet1'");
-$S2_U = mysql_query("UPDATE users SET clan='$name',clan_short='$name_short',orden='$orden',chin='Советник' WHERE login='$sovet2'");
+$GL_U = mysql_query("UPDATE characters SET clan='$name',clan_short='$name_short',orden='$orden',glava='1',clan_take='1',money=money-10000,chin='глава' WHERE login='$glava'");
+$S1_U = mysql_query("UPDATE characters SET clan='$name',clan_short='$name_short',orden='$orden',chin='Советник' WHERE login='$sovet1'");
+$S2_U = mysql_query("UPDATE characters SET clan='$name',clan_short='$name_short',orden='$orden',chin='Советник' WHERE login='$sovet2'");
 
 
 
@@ -57,11 +57,11 @@ mail($mail, "Паладинский отдел регистрации клано
 print "Заявка на создание клана $clan_s подтверждена.";
 $S = mysql_query("DELETE FROM clan_zayavka WHERE name_short='$clan_s'");
 die();
-	}
-	else{
-	print "Суммы на счету <B>$glava</B> недостаточно для регистрации клана.";
-	die();
-	}
+    }
+    else{
+    print "Суммы на счету <B>$glava</B> недостаточно для регистрации клана.";
+    die();
+    }
 }
 
 while($DATA = mysql_fetch_array($S)){

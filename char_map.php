@@ -1,5 +1,5 @@
 <?
-defined('AntiBK') or die ("Доступ запрещен!");
+defined('AntiBK') or die("Доступ запрещен!");
 ?>
 <table width="100%" border="0" cellspacing="1" cellpadding="0">
   <tr>

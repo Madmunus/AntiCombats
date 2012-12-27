@@ -27,7 +27,7 @@ if(empty($target)){
 <?
 }
 else if($db["orden"]==1 && $db["admin_level"]>=10){
-$S="select * from users where login='$target'";
+$S="select * from characters where login='$target'";
 $q=mysql_query($S);
 $res=mysql_fetch_array($q);
 if(!$res){
@@ -44,7 +44,7 @@ else{
 $prefix="";
 }
         $d=date("d.m.y H:i");
-	$city = $db["city_game"];
+    $city = $db["city_game"];
         $time = time();
         $room = $db["room"];
 $masseg= "<i>Паладин &quot$login&quot наградил$prefix персонажа &quot$target&quot орденом.</i>";

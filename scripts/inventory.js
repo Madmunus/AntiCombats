@@ -13,9 +13,9 @@ function sortInventory (type)
     var sort = top.exploder(data);
 	  if (sort[0] == 'complete')
 	  {
-	    var section = getCookie ('section');
+	    var section = getCookie('section');
       num = (num == 1) ?0 :1;
-      $.post('ajax.php', 'do=showinventory&section='+section+'&type=inv', function (data){
+      $.post('ajax.php', {'do': 'showinventory', 'section': section, 'type': 'inv'}, function (data){
         var inventory = top.exploder(data);
         visual.show_any('#inventory', inventory[0]);
         $('#sort_'+type).attr('name', num);
@@ -106,7 +106,7 @@ function deleteItem (id)
 {
   var dropall = ($('input[name=dropall]').is(':checked')) ?1 :0;
 	$.post('ajax.php', {'do': 'deleteitem', 'id': id, 'dropall': dropall}, function (data){
-    closehint3 ();
+    closehint3();
 	  var item = top.exploder(data);
 	  if (item[0] == 'complete')
       visual.item_delete(item, id, dropall);

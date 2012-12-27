@@ -1,11 +1,11 @@
-body		{background-color: #000; margin: 0px; font-size: 10pt; font-family: Verdana, Arial, Helvetica, sans-serif; color: white;}
+body    {background-color: #000; margin: 0px; font-size: 10pt; font-family: Verdana, Arial, Helvetica, sans-serif; color: white;}
 A:link, 
-A:visited	{font-size: 9pt; color: #F9F7EA; text-decoration: none; font-weight: normal;}
-A:active	{color: #77684D;}
-A:hover		{color: #7E7765; text-decoration: underline;}
+A:visited  {font-size: 9pt; color: #F9F7EA; text-decoration: none; font-weight: normal;}
+A:active  {color: #77684D;}
+A:hover    {color: #7E7765; text-decoration: underline;}
 
-.inup		{font-size: 8pt; color: #DFDDD3; font-family: Verdana, Arial, Helvetica, sans-serif; background-color: #151616; border: 1px double #817A63;}
-.style2		{color: #A7A495}
-.btn		{font-size: 7.5pt; color: #DFDDD3; font-family: Verdana, Arial, Helvetica, sans-serif; background-color: #2B2B18; border: 1px double #817A63; cursor: pointer;}
-.btkey		{display: block; text-align: center; padding-right: 1px; padding-left: 1px; font-size: 7.5pt; font-family: Verdana, Arial, Helvetica, sans-serif; width: 20px; cursor: pointer; border: 1px solid #D6D3CE; color: #DFDDD3; background-color: #2B2B18;}
-.message	{font-size: 7.5pt; font-family: Verdana, Arial, Helvetica, sans-serif;}
+.inup    {font-size: 8pt; color: #DFDDD3; font-family: Verdana, Arial, Helvetica, sans-serif; background-color: #151616; border: 1px double #817A63;}
+.style2    {color: #A7A495}
+.btn    {font-size: 7.5pt; color: #DFDDD3; font-family: Verdana, Arial, Helvetica, sans-serif; background-color: #2B2B18; border: 1px double #817A63; cursor: pointer;}
+.btkey    {display: block; text-align: center; padding-right: 1px; padding-left: 1px; font-size: 7.5pt; font-family: Verdana, Arial, Helvetica, sans-serif; width: 20px; cursor: pointer; border: 1px solid #D6D3CE; color: #DFDDD3; background-color: #2B2B18;}
+.message  {font-size: 7.5pt; font-family: Verdana, Arial, Helvetica, sans-serif;}

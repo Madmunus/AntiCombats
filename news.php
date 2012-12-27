@@ -1,14 +1,9 @@
 <?
-error_reporting(E_ALL);
-ini_set('display_errors', true);
-ini_set('html_errors', false);
-ini_set('error_reporting', E_ALL);
-
 define('AntiBK', true);
 
-include("engline/config.php");
-include("engline/dbsimple/Generic.php");
-include("engline/functions/functions.php");
+include_once("engline/config.php");
+include_once("engline/dbsimple/Generic.php");
+include_once("engline/functions/functions.php");
 
 $adb = DbSimple_Generic::connect($database['adb']);
 $adb->query("SET NAMES ? ",$database['db_encoding']);
@@ -17,9 +12,8 @@ $adb->setErrorHandler("databaseErrorHandler");
 <html>
 <head>
 <link rel="SHORTCUT ICON" href="img/favicon.ico" />
-<title>Новости АнтиБК+</title>
+<title>Новости Анти Бойцовского Клуба</title>
 <meta http-equiv="Content-type" content="text/html; charset=utf-8">
-<meta http-equiv="Pragma" content="no-cache">
 <link href="styles/main.css" rel="stylesheet" type="text/css">
 </head>
 <body bgcolor="#3D3D3B" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
@@ -42,7 +36,7 @@ foreach ($rows as $news)
      . "<table width='100%' border='0' cellpadding='0' cellspacing='0' background='img/site/evn_news_05.gif'><tr>"
      . "<td align='left' width='8' height='29'><img src='img/site/evn_news_03.gif' width='8' height='29'></td>"
      . "<td align='left' width='90%'><b><font color='#FFFFFF'>$news[theme]</font></b></td>"
-     . "<td align='right' nowrap><font color='#FFFF80'>$news[date]</font></td>"
+     . "<td align='right' nowrap><font color='#FFFF80'>".date('d/m/y H:i', $news['date'])."</font></td>"
      . "<td align='right'><img src='img/site/evn_news_07.gif' width='9' height='29'></td>"
      . "</tr></table></td></tr>"
      . "<tr><td bgcolor='#EDE9DA'>"
@@ -70,7 +64,7 @@ foreach ($rows as $news)
     <td>
       <table cellSpacing="0" cellPadding="0" width="100%" border="0">
         <tr><td width="100%" height="13" background="img/site/sitebk_07.jpg"></td></tr>
-        <tr><td width="10%" align="center" class="copyright" bgColor="#000000" height="20">Copyright © 2002—2010 Dragon Server</td></tr>
+        <tr><td width="100%" bgColor="#000" height="20" align="center" class="copyright"><?echo $config['copyright'];?></td></tr>
       </table>
     </td>
   </tr>

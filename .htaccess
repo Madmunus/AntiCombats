@@ -6,8 +6,6 @@
 DirectoryIndex index.php
 # Disable output dirs
 Options -Indexes
-# Globals
-php_value register_globals on
 # UTF8 support
 AddDefaultCharset utf8
 <IfModule mod_charset.c>

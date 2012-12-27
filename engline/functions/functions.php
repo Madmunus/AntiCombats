@@ -111,7 +111,7 @@ function getExp ($exp)
 function getColor ($cur, $add)
 {
   $diff = ($add > 0) ?(1 - (($cur - $add) / $cur)) * 255 :($add < 0) ?(1 -(($cur - $add*(-1)) / $cur)) * 255 :-50;
-  $diff = abs (intval ($diff)) + 50;
+  $diff = abs(intval($diff)) + 50;
   
   if ($diff > 150 && $add > 0) return "#00AA00";
   if ($diff > 150 && $add < 0) return "#AA0000";
@@ -245,6 +245,7 @@ function returnAjax ()
 /*Получение место перехода*/
 function toIndex ($type = 'main', $die = true, $loc = '')
 {
+  deleteSession();
   switch ($type)
   {
     case 'main':
@@ -256,7 +257,7 @@ function toIndex ($type = 'main', $die = true, $loc = '')
       echoScript("location.href = '{$loc}index.php';", $die);
     break;
     case 'ajax':
-      die("ajax_error");
+      die('ajax_error');
     break;
   }
 }
@@ -284,7 +285,7 @@ function getTable ($name)
 /*Удаление переменных сессии*/
 function deleteSession ()
 {
-  unset($_SESSION['guid'], $_SESSION['bankСredit'], $_SESSION['last']);
+  unset($_SESSION['guid'], $_SESSION['bankСredit'], $_SESSION['last_t'], $_SESSION['token']);
 }
 /*Смешивает порядок ключей массива сохраняя значения*/
 function shuffle_arr ($array)
@@ -292,5 +293,17 @@ function shuffle_arr ($array)
   $keys = array_keys($array);
   shuffle($keys);
   return array_merge(array_flip($keys), $array);
-} 
+}
+/*Функции для определения времени создания страницы*/
+function gettime ()
+{
+  $part_time = explode(' ',microtime());
+  $real_time = $part_time[1].substr($part_time[0],1);
+  return $real_time;
+}
+function showtime ($start_time, &$s)
+{
+  $dift_time2 = bcsub(gettime(), $start_time, 6);
+  $s .= "Время $dift_time2 секунд";
+}
 ?>

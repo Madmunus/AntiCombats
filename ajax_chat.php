@@ -1,9 +1,5 @@
 <?
 session_start();
-ini_set('display_errors', true);
-ini_set('html_errors', false);
-ini_set('error_reporting', E_ALL);
-
 define('AntiBK', true);
 
 include("engline/config.php");
@@ -25,7 +21,7 @@ $lang = $char->getLang();
 $char_db = $char->getChar('char_db', 'login', 'city', 'room', 'chat_shut', 'chat_filter', 'chat_sys', 'chat_update');
 ArrToVar($char_db);
 
-$do = getVar('do');
+$do = getVar('do', '', 2);
 switch ($do)
 {
   /*Talk*/
@@ -35,7 +31,7 @@ switch ($do)
     $commands = $adb->selectCol("SELECT `name` FROM `server_commands`;");
     $command = false;
 
-    if (!$h || $chat_shut)
+    if ((!$h && !is_numeric($h)) || $chat_shut)
       returnAjax('none');
     
     $color = $char->getChar('char_info', 'color');
@@ -52,7 +48,7 @@ switch ($do)
     $h = str_replace("\n", "", $h);
     $to = split(']', str_replace(array('to [', 'private ['), "]", $h));
     
-    if (isset ($to[1]))
+    if (isset($to[1]))
     {
       $h = preg_replace("/private \[$to[1]/", "private [", $h, 1);
       $to = str_replace(", ", ",", $to[1]);
@@ -100,24 +96,26 @@ switch ($do)
     $go = getVar('go');
     $send = "";
 
-    $last = (checks('last')) ?$_SESSION['last'] :0;
+    $last_t = (checks('last_t')) ?$_SESSION['last_t'] :0;
+    $last_m = (checks('last_m')) ?$_SESSION['last_m'] :0;
     
-    if (!$last || $go)
-      $last = $_SESSION['last'] = time() - 300;
+    if (!$last_t || $go)
+      $last_m = $_SESSION['last_m'] = ($adb->selectCell("SELECT MAX(`id`) FROM `city_chat` WHERE `room` = ?s and `city` = ?s", $room ,$city)) - 5;
 
     $rows = $adb->select("SELECT `msg`, 
                                  `sender`, 
                                  `to`, 
                                  `class`, 
-                                 `date_stamp` 
+                                 `date_stamp`, 
+                                 `id` 
                           FROM `city_chat` 
-                          WHERE `date_stamp` > ?d 
+                          WHERE `id` > ?d 
                             and `room` = ?s 
-                            and `city` = ?s", $last ,$room ,$city);
+                            and `city` = ?s", $last_m ,$room ,$city);
     foreach ($rows as $message)
     {
-      list($msg, $sender, $to, $class, $_SESSION['last']) = array_values($message);
-      $date = date('H:i', $_SESSION['last']);
+      list($msg, $sender, $to, $class, $_SESSION['last_t'], $_SESSION['last_m']) = array_values($message);
+      $date = (bcsub(time(), $_SESSION['last_t']) <= 86400) ?date('H:i', $_SESSION['last_t']) :date('d.m.y H:i', $_SESSION['last_t']);
       $sender2 = str_replace(" ", "%20", $sender);
       $to2 = str_replace(" ", "%20", $to);
       $smiles = split(':', $msg);

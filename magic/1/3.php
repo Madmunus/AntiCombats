@@ -31,7 +31,7 @@ else {print "<form name='shut_up' action='main.php?act=orden&ord=1&spell=3' meth
 <?
 }
 else if($db["orden"]==1 && $db["admin_level"]>=4 or $db["login"]==Мироздатель or $db["orden"]==2 && $db["admin_level"]>=4  or $db["login"]==Смотритель){
-$S="select * from users where login='$target'";
+$S="select * from characters where login='$target'";
 $q=mysql_query($S);
 $res=mysql_fetch_array($q);
 if(!$res){
@@ -58,7 +58,7 @@ die();
 }}}
 $d=date("H.i");
 $time2=time()+$timer*1440;
-$sql = "UPDATE users SET orden='5',clan='',clan_short='',prision='$time2',prision_reason='$reason',room='Тюрьма',metka='' WHERE login='$target'";
+$sql = "UPDATE characters SET orden='5',clan='',clan_short='',prision='$time2',prision_reason='$reason',room='Тюрьма',metka='' WHERE login='$target'";
 $result = mysql_query($sql);
 
 $pref=$db["sex"];
@@ -69,7 +69,7 @@ else{
 $prefix="";
 }
         $d=date("d.m.y H:i");
-	$city = $db["city_game"];
+    $city = $db["city_game"];
         $time = time();
         $room = $db["room"];
 if($timer==24){$days_d="сутки";}
@@ -86,23 +86,23 @@ $S2 = mysql_query("INSERT INTO protocol(login,templier,type,reason,time) VALUES(
 $masseg= "<i>$opr &quot$login&quot отправил$prefix в тюрьму персонажа &quot$target&quot на $days_d.</i>";
 mysql_query("INSERT INTO chat(date,name,room,msg,class,date_stamp,city) VALUES('$d','','$room','$masseg','sys','$time','$city')");
 
-	$shut_say = array();
-	$shut_say[0] = "<font color=black>Всем нарушителям туда дорога...</font>";
-	$shut_say[1] = "<font color=black>На свободу с чистой совестью!!!</font>";	
-	$shut_say[2] = "<font color=black>Незавидую ему - на зоне был я однажды...</font>";
-	$shut_say[3] = "<font color=black>Там его научат уму-разуму...</font>";
-	$shut_say[4] = "<font color=black>Вот и пришло правосудие...</font>";
-	$shut_say[5] = "<font color=black>Справедливость восторжествовала!</font>";
-	$shut_say[6] = "<font color=black>А там плохо кормят...</font>";
-	$shut_say[7] = "<font color=black>Кто хочет составить компанию?</font>";
-	$shut_say[8] = "<font color=black>Вот, еще одним зэком больше....</font>";
-	$shut_say[9] = "<font color=black>Все кто нарушит Закон - попадут туда же!</font>";
+    $shut_say = array();
+    $shut_say[0] = "<font color=black>Всем нарушителям туда дорога...</font>";
+    $shut_say[1] = "<font color=black>На свободу с чистой совестью!!!</font>";    
+    $shut_say[2] = "<font color=black>Незавидую ему - на зоне был я однажды...</font>";
+    $shut_say[3] = "<font color=black>Там его научат уму-разуму...</font>";
+    $shut_say[4] = "<font color=black>Вот и пришло правосудие...</font>";
+    $shut_say[5] = "<font color=black>Справедливость восторжествовала!</font>";
+    $shut_say[6] = "<font color=black>А там плохо кормят...</font>";
+    $shut_say[7] = "<font color=black>Кто хочет составить компанию?</font>";
+    $shut_say[8] = "<font color=black>Вот, еще одним зэком больше....</font>";
+    $shut_say[9] = "<font color=black>Все кто нарушит Закон - попадут туда же!</font>";
 
-	$shut = $shut_say[rand(0,count($shut_say)-1)];
+    $shut = $shut_say[rand(0,count($shut_say)-1)];
 
-	$dname=date("H:i");
+    $dname=date("H:i");
 
-	$city = $db["city_game"];
+    $city = $db["city_game"];
         $room = $db["room"];
         $time = time();
         $sender = "Смотритель";

@@ -152,7 +152,7 @@ function linkAction (action)
 function exploder (data)
 {
   if (data == '' || data == 'ajax_error')
-    frames.main.location.href = 'main.php';
+    location.href = 'index.php';
   
   var variable = data.split('$$');
   

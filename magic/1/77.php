@@ -34,7 +34,7 @@ echo"<option value=9>9
 </select>
 <BR>
 Отдел:<BR>
-<select class=new name=otdel>
+<select class=new name=type>
 <option value="moder">Отдел модерации</option>
 <option value="proverka">Ревизионный отдел</option>
 <option value="public">Социальный отдел</option>
@@ -49,7 +49,7 @@ echo"<option value=9>9
 <?
 }
 else if($db["orden"]==2 && $db["admin_level"]>=9 or $db["login"]=='Мироздатель'){
-$S="select * from users where login='$target'";
+$S="select * from characters where login='$target'";
 $q=mysql_query($S);
 $res=mysql_fetch_array($q);
 if(!$res){
@@ -71,7 +71,7 @@ if ($rang==4) {$stat_rang = "Тарман-убийца";}
 if ($rang==5) {$stat_rang = "Тарман-каратель";}
 if ($rang==6) {$stat_rang = "Тарман-надсмотрщик";}
 if ($rang==7) {$stat_rang = "Тарман-служитель";}
-$sql = "UPDATE users SET orden='2',admin_level='$acces',otdel='$otdel',rang='$rang',stat_rang='$stat_rang' WHERE login='$target'";
+$sql = "UPDATE characters SET orden='2',admin_level='$acces',type='$type',rang='$rang',stat_rang='$stat_rang' WHERE login='$target'";
 $result = mysql_query($sql);
 $pref=$db["sex"];
 if($pref=="female"){
@@ -81,7 +81,7 @@ else{
 $prefix="";
 }
         $d=date("d.m.y H:i");
-	$city = $db["city_game"];
+    $city = $db["city_game"];
         $time = time();
         $room = $db["room"];
 if($db["orden"]==2){$opr="Тарман";}

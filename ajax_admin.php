@@ -1,16 +1,16 @@
 <?
 session_start();
-ini_set('display_errors', true);
-ini_set('html_errors', false);
-ini_set('error_reporting', E_ALL);
-
 define('AntiBK', true);
 
 include("engline/config.php");
 include("engline/dbsimple/Generic.php");
 include("engline/functions/functions.php");
+include("token/bootstrap.php");
 
 $guid = getGuid('ajax');
+
+if (!lpg_csrf_token($guid))
+  toIndex('ajax');
 
 $adb = DbSimple_Generic::connect($database['adb']);
 $adb->query("SET NAMES ? ",$database['db_encoding']);
@@ -21,7 +21,7 @@ $char = Char::initialization($guid, $adb);
 $char->test->Guid('ajax');
 $char->test->Admin('ajax');
 
-$do = getVar('do');
+$do = getVar('do', '', 2);
 switch ($do)
 {
   /*Удаление персонажа*/

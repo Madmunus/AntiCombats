@@ -1,8 +1,4 @@
 <?php
-ini_set('display_errors', true);
-ini_set('html_errors', false);
-ini_set('error_reporting', E_ALL);
-
 define('AntiBK', true);
 
 include_once("engline/config.php");
@@ -71,14 +67,14 @@ $info->showStatAddition();
 <?  $info->showCharacter();
     echo "<strong>$city</strong><br>";
     echo ($online) ?"<small>Персонаж сейчас находится в клубе.<br>\"<strong>$room</strong>\"</small>" :(($admin_level > 0) ?"<small>Персонаж не в клубе</small>" :"<small>Персонаж не в клубе, но был тут:<br>".date('d.m.y H:i', $last_time)." <img src='img/clok3_2.png' alt='Время сервера' border='0'><br> (".getFormatedTime($last_time)." назад)</small>");
-  echo "</td>";
-  echo "<td align='left' style='padding-top: 10px; background: url(img/icon/zodiac/$birthday.gif) no-repeat right 10%;'><br>";
+    echo "</td>";
+    echo "<td align='left' style='padding-top: 10px; background: url(img/icon/zodiac/$birthday.gif) no-repeat right 10%;'><br>";
     foreach ($behaviour as $key => $min_level)
     {
       if ($level < $min_level)
         continue;
       
-      $stat_text = (in_array($key, array ('str', 'dex', 'con', 'int'))) ?"<font style='color: ".getColor($char_stats[$key], $added[$key]).";'>%s</font></b>".getBraces($char_stats[$key], $added[$key]) :"%s</b>";
+      $stat_text = (in_array($key, array('str', 'dex', 'con', 'int'))) ?"<font style='color: ".getColor($char_stats[$key], $added[$key]).";'>%s</font></b>".getBraces($char_stats[$key], $added[$key]) :"%s</b>";
       printf($lang[$key]." <b>".$stat_text."<br>", $char_stats[$key]);
     }
     echo "<hr align='left' width='300' size='1'>";
@@ -156,7 +152,7 @@ foreach ($rows as $dat_t)
       echo ($url) ?"<br>Домашняя страница: <a href='$url' target='_blank' class='nick'>$url</a>" :"";
       echo ($town) ?"<br>Город: $town" :"";
       echo ($motto) ?"<br>Девиз: <code>$motto</code>" :"";
-      echo ($hobie) ?"<br>Увлечения / хобби:<br><code>".str_replace (array("\'", '\&quot;'), array("'", '"'), $hobie)."</code>" :"";
+      echo ($hobie) ?"<br>Увлечения / хобби:<br><code>".str_replace(array("\'", '\&quot;'), array("'", '"'), $hobie)."</code>" :"";
 ?>
     </td>
   </tr>

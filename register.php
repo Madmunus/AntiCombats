@@ -1,9 +1,5 @@
 <?
 session_start();
-ini_set('display_errors', true);
-ini_set('html_errors', false);
-ini_set('error_reporting', E_ALL);
-
 define('AntiBK', true);
 
 include_once("engline/config.php");
@@ -32,7 +28,7 @@ $error_text = 'Пройдите предыдущий шаг!<br><br><a href="?st
   <thead><tr><td background="img/site/sitebk_02.jpg" align="center"><img src="img/site/sitebk_03.gif" width="194" height="135"></td></tr></thead>
   <tfoot>
     <tr><td width="100%" height="13" background="img/site/sitebk_07.jpg"></td></tr>
-    <tr><td width="100%" bgColor="#000" height="20" align="center" class="copyright">Copyright © 2002—2012 Dragon Server</td></tr>
+    <tr><td width="100%" bgColor="#000" height="20" align="center" class="copyright"><?echo $config['copyright'];?></td></tr>
   </tfoot>
   <tbody>
   <tr>
@@ -59,6 +55,7 @@ $error_text = 'Пройдите предыдущий шаг!<br><br><a href="?st
 <?  
 if (!($adb->selectCell("SELECT `registration` FROM `server_info`;")))
   die('Регистрация закрыта!<br><br><a href="index.php" class="us2">Вернуться на главную</a>');
+
     switch ($step)
     {
       default :
@@ -183,7 +180,6 @@ if (!($adb->selectCell("SELECT `registration` FROM `server_info`;")))
 <?    break;
       case 4:
         if (!checks('reg_login', 'reg_password', 'reg_email', 'reg_secretquestion', 'reg_secretanswer')) die($error_text);
-        //$code = rand(1000, 9999);
         $reg_name = (checks('reg_name')) ?$_SESSION['reg_name'] :'';
         $reg_birth_day = (checks('reg_birth_day')) ?$_SESSION['reg_birth_day'] :'';
         $reg_birth_month = (checks('reg_birth_month')) ?$_SESSION['reg_birth_month'] :'';
@@ -263,13 +259,6 @@ if (!($adb->selectCell("SELECT `registration` FROM `server_info`;")))
                         echo "<option style='color: $color;' value='$color'>$name</option>";
 ?>                  </select></td>
                   </tr>
-<!---  
-<tr>
-<td width="166" align="right"><span class="style6"><span class="style7">*</span>Код подтверждения:</span></td>
-<td width="564"><img src=regcode.php>
-<input type="text" name="secret_code" class="field" size="30" maxlength="4" style="filter:alpha(Opacity=80);">
-</td>
-</tr>  --->
                   <tr>
                     <td><input onclick="location.href='?step=3';" type="button" class="btn" value="Вернуться"></td>
                     <td><input type="button" class="btn" value="Продолжить" onclick="checkStep4();"></td>
@@ -278,23 +267,23 @@ if (!($adb->selectCell("SELECT `registration` FROM `server_info`;")))
 <?    break;
       case 5:
         if (!checks('reg_login', 'reg_password', 'reg_email', 'reg_secretquestion', 'reg_secretanswer', 'reg_name', 'reg_birth_day', 'reg_birth_month', 'reg_birth_year', 'reg_sex', 'reg_city', 'reg_icq', 'reg_hide_icq', 'reg_motto', 'reg_color')) die($error_text);
-?>              <table class="g" align="center" border="0" cellpadding="1" cellspacing="0" width="100%">
+?>              <table align="center" border="0" cellpadding="1" cellspacing="0" width="100%">
                   <tr class="bg6">
                     <td><span class="style5">*</span><font style="margin-left: 8px;">Имя вашего персонажа:</font></td>
                     <td><?echo $_SESSION['reg_login'];?></td>
                   </tr>
-                  <tr><td colspan="2"><br><span class="style5">*</span><input type="checkbox" name="rules" value="1" />Я обязуюсь соблюдать <a href="encicl/law.html" target="_blank"><b>Законы Анти Бойцовского Клуба</b></a><br><br></td></tr>
+                  <tr height="30"><td colspan="2"><span class="style5">*</span> <input type="checkbox" name="rules" value="1" />Я обязуюсь соблюдать <a href="encicl/law.html" target="_blank"><b>Законы Анти Бойцовского Клуба</b></a></td></tr>
+                  <tr>
+                    <td><span class="style5">*</span><font style="margin-left: 8px;">Введите изображенный на рисунке код</font><br><font style="margin-left: 18px;"><input type="text" name="code" maxlength="7" size="7"></font></td>
+                    <td><img src="secpic.php" style="border: 1px solid grey; cursor: pointer;" onclick="location.reload();"></td>
+                  </tr>
                   <tr>
                     <td><input onclick="location.href='?step=4';" type="button" class="btn" value="Вернуться"></td>
                     <td><input type="button" class="btn" value="Зарегистрировать" onclick="checkStep5();"></td>
                   </tr>
                 </table>
                 <p align="left">Для быстрого ознакомления с правилами игры рекомендуем прочесть статью <a target="_blank" href="encicl/start.html"><b>Быстрый старт</b></a>.</p>
-<?
-      // $code = $_POST['secret_code'];
-      // $code_loaded = $_POST['code_loaded'];
-      //elseif($code != $code_loaded){echo 'Ошибка при введении кода! <a href="?step=4">Назад</a><br>'; die();}
-      break;
+<?    break;
     }
 ?>
                 </td>

@@ -1,15 +1,11 @@
 <?
 session_start();
-ini_set('display_errors', true);
-ini_set('html_errors', false);
-ini_set('error_reporting', E_ALL);
-
 define('AntiBK', true);
 
-include_once("engline/config.php");
-include_once("engline/dbsimple/Generic.php");
-include_once("engline/data/data.php");
-include_once("engline/functions/functions.php");
+include("engline/config.php");
+include("engline/dbsimple/Generic.php");
+include("engline/data/data.php");
+include("engline/functions/functions.php");
 
 $adb = DbSimple_Generic::connect($database['adb']);
 $adb->query("SET NAMES ? ",$database['db_encoding']);
@@ -17,13 +13,14 @@ $adb->setErrorHandler("databaseErrorHandler");
 
 $register = $adb->selectCell("SELECT `registration` FROM `server_info`;");
 $register_error = 'Регистрация закрыта!<br><a href="index.php" class="us2">Вернуться на главную</a><br>';
-$do = getVar('do');
+
+if (!$register)
+  returnAjax('error', $register_error);
+
+$do = getVar('do', '', 2);
 switch ($do)
 {
   case 'checkstep1':
-    if (!$register)
-      returnAjax('error', $register_error);
-    
     unset($_SESSION['reg_login']);
     $login = getVar('login');
     $login_check = $adb->selectCell("SELECT `guid` FROM `characters` WHERE `login` = ?s", $login);
@@ -80,9 +77,6 @@ switch ($do)
     returnAjax('complete');
   break;
   case 'checkstep2':
-    if (!$register)
-      returnAjax('error', $register_error);
-    
     unset($_SESSION['reg_password']);
     $password = getVar('password');
     $password_confirm = getVar('password_confirm');
@@ -106,9 +100,6 @@ switch ($do)
     returnAjax('complete');
   break;
   case 'checkstep3':
-    if (!$register)
-      returnAjax('error', $register_error);
-    
     unset($_SESSION['reg_email'], $_SESSION['reg_secretquestion'], $_SESSION['reg_secretanswer']);
     $email = getVar('email');
     $secretquestion = getVar('secretquestion');
@@ -127,9 +118,6 @@ switch ($do)
     returnAjax('complete');
   break;
   case 'checkstep4':
-    if (!$register)
-      returnAjax('error', $register_error);
-    
     unset($_SESSION['reg_name'], $_SESSION['reg_birth_day'], $_SESSION['reg_birth_month'], $_SESSION['reg_birth_year'], $_SESSION['reg_sex'], $_SESSION['reg_city'], $_SESSION['reg_icq'], $_SESSION['reg_hide_icq'], $_SESSION['reg_motto'], $_SESSION['reg_color']);
     $name = getVar('name');
     $birth_day = getVar('birth_day');
@@ -171,15 +159,15 @@ switch ($do)
     returnAjax('complete');
   break;
   case 'checkstep5':
-    if (!$register)
-      returnAjax('error', $register_error);
-    
     $rules = getVar('rules');
+    $code = getVar('code');
     
     if (!checks('reg_login', 'reg_password', 'reg_email', 'reg_secretquestion', 'reg_secretanswer', 'reg_name', 'reg_birth_day', 'reg_birth_month', 'reg_birth_year', 'reg_sex', 'reg_city', 'reg_icq', 'reg_hide_icq', 'reg_motto', 'reg_color'))
       returnAjax('error', 'Пройдите предыдущий шаг!');
     else if ($rules == 'false')
       returnAjax('error', 'Извините, без принятия правил нашего клуба, вы не можете зарегистрировать своего персонажа.');
+    else if ($code != $_SESSION['secpic'])
+      returnAjax('error', 'Ошибка введения кода.');
     
     $login = $_SESSION['reg_login'];
     $password = $_SESSION['reg_password'];

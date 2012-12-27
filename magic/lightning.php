@@ -26,75 +26,75 @@ if(empty($target)){
 <?
 }
 else if($db["battle"]!=0){
-$S="select * from users where login='$target'";
+$S="select * from characters where login='$target'";
 $q=mysql_query($S);
 $res=mysql_fetch_array($q);
 $on1 = 0;
-$phrase ="";
-	$chas = date("H");
-	$date = date("H:i", mktime($chas-$GSM));
-	$sss = mysql_query("SELECT * FROM online");
-	while($D = mysql_fetch_array($sss)){
-		if($D["login"] == $target){
-		$on1 = 1;
-		}
-	}
-	if(!$res){
-	print "Персонаж <B>$target</B> не найден в базе данных.";
-	die();
-	}
-	if($on1 == 0){
-	print "Персонаж <B>$target</B> сейчас офф-лайн.";
-	die();
-	}
-	if($res["battle"] != $db["battle"]){
-	print "Персонаж <B>$target</B> не в Вашем бою.";
-	}
-	$hp_now = $res["hp"];
-	$hp_all = $res["hp_all"];
-	$dam = floor($db["fire_magic"]+5);
-	$dam_min = $dam-3;
-	$dam_max = $dam+3;
-	$damage = rand($dam_min,$dam_max);
-		if($hp_all - $damage<0){
-		$damage = $hp_all;
-		$phrase .= "<span class=date>$date</span> <B>$target убит</B><BR>";
-		}
-	$hp_new = $hp_now - $damage;
-	$mana_new = $db["mana"] - 5;
-	$mana_all = $db["mana_all"];
-	setHP($target,$hp_new,$hp_all);
-	setMN($login,$mana_new,$mana_all);
+$text ="";
+    $chas = date("H");
+    $date = date("H:i", mktime($chas-$GSM));
+    $sss = mysql_query("SELECT * FROM online");
+    while($D = mysql_fetch_array($sss)){
+        if($D["login"] == $target){
+        $on1 = 1;
+        }
+    }
+    if(!$res){
+    print "Персонаж <B>$target</B> не найден в базе данных.";
+    die();
+    }
+    if($on1 == 0){
+    print "Персонаж <B>$target</B> сейчас офф-лайн.";
+    die();
+    }
+    if($res["battle"] != $db["battle"]){
+    print "Персонаж <B>$target</B> не в Вашем бою.";
+    }
+    $hp_now = $res["hp"];
+    $hp_all = $res["hp_all"];
+    $dam = floor($db["fire"]+5);
+    $dam_min = $dam-3;
+    $dam_max = $dam+3;
+    $damage = rand($dam_min,$dam_max);
+        if($hp_all - $damage<0){
+        $damage = $hp_all;
+        $text .= "<span class=date>$date</span> <B>$target убит</B><BR>";
+        }
+    $hp_new = $hp_now - $damage;
+    $mp_new = $db["mp"] - 5;
+    $mp_all = $db["mp_all"];
+    setHP($target,$hp_new,$hp_all);
+    setMN($login,$mp_new,$mp_all);
 
-	$battle_id = $db["battle"];
+    $battle_id = $db["battle"];
 
-	if($db["battle_team"]==1){
-	$U_UPDATE = mysql_query("UPDATE team1 SET hitted=hitted+$damage WHERE player='$login'");
-	}
-	else{
-	$U_UPDATE = mysql_query("UPDATE team2 SET hitted=hitted+$damage WHERE player='$login'");
-	}
+    if($db["battle_team"]==1){
+    $U_UPDATE = mysql_query("UPDATE team1 SET hitted=hitted+$damage WHERE player='$login'");
+    }
+    else{
+    $U_UPDATE = mysql_query("UPDATE team2 SET hitted=hitted+$damage WHERE player='$login'");
+    }
 
-	if($db["battle_team"]==1){$span = "p1";$span2 = "p2";}else{$span = "p2";$span2 = "p1";}
-	$phrase = "<span class=date2>$date</span> <span class=$span>$login</span> Выпустил молнию в <span class=$span2>$target</span> на <span class=magic>-$damage</span> пунктов здоровья!<BR>";
-	$ALL_UPDATE = mysql_query("UPDATE users SET battle_opponent='' WHERE login='$login'");
-	$t = time();
-	$U_T = mysql_query("UPDATE timeout SET lasthit='$t' WHERE battle_id='$battle_id'");
-	$td = fopen("logs/$battle_id.dis","a");
-	fputs($td,$phrase);
-	fclose($td);
+    if($db["battle_team"]==1){$span = "p1";$span2 = "p2";}else{$span = "p2";$span2 = "p1";}
+    $text = "<span class=date2>$date</span> <span class=$span>$login</span> Выпустил молнию в <span class=$span2>$target</span> на <span class=magic>-$damage</span> пунктов здоровья!<BR>";
+    $ALL_UPDATE = mysql_query("UPDATE characters SET battle_opponent='' WHERE login='$login'");
+    $t = time();
+    $U_T = mysql_query("UPDATE timeout SET lasthit='$t' WHERE battle_id='$battle_id'");
+    $td = fopen("logs/$battle_id.dis","a");
+    fputs($td,$text);
+    fclose($td);
 
-	$SQL = mysql_query("UPDATE users SET cast = cast+0.5,fire_magic=fire_magic+0.5 WHERE login='$login'");
-	$S = mysql_query("UPDATE inv SET iznos = iznos+1 WHERE id=$scroll");
-	$S_INV = mysql_query("SELECT * FROM inv WHERE id = $scroll");
-	$DATA = mysql_fetch_array($S_INV);
-	$iznos = $DATA["iznos"];
-	$iznos_max = $DATA["iznos_max"];
-	$iznos_k = $iznos+1;
-		if($iznos_k>=$iznos_max){
-		$S_D = mysql_query("DELETE FROM inv WHERE id = $scroll");
-		}
-	print "Прокастованно удачно!<BR>";
-	print "<a href='main.php?act=inv&section=thing' class=us2>вернуться</a>";
+    $SQL = mysql_query("UPDATE characters SET cast = cast+0.5,fire=fire+0.5 WHERE login='$login'");
+    $S = mysql_query("UPDATE inv SET iznos = iznos+1 WHERE id=$scroll");
+    $S_INV = mysql_query("SELECT * FROM inv WHERE id = $scroll");
+    $DATA = mysql_fetch_array($S_INV);
+    $iznos = $DATA["iznos"];
+    $tear_max = $DATA["tear_max"];
+    $iznos_k = $iznos+1;
+        if($iznos_k>=$tear_max){
+        $S_D = mysql_query("DELETE FROM inv WHERE id = $scroll");
+        }
+    print "Прокастованно удачно!<BR>";
+    print "<a href='main.php?act=inv&section=thing' class=us2>вернуться</a>";
 }
 ?>

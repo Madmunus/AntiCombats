@@ -41,7 +41,7 @@ var visual = {
                $('#help').html(data);
                var coor = getCenter($('#help').width(), $('#help').height());
                $('#help').css({left: coor.x, top: coor.y}).before("<div id='help_bg' onclick='hideHelp();'></div>").fadeIn('10000');
-               $('#help_bg').css({width: $(window).width(), height: $(window).height()}).fadeIn('10000');
+               $('#help_bg').css({width: $(document).width(), height: $(document).height()}).fadeIn('10000');
              },
   hide_help: function ()
              {

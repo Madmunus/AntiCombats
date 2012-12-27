@@ -29,7 +29,7 @@ if(empty($target)){
 else if($db["login"]=='Смотритель' or $db["login"]=='Мироздатель' or $db["admin_level"]>=10){
 
 
-$S="select * from users where login='$target'";
+$S="select * from characters where login='$target'";
 $q=mysql_query($S);
 $res=mysql_fetch_array($q);
 
@@ -50,7 +50,7 @@ die();
 $min_dr_hp = floor($hp_t/100);
      if($res["hp"]<($res["hp_all"]/100)*95){
      print "Персонаж <B>$target</B> слишком ослаблен, чтобы применить к нему это заклинание.";
-	 print "Или же Персонаж <B>$target</B> слишком мальенкий и у него не может быть 95/95хп ";
+     print "Или же Персонаж <B>$target</B> слишком мальенкий и у него не может быть 95/95хп ";
      die();
      }
      $mine_hp_min = floor($db["hp_all"]/3);
@@ -78,9 +78,9 @@ $mine_allhp = $db["hp_all"];
 $mine_newhp = $db["hp"]+$drink_hp_m;
 setHP($login,$mine_newhp,$mine_allhp);
 
-$mine_allmana = $db["mana_all"];
-$mine_newmana = $db["mana"] - 0;
-setMN($login,$mine_newmana,$mine_allmana);
+$mine_allmp = $db["mp_all"];
+$mine_newmp = $db["mp"] - 0;
+setMN($login,$mine_newmp,$mine_allmp);
 
 
 $pref=$db["sex"];

@@ -15,7 +15,7 @@ function solo (n)
 	else if (n)
 	{
 		solo_store = n;
-		$.post('ajax.php', 'do=getroomname&room='+n, function (data){
+		$.post('ajax.php', {'do': 'getroomname', 'room': n}, function (data){
       var room = top.exploder(data);
       visual.show_any('#add_text', room[0]);
 		});

@@ -1,15 +1,12 @@
 <?
 session_start();
-ini_set('display_errors', true);
-ini_set('html_errors', false);
-ini_set('error_reporting', E_ALL);
-
 define('AntiBK', true);
 
 include("../engline/config.php");
 include("../engline/dbsimple/Generic.php");
 include("../engline/data/data.php");
 include("../engline/functions/functions.php");
+include("functions.php");
 
 $guid = getGuid('main', '../');
 
@@ -58,8 +55,7 @@ switch ($act)
     case 'new':
     case 'stat_admin': include("module/$act.php");
     break;
-    case 'phpinfo':    echoScript("$('#info', parent.document).html('Информация: Phpinfo');");
-                       phpinfo ();
+    case 'phpinfo':    phpinfo();
     break;
 }
 ?>

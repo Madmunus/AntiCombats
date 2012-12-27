@@ -384,8 +384,8 @@ class Equip extends Char
     $item_flags = $i_info['item_flags'];
     $item_id = (isset($i_info['id'])) ?$i_info['id'] :0;
     $made_in = (isset($i_info['made_in'])) ?$this->char->city->getCity($i_info['made_in'], 'name') :'';
-    $tear_cur = (isset($i_info['tear_cur'])) ?intval ($i_info['tear_cur']) :0;
-    $tear_max = (isset($i_info['tear_max'])) ?ceil ($i_info['tear_max']) :$i_info['tear'];
+    $tear_cur = (isset($i_info['tear_cur'])) ?intval($i_info['tear_cur']) :0;
+    $tear_max = (isset($i_info['tear_max'])) ?ceil($i_info['tear_max']) :$i_info['tear'];
     $color = ($tear_cur >= $tear_max * 0.9) ?" class='broken'" :"";
     $validity = (isset($i_info['date'])) ?$i_info['date'] :$i_info['validity'];
     $gift = (isset($i_info['gift'])) ?$i_info['gift'] :0;
@@ -404,7 +404,7 @@ class Equip extends Char
         $return .= "<td width='150' align='center'>";
         $return .= "<img src='img/items/$img' border='0'$color /><br><center style='padding-top: 4px;'>";
         $return .= ($wearable) ?"<a href='?action=wear_item&item_id=$item_id' class='nick'>надеть</a>&nbsp;" :"";
-        $return .= "<a href=\"javascript:drop ($item_id, '$img', '$name');\"><img src='img/icon/clear.gif' width='14' height='14' border='0' alt='Выбросить предмет'></a>";
+        $return .= "<a href=\"javascript:drop($item_id, '$img', '$name');\"><img src='img/icon/clear.gif' width='14' height='14' border='0' alt='Выбросить предмет'></a>";
       break;
       case 'shop':
         $s_price = ($price_euro > 0) ?$price_euro :$price;
@@ -417,13 +417,13 @@ class Equip extends Char
         $s_price = $this->getSellValue($i_info, true);
         $return .= "<td width='260' align='center'>";
         $return .= "<img src='img/items/$img' border='0'$color /><br><center style='padding-top: 4px;'>";
-        $return .= "<a href='javascript:sellItem ($item_id);' onclick=\"if (confirm ('Вы уверены что хотите продать предмет $name за $s_price?')){return true;} else {return false;}\" class='nick'>продать за $s_price</a>";
+        $return .= "<a href='javascript:sellItem ($item_id);' onclick=\"if (confirm('Вы уверены что хотите продать предмет $name за $s_price?')){return true;} else {return false;}\" class='nick'>продать за $s_price</a>";
       break;
       case 'mail_to':
         $s_price = $this->char->mail->getPrice($item_id)." кр.";
         $return .= "<td width='260' align='center'>";
         $return .= "<img src='img/items/$img' border='0'$color /><br><center style='padding-top: 4px;'>";
-        $return .= "<a href='main.php?do=send_item&mail_to=$mail_guid&item_id=$item_id' onclick=\"if (confirm ('Отправить предмет $name?')){return true;} else {return false;}\" class='nick'>передать за $s_price</a>";
+        $return .= "<a href='main.php?do=send_item&mail_to=$mail_guid&item_id=$item_id' onclick=\"if (confirm('Отправить предмет $name?')){return true;} else {return false;}\" class='nick'>передать за $s_price</a>";
       break;
       case 'mail_in':
         $return .= "<td width='260' align='center'>";
@@ -437,12 +437,12 @@ class Equip extends Char
         $mail_id = $i_info['id'];
         $return .= "<td width='260' align='center'>";
         $return .= "<img src='img/items/$img' border='0'$color /><br><center style='padding-top: 4px;'>";
-        $return .= "<a href='main.php?do=get_money&mail_id=$mail_id' onclick=\"if (confirm ('Забрать $price_s?')){return true;} else {return false;}\" class='nick'>Забрать</a><br><a href='main.php?do=return_money&mail_id=$mail_id' onclick=\"if (confirm ('Отказаться от $price?')){return true;} else {return false;}\" class='nick'>Отказаться</a>";
+        $return .= "<a href='main.php?do=get_money&mail_id=$mail_id' onclick=\"if (confirm('Забрать $price_s?')){return true;} else {return false;}\" class='nick'>Забрать</a><br><a href='main.php?do=return_money&mail_id=$mail_id' onclick=\"if (confirm ('Отказаться от $price?')){return true;} else {return false;}\" class='nick'>Отказаться</a>";
         $return .= "<br><small>(".getFormatedTime($i_info['delivery_time'] + 5184000).")</small>";
       break;
     }
     $return .= "</td><td align='left' valign='top' style='padding: 2px;'>";
-    $tear_show = compare ($tear_cur, $tear_max * 0.90, "$tear_cur/$tear_max");
+    $tear_show = compare($tear_cur, $tear_max * 0.90, "$tear_cur/$tear_max");
     $required = array('dex', 'con', 'int', 'level', 'fire', 'water', 'air', 'earth', 'sword', 'axe', 'fail', 'knife', 'staff', 'vit', 'str', 'mp_all', 'wis', 'sex');
     $modifiers = array('mf_critp', 'mf_acrit', 'mf_adodge', 'mf_parmour', 'mf_crit', 'mf_parry', 'mf_shieldb', 'mf_dodge', 'mf_contr', 'rep_magic',
                        'rep_fire', 'rep_water', 'rep_air', 'rep_earth', 'mf_magic', 'mf_fire', 'mf_water', 'mf_air', 'mf_earth', 'mf_light', 'mf_gray', 
@@ -491,8 +491,8 @@ class Equip extends Char
     
     $return .= "<br>$lang[durability] $tear_show";
     
-    if (($mode == 'inv' | $mode == 'sell') && $validity > 0) $return .= "<br>".sprintf ($lang['validity'], date ('d.m.y H:i', $validity), getFormatedTime($validity));
-    else if ($mode == 'shop' && $validity > 0)               $return .= "<br>$lang[val_life] ".getFormatedTime($validity * 3600 + time ());
+    if (($mode == 'inv' || $mode == 'sell') && $validity > 0)$return .= "<br>".sprintf($lang['validity'], date('d.m.y H:i', $validity), getFormatedTime($validity));
+    else if ($mode == 'shop' && $validity > 0)               $return .= "<br>$lang[val_life] ".getFormatedTime($validity * 3600 + time());
     
     $val = "";
     $require = "";
@@ -504,15 +504,15 @@ class Equip extends Char
       if (!$val)
         $val = "<br><b>$lang[required]</b>";
       
-      if ($key != 'sex' && $i_info['min_'.$key] > 0) $require .= "<br>&bull; ".(compare ($i_info['min_'.$key], $char_feat[$key], "$lang[$key] {$i_info['min_'.$key]}"));
-      else if ($key == 'sex' && $i_info[$key])       $require .= "<br>&bull; ".(compare ($i_info[$key], $char_feat[$key], "$lang[$key] ".$lang[$i_info[$key]]));
+      if ($key != 'sex' && $i_info['min_'.$key] > 0) $require .= "<br>&bull; ".(compare($i_info['min_'.$key], $char_feat[$key], "$lang[$key] ".$i_info['min_'.$key]));
+      else if ($key == 'sex' && $i_info[$key])       $require .= "<br>&bull; ".(compare($i_info[$key], $char_feat[$key], "$lang[$key] ".$lang[$i_info[$key]]));
     }
     $return .= $val.$require;
     
     $val = "";
     if (($add['str'] != 0 || $add['dex'] != 0 || $add['con'] != 0 || $add['int'] != 0 
         || $i_info['def_h_max'] != 0 || $i_info['def_a_max'] != 0 || $i_info['def_b_max'] != 0 || $i_info['def_l_max'] != 0 || $inc_count > 0 
-        || (!in_array ($type, $weapons) && ($max_hit != 0 || $min_hit != 0))))
+        || (!in_array($type, $weapons) && ($max_hit != 0 || $min_hit != 0))))
       $val = "<br><b>$lang[act]</b>";
     
     $inc = ($inc_count > 0) ?"<br>&bull; $lang[inc_count] <span id='inc_count_$item_id'>$inc_count</span>" :"";
@@ -541,7 +541,7 @@ class Equip extends Char
       if ($value[1] > 0)
         $return .= "<br>&bull; ".$lang['def_'.$key]." $value[0]-$value[1] $value[2]";
     }
-    if (in_array ($type, $weapons))
+    if (in_array($type, $weapons))
     {
       $return .= "<br><b>$lang[behaviour]</b>";
       $return .= "<br>&bull; $lang[damage] $min_hit - $max_hit";
@@ -575,7 +575,7 @@ class Equip extends Char
       }
       $return .= $val.$chance;
     }
-    if (in_array($type, array_keys ($armors)))
+    if (in_array($type, array_keys($armors)))
     {
       $val = "";
       $armor = "";
@@ -628,7 +628,7 @@ class Equip extends Char
   /*Получение кнопки прибавления характеристик вещи*/
   private function getIncButton ($item_id, $stat)
   {
-    return "<input type='image' id='inc_{$item_id}_btn' src='img/icon/plus.gif' style='border: 0px; vertical-align: bottom;' onclick=\"increaseItemStat ('$item_id', '$stat'); this.blur();\">";
+    return "<input type='image' id='inc_{$item_id}_btn' src='img/icon/plus.gif' style='border: 0px; vertical-align: bottom;' onclick=\"increaseItemStat('$item_id', '$stat'); this.blur();\">";
   }
   /*Одеть/Снять предмет*/
   function equipItem ($item, $type = 1, $guid = 0)

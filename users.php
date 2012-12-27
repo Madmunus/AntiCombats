@@ -1,9 +1,5 @@
 <?
 session_start();
-ini_set('display_errors', true);
-ini_set('html_errors', false);
-ini_set('error_reporting', E_ALL);
-
 define('AntiBK', true);
 
 include("engline/config.php");
@@ -35,7 +31,7 @@ var autorefresh = <?echo $chat_list;?>;
 
 function updateUsers ()
 {
-  $.post('ajax_chat.php', 'do=refreshusers', function (data){
+  $.post('ajax_chat.php', {'do': 'refreshusers'}, function (data){
     var list = top.exploder(data);
     
     if (TimerOnline)
@@ -61,7 +57,7 @@ function changeAutoRefresh ()
 }
 
 $(function (){
-  updateUsers ();
+  updateUsers();
   if (autorefresh)
     $('[name=auto_refresh]').attr('checked', 'checked');
 });

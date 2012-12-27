@@ -1,9 +1,5 @@
 <?
 session_start();
-ini_set('display_errors', true);
-ini_set('html_errors', false);
-ini_set('error_reporting', E_ALL);
-
 define('AntiBK', true);
 
 include("engline/config.php");
@@ -38,8 +34,8 @@ function cMenu ()
 
 function updateMessages (go)
 {
-  var add_go = (go) ?'&go=1' :'';
-  $.post('ajax_chat.php', 'do=refreshmessage'+add_go, function (data){
+  var add_go = (go) ?1 :0;
+  $.post('ajax_chat.php', {'do': 'refreshmessage', 'go': add_go}, function (data){
     var messages = top.exploder(data);
     
     if (TimerMessage)

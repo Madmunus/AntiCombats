@@ -1,15 +1,12 @@
 <?
 session_start();
-ini_set('display_errors', true);
-ini_set('html_errors', false);
-ini_set('error_reporting', E_ALL);
-
 define('AntiBK', true);
 
 include("engline/config.php");
 include("engline/dbsimple/Generic.php");
 include("engline/data/data.php");
 include("engline/functions/functions.php");
+include("token/bootstrap.php");
 
 $guid = getGuid();
 
@@ -31,6 +28,8 @@ $char->test->Regen();
 $char->test->Room();
 $char->test->WakeUp();
 $char->test->Effects();
+
+create_token($guid);
 
 $char_db = $char->getChar('char_db', '*');
 $char_stats = $char->getChar('char_stats', '*');
@@ -58,6 +57,10 @@ if ($action == 'enter')
   $login_mail = '';
   setCookie('login_mail', '');
 }
+else if ($action == 'exit')
+{
+  setCookie('PHPSESSID', '');
+}
 else if ($login_mail == $guid || lowercase($login_mail) == lowercase($char_db['login']))
   $char->error->Map(218);
 else if ($login_mail)
@@ -74,7 +77,10 @@ else if ($login_mail)
 <script src="scripts/main.js" type="text/javascript"></script>
 <script src="scripts/show.js" type="text/javascript"></script>
 <script src="scripts/dialog.js" type="text/javascript"></script>
-<script type="text/javascript">try {top.checkGame();} catch(e) {location.href = 'index.php';}</script>
+<script type="text/javascript">
+  try {top.checkGame();} catch(e) {location.href = 'index.php';}
+  $.ajaxSetup({headers: {'X-Csrf-Token': '<?echo $_SESSION['token'];?>'}});
+</script>
 </head>
 <body>
 <div id="hint3"></div>
@@ -212,7 +218,7 @@ switch ($action)
     }
   break;
   case 'enter':
-    if (!checks('last'))
+    if (!checks('last_t'))
     {
       $id = $adb->selectCell("SELECT `id` FROM `history_auth` WHERE `guid` = ?d ORDER BY `id` DESC", $guid) - 1;
       $auth = $adb->selectRow("SELECT `ip`, `date` FROM `history_auth` WHERE `guid` = ?d and `id` = ?d", $guid ,$id);

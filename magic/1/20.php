@@ -27,7 +27,7 @@ if(strlen($ip)>20){
 print "ip адрес может содержать не более чем 20 символов.";
 die();
 }
-$S="select * from users where reg_ip='$ip'";
+$S="select * from characters where reg_ip='$ip'";
 $q=mysql_query($S);
 $res=mysql_fetch_array($q);
 if(!$res){
@@ -43,20 +43,20 @@ $orden_d = $ip_data["orden"];
 $clan_s = $ip_data["clan_short"];
 $clan_f = $ip_data["clan"];
 $rang = $ip_data["rang"];
-	if($orden_d==1){$orden_dis="Белое братство";}
-	else if($orden_d==2){$orden_dis="Темное братство";}
-	else if($orden_d==3){$orden_dis="Нейтральное братство";}
-	else if($orden_d==4){$orden_dis="Алхимик";}
-	else if($orden_d==5){$orden_dis="Тюремный заключеный";}
-	if(empty($clan_s)){$clan="";}
-	else{$clan="<img src='img/clan/$clan_s.gif' border=0 alt='$clan_f'>";}
-	if(empty($orden_d)){$orden="";}
-	else{
+    if($orden_d==1){$orden_dis="Белое братство";}
+    else if($orden_d==2){$orden_dis="Темное братство";}
+    else if($orden_d==3){$orden_dis="Нейтральное братство";}
+    else if($orden_d==4){$orden_dis="Алхимик";}
+    else if($orden_d==5){$orden_dis="Тюремный заключеный";}
+    if(empty($clan_s)){$clan="";}
+    else{$clan="<img src='img/clan/$clan_s.gif' border=0 alt='$clan_f'>";}
+    if(empty($orden_d)){$orden="";}
+    else{
 if ($orden_d==2) {$orden="<img src='img/orden/arm/$rang.gif' width=12 height=15 border=0 alt='$orden_dis'>";}  
 else{$orden="<img src='img/orden/$orden_d.gif' border=0 alt='$orden_dis'>";}
 if ($orden_d==1) {$orden="<img src='img/orden/pal/$rang.gif' width=12 height=15 border=0 alt='$orden_dis'>";}
 }
-	print "$orden$clan<b>$player</b> [$lev_ip]<a href='info.php?log=$pl1' target='$player'><img src='img/inf.gif' border=0></a><br>";
+    print "$orden$clan<b>$player</b> [$lev_ip]<a href='info.php?log=$pl1' target='$player'><img src='img/inf.gif' border=0></a><br>";
 }
 
 }

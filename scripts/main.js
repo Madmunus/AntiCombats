@@ -1,8 +1,10 @@
 function getCenter (width, height)
 {
   var center = {};
-  center.x = (width <= $(window).width()) ?($(window).width() - width)/2 :0;
-  center.y = (height <= $(window).height()) ?($(window).height() - height)/2 :0;
+  var h = $('[name=main]', top.document).height();
+  var w = $('[name=main]', top.document).width();
+  center.x = (width <= w) ?(w - width)/2 :0;
+  center.y = (height <= h) ?(h - height)/2 :0;
   return center;
 }
 
@@ -32,7 +34,8 @@ function drophlam ()
 	dialogconfirm('Выбросить хлам?', 'main.pl', table);
 }
 
-function unstack (name, n, txt){
+function unstack (name, n, txt)
+{
 	var table = '<TABLE width=100%><TD><IMG src="http://img.combats.com/i/items/'+name+
 			'.gif"></TD><TD>Разделить предмет <NOBR><B>\''+txt+'\'</B></NOBR></TABLE>'+
 	'<INPUT type=hidden name=unstack value="'+name+'"><INPUT type=hidden name=n value="'+n+'"><INPUT type=hidden name=sd4 value="' + sd4+'">'+
@@ -71,8 +74,8 @@ function hideHelp ()
 
 function showInventory (section, type, mail_guid)
 {
-	clearError ();
-	var cur_section = getCookie ('section');
+	clearError();
+	var cur_section = getCookie('section');
 	
 	if (cur_section == section && $("#inventory").html() != '')
 	  return;
@@ -267,7 +270,7 @@ function BrokenItems ()
 
 function checkWindow ()
 {
-  if ($('body').height() > $(window).height())
+  if ($('body').height() > $('[name=main]', top.document).height())
     $('body').css('margin-right', '0px');
   else
     $('body').css('margin-right', '17px');

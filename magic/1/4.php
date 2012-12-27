@@ -18,7 +18,7 @@ else {print "<form name='shut_up' action='main.php?act=orden&ord=1&spell=4' meth
 <?
 }
 else if($db["orden"]==1 && $db["admin_level"]>=5 or $db["login"]=='Мироздатель' or $db["orden"]==2 && $db["admin_level"]>=5 or $db["login"]==Смотритель){
-$S="select * from users where login='$target'";
+$S="select * from characters where login='$target'";
 $q=mysql_query($S);
 $res=mysql_fetch_array($q);
 if(!$res){
@@ -43,7 +43,7 @@ if($res["admin_level"]>=$db["admin_level"] or $res["login"]==Мироздате�
 print "Вы не можете выпустить этого персонажа из тюрьмы.";
 die();
 }}}
-$sql = "UPDATE users SET prision='0',orden='' WHERE login='$target'";
+$sql = "UPDATE characters SET prision='0',orden='' WHERE login='$target'";
 $result = mysql_query($sql);
 $pref=$db["sex"];
 if($pref=="female"){
@@ -53,7 +53,7 @@ else{
 $prefix="";
 }
         $d=date("d.m.y H:i");
-	$city = $db["city_game"];
+    $city = $db["city_game"];
         $time = time();
         $room = $db["room"];
 if($db["orden"]==2){$opr="Тарман";}

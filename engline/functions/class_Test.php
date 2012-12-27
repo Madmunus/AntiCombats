@@ -21,9 +21,9 @@ class Test extends Char
     $char_db = $this->getChar('char_db', 'guid');
     $char_stats = $this->getChar('char_stats', 'guid');
     $char_info = $this->getChar('char_info', 'guid');
-    $ip = $this->db->selectCell("SELECT `ip` FROM `online` WHERE `guid` = ?d", $this->guid);
+    $sid = $this->db->selectCell("SELECT `sid` FROM `online` WHERE `guid` = ?d", $this->guid);
     
-    if (!$char_db || !$char_stats || !$char_info || $ip != $_SERVER['REMOTE_ADDR'])
+    if (!$char_db || !$char_stats || !$char_info || $sid != session_id() || $sid != $_COOKIE['PHPSESSID'])
       toIndex($type, true, $loc);
   }
   /*Проверка на доступ*/

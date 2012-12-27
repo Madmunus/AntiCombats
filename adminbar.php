@@ -1,5 +1,5 @@
 <?
-defined('AntiBK') or die ("Доступ запрещен!");
+defined('AntiBK') or die("Доступ запрещен!");
 
 $char->test->Admin();
 ?>
@@ -7,7 +7,7 @@ $char->test->Admin();
 <script type="text/javascript">
 function deleteChar (d_guid)
 {
-  $.post('ajax_admin.php', 'do=delete_char&d_guid='+d_guid, function (data){
+  $.post('ajax_admin.php', {'do': 'delete_char', 'd_guid': d_guid}, function (data){
     var error = top.exploder(data);
     
     if (error[0] == 'complete')
@@ -134,5 +134,6 @@ foreach ($all_characters as $one_character)
 </tr></table>
 </div>
 <?
-$char->workTravm(100);
+echo time().'<br>';
+echo microtime();
 ?>

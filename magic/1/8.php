@@ -16,7 +16,7 @@ if(empty($target)){
 <?
 }
 else if($db["orden"]==1 && $db["admin_level"]>=10 or $db["login"]=='Мироздатель'){
-$S="select * from users where login='$target'";
+$S="select * from characters where login='$target'";
 $q=mysql_query($S);
 $res=mysql_fetch_array($q);
 if(!$res){
@@ -31,7 +31,7 @@ if($res["orden"]!=1){
 print "Вы не можете выгнать персонажа <B>$target</B>, т.к он не состоит в Ордене.";
 die();
 }
-$sql = "UPDATE users SET orden='',admin_level='0',rang='0',stat_rang='' WHERE login='$target'";
+$sql = "UPDATE characters SET orden='',admin_level='0',rang='0',stat_rang='' WHERE login='$target'";
 $result = mysql_query($sql);
 $pref=$db["sex"];
 if($pref=="female"){
@@ -41,7 +41,7 @@ else{
 $prefix="";
 }
         $d=date("d.m.y H:i");
-	$city = $db["city_game"];
+    $city = $db["city_game"];
         $time = time();
         $room = $db["room"];
 if($db["orden"]==1){$opr="Паладин";}

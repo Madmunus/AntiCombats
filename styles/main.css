@@ -8,47 +8,47 @@ body, td, ol, ul, li , p {
   font-weight: normal;
   font-family: Verdana, Arial, Helvetica, Tahoma, sans-serif;
 }
-H3			{color: #8f0000; font-family: arial; font-size: 12pt; font-weight: bold; text-align: center;}
-H4			{color: #8f0000; font-family: arial; font-size: 11pt; font-weight: bold; margin-bottom: 5px;}
-H5			{color: #4f0000; font-family: arial; font-size: 11pt; font-weight: bold; margin-bottom: 0px; margin-top: 0px;}
-a,a:visited 	{text-decoration: none; font-weight: bold; color: #003388;}
-a:active	{color: #6F0000;}
-a:hover		{color: #0066FF;}
-.date		{font-family: Courier; font-size: 8pt; text-decoration:none; font-weight: normal; color: #007000;}
-.date2		{font-family: Courier; font-size: 8pt; text-decoration:none; font-weight: normal; color: #007000; background-color: #00FFAA;}
-.sysdate	{font-family: Courier; font-size: 8pt; text-decoration:none; font-weight: normal; color: #B00000;}
-.private	{font-weight:bold; color: red; background-color: #FAE0E0;}
-.number		{font-size: 11pt; font-weight: bold; color: #6F0000;}
-.dsc		{color: #606060; font-weight:normal;}
-select,textarea,input	{ border: solid 1pt #B0B0B0; font-family: MS Sans Serif; font-size: 10px; color: #191970; margin-bottom: 2px; margin-top: 1px;}
-.us2		{font-family: verdana; font-size: 13px; text-decoration: none; color: #000000; font-weight: bold;}
-.us2:hover	{color: #8A8A8A;}
+H3      {color: #8f0000; font-family: arial; font-size: 12pt; font-weight: bold; text-align: center;}
+H4      {color: #8f0000; font-family: arial; font-size: 11pt; font-weight: bold; margin-bottom: 5px;}
+H5      {color: #4f0000; font-family: arial; font-size: 11pt; font-weight: bold; margin-bottom: 0px; margin-top: 0px;}
+a,a:visited   {text-decoration: none; font-weight: bold; color: #003388;}
+a:active  {color: #6F0000;}
+a:hover    {color: #0066FF;}
+.date    {font-family: Courier; font-size: 8pt; text-decoration:none; font-weight: normal; color: #007000;}
+.date2    {font-family: Courier; font-size: 8pt; text-decoration:none; font-weight: normal; color: #007000; background-color: #00FFAA;}
+.sysdate  {font-family: Courier; font-size: 8pt; text-decoration:none; font-weight: normal; color: #B00000;}
+.private  {font-weight:bold; color: red; background-color: #FAE0E0;}
+.number    {font-size: 11pt; font-weight: bold; color: #6F0000;}
+.dsc    {color: #606060; font-weight:normal;}
+select,textarea,input  { border: solid 1pt #B0B0B0; font-family: MS Sans Serif; font-size: 10px; color: #191970; margin-bottom: 2px; margin-top: 1px;}
+.us2    {font-family: verdana; font-size: 13px; text-decoration: none; color: #000000; font-weight: bold;}
+.us2:hover  {color: #8A8A8A;}
 
-.B1			{font-weight: bold; color: #6666CC;}
-.B2			{font-weight: bold; color: #B06A00;}
-img,table	{border: 0px;}
+.B1      {font-weight: bold; color: #6666CC;}
+.B2      {font-weight: bold; color: #B06A00;}
+img,table  {border: 0px;}
 
-.ismagic	{background-color: #E0E0E2; background-image: url(ItImages/blinkmagic1.gif)}
-.glow_pink	{background-color: #E0E0E2; background-image: url(ItImages/blinkmagic_pink.gif)}
-.glow_red	{background-color: #E0E0E2; background-image: url(ItImages/blinkmagic_red.gif)}
-.glow_green	{background-color: #E0E0E2; background-image: url(ItImages/blinkmagic_green.gif)}
+.ismagic  {background-color: #E0E0E2; background-image: url(ItImages/blinkmagic1.gif)}
+.glow_pink  {background-color: #E0E0E2; background-image: url(ItImages/blinkmagic_pink.gif)}
+.glow_red  {background-color: #E0E0E2; background-image: url(ItImages/blinkmagic_red.gif)}
+.glow_green  {background-color: #E0E0E2; background-image: url(ItImages/blinkmagic_green.gif)}
 .glow_yellow{background-color: #E0E0E2; background-image: url(ItImages/blinkmagic_yellow.gif)}
-.glow_dark 	{background-color: #E0E0E2; background-image: url(ItImages/blinkmagic_dark.gif)}
-.glow_blue 	{background-color: #E0E0E2; background-image: url(ItImages/blinkmagic_blue.gif)}
-.copyright	{color: #F2E5B1; font-size: 7pt;}
+.glow_dark   {background-color: #E0E0E2; background-image: url(ItImages/blinkmagic_dark.gif)}
+.glow_blue   {background-color: #E0E0E2; background-image: url(ItImages/blinkmagic_blue.gif)}
+.copyright  {color: #F2E5B1; font-size: 7pt; padding: 3px 0 3px 0;}
 .btn {
-	border-right: #817a63 1px double;
-	border-top: #817a63 1px double;
-	font-size: 7.5pt;
-	border-left: #817a63 1px double;
-	color: #dfddd3;
-	border-bottom: #817a63 1px double;
-	font-family: verdana, arial, helvetica, sans-serif;
-	background-color: #2b2b18;
-	cursor: pointer;
+  border-right: #817a63 1px double;
+  border-top: #817a63 1px double;
+  font-size: 7.5pt;
+  border-left: #817a63 1px double;
+  color: #dfddd3;
+  border-bottom: #817a63 1px double;
+  font-family: verdana, arial, helvetica, sans-serif;
+  background-color: #2b2b18;
+  cursor: pointer;
 }
-.style6 	{color: #dfd3a3; font-size: 9px;}
-.style5 	{color: #990000;}
-.style7 	{color: #364875;}
-.news	 {color: #8f0000; font-family: Arial; font-size: 12pt; font-weight: bold; text-align: center;}
-.header	 {color: #8f0000; font-family: Arial; font-size: 11pt; text-align: center;}
+.style6   {color: #dfd3a3; font-size: 9px;}
+.style5   {color: #990000;}
+.style7   {color: #364875;}
+.news   {color: #8f0000; font-family: Arial; font-size: 12pt; font-weight: bold; text-align: center;}
+.header   {color: #8f0000; font-family: Arial; font-size: 11pt; text-align: center;}

@@ -1,9 +1,5 @@
 <?
 session_start();
-ini_set('display_errors', true);
-ini_set('html_errors', false);
-ini_set('error_reporting', E_ALL);
-
 define('AntiBK', true);
 
 include("engline/config.php");
@@ -31,7 +27,7 @@ ArrToVar($char_db);
 <script type="text/javascript">
 try {top.checkGame();} catch(e) {location.href = 'index.php';}
 
-var chat = new Array ();
+var chat = new Array();
 chat['filter'] = <?echo $chat_filter;?>;
 chat['sys'] = <?echo $chat_sys;?>;
 chat['slow'] = (<?echo $chat_update;?> == 10) ?false :true;
@@ -50,12 +46,12 @@ function changeButtonState (button)
 function sendMessage ()
 {
   var message = $("#text").val();
+  $("#text").val('');
   if (chat['translit'])
     message = translate(message);
-  $.post('ajax_chat.php', 'do=sendmessage&h='+message, function (data){
+  $.post('ajax_chat.php', {'do': 'sendmessage', 'h': message}, function (data){
     var result = top.exploder(data);
     top.msg.updateMessages();
-    $("#text").val('');
 	});
 }
 

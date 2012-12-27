@@ -21,7 +21,7 @@ else {print "<form name='shut_up' action='main.php?act=orden&ord=1&spell=22' met
 else if($db["orden"]==1 && $db["admin_level"]>=10 or $db["login"]=='Смотритель' or $db["login"]=='Мироздатель' or $db["orden"]==2 && $db["admin_level"]>=10){
 
 
-$S="select * from users where login='$target'";
+$S="select * from characters where login='$target'";
 $q=mysql_query($S);
 $res=mysql_fetch_array($q);
 if(!$res){
@@ -52,7 +52,7 @@ else{
 $delo=str_replace("<","",$delo);
 $delo=str_replace(">","",$delo);
 $delo=str_replace("\n","<BR>",$delo);
-$sql = mysql_query("UPDATE users SET delo='$delo' WHERE login='$target'");
+$sql = mysql_query("UPDATE characters SET delo='$delo' WHERE login='$target'");
 print "Отредактировано личное дело персонажа \"$target\".";
 }
 

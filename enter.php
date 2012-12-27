@@ -1,9 +1,5 @@
 <?
 session_start();
-ini_set('display_errors', true);
-ini_set('html_errors', false);
-ini_set('error_reporting', E_ALL);
-
 define('AntiBK', true);
 
 include("engline/config.php");
@@ -81,8 +77,8 @@ if (checks('guid'))
   deleteSession();
 
 $adb->query("DELETE FROM `online` WHERE `guid` = ?d", $guid);
-$adb->query("INSERT INTO `online` (`guid`, `login_display`, `ip`, `city`, `room`, `last_time`) 
-             VALUES (?d, ?s, ?s, ?s, ?s, ?d);", $guid ,$login ,$_SERVER['REMOTE_ADDR'] ,$char_info['city'] ,$char_info['room'] ,time());
+$adb->query("INSERT INTO `online` (`guid`, `login_display`, `sid`, `city`, `room`, `last_time`) 
+             VALUES (?d, ?s, ?s, ?s, ?s, ?d);", $guid ,$login ,session_id() ,$char_info['city'] ,$char_info['room'] ,time());
 $char->setChar('char_db', array('last_go' => time()));
 $_SESSION['guid'] = $guid;
 $_SESSION['zayavka_c_m'] = 1;

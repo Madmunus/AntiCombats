@@ -4,7 +4,7 @@ include "conf.php";
 $data = mysql_connect($base_name, $base_user, $base_pass);
 mysql_query("SET CHARSET cp1251");
     if(!mysql_select_db($db_name,$data)
-		){
+        ){
      print "Ошибка при подключении к БД<BR>";
 
      echo mysql_error();

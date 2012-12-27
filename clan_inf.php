@@ -1,13 +1,9 @@
 <?
-ini_set('display_errors', true);
-ini_set('html_errors', false);
-ini_set('error_reporting', E_ALL);
-
 define('AntiBK', true);
 
-include("engline/config.php");
-include("engline/dbsimple/Generic.php");
-include("engline/functions/functions.php");
+include_once("engline/config.php");
+include_once("engline/dbsimple/Generic.php");
+include_once("engline/functions/functions_info.php");
 
 $adb = DbSimple_Generic::connect($database['adb']);
 $adb->query("SET NAMES ? ",$database['db_encoding']);
@@ -16,17 +12,17 @@ $adb->setErrorHandler("databaseErrorHandler");
 $char = Char::initialization(0, $adb);
 
 $db = $adb->selectRow("SELECT `name`, 
-                               `glava`, 
-                               `name_short` 
-                        FROM `clan` 
-                        WHERE `name_short` = ?s", $clan);
+                              `glava`, 
+                              `name_short` 
+                       FROM `clan` 
+                       WHERE `name_short` = ?s", $clan);
 $top = "Произошла ошибка:<br><br><span class='err'>";
 $bot = "</span><br><br><a href='javascript: window.history.go(-1);' class='us2'>Назад</a><hr>";
 $name_s = $db['name_short'];
 $name = $db['name'];
 $glava = $db['glava'];
-if (empty($clan))     die("$top Неверный запрос.$bot");
-else if (!$name_s)    die("$top Нет информации о клане $name_s.$bot");
+if (empty($clan))  die("$top Неверный запрос.$bot");
+else if (!$name_s) die("$top Нет информации о клане $name_s.$bot");
 
 $orden = $char->getLogin('turn', $glava);
 ?>
@@ -58,19 +54,19 @@ $orden = $char->getLogin('turn', $glava);
   <tr>
     <td width="50%" valign="top">
 <?
-      echo "Глава клана: {$char->getLogin('clan', $glava)}";
+      echo "Глава клана: ".$char->getLogin('clan', $glava);
 ?>
     </td>
     <td width="50%" valign="top">
       Бойцы клана:<br>
 <?
     $rows = $adb->selectCol("SELECT `login` 
-                              FROM `characters` 
-                              WHERE `clan_short` = ?s 
-                              ORDER BY `exp` DESC", $name_s); 
+                             FROM `characters` 
+                             WHERE `clan_short` = ?s 
+                             ORDER BY `exp` DESC", $name_s); 
     foreach ($rows as $num => $clan_player)
         echo $char->getLogin('clan', $clan_player)."<br>";
-    echo "Всего: <b>".count ($rows)."</b>";
+    echo "Всего: <b>".count($rows)."</b>";
 ?>
     </td>
   </tr>

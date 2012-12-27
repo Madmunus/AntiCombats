@@ -1,8 +1,4 @@
 <?
-ini_set('display_errors', true);
-ini_set('html_errors', false);
-ini_set('error_reporting', E_ALL);
-
 define('AntiBK', true);
 
 include("engline/config.php");
@@ -30,7 +26,7 @@ $char = Char::initialization(0, $adb);
   <thead><tr><td background="img/site/sitebk_02.jpg" scope="col" align="center"><img src="img/site/sitebk_03ru.gif" width="194" height="135"></td></tr></thead>
   <tfoot>
     <tr><td width="100%" height="13" background="img/site/sitebk_07.jpg"></td></tr>
-    <tr><td width="100%" bgColor="#000" height="20" align="center" class="copyright">Copyright © 2002—2010 Dragon Server</td></tr>
+    <tr><td width="100%" bgColor="#000" height="20" align="center" class="copyright"><?echo $config['copyright'];?></td></tr>
   </tfoot>
   <tbody>
   <tr>

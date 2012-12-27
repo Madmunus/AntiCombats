@@ -1,9 +1,5 @@
 <?
 session_start();
-ini_set('display_errors', true);
-ini_set('html_errors', false);
-ini_set('error_reporting', E_ALL);
-
 define('AntiBK', true);
 
 include("../engline/config.php");
@@ -30,7 +26,7 @@ switch ($do)
     $section = getVar('section');
     
     if (!$section)
-      die ('');
+      die('');
     
     $types = $adb->selectCol("SELECT `type` AS ARRAY_KEY FROM `admin_item_create` WHERE `section` = ?s and `type` != 'lang';", $section);
     
@@ -38,13 +34,13 @@ switch ($do)
     foreach ($types as $type => $n)
       $return .= "<option value='$type'>$type</option>";
     $return .= "</select><br>";
-    die ($return);
+    die($return);
   break;
   case 'showfields':
     $type = getVar('type');
     
     if (!$type)
-      die ('');
+      die('');
     
     $lang = $adb->selectRow("SELECT * FROM `admin_item_create` WHERE `type` = 'lang';");
     $fields = $adb->selectRow("SELECT * FROM `admin_item_create` WHERE `type` = ?s", $type);
@@ -54,7 +50,7 @@ switch ($do)
     {
       switch ($field)
       {
-        case 'min_dex':   $return .= "</tr><tr><td colspan='8' class='header'>Требования:<hr></td></tr><tr>";     $i = 0; break;
+        case 'min_level': $return .= "</tr><tr><td colspan='8' class='header'>Требования:<hr></td></tr><tr>";     $i = 0; break;
         case 'add_str':   $return .= "</tr><tr><td colspan='8' class='header'>Характеристики:<hr></td></tr><tr>"; $i = 0; break;
         case 'def_h_min': $return .= "</tr><tr><td colspan='8' class='header'>Защита:<hr></td></tr><tr>";         $i = 0; break;
         case 'res_magic': $return .= "</tr><tr><td colspan='8' class='header'>Резисты:<hr></td></tr><tr>";        $i = 0; break;
@@ -77,24 +73,22 @@ switch ($do)
         $return .= '</tr><tr>';
     }
     $return .= "</tr></table><input type='submit' name='create' value='Создать'>";
-    die ($return);
+    die($return);
   break;
   case 'createitem':
     $fields = getVar('fields');
     $sql = array();
-    $field = explode('A_D', $fields);
-    unset ($field[count($field) - 1]);
+    $field = explode('$$', $fields);
+    unset($field[count($field) - 1]);
     foreach ($field as $fill)
     {
       $f = explode('=', $fill);
       $sql[$f[0]] = $f[1];
     }
-    if ($adb->query("INSERT INTO `item_template` (?#) VALUES (?a);",array_keys($sql), array_values($sql)))
-    {
-      $entry = $adb->selectCell("SELECT MAX(`entry`) FROM `item_template`;");
-      $adb->query("INSERT INTO `item_amount` (`entry`) VALUES (?d);", $entry);
-      die('complete');
-    }
+    $adb->query("INSERT INTO `item_template` (?#) VALUES (?a);",array_keys($sql), array_values($sql));
+    $entry = $adb->selectCell("SELECT MAX(`entry`) FROM `item_template`;");
+    $adb->query("INSERT INTO `item_amount` (`entry`) VALUES (?d);", $entry);
+    die('complete');
   break;
 }
 ?>
