@@ -22,7 +22,7 @@ $enter = $adb->selectCell("SELECT `login` FROM `server_info`;");
 <meta http-equiv="Content-Language" content="ru" />
 <script src="scripts/jquery.js" type="text/javascript"></script>
 <script type="text/javascript">
-if (!($.browser.mozilla))
+if (!(/Firefox[\/\s](\d+\.\d+)/.test(navigator.userAgent)))
 {
   alert('Поддерживается только браузер Mozilla Firefox');
   location.href = 'index.php';

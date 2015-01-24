@@ -33,7 +33,6 @@ $mass = $char_feat['mass'];
 $city = $char_feat['city'];
 $room = $char_feat['room'];
 $money = $char_feat['money'];
-$money_euro = $char_feat['money_euro'];
 
 $do = getVar('do', '', 2);
 switch ($do)
@@ -50,7 +49,6 @@ switch ($do)
   break;
   case 'showshapes':
     $available = getVar('available', 1);
-    $sex = ($sex == "male") ?"m" :"f";
     $shapes = $adb->select("SELECT * FROM `player_shapes` WHERE `sex` = ?s ORDER BY `id`;", $sex);
     $required = array('str', 'dex', 'con', 'vit', 'fire', 'water', 'air', 'earth', 'dark', 'light', 'int', 'wis', 'level', 'sword', 'axe', 'fail', 'knife');
     $return = "<table cellspacing='0' cellpadding='0' border='0' align='center'><tr>";
@@ -72,7 +70,7 @@ switch ($do)
       }
       if ($availabled)
       {
-        $return .= "<td class='shape'><a href='javascript:chooseShape ($shape[id]);'><img src='img/chars/$shape[sex]/$shape[img]' alt='<strong>$lang[select_shape]</strong><br>$requirement$title' border='0' style='opacity: 0.6;' onmouseover=\"this.style.opacity = '1';\" onmouseout=\"this.style.opacity = '0.6';\"></a></td>";
+        $return .= "<td class='shape'><a href='javascript:chooseShape($shape[id]);'><img src='img/chars/$shape[sex]/$shape[img]' alt='<strong>$lang[select_shape]</strong><br>$requirement$title' border='0' style='opacity: 0.6;' onmouseover=\"this.style.opacity = '1';\" onmouseout=\"this.style.opacity = '0.6';\"></a></td>";
         $i++;
       }
       else if (!$available)
@@ -81,7 +79,7 @@ switch ($do)
         $i++;
       }
       
-      if ($i % 8 === 0)
+      if ($i % 9 === 0)
         $return .= "</tr><tr>";
     }
     $return .= "</tr></table>";
@@ -93,8 +91,7 @@ switch ($do)
     if (!$shape || !($char->checkShape($shape)))
       returnAjax('error', 215);
     
-    $shape = ($sex == "male") ?"m/$shape.gif" :"f/$shape.gif";
-    $char->setChar('char_db', array('shape' => $shape, 'next_shape' => (time() + 86400)));
+    $char->setChar('char_db', array('shape' => "$sex/$shape.gif", 'next_shape' => (time() + 86400)));
     returnAjax('complete');
   break;
   /*Invetory*/
@@ -389,16 +386,13 @@ switch ($do)
     setCookie('level_filter', $level_filter,  time() + 3600);
     setCookie('name_filter', $name_filter,  time() + 3600);
     $rows = $adb->select("SELECT * 
-                          FROM `item_template` AS `i` 
-                          LEFT JOIN `item_amount` AS `a` 
-                          ON `i`.`entry` = `a`.`entry` 
-                          WHERE `i`.`type` = ?s 
-                            and `a`.?# > '0' 
-                           {and `i`.`min_level` = ?d} 
-                           {and `i`.`name` LIKE (?)} 
-                           {and !(`i`.`item_flags` & ?d) 
-                            and `i`.`price_euro` = '0'} 
-                          ORDER BY `min_level`;", $section_shop ,$city.'-'.$room,
+                          FROM `item_template` 
+                          WHERE `type` = ?s 
+                           {and `min_level` = ?d} 
+                           {and `name` LIKE (?)} 
+                           {and !(`item_flags` & ?d) 
+                            and `price_euro` = '0'} 
+                          ORDER BY `min_level`;", $section_shop,
                           (($check_level) ?$level_filter :DBSIMPLE_SKIP),
                           (($name_filter) ?escapeLike($name_filter) :DBSIMPLE_SKIP),
                           (($room != 'shop') ?4 :DBSIMPLE_SKIP));
@@ -430,41 +424,30 @@ switch ($do)
     if (!($flags & 2))
       returnAjax('error', 403);
     
-    $i_info = $adb->selectRow("SELECT `i`.`name`, 
-                                      `i`.`price`, 
-                                      `i`.`price_euro` 
-                               FROM `item_template` AS `i` 
-                               LEFT JOIN `item_amount` AS `a` 
-                               ON `i`.`entry` = `a`.`entry` 
-                               WHERE `i`.`entry` = ?d 
-                                 and `a`.?# > '0';", $item_entry ,$amount) or returnAjax('error', 403);
+    $i_info = $adb->selectRow("SELECT `name`, 
+                                      `price`, 
+                                      `price_euro` 
+                               FROM `item_template` 
+                               WHERE `entry` = ?d", $item_entry) or returnAjax('error', 403);
     list($name, $price, $price_euro) = array_values($i_info);
     
     for ($i = 1; $i <= $count; $i++)
     {
-      $char->equip->getBuyValue($price);
-      $char->equip->getBuyValue($price_euro);
-      
-      if (($price > 0 && !($char->changeMoney(-$price))) || ($price_euro > 0 && !($char->changeMoney(-$price_euro, 'euro'))))
+      if ($price > 0 && !($char->changeMoney(-$price)))
         continue;
       
       $money = $money - $price;
-      $money_euro = $money_euro - $price_euro;
       
       if (!($char->equip->addItem($item_entry)))
         returnAjax('error', 403);
       
-      if ($char_feat['trade'] < 10)
-        $adb->query("UPDATE `character_stats` SET `trade` = `trade` + '0.01' WHERE `guid` = ?d", $guid);
-      
-      $adb->query("UPDATE `item_amount` SET ?# = ?# - '1' WHERE `entry` = ?d", $amount ,$amount ,$item_entry);
       $buycount++;
     }
     $mass = $char->getChar('char_stats', 'mass');
     if ($buycount != 0 && $price > 0)
       returnAjax('complete', getMoney($money), $mass, 400, "$name|".($price*$buycount)."|$buycount");
     else if ($buycount != 0 && $price_euro > 0)
-      returnAjax('complete', getMoney($money_euro), $mass, 401, "$name|".($price_euro*$buycount)."|$buycount");
+      returnAjax('complete', getMoney($money), $mass, 401, "$name|".($price_euro*$buycount)."|$buycount");
     else
       returnAjax('error', 107);
   break;

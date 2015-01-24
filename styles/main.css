@@ -1,4 +1,4 @@
-body, td, ol, ul, li , p {
+body, td, ol, ul, li, p {
   font-size: 10pt;
   font-family: Verdana;
 }
@@ -50,5 +50,15 @@ img,table  {border: 0px;}
 .style6   {color: #dfd3a3; font-size: 9px;}
 .style5   {color: #990000;}
 .style7   {color: #364875;}
-.news   {color: #8f0000; font-family: Arial; font-size: 12pt; font-weight: bold; text-align: center;}
+.news      {color: #8f0000; font-family: Arial; font-size: 12pt; font-weight: bold; text-align: center;}
 .header   {color: #8f0000; font-family: Arial; font-size: 11pt; text-align: center;}
+.inup      {
+  border-right: #302F2A 1px double;
+  border-top: #302F2A 1px double;
+  font-size: 8pt;
+  border-left: #302F2A 1px double;
+  color: #000000;
+  border-bottom: #302F2A 1px double;
+  font-family: Verdana, Arial, Helvetica, sans-serif;
+  background-color: #DED7BD;
+}

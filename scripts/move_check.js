@@ -71,7 +71,7 @@ function ch_counter_color (color)
 }
 
 $(function (){
-	$('a.passage').live('click', function (){
+	$('body').on('click', 'a.passage', function (){
 		return check_access();
 	});
 	if (mtime > 0)

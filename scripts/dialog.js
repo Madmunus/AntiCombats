@@ -40,11 +40,10 @@ function dialogconfirm (title, script, text, mtype)
 	var s;
 	s = '<table border="0" width="100%" cellspacing="0" cellpadding="2"><tr><td colspan="2">'+text+
       '</td></tr><tr><td width="50%" align="center"><input type="submit" name="yes" value="Да" style="width: 70%; cursor: pointer;" onclick="'+script+';"></td><td width="50%" align="center"><input type="button" style="width: 70%; cursor: pointer;" value="Нет" onclick="closehint3();"></td></tr></table>';
-	s = crtmagic (mtype, title, s);
+	s = crtmagic(mtype, title, s);
   $('#hint3').html(s);
   var coor = getCenter($('#hint3').width(), $('#hint3').height());
   $('#hint3').css({'left': coor.x, 'top': coor.y, 'zIndex': 200}).fadeIn('fast');
-  $('[name=yes]').focus();
 	Hint3Name = "hint3";
 }
 
@@ -97,10 +96,10 @@ function crtmagic (mtype, title, body, noclose)
 	var mtype = foundmagictype(mtype);
 	var names = new Array (
 	'neitral', 17, 6, 14, 17, 14, 7, 0, 0, 3,
-	'fire', 57, 30, 33, 20, 21, 14, 11, 12, 0,
-	'water', 57, 30, 33, 20, 21, 14, 11, 12, 0,
-	'air', 57, 30, 33, 20, 21, 14, 11, 12, 0,
-	'earth', 57,30, 33, 20, 21, 14, 11, 12, 0,
+	'fire', 57, 30, 33, 20, 21, 14, 11, 11, 0,
+	'water', 57, 30, 33, 20, 21, 14, 11, 11, 0,
+	'air', 57, 30, 33, 20, 21, 14, 11, 11, 0,
+	'earth', 57,30, 33, 20, 21, 14, 11, 11, 0,
 	'white', 51, 25, 46, 44, 44, 10, 5, 5, 0,
 	'gray', 51, 25, 46, 44, 44, 10, 5, 5, 0,
 	'black', 51, 25, 46, 44, 44, 10, 5, 5, 0);
@@ -120,7 +119,7 @@ function crtmagic (mtype, title, body, noclose)
 			'</tr></table></td></tr>'+
 			'<tr>'+
 				'<td><table width="100%" border="0" cellspacing="0" cellpadding="0"><tr>'+
-					(names[mtype*10+7] ?'<td width="'+names[mtype*10+7]+'"><span style="width: '+names[mtype*10+7]+'">&nbsp;</span></td>' :'')+
+					(names[mtype*10+7] ?'<td width="'+names[mtype*10+7]+'"><div style="width: '+names[mtype*10+7]+'">&nbsp;</div></td>' :'')+
 					'<td width="5" background="i/misc/dmagic/b'+names[mtype*10]+'_19.gif">&nbsp;</td>'+
 					'<td width="100%" bgcolor="#'+colors[mtype*2]+'"' + (names[mtype*10+9] ?' style="padding-top: '+names[mtype*10+9]+'px;"' :'') + '>'+
 						'<table border="0" width="100%" cellspacing="0" cellpadding="0">'+
@@ -130,7 +129,7 @@ function crtmagic (mtype, title, body, noclose)
 						'<div align="center" style="background-color:#'+colors[mtype*2+1]+';">'+body+'</div>'+
 					'</td>'+
 					'<td width="5" background="i/misc/dmagic/b'+names[mtype*10]+'_17.gif">&nbsp;</td>'+
-					(names[mtype*10+8] ?'<td width="'+names[mtype*10+8]+'"><span style="width:'+names[mtype*10+8]+'px;">&nbsp;</span></td></td>' :'')+
+					(names[mtype*10+8] ?'<td width="'+names[mtype*10+8]+'"><div style="width:'+names[mtype*10+8]+'px;">&nbsp;</div></td></td>' :'')+
 				'</tr></table></td>'+
 			'</tr>'+
 			'<tr><td><table width="100%"  border="0" cellpadding="0" cellspacing="0"><tr>'+

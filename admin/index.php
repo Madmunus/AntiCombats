@@ -25,7 +25,7 @@ $char->test->Admin('game', '../');
 <script src="../scripts/jquery.js" type="text/javascript"></script>
 <script type="text/javascript">
 $(function (){
-  $('.menu').live('click', function (){
+  $('body').on('click', '.menu', function (){
     $('.menu').css('font-weight', 'normal');
     $(this).css('font-weight', 'bold');
   });

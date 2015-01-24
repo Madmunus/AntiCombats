@@ -73,7 +73,7 @@ class City extends Char
   {
     $char_db = $this->getChar('char_db', 'room', 'city');
     $name = $this->getRoom($id, $char_db['city'], 'name');
-    $flag = ($char_db['room'] == $id) ?"<img src='img/icon/flag2.gif' width='20' height='20' alt='Вы находитесь здесь' align='right'>" :'';
+    $flag = ($char_db['room'] == $id) ?"<img src='../img/icon/flag2.gif' width='20' height='20' alt='Вы находитесь здесь' align='right'>" :'';
     echo $flag."<strong>$name</strong> (<strong>".$this->getRoomOnline($id, 'map')."</strong>)";
   }
   /*Добавление кнопок в клубе*/

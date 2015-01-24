@@ -41,12 +41,12 @@ function getUpdateBar ()
 {
   echo "<table width='80' border='0' cellspacing='0' cellpadding='0'>"
      . "<tr>"
-     . "<td><a href='?action=none'><img src='img/room/rel_1.png' width='15' height='16' alt='Обновить' border='0' /></a></td>"
+     . "<td><a href='?action=none'><img src='../img/room/rel_1.png' width='15' height='16' alt='Обновить' border='0' /></a></td>"
      . "<td>"
      . "<table width='80' border='0' cellspacing='0' cellpadding='0'>"
-     . "<tr><td colspan='3' align='center'><img src='img/room/navigatin_462s.gif' width='80' height='3' /></td></tr>"
+     . "<tr><td colspan='3' align='center'><img src='../img/room/navigatin_462s.gif' width='80' height='3' /></td></tr>"
      . "<tr width='80'>"
-     . "<td><img src='img/room/navigatin_481.gif' width='9' height='8' /></td>"
+     . "<td><img src='../img/room/navigatin_481.gif' width='9' height='8' /></td>"
      . "<td width='100%' bgcolor='#000000' nowrap><div id='prcont' align='center' style='font-size: 4px; padding: 0px; border: solid black 0px; text-align: center;'>";
   for ($i = 1; $i <= 32; $i++)
   {
@@ -55,9 +55,9 @@ function getUpdateBar ()
       echo "&nbsp;";
   }
   echo "</div></td>"
-     . "<td><img src='img/room/navigatin_50s.gif' width='7' height='8' /></td>"
+     . "<td><img src='../img/room/navigatin_50s.gif' width='7' height='8' /></td>"
      . "</tr>"
-     . "<tr><td colspan='3'><img src='img/room/navigatin_tt1_532.gif' width='80' height='5' /></td></tr>"
+     . "<tr><td colspan='3'><img src='../img/room/navigatin_tt1_532.gif' width='80' height='5' /></td></tr>"
      . "</table></td></tr></table>";
 }
 /*Получение времени восстановления здоровья*/
@@ -79,22 +79,30 @@ function getFormatedTime ($timestamp)
   if (!is_numeric($timestamp))
     $timestamp = time();
   
-  $seconds = $timestamp - time();
+  $seconds = ($timestamp > time()) ?$timestamp - time() :time() - $timestamp;
   $seconds = ($seconds > 0) ?$seconds :0;
+  $y = intval($seconds / 31536000);
+  $seconds %= 31536000;
+  $m = intval($seconds / 2592000);
+  $seconds %= 2592000;
   $d = intval($seconds / 86400);
   $seconds %= 86400;
   $h = intval($seconds / 3600);
   $seconds %= 3600;
-  $m = intval($seconds / 60);
+  $n = intval($seconds / 60);
   $seconds %= 60;
   $s = $seconds;
   
+  if ($y && $m == 0) return "$y г.";
+  if ($y)            return "$y г. $m мес.";
+  if ($m && $d == 0) return "$m мес.";
+  if ($m)            return "$m мес. $d дн.";
   if ($d && $h == 0) return "$d дн.";
   if ($d)            return "$d дн. $h ч.";
-  if ($h && $m == 0) return "$h ч.";
-  if ($h)            return "$h ч. $m мин.";
-  if ($m && $s == 0) return "$m мин.";
-  if ($m)            return "$m мин. $s сек.";
+  if ($h && $n == 0) return "$h ч.";
+  if ($h)            return "$h ч. $n мин.";
+  if ($n && $s == 0) return "$n мин.";
+  if ($n)            return "$n мин. $s сек.";
                      return "$s сек.";
 }
 /*Перевод в float*/
@@ -171,11 +179,8 @@ function databaseErrorHandler ($message, $info)
   if (!error_reporting())
     return;
   
-  echo "<table class = report>";
-  echo "<tbody>";
-  echo "<tr><td>SQL Error: $message<br><pre>".print_r($info, true)."</pre></td></tr>";
-  echo "</tbody>";
-  echo "</table>";
+  echo "<table class = report><tbody><tr><td>SQL Error: $message<br><pre>".print_r($info, true)."</pre></td></tr></tbody></table>";
+  error_log($message);
 }
 /*Получение переменной GET, POST и COOKIE*/
 function getVar ($var, $stand = '', $flags = 3)
@@ -189,7 +194,7 @@ function getVar ($var, $stand = '', $flags = 3)
   else
     return $stand;
 
-  if (is_numeric($stand) && is_numeric($value)) return ($flags & 8) ?round($value, 2) :$value;
+  if (is_numeric($stand) && is_numeric($value)) return ($flags & 8) ?rdf($value) :$value;
   else if (!is_numeric($stand))                 return htmlspecialchars($value);
   else                                          return $stand;
 }
@@ -197,9 +202,8 @@ function getVar ($var, $stand = '', $flags = 3)
 function checks ()
 {
   $args = func_get_args();
-  $a_num = func_num_args();
   
-  if ($a_num == 1)
+  if (func_num_args() == 1)
     return isset($_SESSION[$args[0]]);
   
   foreach ($args as $arg)
@@ -217,7 +221,6 @@ function checki ($int)
 /*Преобразование русско-язычной строки в нижний и верхний регистр*/
 define('UPCASE', 'АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯABCDEFGHIKLMNOPQRSTUVWXYZ');
 define('LOCASE', 'абвгдеёжзийклмнопрстуфхцчшщъыьэюяabcdefghiklmnopqrstuvwxyz');
-
 function mb_str_split ($str)
 {        
     preg_match_all('/.{1}|[^\x00]{1}$/us', $str, $ar);
@@ -238,9 +241,7 @@ function uppercase ($arg = '')
 /*Возврат значения ajax запроса*/
 function returnAjax ()
 {
-  $args = func_get_args();
-  $str = implode('$$', $args);
-  die($str);
+  die(implode('$$', func_get_args()));
 }
 /*Получение место перехода*/
 function toIndex ($type = 'main', $die = true, $loc = '')
@@ -266,8 +267,8 @@ function getGuid ($type = 'main', $loc = '')
 {
   if (empty($_SESSION['guid']))
     toIndex($type, true, $loc);
-  
-  return $_SESSION['guid'];
+  else
+    return $_SESSION['guid'];
 }
 /*Получение названия таблицы*/
 function getTable ($name)
@@ -305,5 +306,10 @@ function showtime ($start_time, &$s)
 {
   $dift_time2 = bcsub(gettime(), $start_time, 6);
   $s .= "Время $dift_time2 секунд";
+}
+
+function rdf ($float)
+{
+  return round($float * 100) / 100;
 }
 ?>

@@ -89,7 +89,7 @@ a.dis_passage:hover  {opacity: 0.5; color: gray; text-shadow: 0.1em 0.1em white;
 .shape     {background: black; width: 120px; height: 220px; border-right: 25px solid #dedede; border-bottom: 2px solid #dedede;}
 .dis_shape {background: grey;}
 
-#mmoves    {border: #666666 1px solid; padding: 2px; visibility: hidden; overflow: visible; white-space: nowrap; position: absolute; background-color: #ffffcc; z-index: 200; text-align: left;}
+#mmoves    {border: #666666 1px solid; padding: 2px; visibility: hidden; overflow: visible; white-space: nowrap; position: absolute; left: 0px; top: 0px; background-color: #ffffcc; z-index: 200; text-align: left;}
 
 #help          {z-index: 112; position: fixed; width: 700px; height: 300px; border-bottom: 3px double #ffffff; border-left: 3px double #ffffff; border-right: 3px double #ffffff; border-top: 2px groove #ffffff; border-radius: 5px; padding: 5px; display: none; overflow-y: auto; background-color: #D5D5D5;}
 #help_bg   {z-index: 111; position: fixed; background-color: #000000; opacity: 0.5; display: none; top: 0px; left: 0px;}

@@ -61,13 +61,13 @@ function AddCount (entry, name, price, kr)
 }
 
 $(function (){
-  $('input[name=count]').live('keyup', function (){
+  $('body').on('keyup', 'input[name=count]', function (){
     $(this).val($(this).val().replace(/[^0-9]/g, ''));
     
     if ($(this).val() == '')
       $(this).val(1);
     
-    var summ = parseFloat($('input[name=price]').val()) * parseInt($('input[name=count]').val());
+    var summ = rdf(parseFloat($('input[name=price]').val()) * parseInt($('input[name=count]').val()));
     visual.show_any('#full_price', summ);
   });
 });

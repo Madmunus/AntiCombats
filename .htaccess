@@ -15,3 +15,4 @@ AddDefaultCharset utf8
 php_value default_charset UTF-8
 php_flag zlib.output_compression On 
 FileETag none
+ErrorDocument 404 /error/404.html

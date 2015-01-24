@@ -67,7 +67,7 @@ $online = $adb->selectCell("SELECT COUNT(*) FROM `online` WHERE `city` = ?s", $c
 $night = (date('H') > 19 || date('H') < 8) ?1 :0;
 ?>
 <table width="100%" border="0" cellspacing="0" cellpadding="0"><tr>
-  <td valign="top"><?include("char_map.php");?></td>
+  <td valign="top" style="min-width: 600px;"><?include("char_map.php");?></td>
   <td align="right" valign="top">
     <img src="img/1x1.gif" width="1" height="5">
     <font color='red' id='error'><?$char->error->getFormattedError($error, $parameters);?></font>

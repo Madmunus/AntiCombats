@@ -104,7 +104,6 @@ echo "<td>".date('d.m.y H:i:s', $char_db['last_time'])."</td>";
 <td>Exp</td>
 <td>Next Up</td>
 <td>Money</td>
-<td>Euro</td>
 <td>City</td>
 <td>Room</td>
 <td> </td>
@@ -124,7 +123,6 @@ foreach ($all_characters as $one_character)
   echo "<td>$one_character[exp]</td>";
   echo "<td>$one_character[next_up]</td>";
   echo "<td>".getMoney($one_character['money'])." кр.</td>";
-  echo "<td>".getMoney($one_character['money_euro'])." кр.</td>";
   echo "<td>$one_character[city]</td>";
   echo "<td>$one_character[room]</td>";
   echo "<td width='14'><img src='img/icon/clear.gif' width='14' height='14' border='0' alt='Удалить персонажа' id='$one_character[guid]' class='remove'></td>";
@@ -134,6 +132,14 @@ foreach ($all_characters as $one_character)
 </tr></table>
 </div>
 <?
-echo time().'<br>';
-echo microtime();
+$password = null;
+$max = 10;
+$letters = "qazxswedcvfrtgbnhyujmkiolp1234567890QAZXSWEDCVFRTGBNHYUJMKIOLP";
+while ($max--)
+  $password .= $letters[rand(0, (strlen($letters) - 1))];
+echo $password;
+//gamerforever@mail.ru
+//acombats@yandex.ru
+//madmunus@gmail.com
+//mail('gamerforever@mail.ru', "По вашей просьбе высылаем пароль к персонажу $password", $password, 'From: reminder@anticombats.com', 'reminder@anticombats.com')
 ?>

@@ -42,7 +42,11 @@ $(function (){
     $('#menu'+cur_Id).css({visibility: 'visible', position: 'relative'});
   });
   $('.main_text').trigger('click');
-  $('input, a').live('click', function (){$(this).blur();});
+  $('body').on('click', 'input, a', function (){$(this).blur();})
+  .on('click', 'a.menutop', function (){
+    if ($(this).attr('id') != '')
+      top.linkAction($(this).attr('id'));
+  });
   if (mail)
     $('#mail').html("<img src='img/icon/mail"+mail+".gif' title='Получена почта' width='24' height='15'>");
 });
@@ -68,7 +72,7 @@ $(function (){
                 <td><img height="11" src="img/mennu112_09.gif" width="1" /></td>
                 <td class="main_text" id="4">Персонаж</td>
                 <td><img height="11" src="img/mennu112_09.gif" width="1" /></td>
-                <td class="exit" onclick="top.exit();">Выход&nbsp;</td>
+                <td class="exit" onclick="top.exit();">Выход</td>
               </tr>
             </table>
           </td>
@@ -100,19 +104,19 @@ $(function (){
                     | <a class="menutop" href="stat.php" target="_blank">Рейтинг</a>
                   </span>
                   <span id="menu3" class="bottom_text">
-                      <a class="menutop" onclick="top.linkAction('security');" href="#">Смена пароля</a>
-                    | <a class="menutop" onclick="top.linkAction('report');" href="#">Отчеты</a>
+                      <a class="menutop" id="security" href="#">Смена пароля</a>
+                    | <a class="menutop" id="report" href="#">Отчеты</a>
                     | <a class="menutop" href="encicl/FAQ/afer.html" target="_blank">Правила</a>
-                    | <a class="menutop" onclick="top.linkAction('security');" href="#">Настройки</a>
+                    | <a class="menutop" id="security" href="#">Настройки</a>
                   </span>
                   <span id="menu4" class="bottom_text">
-                      <a class="menutop" onClick="top.linkAction('inv');" href="#">Инвентарь</a>
-                    | <a class="menutop" onClick="top.linkAction('skills');" href="#"><?echo $lang['abilities'];?></a>
-                    | <a class="menutop" onClick="top.linkAction('zayavka');" href="#"><?echo $lang['fights'];?></a>
-                    | <a class="menutop" onclick="top.linkAction('info');" href="#"><?echo $lang['form'];?></a>
+                      <a class="menutop" id="inv" href="#">Инвентарь</a>
+                    | <a class="menutop" id="skills" href="#"><?echo $lang['abilities'];?></a>
+                    | <a class="menutop" id="zayavka" href="#"><?echo $lang['fights'];?></a>
+                    | <a class="menutop" id="info" href="#"><?echo $lang['form'];?></a>
 <?
 if ($admin_level > 0)
-    echo "| <a class='menutop' onclick=\"top.linkAction('admin');\" href='#'>Админка</a>";
+    echo "| <a class='menutop' id='admin' href='#'>Админка</a>";
 ?>
                   </span>
                 </td>

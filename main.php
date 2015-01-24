@@ -67,20 +67,20 @@ else if ($login_mail)
   setCookie('login_mail', $login_mail,  time() + 3600);
 ?>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta http-equiv="Content-Language" content="ru" />
-<link rel="StyleSheet" href="styles/style.css" type="text/css" />
-<script src="scripts/jquery.js" type="text/javascript"></script>
-<script src="scripts/jquery.color.js" type="text/javascript"></script>
-<script src="scripts/cookies.js" type="text/javascript"></script>
-<script src="scripts/visual.js" type="text/javascript"></script>
-<script src="scripts/main.js" type="text/javascript"></script>
-<script src="scripts/show.js" type="text/javascript"></script>
-<script src="scripts/dialog.js" type="text/javascript"></script>
-<script type="text/javascript">
-  try {top.checkGame();} catch(e) {location.href = 'index.php';}
-  $.ajaxSetup({headers: {'X-Csrf-Token': '<?echo $_SESSION['token'];?>'}});
-</script>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Language" content="ru" />
+  <link rel="StyleSheet" href="styles/style.css" type="text/css" />
+  <script src="scripts/jquery.js" type="text/javascript"></script>
+  <script src="scripts/jquery.color.js" type="text/javascript"></script>
+  <script src="scripts/cookies.js" type="text/javascript"></script>
+  <script src="scripts/visual.js" type="text/javascript"></script>
+  <script src="scripts/main.js" type="text/javascript"></script>
+  <script src="scripts/show.js" type="text/javascript"></script>
+  <script src="scripts/dialog.js" type="text/javascript"></script>
+  <script type="text/javascript">
+    try{top.checkGame();} catch(e) {location.href = 'index.php';}
+    $.ajaxSetup({headers: {'X-Csrf-Token': '<?echo $_SESSION['token'];?>'}});
+  </script>
 </head>
 <body>
 <div id="hint3"></div>
@@ -101,13 +101,10 @@ $exp = $char_db['exp'];
 $next_up = $char_db['next_up'];
 
 $money = $char_db['money'];
-$money_euro = $char_db['money_euro'];
 $mass = $char_stats['mass'];
 $maxmass = $char_stats['maxmass'];
 
 $chin = $char_db['chin'];
-$status = $char_db['status'];
-$stat_rang = $char_db['stat_rang'];
 $name_s = $char_db['clan_short'];
 $clan  = $char_db['clan'];
 $orden = $char_db['orden'];

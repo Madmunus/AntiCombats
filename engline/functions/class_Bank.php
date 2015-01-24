@@ -43,7 +43,7 @@ class Bank extends Char
     if (checki($id) || !is_numeric($sum))
       $this->char->error->Map(326);
     
-    $sum = round($sum, 2);
+    $sum = rdf($sum);
     
     if ($sum == 0)
       $this->char->error->Map(325);
@@ -54,7 +54,7 @@ class Bank extends Char
       case 'euro':
         $money = $this->db->selectCell("SELECT `euro` FROM `character_bank` WHERE `id` = ?d and `guid` = ?d", $id ,$guid);
 
-        if (($money = $money - $sum) < 0)
+        if (($money = rdf($money - $sum)) < 0)
           $this->char->error->Map(310, $sum);
         
         $this->db->query("UPDATE `character_bank` SET `euro` = ?f WHERE `id` = ?d and `guid` = ?d", $money ,$id ,$guid);
@@ -62,7 +62,7 @@ class Bank extends Char
       default:
         $money = $this->db->selectCell("SELECT `cash` FROM `character_bank` WHERE `id` = ?d and `guid` = ?d", $id ,$guid);
 
-        if (($money = $money - $sum) < 0)
+        if (($money = rdf($money - $sum)) < 0)
           $this->char->error->Map(305, $sum);
         
         $this->db->query("UPDATE `character_bank` SET `cash` = ?f WHERE `id` = ?d and `guid` = ?d", $money ,$id ,$guid);

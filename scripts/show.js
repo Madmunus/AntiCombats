@@ -15,7 +15,7 @@ function updateMmoves (id, text)
 }
 
 $(function (){
-	$('img,a,td,span').live('mousemove', function (e){
+	$('body').on('mousemove', 'img,a,td,span', function (e){
 		var x, y;
 		e.preventDefault();
 		if (!($(this).attr('alt')) || $(this).attr('alt') == '')
@@ -27,6 +27,7 @@ $(function (){
 		var razY = $(window).height() - (e.pageY - $(window).scrollTop()) - 25;
 		y = (razY < $("#mmoves").height()) ?$("#mmoves").height() + 15 :-15;
 		$("#mmoves").css({'left': e.pageX - x + 'px', 'top': e.pageY - y + 'px', 'visibility': 'visible'});
-	});
-	$('img,a,td,span').live('mouseleave', function (){$("#mmoves").remove();});
+	}).on('mouseleave', 'img,a,td,span', function (){
+    $("#mmoves").remove();
+  });
 });

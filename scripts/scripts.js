@@ -12,16 +12,16 @@ function getFormatedTime (time)
 
 function strip_sc (str)
 {
-  str = str.replace (/^\s+/, '');
-  str = str.replace (/\s*,\s*/g, ',');
-  str = str.substr (0, str.length - 1);
+  str = str.replace(/^\s+/, '');
+  str = str.replace(/\s*,\s*/g, ',');
+  str = str.substr(0, str.length - 1);
   return str;
 }
 
 function trim (str)
 {
-  str = str.replace (/^\s*/, '');
-  str = str.replace (/\s*$/, '');
+  str = str.replace(/^\s*/, '');
+  str = str.replace(/\s*$/, '');
   return str;
 }
 
@@ -180,7 +180,7 @@ function cleanChat ()
 
 function exit ()
 {
-  frames.main.dialogconfirm('Подтверждение', "top.linkAction('exit')", '<center>Вы уверены что хотите выйти из игры?</center>', 6);
+  frames.main.dialogconfirm('Подтверждение', "top.linkAction('exit')", '<center>Вы уверены что хотите выйти из игры?</center>', 0);
 }
 
 var time_to_go = 0;

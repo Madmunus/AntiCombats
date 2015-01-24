@@ -16,16 +16,16 @@ $error_text = 'Пройдите предыдущий шаг!<br><br><a href="?st
 ?>
 <html>
 <head>
-<link rel="SHORTCUT ICON" href="img/favicon.ico" />
-<title>Анти Бойцовский Клуб</title>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<link href="styles/main.css" rel="stylesheet" type="text/css" />
-<script src="scripts/jquery.js" type="text/javascript"></script>
-<script src="scripts/register.js" type="text/javascript"></script>
+  <link rel="SHORTCUT ICON" href="img/favicon.ico" />
+  <title>Анти Бойцовский Клуб</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link href="styles/main.css" rel="stylesheet" type="text/css" />
+  <script src="scripts/jquery.js" type="text/javascript"></script>
+  <script src="scripts/register.js" type="text/javascript"></script>
 </head>
-<body bgColor="#3D3D3B" leftMargin="0" topMargin="0" marginwidth="0" marginheight="0">
+<body bgcolor="#3D3D3B" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
 <table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0">
-  <thead><tr><td background="img/site/sitebk_02.jpg" align="center"><img src="img/site/sitebk_03.gif" width="194" height="135"></td></tr></thead>
+  <thead><tr><td background="img/site/sitebk_02.jpg" align="center"><img src="img/site/sitebk_03ru.gif" width="194" height="135"></td></tr></thead>
   <tfoot>
     <tr><td width="100%" height="13" background="img/site/sitebk_07.jpg"></td></tr>
     <tr><td width="100%" bgColor="#000" height="20" align="center" class="copyright"><?echo $config['copyright'];?></td></tr>
@@ -33,46 +33,37 @@ $error_text = 'Пройдите предыдущий шаг!<br><br><a href="?st
   <tbody>
   <tr>
     <td align="center" height="90%" valign="top">
-      <table width="75%" height=100% border="0" cellpadding="0" cellspacing="0" bgcolor="#f2e5b1">
-        <tfoot>
-        <tr>
-          <td style="background: url(img/site/n21_08_1.jpg) repeat-y;"></td>
-          <td colspan="3" align="right"><img src="img/site/nm314_13.jpg" border="0"></td>
-          <td valign="top" background="img/site/nnn21_03_1.jpg"></td>
-        </tr>
-        </tfoot>
-        <tbody>
+      <table width="75%" height="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#f2e5b1">
         <tr valign="top">
           <td width="29" align="right" valign="top" style="background: url(img/site/n21_08_1.jpg) repeat-y;"><img src="img/site/nm31_08.jpg"></td>
           <td><img src="img/site/nm31_04.jpg"></td>
-          <td>
+          <td width="69%">
             <table width="100%" border="0" cellpadding="0" cellspacing="0">
-              <tr>
-                <td><br><br><img src="img/site/regen_10.gif"><p><span class="style5"><b>Внимание!</b></span> Данная игра работает <u>только</u> под браузером Mozilla Firefox!<br>
-                <div id="error" readonly cols="100" rows="1" style="color: red; font-weight: bold; background-color: #f2e5b1; border: 0; display: none;"></div></p></td>
-              </tr>
+              <tr><td><br><br><img src="img/site/regen_10.gif"><br><br><div id="error" readonly cols="100" rows="1" style="color: red; font-weight: bold; background-color: #f2e5b1; border: 0; display: none; margin-bottom: 5px;"></div></td></tr>
               <tr><td>
-<?  
+<?
 if (!($adb->selectCell("SELECT `registration` FROM `server_info`;")))
-  die('Регистрация закрыта!<br><br><a href="index.php" class="us2">Вернуться на главную</a>');
+  $step = 'stop';
 
     switch ($step)
     {
+      case 'stop':
+?>              <div style="padding: 0 0 0 20px;">Регистрация закрыта!<br><a href="../" class="us2">Вернуться на главную</a></div>
+<?    break;
       default :
       case '':
         $reg_login = (checks('reg_login')) ?$_SESSION['reg_login'] :'';
 ?>              <table class="g" align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
                   <tr class="bg6">
-                    <td><span class="style5">* </span>&nbsp;Имя вашего<br> &nbsp; &nbsp; персонажа (login):</td>
-                    <td><input type="text" name="reg_login" class="inup" size="25" maxlength="15" value="<?echo $reg_login;?>"> &nbsp;<input type="button" class="btn" value="Продолжить" onclick="checkStep1();"></td>
+                    <td><span class="style5">* </span>&nbsp;Имя вашего персонажа (login): <input type="text" name="reg_login" class="inup" size="25" maxlength="15" value="<?echo $reg_login;?>"> &nbsp;<input type="button" class="btn" value="Продолжить" onclick="checkStep1();" id="next"></td>
                   </tr>
                   <tr>
-                    <td colspan="2" style="padding: 5px 0 0 20px;">
+                    <td style="padding: 5px 0 0 20px;">
                       <p><small><span class="style7">Ограничения:</span>
                       <br>1. Имя не может быть короче 2-х символов и длиннее 15-ти. Имя не может состоять более чем из трех слов.
                       <br>Правильно: <b>Грозный Вася</b>, <b>Чудовище</b>, <b>Ли</b>
                       <br>Неправильно: <b>Ы</b>, <b>Суперубивающий Монстр</b>
-                      <br><br>2. Имя может содержать только буквы или русского или английского алфавита. В качестве разделительных символов можно использовать символ &quot;_&quot; или тире &quot;-&quot;
+                      <br><br>2. Имя может содержать только буквы или русского или английского алфавита. В качестве разделительных символов можно использовать пробел или тире &quot;-&quot;
                       <br>Правильно: <b>Вася-Зверь</b>, <b>Идуший по полю</b>
                       <br>Неправильно: <b>Вася 17</b>, <b>*Вася*</b>
                       <br><br>3. Допускается использовать или только английские буквы, или только русские, но нельзя одновременно использовать буквы обоих алфавитов.
@@ -96,7 +87,6 @@ if (!($adb->selectCell("SELECT `registration` FROM `server_info`;")))
                       <br><br>9. Имя не может содержать нецензурную лексику и оскорбления.
                       <br>Правильно: <b>Вася</b>, <b>Иван Петрович</b>
                       <br>Неправильно: <b><font color="red">&lt;вырезано цензурой&gt;</font></b>, <b><font color="red">&lt;вырезано шокированой цензурой&gt;</font></b>
-                      <br><br><br>
                       </small></p>
                     </td>
                   </tr>
@@ -140,7 +130,7 @@ if (!($adb->selectCell("SELECT `registration` FROM `server_info`;")))
                   </tr>
                   <tr>
                     <td><input onclick="location.href='?step=1';" type="button" class="btn" value="Вернуться"></td>
-                    <td><input type="button" class="btn" value="Продолжить" onclick="checkStep2();"></td>
+                    <td><input type="button" class="btn" value="Продолжить" onclick="checkStep2();" id="next"></td>
                   </tr>
                 </table>
 <?    break;
@@ -174,7 +164,7 @@ if (!($adb->selectCell("SELECT `registration` FROM `server_info`;")))
                   <tr><td colspan="2" style="padding: 5px 0 10px 27px;"><span class="style7"><small>(Если указаны вопрос и ответ, то высылка пароля на email будет производится лишь при правильном ответе)</small></span></td></tr>
                   <tr>
                     <td><input onclick="location.href='?step=2';" type="button" class="btn" value="Вернуться"></td>
-                    <td><input type="button" class="btn" value="Продолжить" onclick="checkStep3();"></td>
+                    <td><input type="button" class="btn" value="Продолжить" onclick="checkStep3();" id="next"></td>
                   </tr>
                 </table>
 <?    break;
@@ -186,7 +176,7 @@ if (!($adb->selectCell("SELECT `registration` FROM `server_info`;")))
         $reg_birth_year = (checks('reg_birth_year')) ?$_SESSION['reg_birth_year'] :'';
 ?>              <table class="g" align="center" border="0" cellpadding="1" cellspacing="0" width="100%">
                   <tr class="bg6">
-                    <td><span class="style5">*</span><font style="margin-left: 8px;">Имя вашего</font> <div style="margin-left: 17px;">персонажа:</div></td>
+                    <td><span class="style5">*</span><font style="margin-left: 8px;">Имя вашего персонажа:</font></td>
                     <td><?echo $_SESSION['reg_login'];?></td>
                   </tr>
                   <tr>
@@ -227,14 +217,14 @@ if (!($adb->selectCell("SELECT `registration` FROM `server_info`;")))
                   <tr><td colspan="2"><span class="style5">*</span><font style="margin-left: 8px;">Пол персонажа:</font></td></tr>
                   <tr>
                     <td style="padding-left: 16px;">
-                      <input type="radio" name="sex" class="inup" checked value="male">Мужской<br>
-                      <input type="radio" name="sex" class="inup" value="female">Женский
+                      <input type="radio" name="sex" class="inup" checked value="0">Мужской<br>
+                      <input type="radio" name="sex" class="inup" value="1">Женский
                     </td>
                   </tr>
                   <tr><td colspan="2" style="padding-left: 16px;"><small><span class="style5">Внимание! </span><span class="style7">Пол персонажа должен соответствовать реальному полу игрока.</span></small></td></tr>
                   <tr>
                     <td style="padding-left: 16px;">Город:</td>
-                    <td><select size="1" name="city_n">
+                    <td><select name="city_n" class="inup">
                       <option selected></option>
 <?                      foreach ($data['towns'] as $name)
                           echo "<option value='$name'>$name</option>";
@@ -261,7 +251,7 @@ if (!($adb->selectCell("SELECT `registration` FROM `server_info`;")))
                   </tr>
                   <tr>
                     <td><input onclick="location.href='?step=3';" type="button" class="btn" value="Вернуться"></td>
-                    <td><input type="button" class="btn" value="Продолжить" onclick="checkStep4();"></td>
+                    <td><input type="button" class="btn" value="Продолжить" onclick="checkStep4();" id="next"></td>
                   </tr>
                 </table>
 <?    break;
@@ -272,28 +262,27 @@ if (!($adb->selectCell("SELECT `registration` FROM `server_info`;")))
                     <td><span class="style5">*</span><font style="margin-left: 8px;">Имя вашего персонажа:</font></td>
                     <td><?echo $_SESSION['reg_login'];?></td>
                   </tr>
-                  <tr height="30"><td colspan="2"><span class="style5">*</span> <input type="checkbox" name="rules" value="1" />Я обязуюсь соблюдать <a href="encicl/law.html" target="_blank"><b>Законы Анти Бойцовского Клуба</b></a></td></tr>
+                  <tr height="30"><td colspan="2"><span class="style5">*</span> <input type="checkbox" name="rules1" value="1" />Я обязуюсь соблюдать <a href="encicl/law.html" target="_blank"><b>Законы Анти Бойцовского Клуба</b></a></td></tr>
+                  <tr height="30"><td colspan="2"><span class="style5">*</span> <input type="checkbox" name="rules2" value="1" />Я ознакомился с <a href="encicl/TOS.html" target="_blank"><b>Соглашением о предоставлении сервиса игры "Анти Бойцовский Клуб"</b></a> и согласен по всем пунктам.</b></a></td></tr>
                   <tr>
                     <td><span class="style5">*</span><font style="margin-left: 8px;">Введите изображенный на рисунке код</font><br><font style="margin-left: 18px;"><input type="text" name="code" maxlength="7" size="7"></font></td>
                     <td><img src="secpic.php" style="border: 1px solid grey; cursor: pointer;" onclick="location.reload();"></td>
                   </tr>
                   <tr>
-                    <td><input onclick="location.href='?step=4';" type="button" class="btn" value="Вернуться"></td>
-                    <td><input type="button" class="btn" value="Зарегистрировать" onclick="checkStep5();"></td>
+                    <td><br><input onclick="location.href='?step=4';" type="button" class="btn" value="Вернуться"></td>
+                    <td><br><input type="button" class="btn" value="Начать" onclick="checkStep5();" id="next"></td>
                   </tr>
                 </table>
-                <p align="left">Для быстрого ознакомления с правилами игры рекомендуем прочесть статью <a target="_blank" href="encicl/start.html"><b>Быстрый старт</b></a>.</p>
 <?    break;
     }
-?>
+?>              <br><br><br>
                 </td>
               </tr>
             </table>
           </td>
-          <td><img src="img/site/ico_n13profile_03ru.jpg" border="0" valign="top"></td>
+          <td style="background: url(img/site/nm314_13.jpg) no-repeat bottom;"><img src="img/site/ico_n13profile_03ru.jpg" border="0" valign="top"></td>
           <td width="23" valign="top" background="img/site/nnn21_03_1.jpg"></td>
         </tr>
-        </tbody>
       </table>
     </td>
   </tr>

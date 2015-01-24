@@ -72,9 +72,9 @@ function shKeypad (fl)
     spSim1 = KeyCreate(spSim1);
   }
   keytable = '<table align="center" border="0">';
-  keytable += '<tr>' + KeyShow(0, chEng1) + "<td colspan='7' align='right'><input id='erase' style='width: 164px;' type='button' class='btn' value='&larr;'></td></tr>";
-  keytable += '<tr>' + KeyShow(1, chEng1) + "<td colspan='7' align='right'><input id='clean' style='width: 164px;' type='button' class='btn' value='Очистить все'></td></tr>";
-  keytable += '<tr>' + KeyShow(0, chDec1) + "<td colspan='16' align='right'><input id='alphabet' style='width: 164px;' type='button' class='btn' value='По алфавиту'></td><td colspan='7' align='right'><input id='shuffle' style='width: 164px;' type='button' class='btn' value='Перемешать'></td></tr>";
+  keytable += '<tr>' + KeyShow(0, chEng1) + "<td colspan='7' align='right'><input id='erase' type='button' class='btn' value='&larr;'></td></tr>";
+  keytable += '<tr>' + KeyShow(1, chEng1) + "<td colspan='7' align='right'><input id='clean' type='button' class='btn' value='Очистить все'></td></tr>";
+  keytable += '<tr>' + KeyShow(0, chDec1) + "<td colspan='16' align='right'><input id='alphabet' type='button' class='btn' value='По алфавиту'></td><td colspan='7' align='right'><input id='shuffle' type='button' class='btn' value='Перемешать'></td></tr>";
   keytable += '<tr><td style="height: 8px;"></td></tr>';
   keytable += '<tr>' + KeyShow(0, chRus1)+'</tr>';
   keytable += '<tr>' + KeyShow(1, chRus1)+'</tr>';
@@ -86,14 +86,7 @@ function shKeypad (fl)
 
 $(function (){
   shKeypad (1);
-  $('input[name=login]').focus(function (){
-    if ($(this).val() == 'Логин')
-      $(this).val('');
-  }).blur(function (){
-    if ($(this).val() == '')
-      $(this).val('Логин');
-  });
-  $('#keypadshow').live('click', function (){
+  $('body').on('click', '#keypadshow', function (){
     if ($("#keypad").is(":hidden"))
     {
       $('input[name=password]').css('backgroundColor', 'gray');
@@ -105,91 +98,90 @@ $(function (){
       $('input[name=password]').css('backgroundColor', '#151616');
       $("#keypad").fadeOut(1000, function (){$("#keypad").parent().height(0);});
     }
-  });
-  $('input.btkey').live('click', function (){
+  }).on('click', 'input.btkey', function (){
     $('input[name=password]').val($('input[name=password]').val() + $(this).val());
-  });
-  $('input#erase').live('click', function (){
+  }).on('click', 'input#erase', function (){
     tt = $('input[name=password]').val();
     $('input[name=password]').val(tt.substring(0, tt.length-1));
-  });
-  $('input#clean').live('click', function (){
+  }).on('click', 'input#clean', function (){
     $('input[name=password]').val('');
-  });
-  $('input#alphabet').live('click', function (){
+  }).on('click', 'input#alphabet', function (){
     shKeypad();
-  });
-  $('input#shuffle').live('click', function (){
+  }).on('click', 'input#shuffle', function (){
     shKeypad(1);
-  });
-  $('input[type=button], input[type=radio], input[type=submit], a').live('click', function (){
+  }).on('click', 'input[type=button], input[type=radio], input[type=submit], a', function (){
     $(this).blur();
   });
 });
 </script>
 </head>
 <?
-$winer = "runet_30.jpg";
-$best = "runet_10.jpg";
+$winer = "runet_30";
+$best = "runet_10";
+$ny = "";
 switch (date('m'))
 {
   case '01':
+    $back = "start_15_winter_03";
+    $icon = "start_15_winter_nw_05";
+    $winer = "runet_4";
+    $best = "runet_5";
+    $ny = "<img src='img/site/2015.gif'>";
+  break;
   case '02':
-    $back = "start_2011_win_03.jpg";
-    $icon = "start_2011_winng_05.jpg";
-    $winer = "runet_4.jpg";
-    $best = "runet_5.jpg";
+    $back = "start_2011_win_03";
+    $icon = "start_2011_win_05";
+    $winer = "runet_4";
+    $best = "runet_5";
   break;
   case '03':
-    $back = "start_12spr_03.jpg";
-    $icon = "start_12spr_05.jpg";
+    $back = "start_12spr_03";
+    $icon = "start_12spr_05";
   break;
   case '04':
+    $back = "start_10spr1_03";
+    $icon = "start_10spr1_05";
+  break;
   case '05':
-    $back = "start_10spr1_03.jpg";
-    $icon = "start_10spr1_05.jpg";
+    $back = "start_14sum_03";
+    $icon = "start_14sum_05";
   break;
   case '06':
   case '07':
-    $back = "start_10sum1_03.jpg";
-    $icon = "start_10sum1_05.jpg";
+    $back = "start_10sum1_03";
+    $icon = "start_14sum_05";
   break;
   case '08':
     $random = rand(1, 2);
-    $back = ($random == 1) ?"start_09sum1_03.jpg" :"start_09sum2_03.jpg";
-    $icon = ($random == 1) ?"start_09sum1_05.jpg" :"start_09sum2_051.jpg";
+    $back = ($random == 1) ?"start_09sum1_03" :"start_09sum2_03";
+    $icon = ($random == 1) ?"start_09sum1_05" :"start_09sum2_051";
   break;
   case '09':
   case '10':
   case '11':
-    $back = "start_10aut1_03.jpg";
-    $icon = "start_10aut1_05.jpg";
+    $back = "start_10aut1_03";
+    $icon = "start_10aut1_05";
   break;
   case '12':
-    $back = "start_2011_win_03.jpg";
-    $icon = "start_2011_win_05.jpg";
-    $winer = "runet_4.jpg";
-    $best = "runet_5.jpg";
+    $back = "start_2011_win_03";
+    $icon = "start_2011_win_05";
+    $winer = "runet_4";
+    $best = "runet_5";
   break;
 }
-$login = ($server['login']) ?"return true;" :"alert('Сервер оффлайн'); return false;";
-$registration = ($server['registration']) ?"location.href = 'register.php';" :"alert('Регистрация закрыта');";
-$rpassword = ($server['password']) ?"pass.php" :"alert('Система отключена');";
 ?>
 <body>
 <table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0">
-  <tr height="30%"><td></td></tr>
+  <tr height="30%"><td colspan="3" width="100%" align="center"><?echo $ny;?></td></tr>
   <tr height="205">
-    <td colspan="3" width="100%" align="center" scope="col" background="img/site/<?echo $back;?>" style="background-repeat: repeat-x;">
-      <div align="center">
+    <td colspan="3" width="100%" align="center" scope="col" background="img/site/<?echo $back;?>.jpg" style="background-repeat: repeat-x;">
       <table width="100%"  border="0" cellspacing="0" cellpadding="0" style="background-repeat: repeat-x;">
         <tr height="205" valign="top">
-          <td width="195" align="right" valign="bottom" style="padding-bottom: 42px;"><img src="img/site/<?echo $winer;?>"></td>
-          <td align="center"><p><img src="img/site/<?echo $icon;?>"></p></td>
-          <td width="195" valign="bottom" style="padding-bottom: 42px; padding-right: 5px;" align="right"><img src="img/site/<?echo $best;?>"></td>
+          <td width="195" align="right" valign="bottom" style="padding-bottom: 42px;"><img src="img/site/<?echo $winer;?>.jpg"></td>
+          <td align="center"><p><img src="img/site/<?echo $icon;?>.jpg"></p></td>
+          <td width="195" valign="bottom" style="padding-bottom: 42px; padding-right: 5px;" align="right"><img src="img/site/<?echo $best;?>.jpg"></td>
         </tr>
       </table>
-      </div>
     </td>
   </tr>
   <tr>
@@ -197,19 +189,19 @@ $rpassword = ($server['password']) ?"pass.php" :"alert('Система откл�
     <td align="center" width="50%" style="padding-left: 10px;">
       <table width="100%" border="0">
         <form action="enter.php" method="post">
-        <tr><td align="center"><input type="text" class="inup" align="middle" style="width: 144" value="Логин" name="login"></td></tr>
+        <tr><td align="center"><input type="text" class="inup" align="middle" style="width: 144" name="login" placeholder="Логин"></td></tr>
         <tr>
           <td align="center">
             <table cellspacing="0" cellpadding="0">
               <tr valign="bottom">
                 <td><input style="width: 114px;" class="inup" type="password" size="25" value="" name="password"></td>
-                <td style="padding-left: 5px;" valign="bottom"><img id="keypadshow" border="0" src="img/site/klav_tra.gif" style="cursor: pointer;" width="26" height="17"></td>
+                <td valign="bottom"><img id="keypadshow" border="0" src="img/site/klav_tra.gif" style="cursor: pointer;" width="26" height="17"></td>
               </tr>
             </table>
           </td>
         </tr>
-        <tr><td height="19" align="center"><input type="submit" class="btn" value=" Войти " onclick="<?echo $login;?>"></td></tr>
-        <tr><td align="center"><input type='button' class='btn' style='width: 120px;' value=' Регистрация ' onclick="<?echo $registration;?>"></td></tr>
+        <tr><td height="19" align="center"><input type="submit" class="btn" value=" Войти "></td></tr>
+        <tr><td align="center"><input type="button" class="btn" value="Регистрация" onclick="location.href = 'register.php';"></td></tr>
         </form>
       </table>
     </td>
@@ -219,14 +211,13 @@ $rpassword = ($server['password']) ?"pass.php" :"alert('Система откл�
   <tr>
     <td colspan="3" align="center" noWrap valign="top">
       <a href="encicl/" target="_blank">Библиотека</a> &nbsp;
-      <a href="encicl/faq/" target="_blank">FAQ</a> &nbsp;
       <a href="encicl/law.html" target="_blank">Законы</a> &nbsp;
-      <a href="encicl/TOS_RU_encicl.html" target="_blank">Соглашения</a> &nbsp;
+      <a href="encicl/TOS_RU.html" target="_blank">Соглашения</a> &nbsp;
       <a href="news.php" target="_blank">События</a> &nbsp;
       <a href="forum" target="_blank">Форум</a> &nbsp;
       <a href="#">Скроллы</a> &nbsp;    
       <a href="stat.php" target="_blank">Рейтинг</a> &nbsp;
-      <a href="<?echo $rpassword;?>">Забыли пароль?</a> &nbsp;
+      <a href="reminder.php">Забыли пароль?</a> &nbsp;
       <a href="#">Подтверждения</a>
     </td>
   </tr>

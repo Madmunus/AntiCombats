@@ -7,23 +7,24 @@ $database = array(
 );
 
 $config = array(
-  'start' => array(                             //Создание персонажа
-               'stats'    => array(
-                               'str' => 3,
-                               'dex' => 3,
-                               'con' => 3,
-                               'vit' => 3
-                             ),
-               'ups'      => 3,
-               'skills'   => 1,
-               'maxmass'  => 40,
-               'hp_regen' => 500,
-               'mp_regen' => 100,
-               'mp_cons'  => 100,
-               'hitmin'   => 1,
-               'hitmax'   => 3,
-               'items'    => array(920, 1031)
-             )
+  'start'     => array(                             //Создание персонажа
+                   'stats'    => array(
+                                   'str' => 3,
+                                   'dex' => 3,
+                                   'con' => 3,
+                                   'vit' => 3
+                                 ),
+                   'ups'      => 3,
+                   'skills'   => 1,
+                   'maxmass'  => 40,
+                   'hp_regen' => 500,
+                   'mp_regen' => 100,
+                   'mp_cons'  => 100,
+                   'hitmin'   => 1,
+                   'hitmax'   => 3,
+                   'items'    => array(920, 1031)
+                 ),
+  'copyright' => '© 2009 - 2015, &laquo;<a href="../index.php" target="_blank">www.AntiCombats.com</a>&raquo;&trade;<br>All rights reserved'
 );
 $GSM = 0;
 ?>

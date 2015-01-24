@@ -44,32 +44,51 @@ switch ($do)
     
     $lang = $adb->selectRow("SELECT * FROM `admin_item_create` WHERE `type` = 'lang';");
     $fields = $adb->selectRow("SELECT * FROM `admin_item_create` WHERE `type` = ?s", $type);
-    $return = "<table border='0' width='100%'><tr><td colspan='8' class='header'>Основные:<hr></td></tr><tr>";
-    $i = 0;
+    $table = "<table border='0'>";
+    $a = 0;
     foreach ($fields as $field => $val)
     {
-      switch ($field)
-      {
-        case 'min_level': $return .= "</tr><tr><td colspan='8' class='header'>Требования:<hr></td></tr><tr>";     $i = 0; break;
-        case 'add_str':   $return .= "</tr><tr><td colspan='8' class='header'>Характеристики:<hr></td></tr><tr>"; $i = 0; break;
-        case 'def_h_min': $return .= "</tr><tr><td colspan='8' class='header'>Защита:<hr></td></tr><tr>";         $i = 0; break;
-        case 'res_magic': $return .= "</tr><tr><td colspan='8' class='header'>Резисты:<hr></td></tr><tr>";        $i = 0; break;
-        case 'mf_dmg':    $return .= "</tr><tr><td colspan='8' class='header'>Мф удара:<hr></td></tr><tr>";       $i = 0; break;
-        case 'mf_acrit':  $return .= "</tr><tr><td colspan='8' class='header'>Мф усиления:<hr></td></tr><tr>";    $i = 0; break;
-        case 'all_magic': $return .= "</tr><tr><td colspan='8' class='header'>Умения:<hr></td></tr><tr>";         $i = 0; break;
-        case 'min_hit':   $return .= "</tr><tr><td colspan='8' class='header'>Урон:<hr></td></tr><tr>";           $i = 0; break;
-        case 'rep_magic': $return .= "</tr><tr><td colspan='8' class='header'>Подавления:<hr></td></tr><tr>";     $i = 0; break;
-        case 'ch_sting':  $return .= "</tr><tr><td colspan='8' class='header'>Шансы:<hr></td></tr><tr>";          $i = 0; break;
-        case 'inc_count': $return .= "</tr><tr><td colspan='8' class='header'>Дополнительно:<hr></td></tr><tr>";  $i = 0; break;
-      }
-      
       if (!$val || $field == 'section' || $field == 'type')
         continue;
       
-      $size = ($field == 'name') ?20 :10;
-      $return .= "<td>$lang[$field]:</td><td><input class='field' type='text' name='$field' size='$size'></td>";
+      $title = $field;
+      switch ($field)
+      {
+        case 'item_flags':  $title .= " 1-Sellable, 2-Repairable, 4-Artefact, 8-Personal, 16-Left Hand";                                break;
+        case 'name':        $return = "<font class='header'>Основные:<hr></font>$table";                       $i = 0; $c = 7;          break;
+        case 'min_level':   $return .= "</table><font class='header'>Требования:<hr></font>$table";            $i = 0; $c = 11;         break;
+        case 'add_str':     $return .= "</table><font class='header'>Характеристики:<hr></font>$table";        $i = 0; $c = 9;          break;
+        case 'def_h':
+        case 'def_a':
+        case 'def_b':
+        case 'def_l':
+        case 'attack':
+        case 'add_hit_min': if(!$a){$return .= "</table><font class='header'>Защита и урон:<hr></font>$table"; $i = 0; $c = 7; $a = 1;} break;
+        case 'res_magic':   $return .= "</table><font class='header'>Резисты:<hr></font>$table";               $i = 0; $c = 12;         break;
+        case 'mf_dmg':      $return .= "</table><font class='header'>Мф удара:<hr></font>$table";              $i = 0; $c = 10;         break;
+        case 'mf_acrit':    $return .= "</table><font class='header'>Мф усиления:<hr></font>$table";           $i = 0; $c = 9;          break;
+        case 'all_magic':   $return .= "</table><font class='header'>Умения:<hr></font>$table";                $i = 0; $c = 12;         break;
+        case 'rep_magic':   $return .= "</table><font class='header'>Подавления:<hr></font>$table";            $i = 0; $c = 7;          break;
+        case 'ch_sting':    $return .= "</table><font class='header'>Шансы:<hr></font>$table";                 $i = 0; $c = 10;         break;
+        case 'inc_count':   $return .= "</table><font class='header'>Дополнительно:<hr></font>$table";         $i = 0; $c = 9;          break;
+        case 'description': $return .= '</tr><tr>';                                                                                     break;
+      }
+      
+      switch ($field)
+      {
+        case 'name':
+        case 'personal_owner':
+        case 'img':         $size = 150; break;
+        case 'validity':
+        case 'price':
+        case 'price_euro':  $size = 60;  break;
+        case 'description': $size = 300;  break;
+        default:            $size = 30;  break;
+      }
+      
+      $return .= "<td title='$title'>$lang[$field]:</td><td><input class='field' type='text' name='$field' style='width: ".$size."px;'></td>";
       $i++;
-      if (!($i % 4))
+      if (!($i % $c))
         $return .= '</tr><tr>';
     }
     $return .= "</tr></table><input type='submit' name='create' value='Создать'>";
@@ -86,8 +105,6 @@ switch ($do)
       $sql[$f[0]] = $f[1];
     }
     $adb->query("INSERT INTO `item_template` (?#) VALUES (?a);",array_keys($sql), array_values($sql));
-    $entry = $adb->selectCell("SELECT MAX(`entry`) FROM `item_template`;");
-    $adb->query("INSERT INTO `item_amount` (`entry`) VALUES (?d);", $entry);
     die('complete');
   break;
 }

@@ -37,7 +37,7 @@ foreach ($bank as $num => $bank_id)
   <tr>
     <td width="210" align="center" valign="top">
       <table border="0" cellspacing="0" cellpadding="0">
-        <tr><td width="210" align="center"><?$char->equip->showCharacter('inv');?></td></tr>    
+        <tr><td width="210" align="center"><?$char->equip->showCharacter('inv');?><br></td></tr>    
 <?
 if ($chat_shut)
   echo "<tr><td valign='top'><p style='margin-left: 10px;'><small><img src='img/icon/sleep.gif' width='40' height='25'>$lang[shut_desc] ".getFormatedTime($chat_shut)."<br></small></p></td></tr>";
@@ -75,19 +75,17 @@ foreach ($bars as $bar => $value)
   echo "<div id='bar_$bar'>".$char->showInventoryBar($bar, $value, count($bars))."</div>";
 echo "<small>";
 echo ($clan) ?"$lang[clan] <strong><a href='clan_inf.php?clan=$name_s' class='us2' target='_blank' style='font-size: 10px;'>$clan</a> ($chin)</strong><br>" :"";
-$orden_dis = ($orden == 1) ?"$lang[orden_pal] - " :(($orden == 2) ?"$lang[orden_dark] - " :"");
-echo ($orden == 1 || $orden == 2) ?"<strong>$orden_dis$stat_rang</strong><br></small>" :"";//<small>$lang[status] <strong>".$lang['status_'.$status]."</strong>
 ?>
-                 </small></td>
+                </small></td>
                 <td align="center" valign="top">
                   <table width="100%" border="0" cellspacing="0" cellpadding="0">
                     <tr>
-                      <td background="im/menu-but.gif" height="25" align="right" valign="middle">
+                      <td height="25" align="right" valign="middle">
                         <font color='red' id='error'><?$char->error->getFormattedError($error, $parameters);?></font>
                         <input type="button" class="nav" value="<?echo $lang['shape'];?>" title="<?echo $lang['shape_choose'];?>" id="link" link="shape">
                         <input type="button" class="nav" value="<?echo $lang['abilities'];?>" id="link" link="skills">
-                        <input type="button" class="nav" value="<?echo $lang['form'];?>" title="<?echo $lang['form'];?>" id="link" link="form&do=info">
-                        <input type="button" class="nav" value="<?echo $lang['security'];?>" title="<?echo $lang['change_pass_mail'];?>" style="font-weight: bold;" id="link" link="form&do=passandmail">
+                        <input type="button" class="nav" value="<?echo $lang['form'];?>" title="<?echo $lang['form'];?>" id="link" link="info">
+                        <input type="button" class="nav" value="<?echo $lang['security'];?>" title="<?echo $lang['change_pass_mail'];?>" style="font-weight: bold;" id="link" link="security">
                         <input type="button" class="help" value="<?echo $lang['hint'];?>" id="hint" link="invent">
                         <input type="button" class="nav" value="<?echo $lang['return'];?>" id="link" link="none">
                       </td>

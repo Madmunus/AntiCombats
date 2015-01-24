@@ -68,7 +68,7 @@ class Mail extends Char
     
     $send_money = round (0.95 * $send_money, 2);
     $this->db->query("INSERT INTO `city_mail_items` (`sender`, `to`, `item_id`, `count`, `delivery_time`, `date`) 
-                      VALUES (?d, ?d, '1000', ?f, ?d, ?d)", $this->guid ,$mail_to ,$send_money ,time() ,time());
+                      VALUES (?d, ?d, '1000', ?f, ?d, ?d)", $this->guid ,$mail_to ,rdf($send_money) ,time() ,time());
     $this->char->history->Mail('Send', "Деньги: $send_money кр", $mail_to);
     $this->char->error->Mail(409, 'money', $send_money);
   }
@@ -101,7 +101,7 @@ class Mail extends Char
       break;
       case 'return_money':
         $this->db->query("INSERT INTO `city_mail_items` (`sender`, `to`, `item_id`, `count`, `delivery_time`, `date`) 
-                          VALUES (?d, ?d, '1000', ?f, ?d, ?d)", $this->guid ,$sender ,$money_count ,time() ,time());
+                          VALUES (?d, ?d, '1000', ?f, ?d, ?d)", $this->guid ,$sender ,rdf($money_count) ,time() ,time());
         $this->char->history->Mail('Return', $name, $sender);
         $this->char->error->Mail(408, 'get_mail', $name);
       break;

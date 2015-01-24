@@ -29,7 +29,7 @@ var TimerMessage = -1;
 
 function cMenu ()
 {
-  $('#oMenu').css('visibility', "hidden");
+  $('#oMenu').css('visibility', 'hidden');
 }
 
 function updateMessages (go)
@@ -48,7 +48,7 @@ function updateMessages (go)
 }
 
 $(function (){
-  $('span').live("contextmenu", function (e){
+  $('body').on('contextmenu', 'span', function (e){
     var x, y, login, login2, i1, i2;
     e.preventDefault();
     x = e.pageX - 3;
@@ -62,16 +62,19 @@ $(function (){
                      '<a class="menuItem" href="javascript:top.AddToPrivate(\''+login+'\');">PRIVATE</a>'+
                      '<a class="menuItem" href="info.php?log='+ login.replace(' ', '%20') +'" target="_blank" return true;">INFO</a>');
     $('#oMenu').css({'left': x + "px", 'top': y + "px", 'visibility': "visible"});
-  });
-  $('.menuItem').live("contextmenu",function (e){e.preventDefault();}).live("click", function (){cMenu ();});
-  $('#oMenu').live("mouseleave",function (){cMenu ();});
-  $('img').live("click",function (){
+  }).on('contextmenu', '.menuItem', function (e){
+    e.preventDefault();
+  }).on('click', '.menuItem', function (){
+    cMenu();
+  }).on('mouseleave', '#oMenu', function (){
+    cMenu();
+  }).on('click', 'img', function (){
     var image = $(this).attr('src');
     image = image.split("/");
     image = image[image.length - 1].replace('.gif', '');
     $('#text', top.talk.document).val($('#text', top.talk.document).val() +' :'+image+': ');
   });
-  updateMessages ();
+  updateMessages();
 });
 </script>
 </head>

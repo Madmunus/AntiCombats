@@ -157,7 +157,7 @@ class Info
     $char_equip['hand_l_s'] = (!$char_equip['hand_l_free']) ?"hand_l" :"hand_l_f";
     
     echo $this->getLogin();
-    echo "<div style='height: 9px;'></div>";
+    echo "<div style='height: 5px;'></div>";
     echo $this->getCharacterEquipped($char_equip, $char_feat);
     echoScript("showHP($char_feat[hp], $char_feat[hp_all], $char_feat[hp_regen]);".
                "showMP($char_feat[mp], $char_feat[mp_all], $char_feat[mp_regen]);");
@@ -269,13 +269,11 @@ class Info
     
     $lang = $this->getLang();
     $i_info = $this->db->selectRow("SELECT `c`.`tear_cur`, `c`.`tear_max`, 
-                                           `i`.`min_hit`, `i`.`max_hit`, 
+                                           `i`.`attack`, `i`.`brick`, 
                                            `i`.`name`, `i`.`img`, 
                                            `i`.`add_hp`, `i`.`add_mp`, 
-                                           `i`.`def_h_min`, `i`.`def_h_max`, 
-                                           `i`.`def_a_min`, `i`.`def_a_max`, 
-                                           `i`.`def_b_min`, `i`.`def_b_max`, 
-                                           `i`.`def_l_min`, `i`.`def_l_max` 
+                                           `i`.`def_h`, `i`.`def_a`, 
+                                           `i`.`def_b`, `i`.`def_l` 
                                     FROM `character_inventory` AS `c` 
                                     LEFT JOIN `item_template` AS `i` 
                                     ON `c`.`item_entry` = `i`.`entry` 
@@ -288,34 +286,24 @@ class Info
     $tear_check = ($i_info['tear_cur'] >= $i_info['tear_max'] * 0.90);
     $tear_show = ($tear_check) ?'<font color=#990000>%s</font>' :'%s';
     $color = ($tear_check) ?" class='broken'" :'';
-    $protect = array ('h', 'a', 'b', 'l');
+    $def = array('h', 'a', 'b', 'l');
     $desc = $i_info['name'];
     
-    if ($i_info['min_hit'] > 0 || $i_info['max_hit'] > 0)
-      $desc .= "<br>$lang[damage] $i_info[min_hit] - $i_info[max_hit]";
+    if ($i_info['attack'] > 0)
+      $desc .= "<br>$lang[damage] $i_info[attack] - ".($i_info['attack'] + $i_info['brick']);
     
-    if ($i_info['add_hp'] > 0)      $desc .= "<br>$lang[add_hp] +".$i_info['add_hp'];
-    else if ($i_info['add_hp'] < 0) $desc .= "<br>$lang[add_hp] ".$i_info['add_hp'];
-    if ($i_info['add_mp'] > 0)      $desc .= "<br>$lang[add_mp] +".$i_info['add_mp'];
-    else if ($i_info['add_mp'] < 0) $desc .= "<br>$lang[add_mp] ".$i_info['add_mp'];
-    
-    foreach ($protect as $key)
-    {
-      if ($i_info['def_'.$key.'_min'] > 0)
-        $desc .= "<br>".$lang['def_'.$key]." ".$i_info['def_'.$key.'_min']."-".$i_info['def_'.$key.'_max']." ".$this->getFormatedBrick($i_info['def_'.$key.'_min'], $i_info['def_'.$key.'_max']);
-    }
     $desc .= "<br>$lang[durability] ".sprintf($tear_show, intval($i_info['tear_cur'])."/".ceil($i_info['tear_max']));
     return $desc;
   }
   /*Получение отформатированного кубика*/
-  private function getFormatedBrick ($min, $max)
+  private function getFormatedBrick ($min, $brick)
   {
-    $fist = $min - 1;
-    $second = $max - $fist;
+    $first = $min - 1;
+    $second = $brick + 1;
     if ($min == 1)    return "(d$second)";
-    if ($min == $max) return '';
+    if ($brick == 0)  return '';
     if ($min <= 0)    return '';
-                      return "($fist+d$second)";
+                      return "($first+d$second)";
   }
   /*Получение слота в который одет предмет*/
   function getItemSlot ($item_id)
@@ -348,23 +336,23 @@ class Info
     $clan = ($clan_s != '') ?"<img src='img/clan/$clan_s.gif' border='0' title='$clan_f'>" :"";
     $login_link = str_replace (" ", "%20", $login);
     $login_info = "<a href='info.php?log=$login_link' target='_blank'><img src='img/inf.gif' border='0' title='Инф. о $login'></a>";
-    return "<img src='img/icon/lock3.gif' border='0' onclick=\"window.opener.top.AddToPrivate('$login',true);\" style='cursor: pointer;'> $orden_img$clan<b>$login</b> [$level]$login_info";
+    return "<img src='img/icon/lock3.gif' border='0' onclick=\"window.opener.top.AddToPrivate('$login',true);\" style='cursor: pointer;'>$orden_img$clan<b>$login</b> [$level]$login_info";
   }
   /*Показ дополнительной информации по персонажу*/
   function showInfDetail ()
   {
-    $char_db = $this->getChar('char_db', 'block', 'block_reason', 'chat_shut', 'prison', 'prison_reason');
+    $char_db = $this->getChar('char_db', 'sex', 'block', 'block_reason', 'chat_shut', 'prison', 'prison_reason');
     $lang = $this->getLang();
     /*Блок*/
     if ($char_db['block'] && $char_db['block_reason'])
       echo "Причина блока :<br><b><font class='private'>$char_db[block_reason]</font></b><br>";
     /*Молчанка*/
     if ($char_db['chat_shut'])
-      echo "<img src='img/icon/sleeps0.gif'><small>На персонажа наложено заклятие молчания. Будет молчать еще ".getFormatedTime($char_db['chat_shut'])."</small><br>";
+      echo "<img src='img/icon/sleeps$char_db[sex].gif'><small>На персонажа наложено заклятие молчания. Будет молчать еще ".getFormatedTime($char_db['chat_shut'])."</small><br>";
     /*Тюрьма*/
     if ($char_db['prison'])
     {
-      echo "<small>Персонаж находиться под стражей еще ".getFormatedTime($char_db['prison'])."</small><br>";
+      echo "<img src='img/icon/jail.png'><small>В заточении еще ".getFormatedTime($char_db['prison'])."</small><br>";
       if ($char_db['prison_reason'] != "")
         echo "Причина тюремного заключения :<br><b><font class='private'>$char_db[prison_reason]</font></b><br>";
     }
@@ -449,7 +437,7 @@ function getCureValue ($now, $all, $regen, &$value)
 /*Получение количества восстановленного здоровья*/
 function getRegeneratedValue ($all, $cure, $regen)
 {
-  return $all - intval(0.0001*$all*$cure*$regen/3);
+  return ($all - intval(0.0001*$all*$cure*$regen/3));
 }
 /*Получение отформатированного времени*/
 function getFormatedTime ($timestamp)
@@ -460,22 +448,30 @@ function getFormatedTime ($timestamp)
   if (!is_numeric($timestamp))
     $timestamp = time();
   
-  $seconds = $timestamp - time();
+  $seconds = ($timestamp > time()) ?$timestamp - time() :time() - $timestamp;
   $seconds = ($seconds > 0) ?$seconds :0;
+  $y = intval($seconds / 31536000);
+  $seconds %= 31536000;
+  $m = intval($seconds / 2592000);
+  $seconds %= 2592000;
   $d = intval($seconds / 86400);
   $seconds %= 86400;
   $h = intval($seconds / 3600);
   $seconds %= 3600;
-  $m = intval($seconds / 60);
+  $n = intval($seconds / 60);
   $seconds %= 60;
   $s = $seconds;
   
+  if ($y && $m == 0) return "$y г.";
+  if ($y)            return "$y г. $m мес.";
+  if ($m && $d == 0) return "$m мес.";
+  if ($m)            return "$m мес. $d дн.";
   if ($d && $h == 0) return "$d дн.";
   if ($d)            return "$d дн. $h ч.";
-  if ($h && $m == 0) return "$h ч.";
-  if ($h)            return "$h ч. $m мин.";
-  if ($m && $s == 0) return "$m мин.";
-  if ($m)            return "$m мин. $s сек.";
+  if ($h && $n == 0) return "$h ч.";
+  if ($h)            return "$h ч. $n мин.";
+  if ($n && $s == 0) return "$n мин.";
+  if ($n)            return "$n мин. $s сек.";
                      return "$s сек.";
 }
 /*Получение цвета улучшения*/
@@ -520,7 +516,7 @@ function getVar ($var, $stand = '', $flags = 3)
   else
     return $stand;
 
-  if (is_numeric($stand) && is_numeric($value)) return ($flags & 8) ?round($value, 2) :$value;
+  if (is_numeric($stand) && is_numeric($value)) return ($flags & 8) ?rdf($value) :$value;
   else if (!is_numeric($stand))                 return htmlspecialchars($value);
   else                                          return $stand;
 }
@@ -567,7 +563,7 @@ function uppercase ($arg = '')
 {
   return mb_strtr($arg, LOCASE, UPCASE);
 }
-/*Определение знака зодиака*/
+/*Определение знака зодиака (Невостребована)*/
 function getZodiac ($birthday)
 {
   $b = split('\.', $birthday);

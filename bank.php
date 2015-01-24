@@ -1,54 +1,11 @@
 <?
-defined('AntiBK') or die ("Доступ запрещен!");
+defined('AntiBK') or die("Доступ запрещен!");
 
 $id = getVar('id', 0);
 $id2 = getVar('id2', 0);
 ?>
 <script src="scripts/move_check.js" type="text/javascript"></script>
-<script type="text/javascript">
-$(function (){
-  $('input[name=add_kredit]').live('click', function (){
-    if (isNaN(parseFloat($('input[name=add_sum]').val())))
-    {
-      alert('Укажите сумму');
-      return false;
-    }
-    else
-      return confirm('Вы хотите положить на свой счет '+parseFloat($('input[name=add_sum]').val())+' кр. ?');
-  });
-  $('input[name=get_kredit]').live('click', function (){
-    if (isNaN(parseFloat($('input[name=get_sum]').val())))
-    {
-      alert('Укажите сумму');
-      return false;
-    }
-    else
-      return confirm('Вы хотите снять со своего счета '+parseFloat($('input[name=get_sum]').val())+' кр. ?');
-  });
-  $('input[name=transfer_kredit]').live('click', function (){
-    if (isNaN(parseFloat($('input[name=transfer_sum]').val())) || isNaN(parseInt($('input[name=id2]').val())))
-    {
-      alert('Укажите сумму и номер счета');
-      return false;
-    }
-    else
-      return confirm('Вы хотите перевести со своего счета '+parseFloat($('input[name=transfer_sum]').val())+' кр. на счет номер #'+parseInt($('input[name=id2]').val())+' ?');
-  });
-  $('input[name=convert_ekredit]').live('click', function (){
-    if (isNaN(parseFloat($('input[name=convert_sum]').val())))
-    {
-      alert('Укажите обмениваемую сумму');
-      return false;
-    }
-    else
-      return confirm('Вы хотите обменять '+parseFloat($('input[name=convert_sum]').val())+' екр. на кредиты ?');
-  });
-  $('input[name=close]').live('click', function (){
-    if (confirm('Если вы закроете счет, то для открытия нового счета вам придется снова заплатить 3.00 кр.\nЗакрыть счет?'))
-      location.href = '?do=delete';
-  });
-});
-</script>
+<script src="scripts/bank.js" type="text/javascript"></script>
 <?
 switch ($do)
 {
@@ -124,7 +81,7 @@ switch ($do)
       
       $credit2_guid = $adb->selectCell("SELECT `guid` FROM `character_bank` WHERE `id` = ?d", $id2) or $char->error->Map(303);
       $char->bank->Money($trf_sum, $id);
-      $trfed_sum = round ($trf_sum * 0.97, 2);
+      $trfed_sum = rdf($trf_sum * 0.97);
       $char->bank->Money(-$trfed_sum, $id2, '', $credit2_guid);
       $char->history->Bank($id, $id2, $trfed_sum, '', 4);
       $char->history->Bank($id2, $id, $trfed_sum, '', 5);
@@ -367,7 +324,7 @@ else
         </tr>
       </table>
       <input type="submit" class="nav" name="change_psw" value="Сменить пароль"><br>
-      <?echo ($cash == 0) ?'<hr>Т.к. ваш счет с нулевым балансом, вы можете его в любой момент закрыть <input class="nav" type="button" name="close" value="Закрыть счет"><br>' :"";?>
+      <?echo ($cash == 0 && $euro == 0) ?'<hr>Т.к. ваш счет с нулевым балансом, вы можете его в любой момент закрыть <input class="nav" type="button" name="close" value="Закрыть счет"><br>' :"";?>
     </fieldset>
   </td>
   <td valign="top">

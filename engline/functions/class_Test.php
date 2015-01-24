@@ -50,7 +50,7 @@ class Test extends Char
     if (!$prison || intval($prison - time()) > 0)
       return;
     
-    $this->setChar('char_db', array('prison' => 0, 'orden' => 0));
+    $this->setChar('char_db', 'prison', 0);
   }
   /*Проверка участия персонажа в заявке*/
   function Zayavka ()
@@ -168,15 +168,15 @@ class Test extends Char
     $exp_table = $this->db->selectRow("SELECT `up`, `level`, `ups`, 
                                               `skills`, `money`, `vit`, 
                                               `spi`, `hp_regen`, 
-                                              `add_bars`, `status` 
+                                              `add_bars` 
                                        FROM `player_exp_for_level` 
                                        WHERE `exp` = ?d", $char_db['next_up']);
-    list($this_up, $next_level, $next_ups, $next_skills, $next_money, $next_vit, $next_spi, $next_hpr, $next_bars, $next_status) = array_values($exp_table);
+    list($this_up, $next_level, $next_ups, $next_skills, $next_money, $next_vit, $next_spi, $next_hpr, $next_bars) = array_values($exp_table);
     $next_exp = $this->db->selectCell("SELECT `exp` FROM `player_exp_for_level` WHERE `up` = ?d", ($this_up + 1));
     $this->db->query("UPDATE `characters` 
                       SET `next_up` = ?d, 
                           `money` = `money` + ?f 
-                      WHERE `guid` = ?d", $next_exp ,$next_money ,$this->guid);
+                      WHERE `guid` = ?d", $next_exp ,rdf($next_money) ,$this->guid);
     $this->db->query("UPDATE `character_stats` 
                       SET `ups` = `ups` + ?d, 
                           `skills` = `skills` + ?d 
@@ -198,7 +198,7 @@ class Test extends Char
       return;
     }
     
-    $this->setChar('char_db', array('level' => $next_level, 'status' => $next_status));
+    $this->setChar('char_db', 'level', $next_level);
     $this->db->query("UPDATE `character_stats` SET `maxmass` = `maxmass` + ?f, `hp_regen` = `hp_regen` - ?d WHERE `guid` = ?d", 40 ,$next_hpr ,$this->guid);
     if ($next_bars)
     {
@@ -226,7 +226,7 @@ class Test extends Char
     if (!$ld)
       return;
     
-    list ($all_time, $dest_g, $dest, $len, $napr) = array_values ($ld);
+    list($all_time, $dest_g, $dest, $len, $napr) = array_values($ld);
     $to_go = $all_time - time();
     $to_go_sec = intval(($all_time - time()));  /*seconds*/
     $time_to_go = intval($len / $speed * 3600); /*секунд идти*/
@@ -286,9 +286,9 @@ class Test extends Char
     if ($need_orden)
       $this->char->error->Map(102);
     
-    if ($need_sex && $char_db['sex'] != $need_sex)
+    if ($need_sex != '' && $char_db['sex'] != $need_sex)
     {
-      $need_sex = ($need_sex == 'female') ?'женщинам' :'мужчинам';
+      $need_sex = ($need_sex) ?'женщинам' :'мужчинам';
       $this->char->error->Map(104, $need_sex);
     }
     
@@ -336,13 +336,13 @@ class Test extends Char
   function Room ()
   {
     global $action;
-    $actions = array ('none', 'go', 'admin', 'enter', 'exit', '');
+    $actions = array('none', 'go', 'admin', 'enter', 'exit', '');
     $room = $this->getChar('char_db', 'room');
     
-    if ($room == 'mail' && !in_array ($action, $actions))
+    if ($room == 'mail' && !in_array($action, $actions))
       $this->char->error->Map(105);
     
-    if ($room == 'bank' && !in_array ($action, $actions))
+    if ($room == 'bank' && !in_array($action, $actions))
       $this->char->error->Map();
   }
   /*Проверка состояния персонажа*/

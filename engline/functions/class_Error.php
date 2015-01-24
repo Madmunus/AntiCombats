@@ -55,7 +55,7 @@ class Error extends Char
     if (!$err)
       return;
     
-    list ($err_text, $err_bold, $err_hyph) = array_values ($err);
+    list($err_text, $err_bold, $err_hyph) = array_values($err);
     
     if ($err_bold)
       $err_text = "<b>$err_text</b>";

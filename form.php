@@ -1,5 +1,5 @@
 <?
-defined('AntiBK') or die ("Доступ запрещен!");
+defined('AntiBK') or die("Доступ запрещен!");
 ?>
 <style>
 body {background-color: #e2e0e0;}
@@ -47,7 +47,7 @@ switch ($action)
       if ($old_mail != $char_db['mail'])
         $char->error->Form(510, $do);
       
-      if (!eregi ("^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*$", $new_mail))
+      if (!eregi("^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*$", $new_mail))
         $char->error->Form(511, $do);
       
       $q = $char->setChar('char_db', array('mail' => $new_mail, 'next_change' => (time() + 259200)));
@@ -130,7 +130,7 @@ switch ($action)
 <table width="100%" cellspacing="0" cellpadding="0" style="margin-bottom: -15px;">
 <tr>
   <td width="100%" align="right"><h3>Сменить пароль/email для персонажа "<?echo $login;?>"</h3></td>
-  <td valign="top" nowrap><input type="button" class="help" value="<?echo $lang['hint'];?>" id="hint" link="psw">&nbsp;<input type="button" name="edit" value="<?echo $lang['return'];?>" id="link" link="inv" class="nav"></td>
+  <td valign="top" nowrap><input type="button" class="help" value="<?echo $lang['hint'];?>" id="hint" link="psw">&nbsp;<input type="button" class="nav" value="<?echo $lang['return'];?>" id="link" link="inv"></td>
 </tr>
 </table>
 <font color='red' id='error'><?$char->error->getFormattedError($error, $parameters);?></font>

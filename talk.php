@@ -113,11 +113,10 @@ function smiles ()
 
 $(function (){
   rslength();
-  $('.button').live('click', function (){
+  $('body').on('click', '.button', function (){
     if (id = $(this).attr('id'))
       changeButtonState(id);
-  });
-  $('#text').keydown(function (e){
+  }).on('keydown', '#text', function (e){
     if (e.which == 13)
       sendMessage();
   });

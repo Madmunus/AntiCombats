@@ -53,7 +53,7 @@ else
 {
   foreach ($rows as $answers)
   {
-    $p = round(($answers['count'] / $count) * 100, 1);
+    $p = rdf(($answers['count'] / $count) * 100);
     echo "&nbsp;&nbsp;<b>$answers[answer]</b> ($p%)<br>";
   }
 }

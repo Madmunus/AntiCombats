@@ -12,12 +12,6 @@ class Equip extends Char
     $this->db = $object->db;
     $this->char = $object;
   }
-  /*Вычисление цены покупки предмета*/
-  function getBuyValue (&$value)
-  {
-    $trade = $this->getChar('char_stats', 'trade');
-    $value = round(($value - $value * ($trade / 100)), 2);
-  }
   /*Вычисление цены продажи предмета*/
   function getSellValue ($i_info, $text = false)
   {
@@ -29,7 +23,7 @@ class Equip extends Char
     $price_diff = $price * 0.7 - $tmax_diff;
     $tear_diff = ($i_info['tear_cur'] > 0) ?$price_diff * ($i_info['tear_cur'] / $i_info['tear_max']) :0;
     $sell_price = $price * 0.75 - $tmax_diff - $tear_diff;
-    $sell_price = round($sell_price, 2);
+    $sell_price = rdf($sell_price);
     
     if ($sell_price < 0.01)
       $sell_price = 0.01;
@@ -69,7 +63,7 @@ class Equip extends Char
     foreach ($char_feat as $key => $value)
     {
       if ($key != 'sex' && $key != 'orden' && $value < $dat['min_'.$key])   return false;
-      if ($key == 'sex' && $dat['sex'] && $value != $dat['sex'])            return false;
+      if ($key == 'sex' && $dat['sex'] != '' && $value != $dat['sex'])      return false;
       if ($key == 'orden' && $dat['orden'] != 0 && $value != $dat['orden']) return false;
     }
     
@@ -151,7 +145,7 @@ class Equip extends Char
       return;
     
     $guid = $this->getGuid($guid);
-    $backup = ($type == 'smart') ?"<img src='img/items/slot_bottom0.gif' border='0'>" :"<img src='img/items/w20.gif' border='0' alt='Пустой правый карман'><img src='img/items/w20.gif' border='0' alt='Пустой карман'><img src='img/items/w20.gif' border='0' alt='Пустой левый карман'><br><img src='img/items/w21.gif' border='0' alt='Смена оружия'><img src='img/items/w21.gif' border='0' alt='Смена оружия'><img src='img/items/w21.gif' border='0' alt='Смена оружия'>";
+    $backup = ($type == 'smart') ?"<img src='../img/items/slot_bottom0.gif' border='0'>" :"<img src='../img/items/w20.gif' border='0' alt='Пустой правый карман'><img src='../img/items/w20.gif' border='0' alt='Пустой карман'><img src='../img/items/w20.gif' border='0' alt='Пустой левый карман'><br><img src='../img/items/w21.gif' border='0' alt='Смена оружия'><img src='../img/items/w21.gif' border='0' alt='Смена оружия'><img src='../img/items/w21.gif' border='0' alt='Смена оружия'>";
     $effects = $this->getEffects($type, $guid);
     $equipped = "<table border='0' width='227' class='posit' cellspacing='0' cellpadding='0'>"
               . "<tr bgColor='#dedede'>"
@@ -164,7 +158,7 @@ class Equip extends Char
               . "</td>"
               . "<td width='120' height='220' align='center' valign='middle'><table cellspacing='0' cellpadding='0'>"
               . "<tr height='20'><td style='font-size: 9px; position: relative;'>".(($type != 'smart') ?"<div id='HP'></div><div id='MP'></div>" :'')."</td></tr>"
-              . "<tr height='220'><td><div style='position: relative; z-index: 1; width: 120px; height: 220px;'><img src='img/chars/$char_feat[shape]' $char_feat[name]>$effects</div></td></tr>"
+              . "<tr height='220'><td><div style='position: relative; z-index: 1; width: 120px; height: 220px;'><img src='../img/chars/$char_feat[shape]' $char_feat[name]>$effects</div></td></tr>"
               . "<tr height='40'><td>$backup</td></tr>"
               . "</table></td>"
               . "<td width='60' align='right' valign='top'>"
@@ -202,7 +196,7 @@ class Equip extends Char
       }
       $end_time = 'Осталось: '.getFormatedTime($travm['end_time']);
       $img = ($travm['type'] == 0) ?'' :$travm['power'];
-      $return .= "<img src='img/icon/effects/eff_travma$img.gif' style='position: absolute; left: {$left}px; top: {$top}px; z-index: 100;' alt='<u><b>$name</b></u> (Эффект)<br>$end_time<br>$stats' width='36' height='23'>";
+      $return .= "<img src='../img/icon/effects/eff_travma$img.gif' style='position: absolute; left: {$left}px; top: {$top}px; z-index: 100;' alt='<u><b>$name</b></u> (Эффект)<br>$end_time<br>$stats' width='36' height='23'>";
       $left += 36;
       
       if ($i % 3 == 0)
@@ -220,7 +214,7 @@ class Equip extends Char
   {
     $lang = $this->getLang();
     $image = $this->db->selectRow("SELECT `width`, `height`, `default`, `low_level`, `level`  FROM `server_images` WHERE `name` = ?s", 'item_'.$i_type);
-    $default = "<img src='img/items/$image[default]' width='$image[width]' height='$image[height]' border='0' alt='".$lang[$i_type.'_f']."'>";
+    $default = "<img src='../img/items/$image[default]' width='$image[width]' height='$image[height]' border='0' alt='".$lang[$i_type.'_f']."'>";
     
     if (!is_numeric($item_id))
       return $default;
@@ -229,7 +223,7 @@ class Equip extends Char
     $level = $this->getChar('char_db', 'level', $guid);
     
     if ($item_id == 0 && $level < $image['level'])
-      return "<img src='img/items/$image[low_level]' width='$image[width]' height='$image[height]' border='0' alt='".$lang[$i_type.'_l']."'>";
+      return "<img src='../img/items/$image[low_level]' width='$image[width]' height='$image[height]' border='0' alt='".$lang[$i_type.'_l']."'>";
     else if ($item_id == 0)
       return $default;
     
@@ -242,7 +236,7 @@ class Equip extends Char
     
     $slot = $this->getItemSlot($item_id);
     $return_format = ($type == 'inv') ?"<a href='main.php?action=unwear_item&item_slot=$slot'>%s</a>" :"%s";
-    return sprintf($return_format, "<img src='img/items/$img' width='$image[width]' height='$image[height]' border='0' alt='$desc'$color>");
+    return sprintf($return_format, "<img src='../img/items/$img' width='$image[width]' height='$image[height]' border='0' alt='$desc'$color>");
   }
   /*Получение всплывающей подсказки о предмете*/
   function getItemAlt ($item_id, $type, &$color = '', &$img = '', $guid = 0)
@@ -253,13 +247,11 @@ class Equip extends Char
     $guid = $this->getGuid($guid);
     $lang = $this->getLang();
     $i_info = $this->db->selectRow("SELECT `c`.`tear_cur`, `c`.`tear_max`, 
-                                           `i`.`min_hit`, `i`.`max_hit`, 
+                                           `i`.`attack`, `i`.`brick`, 
                                            `i`.`name`, `i`.`img`, 
                                            `i`.`add_hp`, `i`.`add_mp`, 
-                                           `i`.`def_h_min`, `i`.`def_h_max`, 
-                                           `i`.`def_a_min`, `i`.`def_a_max`, 
-                                           `i`.`def_b_min`, `i`.`def_b_max`, 
-                                           `i`.`def_l_min`, `i`.`def_l_max` 
+                                           `i`.`def_h`, `i`.`def_a`, 
+                                           `i`.`def_b`, `i`.`def_l` 
                                     FROM `character_inventory` AS `c` 
                                     LEFT JOIN `item_template` AS `i` 
                                     ON `c`.`item_entry` = `i`.`entry` 
@@ -273,21 +265,21 @@ class Equip extends Char
     $tear_show = ($tear_check) ?'<font color=#990000>%s</font>' :'%s';
     $color = ($tear_check) ?" class='broken'" :'';
     $name = (($type == 'inv') ?"Снять " :'').$i_info['name'];
-    $protect = array('h', 'a', 'b', 'l');
+    $def = array('h', 'a', 'b', 'l');
     $desc = "$name";
     
-    if ($i_info['min_hit'] > 0 || $i_info['max_hit'] > 0)
-      $desc .= "<br>$lang[damage] $i_info[min_hit] - $i_info[max_hit]";
+    if ($i_info['attack'] > 0)
+      $desc .= "<br>$lang[damage] $i_info[attack] - ".($i_info['attack'] + $i_info['brick']);
     
     if ($i_info['add_hp'] > 0)      $desc .= "<br>$lang[add_hp] +".$i_info['add_hp'];
     else if ($i_info['add_hp'] < 0) $desc .= "<br>$lang[add_hp] ".$i_info['add_hp'];
     if ($i_info['add_mp'] > 0)      $desc .= "<br>$lang[add_mp] +".$i_info['add_mp'];
     else if ($i_info['add_mp'] < 0) $desc .= "<br>$lang[add_mp] ".$i_info['add_mp'];
     
-    foreach ($protect as $key)
+    foreach ($def as $key)
     {
-      if ($i_info['def_'.$key.'_min'] > 0)
-        $desc .= "<br>".$lang['def_'.$key]." ".$i_info['def_'.$key.'_min']."-".$i_info['def_'.$key.'_max']." ".$this->getFormatedBrick($i_info['def_'.$key.'_min'], $i_info['def_'.$key.'_max']);
+      if ($i_info['def_'.$key] > 0)
+        $desc .= "<br>".$lang['def_'.$key]." ".$i_info['def_'.$key]."-".($i_info['def_'.$key] + $i_info['brick'])." ".$this->getFormatedBrick($i_info['def_'.$key], $i_info['brick']);
     }
     $desc .= "<br>$lang[durability] ".sprintf($tear_show, intval($i_info['tear_cur'])."/".intval($i_info['tear_max']));
     return $desc;
@@ -337,7 +329,7 @@ class Equip extends Char
     $id = ($this->db->selectCell("SELECT MAX(`id`) FROM `character_inventory` WHERE `guid` = ?d", $guid)) + 1;
     $this->changeMass($i_info['mass']);
     $this->db->query("INSERT INTO `character_inventory` (`id`, `guid`, `item_entry`, `tear_max`, `inc_count_p`, `made_in`, `date`, `last_update`) 
-                      VALUES (?d, ?d, ?d, ?f, ?d, ?s, ?d, ?d)", $id ,$guid ,$item_entry ,$i_info['tear'] ,$i_info['inc_count'] ,$city ,$time ,time());
+                      VALUES (?d, ?d, ?d, ?f, ?d, ?s, ?d, ?d)", $id ,$guid ,$item_entry ,rdf($i_info['tear']) ,$i_info['inc_count'] ,$city ,$time ,time());
     if ($type == 'buy')
     {
       $room = $this->getChar('char_db', 'room');
@@ -357,13 +349,11 @@ class Equip extends Char
     $armors = array('boots' => '_l', 'light_armor' => '_a', 'heavy_armor' => '_a', 'helmet' => '_h', 'pants' => '_b');
     $types = array('inv', 'sell', 'mail_to', 'mail_in');
     $lang = $this->getLang();
-    $char_db = $this->getChar('char_db', 'money', 'money_euro', 'level', 'sex');
-    $char_stats = $this->getChar('char_stats', 'trade', 'str', 'dex', 'con', 'vit', 'int', 'wis', 'mp_all', 'sword', 'axe', 'fail', 'knife', 'staff', 'fire', 'water', 'air', 'earth');
+    $char_db = $this->getChar('char_db', 'money', 'level', 'sex');
+    $char_stats = $this->getChar('char_stats', 'str', 'dex', 'con', 'vit', 'int', 'wis', 'mp_all', 'sword', 'axe', 'fail', 'knife', 'staff', 'fire', 'water', 'air', 'earth');
     $char_feat = array_merge($char_db, $char_stats);
     
     $money = $char_feat['money'];
-    $money_euro = $char_feat['money_euro'];
-    $trade = $char_feat['trade'];
     $entry = $i_info['entry'];
     $name = $i_info['name'];
     $img = $i_info['img'];
@@ -371,16 +361,12 @@ class Equip extends Char
     $mass = $i_info['mass'];
     $price = $i_info['price'];
     $price_euro = $i_info['price_euro'];
+    
     if ($price_euro > 0)
-    {
-      $this->getBuyValue($price_euro);
-      $price_s = ($mode == 'shop') ?(compare($price_euro, $money_euro))." екр." :$price_euro." екр.";
-    }
+      $price_s = $price_euro." екр.";
     else if ($price > 0)
-    {
-      $this->getBuyValue($price);
       $price_s = ($mode == 'shop') ?(compare($price, $money))." кр." :$price." кр.";
-    }
+    
     $item_flags = $i_info['item_flags'];
     $item_id = (isset($i_info['id'])) ?$i_info['id'] :0;
     $made_in = (isset($i_info['made_in'])) ?$this->char->city->getCity($i_info['made_in'], 'name') :'';
@@ -402,32 +388,32 @@ class Equip extends Char
       case 'inv':
         $wearable = $this->checkItemStats($item_id);
         $return .= "<td width='150' align='center'>";
-        $return .= "<img src='img/items/$img' border='0'$color /><br><center style='padding-top: 4px;'>";
+        $return .= "<img src='../img/items/$img' border='0'$color /><br><center style='padding-top: 4px;'>";
         $return .= ($wearable) ?"<a href='?action=wear_item&item_id=$item_id' class='nick'>надеть</a>&nbsp;" :"";
-        $return .= "<a href=\"javascript:drop($item_id, '$img', '$name');\"><img src='img/icon/clear.gif' width='14' height='14' border='0' alt='Выбросить предмет'></a>";
+        $return .= "<a href=\"javascript:drop($item_id, '$img', '$name');\"><img src='../img/icon/clear.gif' width='14' height='14' border='0' alt='Выбросить предмет'></a>";
       break;
       case 'shop':
         $s_price = ($price_euro > 0) ?$price_euro :$price;
         $s_kr = ($price_euro > 0) ?"екр." :"кр.";
         $return .= "<td width='200' align='center'>";
-        $return .= "<img src='img/items/$img' border='0' /><br><center style='padding-top: 4px;'>";
-        $return .= "<a href='javascript:buyItem($entry);' class='nick'>купить</a>&nbsp;<img src='img/icon/plus.gif' width='11' height='11' border='0' alt='Купить несколько штук' style='cursor: pointer;' onclick=\"AddCount('$entry', '$name', '$s_price', '$s_kr');\"></center>";
+        $return .= "<img src='../img/items/$img' border='0' /><br><center style='padding-top: 4px;'>";
+        $return .= "<a href='javascript:buyItem($entry);' class='nick'>купить</a>&nbsp;<img src='../img/icon/plus.gif' width='11' height='11' border='0' alt='Купить несколько штук' style='cursor: pointer;' onclick=\"AddCount('$entry', '$name', '$s_price', '$s_kr');\"></center>";
       break;
       case 'sell':
         $s_price = $this->getSellValue($i_info, true);
         $return .= "<td width='260' align='center'>";
-        $return .= "<img src='img/items/$img' border='0'$color /><br><center style='padding-top: 4px;'>";
+        $return .= "<img src='../img/items/$img' border='0'$color /><br><center style='padding-top: 4px;'>";
         $return .= "<a href='javascript:sellItem ($item_id);' onclick=\"if (confirm('Вы уверены что хотите продать предмет $name за $s_price?')){return true;} else {return false;}\" class='nick'>продать за $s_price</a>";
       break;
       case 'mail_to':
         $s_price = $this->char->mail->getPrice($item_id)." кр.";
         $return .= "<td width='260' align='center'>";
-        $return .= "<img src='img/items/$img' border='0'$color /><br><center style='padding-top: 4px;'>";
+        $return .= "<img src='../img/items/$img' border='0'$color /><br><center style='padding-top: 4px;'>";
         $return .= "<a href='main.php?do=send_item&mail_to=$mail_guid&item_id=$item_id' onclick=\"if (confirm('Отправить предмет $name?')){return true;} else {return false;}\" class='nick'>передать за $s_price</a>";
       break;
       case 'mail_in':
         $return .= "<td width='260' align='center'>";
-        $return .= "<img src='img/items/$img' border='0'$color /><br><center style='padding-top: 4px;'>";
+        $return .= "<img src='../img/items/$img' border='0'$color /><br><center style='padding-top: 4px;'>";
         $return .= "<a href='main.php?do=get_item&item_id=$item_id' onclick=\"if (confirm('Забрать предмет $name?')){return true;} else {return false;}\" class='nick'>Забрать</a><br><a href='main.php?do=return_item&item_id=$item_id' onclick=\"if (confirm('Отказаться от предмета $name?')){return true;} else {return false;}\" class='nick'>Отказаться</a>";
         $return .= "<br><small>(".getFormatedTime($i_info['delivery_time'] + 5184000).")</small>";
       break;
@@ -436,7 +422,7 @@ class Equip extends Char
         $price_s = "$i_info[count] кр.";
         $mail_id = $i_info['id'];
         $return .= "<td width='260' align='center'>";
-        $return .= "<img src='img/items/$img' border='0'$color /><br><center style='padding-top: 4px;'>";
+        $return .= "<img src='../img/items/$img' border='0'$color /><br><center style='padding-top: 4px;'>";
         $return .= "<a href='main.php?do=get_money&mail_id=$mail_id' onclick=\"if (confirm('Забрать $price_s?')){return true;} else {return false;}\" class='nick'>Забрать</a><br><a href='main.php?do=return_money&mail_id=$mail_id' onclick=\"if (confirm ('Отказаться от $price?')){return true;} else {return false;}\" class='nick'>Отказаться</a>";
         $return .= "<br><small>(".getFormatedTime($i_info['delivery_time'] + 5184000).")</small>";
       break;
@@ -453,14 +439,14 @@ class Equip extends Char
     $w_modifiers = array('mf_adodge', 'mf_crit', 'mf_critp', 'mf_sting', 'mf_slash', 'mf_crush', 'mf_sharp', 'sword', 'axe', 'fail', 'knife', 'mf_parmour');
     $chances = array('ch_sting', 'ch_slash', 'ch_crush', 'ch_sharp', 'ch_fire', 'ch_water', 'ch_air', 'ch_earth', 'ch_light', 'ch_dark');
     $features = array('res_dmg', 'res_sting', 'res_slash', 'res_crush', 'res_sharp');
+    $brick = $i_info['brick'];
     $def = array(
-      'h' => array($i_info['def_h_min'], $i_info['def_h_max'], $this->getFormatedBrick($i_info['def_h_min'], $i_info['def_h_max'])),
-      'a' => array($i_info['def_a_min'], $i_info['def_a_max'], $this->getFormatedBrick($i_info['def_a_min'], $i_info['def_a_max'])),
-      'b' => array($i_info['def_b_min'], $i_info['def_b_max'], $this->getFormatedBrick($i_info['def_b_min'], $i_info['def_b_max'])),
-      'l' => array($i_info['def_l_min'], $i_info['def_l_max'], $this->getFormatedBrick($i_info['def_l_min'], $i_info['def_l_max']))
+      'h' => array($i_info['def_h'], ($i_info['def_h'] + $brick), $this->getFormatedBrick($i_info['def_h'], $brick)),
+      'a' => array($i_info['def_a'], ($i_info['def_a'] + $brick), $this->getFormatedBrick($i_info['def_a'], $brick)),
+      'b' => array($i_info['def_b'], ($i_info['def_b'] + $brick), $this->getFormatedBrick($i_info['def_b'], $brick)),
+      'l' => array($i_info['def_l'], ($i_info['def_l'] + $brick), $this->getFormatedBrick($i_info['def_l'], $brick))
     );
-    $min_hit = $i_info['min_hit'];
-    $max_hit = $i_info['max_hit'];
+    $attack = $i_info['attack'];
     $block = $i_info['block'];
     $hands = $i_info['hands'];
     $url = str_replace('.gif', '.html', $i_info['img']);
@@ -476,15 +462,15 @@ class Equip extends Char
         case 4: $orden_dis = "Алхимик";              break;
         case 5: $orden_dis = "Тюремный заключенный"; break;
       }
-      $orden = "<img src='img/orden/align$need_orden.gif' border='0' alt='$lang[min_bent] <strong>$orden_dis</strong>'>";
+      $orden = "<img src='../img/orden/align$need_orden.gif' border='0' alt='$lang[min_bent] <strong>$orden_dis</strong>'>";
     }
     $return .= "<a href='encicl/object/$url' class='nick' target='_blank'><b>$name</b></a>&nbsp;$orden&nbsp;($lang[mass] $mass)";
     
     if ($gift == 1)
-      $return .= "&nbsp;<img src='img/icon/gift.gif' width='14' height='14' border='0' alt='$lang[gift] $gift_author'>";
+      $return .= "&nbsp;<img src='../img/icon/gift.gif' width='14' height='14' border='0' alt='$lang[gift] $gift_author'>";
     
     if ($item_flags & 4)
-      $return .= "&nbsp;<img src='img/icon/artefakt.gif' width='16' height='16' border='0' alt='$lang[artefact]'>";
+      $return .= "&nbsp;<img src='../img/icon/artefakt.gif' width='16' height='16' border='0' alt='$lang[artefact]'>";
     
     if (isset($price_s))
       $return .= "<br><b>$lang[price] $price_s</b>";
@@ -505,14 +491,14 @@ class Equip extends Char
         $val = "<br><b>$lang[required]</b>";
       
       if ($key != 'sex' && $i_info['min_'.$key] > 0) $require .= "<br>&bull; ".(compare($i_info['min_'.$key], $char_feat[$key], "$lang[$key] ".$i_info['min_'.$key]));
-      else if ($key == 'sex' && $i_info[$key])       $require .= "<br>&bull; ".(compare($i_info[$key], $char_feat[$key], "$lang[$key] ".$lang[$i_info[$key]]));
+      else if ($key == 'sex' && $i_info[$key] != '') $require .= "<br>&bull; ".(compare($i_info[$key], $char_feat[$key], "$lang[$key] ".$lang['sex_'.$i_info[$key]]));
     }
     $return .= $val.$require;
     
     $val = "";
     if (($add['str'] != 0 || $add['dex'] != 0 || $add['con'] != 0 || $add['int'] != 0 
-        || $i_info['def_h_max'] != 0 || $i_info['def_a_max'] != 0 || $i_info['def_b_max'] != 0 || $i_info['def_l_max'] != 0 || $inc_count > 0 
-        || (!in_array($type, $weapons) && ($max_hit != 0 || $min_hit != 0))))
+        || $i_info['def_h'] != 0 || $i_info['def_a'] != 0 || $i_info['def_b'] != 0 || $i_info['def_l'] != 0 || $inc_count > 0 
+        || (!in_array($type, $weapons) && $attack != 0)))
       $val = "<br><b>$lang[act]</b>";
     
     $inc = ($inc_count > 0) ?"<br>&bull; $lang[inc_count] <span id='inc_count_$item_id'>$inc_count</span>" :"";
@@ -538,13 +524,13 @@ class Equip extends Char
     }
     foreach ($def as $key => $value)
     {
-      if ($value[1] > 0)
+      if ($value[0] > 0)
         $return .= "<br>&bull; ".$lang['def_'.$key]." $value[0]-$value[1] $value[2]";
     }
     if (in_array($type, $weapons))
     {
       $return .= "<br><b>$lang[behaviour]</b>";
-      $return .= "<br>&bull; $lang[damage] $min_hit - $max_hit";
+      $return .= "<br>&bull; $lang[damage] $attack - ".($attack + $brick);
       foreach ($w_modifiers as $key)
       {
         if ($i_info[$key.'_h'] != 0)
@@ -616,14 +602,14 @@ class Equip extends Char
     if ($chance >= 91 && $chance <= 100) $chance = "always";
   }
   /*Получение отформатированного кубика*/
-  private function getFormatedBrick ($min, $max)
+  private function getFormatedBrick ($min, $brick)
   {
-    $fist = $min - 1;
-    $second = $max - $fist;
+    $first = $min - 1;
+    $second = $brick + 1;
     if ($min == 1)    return "(d$second)";
-    if ($min == $max) return '';
+    if ($brick == 0)  return '';
     if ($min <= 0)    return '';
-                      return "($fist+d$second)";
+                      return "($first+d$second)";
   }
   /*Получение кнопки прибавления характеристик вещи*/
   private function getIncButton ($item_id, $stat)
@@ -724,7 +710,7 @@ class Equip extends Char
     }
     else if ($type == -1)
     {
-      unset ($char_equip['guid'], $char_equip['hand_r_free'], $char_equip['hand_r_type'], $char_equip['hand_l_free'], $char_equip['hand_l_type']);
+      unset($char_equip['guid'], $char_equip['hand_r_free'], $char_equip['hand_r_type'], $char_equip['hand_l_free'], $char_equip['hand_l_type']);
       foreach ($char_equip as $key => $value)
       {
         if ($i_id == $value)
@@ -800,8 +786,11 @@ class Equip extends Char
 // Protect
     foreach ($defs as $key)
     {
-      $new_sql['def_'.$key.'_min'] = $i_info['def_'.$key.'_min'];
-      $new_sql['def_'.$key.'_max'] = $i_info['def_'.$key.'_max'];
+      if ($i_info['def_'.$key] > 0)
+      {
+        $new_sql['def_'.$key.'_min'] = $i_info['def_'.$key];
+        $new_sql['def_'.$key.'_max'] = $i_info['def_'.$key] + $i_info['brick'];
+      }
     }
     //$new_sql['cost'] = $i_info['price'];
     $new_sql['hp_regen'] = $i_info['hp_regen'];
@@ -824,8 +813,8 @@ class Equip extends Char
         $new_sql[$slot.'_critp'] = $i_info['mf_critp_h'];
         $new_sql[$slot.'_adodge'] = $i_info['mf_adodge_h'];
         $new_sql[$slot.'_parmour'] = $i_info['mf_parmour_h'];
-        $new_sql[$slot.'_hitmin'] = $i_info['min_hit'];
-        $new_sql[$slot.'_hitmax'] = $i_info['max_hit'];
+        $new_sql[$slot.'_hitmin'] = $i_info['attack'];
+        $new_sql[$slot.'_hitmax'] = $i_info['attack'] + $i_info['brick'];
       break;
     }
 // HP/MP

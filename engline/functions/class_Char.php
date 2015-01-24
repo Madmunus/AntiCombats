@@ -131,7 +131,7 @@ class Char
         break;
         case 'vit':
           $hp = $count * 6;
-          $bron = $count * 1.5;
+          $bron = rdf($count * 1.5);
           $this->db->query("UPDATE `character_stats` 
                             SET `vit` = `vit` + ?d, 
                                 `hp` = `hp` + ?d, 
@@ -152,7 +152,7 @@ class Char
           $this->statsBonus($stat);
         break;
         case 'int':
-          $mf = $count * 0.5;
+          $mf = rdf($count * 0.5);
           $this->db->query("UPDATE `character_stats` 
                             SET `int` = `int` + ?d, 
                                 `mf_fire` = `mf_fire` + ?f, 
@@ -186,46 +186,35 @@ class Char
     return true;
   }
   /*Увеличение/уменьшение кол-ва денег у персонажа*/
-  function changeMoney ($sum, $type = '', $guid = 0)
+  function changeMoney ($sum, $guid = 0)
   {
     if (!is_numeric($sum))
       return false;
     
-    $sum = round($sum, 2);
+    $sum = rdf($sum);
     
     if ($sum == 0)
       return false;
     
     $guid = $this->getGuid($guid);
-    switch ($type)
-    {
-      case 'euro':
-        $money_euro = $this->getChar('char_db', 'money_euro');
+    $money = $this->getChar('char_db', 'money');
 
-        if (($money_euro = $money_euro + $sum) < 0)
-          return false;
-        
-        $this->setChar('char_db', array('money_euro' => $money_euro), $guid);
-      break;
-      default:
-        $money = $this->getChar('char_db', 'money');
-
-        if (($money = $money + $sum) < 0)
-          return false;
-        
-        $this->setChar('char_db', array('money' => $money), $guid);
-      break;
-    }
+    if (($money = $money + $sum) < 0)
+      return false;
+    
+    $this->setChar('char_db', 'money', $money, $guid);
     return true;
   }
-  /*Увеличение/уменьшение переносимой массы персонажем*/
+  /*Увеличение/уменьшение массы у персонажа*/
   function changeMass ($mass, $guid = 0)
   {
     if (checki($mass))
       return false;
     
     $guid = $this->getGuid($guid);
-    $this->db->query("UPDATE `character_stats` SET `mass` = `mass` + ?f WHERE `guid` = ?d", $mass ,$guid);
+    
+    $mass = $this->getChar('char_stats', 'mass') + rdf($mass);
+    $this->setChar('char_stats', 'mass', $mass, $guid);
     return true;
   }
   /*Время востановления здоровья*/
@@ -317,12 +306,11 @@ class Char
     $char_db = $this->getChar('char_db', 'level', 'sex', 'next_shape');
     $char_stats = $this->getChar('char_stats', 'str', 'dex', 'con', 'vit', 'int', 'wis', 'sword', 'axe', 'fail', 'knife', 'fire', 'water', 'air', 'earth', 'light', 'dark');
     $char_feat = array_merge($char_db, $char_stats);
-    $sex = ($char_feat['sex'] == "male") ?"m" :"f";
     
     if ($char_feat['next_shape'] && $char_feat['next_shape'] > time())
       $this->error->Inventory(111, getFormatedTime($char_feat['next_shape']));
     
-    if ($shape['sex'] != $sex)
+    if ($shape['sex'] != $char_feat['sex'])
       return false;
     
     unset($char_feat['sex'], $char_feat['next_shape']);
@@ -423,7 +411,7 @@ class Char
           $content .= "<span alt='".$lang[$key.'_d']."'>".$lang[$key.'_i']." ".$char_stats['res_'.$key]."</span><br>";
       break;
       case 'btn':        /*Кнопки*/
-        $content .= "&nbsp;<input type='button' value='$lang[unwear_all]' class='btn' id='link' link='unwear_full' style='font-weight: bold;'><br>";
+        $content .= "&nbsp;<input type='button' value='$lang[unwear_all]' class='btn' id='link' link='unwear_full' style='font-weight: bold; cursor: pointer;'><br>";
       break;
       case 'set':        /*Комплекты*/
         $sets = $this->db->select("SELECT * FROM `character_sets` WHERE `guid` = ?d", $this->guid);
@@ -437,22 +425,22 @@ class Char
     }
     $return = "<table width='100%' border='0' cellspacing='0' cellpadding='1' background='img/back.gif'><tr><td valign='middle'>";
     if ($flags & 1)
-      $return .= "<img id='spoiler_$bar' width='11' height='9' alt='Скрыть' border='0' src='img/minus.gif' style='cursor: pointer;' onclick=\"javascript:spoilerBar('$bar');\" />";
+      $return .= "<img id='spoiler_$bar' width='11' height='9' alt='Скрыть' border='0' src='../img/minus.gif' style='cursor: pointer;' onclick=\"javascript:spoilerBar('$bar');\" />";
     else
-      $return .= "<img id='spoiler_$bar' width='11' height='9' alt='Показать' border='0' src='img/plus.gif' style='cursor: pointer;' onclick=\"javascript:spoilerBar('$bar');\" />";
+      $return .= "<img id='spoiler_$bar' width='11' height='9' alt='Показать' border='0' src='../img/plus.gif' style='cursor: pointer;' onclick=\"javascript:spoilerBar('$bar');\" />";
     $return .= "</td>";
     $return .= "<td>&nbsp;</td><td bgcolor='#e2e0e0'><small>&nbsp;<b>".$lang['bar_'.$bar]."<b>&nbsp;</small></td>";
     if ($link_text)
       $return .= "<td>&nbsp;</td><td bgcolor='#e2e0e0'>&nbsp;<a href='$link' class='nick'><small>$link_text</small></a>&nbsp;</td>";
     $return .= "<td align='right' valign='middle' width='100%'>";
     if ($flags & 2)
-      $return .= "<img border='0' width='11' height='9' alt='Поднять блок наверх' src='img/up.gif' style='cursor: pointer;' onclick=\"javascript:switchBars('up', '$bar');\" />";
+      $return .= "<img border='0' width='11' height='9' alt='Поднять блок наверх' src='../img/up.gif' style='cursor: pointer;' onclick=\"javascript:switchBars('up', '$bar');\" />";
     else
-      $return .= "<img border='0' width='11' height='9' src='img/up-grey.gif'>";
+      $return .= "<img border='0' width='11' height='9' src='../img/up-grey.gif'>";
     if ($flags & 4)
-      $return .= "<img border='0' width='11' height='9' alt='Опустить блок вниз' src='img/down.gif' style='cursor: pointer;' onclick=\"javascript:switchBars('down', '$bar');\" />";
+      $return .= "<img border='0' width='11' height='9' alt='Опустить блок вниз' src='../img/down.gif' style='cursor: pointer;' onclick=\"javascript:switchBars('down', '$bar');\" />";
     else
-      $return .= "<img border='0' width='11' height='9' src='img/down-grey.gif'>";
+      $return .= "<img border='0' width='11' height='9' src='../img/down-grey.gif'>";
     $return .= "</td>";
     $return .= "</tr></table>";
     $style = ($flags & 1) ?"" :" style='display: none;'";
@@ -463,7 +451,7 @@ class Char
   function getSetRow ($name)
   {
     $lang = $this->getLang();
-    return "<div name='".str_replace(" ", "_", $name)."'><img width='200' height='1' src='img/1x1.gif'><br>&nbsp;&nbsp;<img src='img/icon/inf2.gif' width='10' height='10' alt='Просмотр' onclick=\"workSets('show', '$name');\" style='cursor: pointer;'><img src='img/icon/close2.gif' width='9' height='9' alt='$lang[set_delete]' onclick=\"if (confirm('$lang[set_delete] $name?')) {workSets('delete', '$name');}\" style='cursor: pointer;'> <a href='main.php?action=wear_set&set_name=$name' class='nick'><small>$lang[equip] \"$name\"</small></a></div>";
+    return "<div name='".str_replace(" ", "_", $name)."'><img width='200' height='1' src='../img/1x1.gif'><br>&nbsp;&nbsp;<img src='../img/icon/inf2.gif' width='10' height='10' alt='Просмотр' onclick=\"workSets('show', '$name');\" style='cursor: pointer;'><img src='../img/icon/close2.gif' width='9' height='9' alt='$lang[set_delete]' onclick=\"if (confirm('$lang[set_delete] $name?')) {workSets('delete', '$name');}\" style='cursor: pointer;'> <a href='main.php?action=wear_set&set_name=$name' class='nick'><small>$lang[equip] \"$name\"</small></a></div>";
   }
   /*Добавление/Обновление/Удаление эффекта*/
   function workEffect ($effect, $type = 1, $guid = 0)
@@ -686,23 +674,23 @@ class Char
     $travm = $this->db->select("SELECT `c`.`travm_id` FROM `character_travms` AS `c` LEFT JOIN `player_travms` AS `i` ON `c`.`travm_id` = `i`.`id` WHERE `c`.`guid` = ?d and (`i`.`type` = '1' or `i`.`type` = '2');", $guid);
     switch ($orden)
     {
-      case 1:  $orden_img = "<img src='img/orden/pal/$rang.gif' width='12' height='15' border='0' title='Белое братство'>";  break;
-      case 2:  $orden_img = "<img src='img/orden/arm/$rang.gif' width='12' height='15' border='0' title='Темное братство'>"; break;
-      case 3:  $orden_img = "<img src='img/orden/3.gif' width='12' height='15' border='0' title='Нейтральное братство'>";    break;
-      case 4:  $orden_img = "<img src='img/orden/4.gif' width='12' height='15' border='0' title='Алхимик'>";                 break;
-      case 5:  $orden_img = "<img src='img/orden/5.gif' width='12' height='15' border='0' title='Хаос'>";                    break;
+      case 1:  $orden_img = "<img src='../img/orden/pal/$rang.gif' width='12' height='15' border='0' title='Белое братство'>";  break;
+      case 2:  $orden_img = "<img src='../img/orden/arm/$rang.gif' width='12' height='15' border='0' title='Темное братство'>"; break;
+      case 3:  $orden_img = "<img src='../img/orden/3.gif' width='12' height='15' border='0' title='Нейтральное братство'>";    break;
+      case 4:  $orden_img = "<img src='../img/orden/4.gif' width='12' height='15' border='0' title='Алхимик'>";                 break;
+      case 5:  $orden_img = "<img src='../img/orden/5.gif' width='12' height='15' border='0' title='Хаос'>";                    break;
       default: $orden_img = "";                                                                                              break;
     }
-    $clan = ($clan_s != '') ?"<img src='img/clan/$clan_s.gif' border='0' title='$clan_f'>" :"";
+    $clan = ($clan_s != '') ?"<img src='../img/clan/$clan_s.gif' border='0' title='$clan_f'>" :"";
     $login_link = str_replace(" ", "%20", $login);
-    $login_info = "<a href='info.php?log=$login_link' target='_blank'><img src='img/inf.gif' border='0' title='Инф. о $login'></a>";
-    $mol = ($chat_shut) ?" <img src='img/sleep2.gif' title='Наложено заклятие молчания'>" :"&nbsp";
-    $travm = ($travm) ?"<img src='img/travma.gif' title='Инвалидность'>" :"&nbsp";
+    $login_info = "<a href='info.php?log=$login_link' target='_blank'><img src='../img/inf.gif' border='0' title='Инф. о $login'></a>";
+    $mol = ($chat_shut) ?" <img src='../img/sleep2.gif' title='Наложено заклятие молчания'>" :"&nbsp";
+    $travm = ($travm) ?"<img src='../img/travma.gif' title='Инвалидность'>" :"&nbsp";
     $banned = ($block) ?"<font color='red'><b>- Забанен</b></font>" :"";
     $afk = ($afk) ?"<font title='$message'><b>afk</b></font>&nbsp;" :(($dnd && $message) ?"<font title='$message'><b>dnd</b></font>&nbsp;" :'');
     switch ($type)
     {
-      case 'online': return "&nbsp;<a href=javascript:top.AddToPrivate('$login_link',true);><img border='0' src='img/lock.gif' title='Приват'></a>&nbsp;&nbsp;$afk$orden_img$clan<a href=javascript:top.AddTo('$login_link'); class='nick'><b>$login</b></a>[$level]$login_info$mol$travm<br>";
+      case 'online': return "&nbsp;<a href=javascript:top.AddToPrivate('$login_link',true);><img border='0' src='../img/lock.gif' title='Приват'></a>&nbsp;&nbsp;$afk$orden_img$clan<a href=javascript:top.AddTo('$login_link'); class='nick'><b>$login</b></a>[$level]$login_info$mol$travm<br>";
       case 'mults':  return "$orden_img$clan<b>$login</b> [$level]$login_info $banned <br>";
       case 'clan':   return "$orden_img$clan<b>$login</b> [$level]$login_info";
       case 'turn':   return $orden_img;

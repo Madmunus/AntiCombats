@@ -225,8 +225,12 @@ if ($level > 0)
 Не реализовано!
 </div>
 <div class="dtz" id="dL5">
+<?
+  if ($char_db['chat_shut'])
+    echo "<img src='img/icon/sleeps$sex.gif'><small>На персонажа наложено заклятие молчания. Будет молчать еще ".getFormatedTime($char_db['chat_shut'])."</small><br>";
+?>
 <b>Эффекты:</b><br>
-<div style='padding-left: 10'>
+<div style="padding-left: 10">
 <?
   $effects = $adb->select("SELECT * FROM `character_effects` WHERE `guid` = ?d and `end_time` = '0';", $guid);
   foreach ($effects as $effect)

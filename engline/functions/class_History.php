@@ -40,7 +40,7 @@ class History extends Char
   {
     $id = ($this->db->selectCell("SELECT MAX(`id`) FROM `history_bank` WHERE `credit` = ?d", $credit)) + 1;
     $this->db->query("INSERT INTO `history_bank` (`id`, `credit`, `credit2`, `cash`, `euro`, `operation`, `date`) 
-                      VALUES (?d, ?d, ?d, ?f, ?f, ?d, ?d)", $id ,$credit ,$credit2 ,$cash ,$euro ,$operation ,time());
+                      VALUES (?d, ?d, ?d, ?f, ?f, ?d, ?d)", $id ,$credit ,$credit2 ,rdf($cash) ,rdf($euro) ,$operation ,time());
   }
 }
 ?>

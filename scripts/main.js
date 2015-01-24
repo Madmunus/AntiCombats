@@ -268,6 +268,11 @@ function BrokenItems ()
   i = 1;
 }
 
+function rdf (ifloat)
+{
+  return Math.round(ifloat * 100) / 100;
+}
+
 function checkWindow ()
 {
   if ($('body').height() > $('[name=main]', top.document).height())
@@ -287,30 +292,25 @@ $(function (){
   if ($('.broken').html() != undefined)
     setInterval(BrokenItems, 4100);
   
-  $('#clear').live('mouseover mouseleave', function (e){
+  $('body').on('mouseover mouseleave', '#clear', function (e){
     if (e.type == 'mouseover')
       $(this).attr('src', 'i/clear.gif');
     else if (e.type == 'mouseleave')
       $(this).attr('src', 'i/clearg.gif');
-  });
-  $('#link').css('cursor', 'pointer').live('click', function (){
+  }).on('click', '#link', function (){
     top.linkAction($(this).attr('link'));
-  });
-  $('#hint').live('click', function (){
+  }).on('click', '#hint', function (){
     showHelp($(this).attr('link'));
-  });
-  $('#refresh').live('click', function (){
+  }).on('click', '#refresh', function (){
     location.reload();
-  });
-  $('#forum').live('click', function (){
+  }).on('click', '#forum', function (){
     window.open('/forum');
+  }).on('click', 'input[type=button], input[type=radio], input[type=submit], a', function (){
+    $(this).blur();
   });
-  $(document).live('mousemove', function (e){
+  $(document).on('mousemove', function (e){
     pos.x = e.pageX - $(window).scrollLeft();
     pos.y = e.pageY - $(window).scrollTop();
-  });
-  $('input[type=button], input[type=radio], input[type=submit], a').live('click', function (){
-    $(this).blur();
   });
   $(window).resize(checkWindow);
   checkWindow();
