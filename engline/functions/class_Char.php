@@ -683,7 +683,7 @@ class Char
     }
     $clan = ($clan_s != '') ?"<img src='../img/clan/$clan_s.gif' border='0' title='$clan_f'>" :"";
     $login_link = str_replace(" ", "%20", $login);
-    $login_info = "<a href='info.php?log=$login_link' target='_blank'><img src='../img/inf.gif' border='0' title='Инф. о $login'></a>";
+    $login_info = "<a href='../info.php?log=$login_link' target='_blank'><img src='../img/inf.gif' border='0' title='Инф. о $login'></a>";
     $mol = ($chat_shut) ?" <img src='../img/sleep2.gif' title='Наложено заклятие молчания'>" :"&nbsp";
     $travm = ($travm) ?"<img src='../img/travma.gif' title='Инвалидность'>" :"&nbsp";
     $banned = ($block) ?"<font color='red'><b>- Забанен</b></font>" :"";

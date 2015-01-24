@@ -17,10 +17,10 @@ $adb->setErrorHandler("databaseErrorHandler");
 
 $log = (!preg_match('//u', $log)) ?iconv("CP1251", "UTF-8", rawurldecode($log)) :$log;
 
-$top = "Произошла ошибка:<br><br>";
-$bot = "<br><br><a href='javascript:window.history.go(-1);'>Назад</a><hr>";
+$top = "<head><link rel='SHORTCUT ICON' href='img/favicon.ico'><title>Произошла ошибка</title></head>Произошла ошибка:<pre>";
+$bot = "</pre><b><a href='javascript:window.history.go(-1);'>Назад</a></b><hr><p align='right'>(c) <a href='../'>Анти Бойцовский клуб</a></p>";
 
-$guid = $adb->selectCell("SELECT `guid` FROM `characters` WHERE `login` = ?s", $log) or die("$top Указанный персонаж не найден.$bot");
+$guid = $adb->selectCell("SELECT `guid` FROM `characters` WHERE `login` = ?s", $log) or die("$top Указанный персонаж не найден...$bot");
 
 $info = Info::initialization($guid, $adb);
 

@@ -25,6 +25,7 @@ $char->test->Admin('game', '../');
 <script src="../scripts/jquery.js" type="text/javascript"></script>
 <script type="text/javascript">
 $(function (){
+  $('#none').css('font-weight', 'bold');
   $('body').on('click', '.menu', function (){
     $('.menu').css('font-weight', 'normal');
     $(this).css('font-weight', 'bold');
@@ -43,8 +44,8 @@ $(function (){
 $rows = $adb->select("SELECT * FROM `admin_menu` ORDER BY `id`;");
 foreach ($rows as $menu)
 {
-  echo "<a href='main.php?act=$menu[href]' target='main' onclick='this.blur();' class='menu'>$menu[name]</a><br>";
-  if (in_array($menu['href'], array('doc', 'coder', 'travm')))
+  echo "<a href='main.php?act=$menu[href]' target='main' onclick='this.blur();' class='menu' id='$menu[href]'>$menu[name]</a><br>";
+  if (in_array($menu['href'], array('coder', 'travm')))
     echo "<hr>";
 }
 ?>

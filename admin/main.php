@@ -20,42 +20,21 @@ $char->test->Guid('main', '../');
 $char->test->Admin('main', '../');
 
 $act = getVar('act', 'none');
-$name = $adb->selectCell("SELECT `name` FROM `admin_menu` WHERE `href` = ?s", $act);
+$acts = $adb->selectCol("SELECT `href` AS ARRAY_KEY, `name` FROM `admin_menu`;");
+$act = (array_key_exists($act, $acts)) ?$act :'none';
 ?>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <script src="../scripts/jquery.js" type="text/javascript"></script>
 <script src="../scripts/show.js" type="text/javascript"></script>
-<link rel="stylesheet" type="text/css" href="css.css">
+<link rel="stylesheet" type="text/css" href="style.css">
 </head>
-<script>$('#info', parent.document).html('Информация: <?echo $name;?>');</script>
+<script type="text/javascript">$('#info', parent.document).html('Информация: <?echo $acts[$act];?>');</script>
 <?
 switch ($act)
 {
-    case 'none':
-    default:            echo "<center><img src='img/logo.gif'></center>";
-    break;
-    case 'doc':
-    case 'admin_bd':
-    case 'upload':
-    case 'coder':
-    case 'online':
-    case 'room_all':
-    case 'room':
-    case 'kick_all':
-    case 'kick':
-    case 'unwear_all':
-    case 'unwear':
-    case 'travm_all':
-    case 'travm':
-    case 'hpmp':
-    case 'add':
-    case 'mer':
-    case 'metka':
-    case 'new':
-    case 'stat_admin': include("module/$act.php");
-    break;
-    case 'phpinfo':    phpinfo();
-    break;
+  case 'none':    echo "<center><img src='img/logo.gif'></center>"; break;
+  case 'phpinfo': phpinfo();                                        break;
+  default:        include("module/$act.php");                       break;
 }
 ?>

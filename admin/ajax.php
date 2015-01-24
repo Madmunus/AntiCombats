@@ -22,6 +22,7 @@ $do = getVar('do');
 
 switch ($do)
 {
+  /*Отображение типов предметов*/
   case 'showtypes':
     $section = getVar('section');
     
@@ -36,6 +37,7 @@ switch ($do)
     $return .= "</select><br>";
     die($return);
   break;
+  /*Отображение полей предмета*/
   case 'showfields':
     $type = getVar('type');
     
@@ -94,6 +96,7 @@ switch ($do)
     $return .= "</tr></table><input type='submit' name='create' value='Создать'>";
     die($return);
   break;
+  /*Создание предмета*/
   case 'createitem':
     $fields = getVar('fields');
     $sql = array();
@@ -105,6 +108,23 @@ switch ($do)
       $sql[$f[0]] = $f[1];
     }
     $adb->query("INSERT INTO `item_template` (?#) VALUES (?a);",array_keys($sql), array_values($sql));
+    die('complete');
+  break;
+  /*Удаление персонажа*/
+  case 'delete_char':
+    $d_guid = getVar('d_guid');
+    $adb->query("DELETE FROM `character_bank` WHERE `guid` = ?d", $d_guid);
+    $adb->query("DELETE FROM `character_bars` WHERE `guid` = ?d", $d_guid);
+    $adb->query("DELETE FROM `character_effects` WHERE `guid` = ?d", $d_guid);
+    $adb->query("DELETE FROM `character_equip` WHERE `guid` = ?d", $d_guid);
+    $adb->query("DELETE FROM `character_info` WHERE `guid` = ?d", $d_guid);
+    $adb->query("DELETE FROM `character_inventory` WHERE `guid` = ?d", $d_guid);
+    $adb->query("DELETE FROM `character_sets` WHERE `guid` = ?d", $d_guid);
+    $adb->query("DELETE FROM `character_stats` WHERE `guid` = ?d", $d_guid);
+    $adb->query("DELETE FROM `characters` WHERE `guid` = ?d", $d_guid);
+    $adb->query("DELETE FROM `history_auth` WHERE `guid` = ?d", $d_guid);
+    $adb->query("DELETE FROM `history_mail` WHERE `guid` = ?d", $d_guid);
+    $adb->query("DELETE FROM `history_items` WHERE `guid` = ?d", $d_guid);
     die('complete');
   break;
 }

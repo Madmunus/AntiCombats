@@ -24,4 +24,4 @@ a.undl:hover  {color: #FFFFFF; text-decoration: underline;}
 .small    {font-size: 11px;}
 .blok        {width: 100%;}
 .submenu  {position: absolute; visibility: hidden;}
-.mmoves    {border-right: #666666 1px solid; padding-right: 2px; border-top: #666666 1px solid; padding-left: 2px; visibility: hidden; padding-bottom: 2px; overflow: visible; border-left: #666666 1px solid; padding-top: 2px; border-bottom: #666666 1px solid; white-space: nowrap; position: absolute; background-color: #ffffcc; z-index: 101; text-align: left;}
+#mmoves    {border: #666666 1px solid; padding: 2px; visibility: hidden; overflow: visible; white-space: nowrap; position: absolute; left: 0px; top: 0px; background-color: #ffffcc; z-index: 200; text-align: left; font-size: 15px;}
