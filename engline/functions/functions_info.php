@@ -24,11 +24,11 @@ class Info
     unset($args[0]);
     
     if ($args[1] == '*')
-      return $this->db->selectRow("SELECT * FROM ?# WHERE `guid` = ?d", $table ,$guid);
+      return $this->db->selectRow("SELECT * FROM ?# WHERE `guid` = ?d", $table, $guid);
     else if ($args_num == 2)
-      return $this->db->selectCell("SELECT ?# FROM ?# WHERE `guid` = ?d", $args ,$table ,$guid);
+      return $this->db->selectCell("SELECT ?# FROM ?# WHERE `guid` = ?d", $args, $table, $guid);
     else
-      return $this->db->selectRow("SELECT ?# FROM ?# WHERE `guid` = ?d", $args ,$table ,$guid);
+      return $this->db->selectRow("SELECT ?# FROM ?# WHERE `guid` = ?d", $args, $table, $guid);
   }
   /*Получение информации о языке*/
   function getLang ()
@@ -40,14 +40,14 @@ class Info
   function Guid ()
   {
     if (checki($this->guid))
-      toIndex();
+      error('Указанный персонаж не найден...');
     
     $char_db = $this->getChar('char_db', 'guid');
     $char_stats = $this->getChar('char_stats', 'guid');
     $char_info = $this->getChar('char_info', 'guid');
     
     if (!$char_db || !$char_stats || !$char_info)
-      toIndex();
+      error('Указанный персонаж не найден...');
   }
   /*Проверка заключения персонажа*/
   function Prison ()
@@ -57,10 +57,7 @@ class Info
     if (!$prison || intval($prison - time()) > 0)
       return;
     
-    $this->db->query("UPDATE `characters` 
-                      SET `prison` = '0', 
-                          `orden` = '0' 
-                      WHERE `guid` = ?d", $this->guid);
+    $this->db->query("UPDATE `characters` SET `prison` = '0' WHERE `guid` = ?d", $this->guid);
   }
   /*Проверка молчанки у персонажа*/
   function Shut ()
@@ -75,12 +72,11 @@ class Info
   /*Восстановление здоровья/маны*/
   function Regen ()
   {
+    if ($this->getChar('char_db', 'battle') != 0)
+      return;
+    
     $char_stats = $this->getChar('char_stats', 'hp', 'hp_cure', 'hp_all', 'hp_regen', 'mp', 'mp_cure', 'mp_all', 'mp_regen');
     list($now["hp"], $cure["hp"], $all["hp"], $regen["hp"], $now["mp"], $cure["mp"], $all["mp"], $regen["mp"]) = array_values($char_stats);
-    $battle = $this->getChar('char_db', 'battle');
-    
-    if ($battle != 0)
-      return;
     
     foreach ($all as $key => $value)
     {
@@ -151,7 +147,6 @@ class Info
     $char_db = $this->getChar('char_db', 'login', 'shape', 'block');
     $char_stats = $this->getChar('char_stats', 'hp', 'hp_all', 'hp_regen', 'mp', 'mp_all', 'mp_regen');
     $char_feat = array_merge($char_db, $char_stats);
-    $lang = $this->getLang();
     $char_feat['name'] = "alt='$char_feat[login]'";
     $char_equip['armor'] = ($char_equip['cloak']) ?$char_equip['cloak'] :(($char_equip['armor']) ?$char_equip['armor'] :$char_equip['shirt']);
     $char_equip['hand_l_s'] = (!$char_equip['hand_l_free']) ?"hand_l" :"hand_l_f";
@@ -278,7 +273,7 @@ class Info
                                     LEFT JOIN `item_template` AS `i` 
                                     ON `c`.`item_entry` = `i`.`entry` 
                                     WHERE `c`.`guid` = ?d
-                                      and `c`.`id` = ?d", $this->guid ,$item_id);
+                                      and `c`.`id` = ?d", $this->guid, $item_id);
     if (!$i_info)
       return '';
     
@@ -334,28 +329,19 @@ class Info
       default: $orden_img = "";                                                                                              break;
     }
     $clan = ($clan_s != '') ?"<img src='img/clan/$clan_s.gif' border='0' title='$clan_f'>" :"";
-    $login_link = str_replace (" ", "%20", $login);
+    $login_link = str_replace(" ", "%20", $login);
     $login_info = "<a href='info.php?log=$login_link' target='_blank'><img src='img/inf.gif' border='0' title='Инф. о $login'></a>";
     return "<img src='img/icon/lock3.gif' border='0' onclick=\"window.opener.top.AddToPrivate('$login',true);\" style='cursor: pointer;'>$orden_img$clan<b>$login</b> [$level]$login_info";
   }
   /*Показ дополнительной информации по персонажу*/
   function showInfDetail ()
   {
-    $char_db = $this->getChar('char_db', 'sex', 'block', 'block_reason', 'chat_shut', 'prison', 'prison_reason');
+    $char_db = $this->getChar('char_db', 'dealer', 'sex', 'block', 'block_reason', 'chat_shut', 'prison', 'prison_reason');
     $lang = $this->getLang();
-    /*Блок*/
-    if ($char_db['block'] && $char_db['block_reason'])
-      echo "Причина блока :<br><b><font class='private'>$char_db[block_reason]</font></b><br>";
-    /*Молчанка*/
-    if ($char_db['chat_shut'])
-      echo "<img src='img/icon/sleeps$char_db[sex].gif'><small>На персонажа наложено заклятие молчания. Будет молчать еще ".getFormatedTime($char_db['chat_shut'])."</small><br>";
-    /*Тюрьма*/
-    if ($char_db['prison'])
-    {
-      echo "<img src='img/icon/jail.png'><small>В заточении еще ".getFormatedTime($char_db['prison'])."</small><br>";
-      if ($char_db['prison_reason'] != "")
-        echo "Причина тюремного заключения :<br><b><font class='private'>$char_db[prison_reason]</font></b><br>";
-    }
+    echo ($char_db['dealer']) ?"<img src='img/alchemy1.gif' alt='Регистрированный алхимик. Имеет право продавать услуги Анти Бойцовского Клуба.' height='24' width='35'><br>" :"";                                                          /*Дилер*/
+    echo ($char_db['block']) ?"Причина блока :<br><b><font class='private'>$char_db[block_reason]</font></b><br>" :"";                                                                                                                      /*Блок*/
+    echo ($char_db['chat_shut']) ?"<img src='img/icon/sleeps$char_db[sex].gif'><small>На персонажа наложено заклятие молчания. Будет молчать еще ".getFormatedTime($char_db['chat_shut'])."</small><br>" :"";                               /*Молчанка*/
+    echo ($char_db['prison']) ?"<img src='img/icon/jail.png'><small>В заточении еще ".getFormatedTime($char_db['prison'])."</small><br><br>Сообщение от юстициары:<br><b><font class='private'>$char_db[prison_reason]</font></b><br>" :""; /*Тюрьма*/
     /*Травма*/
     $travms = $this->db->select("SELECT * 
                                  FROM `character_travms` AS `c` 
@@ -393,9 +379,9 @@ class Info
     unset($args[0]);
     
     if ($args_num == 2)
-      return $this->db->selectCell("SELECT ?# FROM `server_cities` WHERE `city` = ?s", $args ,$city);
+      return $this->db->selectCell("SELECT ?# FROM `server_cities` WHERE `city` = ?s", $args, $city);
     else
-      return $this->db->selectRow("SELECT ?# FROM `server_cities` WHERE `city` = ?s", $args ,$city);
+      return $this->db->selectRow("SELECT ?# FROM `server_cities` WHERE `city` = ?s", $args, $city);
   }
   /*Получение информации о комнате*/
   function getRoom ()
@@ -407,9 +393,9 @@ class Info
     unset($args[0], $args[1]);
     
     if ($args_num == 3)
-      return $this->db->selectCell("SELECT ?# FROM `city_rooms` WHERE `room` = ?s and `city` & ?d", $args ,$room ,$city);
+      return $this->db->selectCell("SELECT ?# FROM `city_rooms` WHERE `room` = ?s and `city` & ?d", $args, $room, $city);
     else
-      return $this->db->selectRow("SELECT ?# FROM `city_rooms` WHERE `room` = ?s and `city` & ?d", $args ,$room ,$city);
+      return $this->db->selectRow("SELECT ?# FROM `city_rooms` WHERE `room` = ?s and `city` & ?d", $args, $room, $city);
   }
 }
 /*Вывод js скрипта*/
@@ -424,7 +410,7 @@ function ArrToVar ($arr, $pref = '')
 {
   foreach ($arr as $key => $value)
   {
-    $var = ($pref != '') ?$pref.$key :$key;
+    $var = (empty($pref)) ?$key :$pref.$key;
     global ${$var};
     ${$var} = $value;
   }
@@ -548,8 +534,8 @@ define('LOCASE', 'абвгдеёжзийклмнопрстуфхцчшщъыьэ
 
 function mb_str_split ($str)
 {        
-    preg_match_all('/.{1}|[^\x00]{1}$/us', $str, $ar);
-    return $ar[0];
+  preg_match_all('/.{1}|[^\x00]{1}$/us', $str, $ar);
+  return $ar[0];
 }
 function mb_strtr ($str, $from, $to)
 {
@@ -563,7 +549,7 @@ function uppercase ($arg = '')
 {
   return mb_strtr($arg, LOCASE, UPCASE);
 }
-/*Определение знака зодиака (Невостребована)*/
+/*Определение знака зодиака (Неиспользуется)
 function getZodiac ($birthday)
 {
   $b = split('\.', $birthday);
@@ -575,5 +561,12 @@ function getZodiac ($birthday)
     if (($b[1] == $d[1] && $b[0] >= $d[2] && $b[0] <= 31) || ($b[1] == $d[3] && $b[0] >= 1 && $b[0] <= $d[4]))
       return $d[0];
   }
+}*/
+/*Вывод ошибки*/
+function error ($text)
+{
+  echoScript("$('title').html('Произошла ошибка');");
+  echoScript("$('link[rel=StyleSheet]').remove();");
+  die("Произошла ошибка:<br><pre>$text</pre><a href='javascript:window.history.go(-1);'><b>Назад</b></a><hr><p align='right'>(c) <a href='../'>Анти Бойцовский клуб</a></p>");
 }
 ?>

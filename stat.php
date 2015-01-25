@@ -2,8 +2,8 @@
 define('AntiBK', true);
 
 include("engline/config.php");
+include("engline/data.php");
 include("engline/dbsimple/Generic.php");
-include("engline/data/data.php");
 include("engline/functions/functions.php");
 
 $adb = DbSimple_Generic::connect($database['adb']);
@@ -14,12 +14,11 @@ $char = Char::initialization(0, $adb);
 ?>
 <html>
 <head>
-<link rel="SHORTCUT ICON" href="img/favicon.ico" />
-<title>Анти Бойцовский Клуб: Рейтинг бойцов</title>
-<meta http-equiv="Content-type" content="text/html; charset=utf-8">
-<meta http-equiv="Pragma" content="no-cache">
-<meta http-equiv="Cache-control" content="private">
-<link href="styles/main.css" rel="stylesheet" type="text/css">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Language" content="ru" />
+  <title>Анти Бойцовский Клуб: Рейтинг бойцов</title>
+  <link rel="SHORTCUT ICON" href="img/favicon.ico" />
+  <link href="styles/main.css" rel="stylesheet" type="text/css" />
 </head>
 <body bgColor="#3D3D3B" leftMargin="0" topMargin="0" marginwidth="0" marginheight="0">
 <table width="100%" height="100%"  border="0" cellpadding="0" cellspacing="0">
@@ -40,30 +39,24 @@ $char = Char::initialization(0, $adb);
               <tr>
                 <td>
                   <img src="img/site/ratin_10.gif" border="0"><br><br>
-                  <table width='100%'><tr><td>&nbsp; &nbsp; Рейтинг бойцов клуба<td>
-                  <td align='right'>Статистика на <code><?echo DATE_NO_SEC;?></code></td></tr></table>
+                  <table width="100%"><tr><td>&nbsp; &nbsp; Рейтинг бойцов клуба<td>
+                  <td align="right">Статистика на <code><?echo DATE_NO_SEC;?></code></td></tr></table>
                   <br>
-                  <table width='100%'  border='0' cellpadding='0' cellspacing='0' background='img/site/ram12_34.gif' align='center'>
+                  <table width="100%" border="0" cellpadding="0" cellspacing="0" background="img/site/ram12_34.gif" align="center">
                     <tr>
-                      <td align='left' scope='col'><img src='img/site/ram12_33.gif' width='12' height='11'></td>
-                      <td scope='col'></td>
-                      <td width='18' align='right' scope='col'><img src='img/site/ram12_35.gif' width='13' height='11'></td>
+                      <td align="left" scope="col"><img src="img/site/ram12_33.gif" width="12" height="11"></td>
+                      <td scope="col"></td>
+                      <td width="18" align="right" scope="col"><img src="img/site/ram12_35.gif" width="13" height="11"></td>
                     </tr>
                   </table>
-<?//
-$players = $adb->select("SELECT `guid`, 
-                                `login`, 
-                                `exp` 
-                         FROM `characters` 
-                         WHERE `admin_level` = '0' 
-                         ORDER BY `exp` DESC
-                         LIMIT 200;");
-echo "<table width='100%' border='0' cellpadding='0' cellspacing='1' align='center'>";
-echo "<tr bgcolor='#ECDFAA'>";
-echo "<td align='left' width='2%'><b>№</b></td>";
-echo "<td>&nbsp;</td>";
-echo "<td align='right'><b>рейтинг</b></td>";
-echo "</tr>";
+                  <table width="100%" border="0" cellpadding="0" cellspacing="1" align="center">
+                    <tr bgcolor="#ECDFAA">
+                      <td align="left" width="2%"><b>№</b></td>
+                      <td>&nbsp;</td>
+                      <td align="right"><b>рейтинг</b></td>
+                    </tr>
+<?
+$players = $adb->select("SELECT `guid`, `login`, `exp` FROM `characters` WHERE `admin_level` = '0' ORDER BY `exp` DESC LIMIT 200;");
 for ($i = 0; $i < count($players); $i++)
 {
   $bg = (!($i % 2 === 0) || $i == 1) ?" bgcolor='#ECDFAA'" :"";
@@ -73,8 +66,8 @@ for ($i = 0; $i < count($players); $i++)
   echo "<td align='right'><b>".getExp($players[$i]['exp'])."</b></td>";
   echo "</tr>";
 }
-echo "</table>";
 ?>
+                  </table>
                 </td>
               </tr>
             </table>

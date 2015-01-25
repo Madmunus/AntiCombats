@@ -50,7 +50,7 @@ class Test extends Char
     if (!$prison || intval($prison - time()) > 0)
       return;
     
-    $this->setChar('char_db', 'prison', 0);
+    $this->setChar('char_db', array('prison' => 0));
   }
   /*Проверка участия персонажа в заявке*/
   function Zayavka ()
@@ -120,13 +120,12 @@ class Test extends Char
   /*Восстановление здоровья/маны*/
   function Regen ()
   {
-    $battle = $this->getChar('char_db', 'battle');
-    
-    if ($battle != 0)
+    if ($this->getChar('char_db', 'battle') != 0)
       return;
     
     $char_stats = $this->getChar('char_stats', 'hp', 'hp_cure', 'hp_all', 'hp_regen', 'mp', 'mp_cure', 'mp_all', 'mp_regen');
     list($now["hp"], $cure["hp"], $all["hp"], $regen["hp"], $now["mp"], $cure["mp"], $all["mp"], $regen["mp"]) = array_values($char_stats);
+    
     foreach ($all as $key => $value)
     {
       if ($cure[$key] == 0 && $now[$key] < $value)

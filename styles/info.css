@@ -8,6 +8,7 @@ div.alignlogo {position: absolute; right: 15px; text-align: center; top: 0px; wi
 .tab_title a {color: #FFFFFF;}
 .tab_title_active {color: rgb(98, 102, 101); font-family: Tahoma, Geneva, sans-serif; font-size: 13px; font-weight: bold; text-decoration: none;}
 .bgalign0 {background-color: #e2e0e0;}
+.private	{font-weight: bold; color: red; background-color: #FAE0E0;}
 
 a.menu:link {color: rgb(255, 255, 255); font-family: Tahoma, Geneva, sans-serif; font-size: 13px; font-weight: bold; text-decoration: none;}
 a.menu:visited {color: rgb(255, 255, 255); font-family: Tahoma, Geneva, sans-serif; font-size: 13px; font-weight: bold; text-decoration: none;}

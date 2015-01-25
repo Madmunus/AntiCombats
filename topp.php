@@ -23,34 +23,34 @@ ArrToVar($char_db);
 ?>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta http-equiv="Content-Language" content="ru" />
-<link href="styles/topp.css" rel="stylesheet" type="text/css" />
-<script src="scripts/jquery.js" type="text/javascript"></script>
-<script type="text/javascript">
-try {top.checkGame();} catch(e) {location.href = 'index.php';}
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Language" content="ru" />
+  <link href="styles/topp.css" rel="stylesheet" type="text/css" />
+  <script src="scripts/jquery.js" type="text/javascript"></script>
+  <script type="text/javascript">
+    try {top.checkGame();} catch(e) {location.href = 'index.php';}
 
-var mail = <?echo $mail;?>;
+    var mail = <?echo $mail;?>;
 
-$(function (){
-  var cur_Id = '4';
-  $('.main_text').click(function (){
-    $('#'+cur_Id).css({backgroundColor: '', color: ''});
-    $('#menu'+cur_Id).css({visibility: 'hidden', position: 'absolute'});
-    cur_Id = $(this).attr('id');
-    $('#'+cur_Id).css({backgroundColor: '#404040', color: '#FFFFFF'});
-    $('#menu'+cur_Id).css({visibility: 'visible', position: 'relative'});
-  });
-  $('.main_text').trigger('click');
-  $('body').on('click', 'input, a', function (){$(this).blur();})
-  .on('click', 'a.menutop', function (){
-    if ($(this).attr('id') != '')
-      top.linkAction($(this).attr('id'));
-  });
-  if (mail)
-    $('#mail').html("<img src='img/icon/mail"+mail+".gif' title='Получена почта' width='24' height='15'>");
-});
-</script>
+    $(function (){
+      var cur_Id = '4';
+      $('.main_text').click(function (){
+        $('#'+cur_Id).css({backgroundColor: '', color: ''});
+        $('#menu'+cur_Id).css({visibility: 'hidden', position: 'absolute'});
+        cur_Id = $(this).attr('id');
+        $('#'+cur_Id).css({backgroundColor: '#404040', color: '#FFFFFF'});
+        $('#menu'+cur_Id).css({visibility: 'visible', position: 'relative'});
+      });
+      $('.main_text').trigger('click');
+      $('body').on('click', 'input, a', function (){$(this).blur();})
+      .on('click', 'a.menutop', function (){
+        if ($(this).attr('id') != '')
+          top.linkAction($(this).attr('id'));
+      });
+      if (mail)
+        $('#mail').html("<img src='img/icon/mail"+mail+".gif' title='Получена почта' width='24' height='15'>");
+    });
+  </script>
 </head>
 <body>
 <div style="background: url(img/city/top_lite_<?echo $city;?>_11.gif) repeat-x bottom;">
@@ -92,21 +92,21 @@ $(function (){
               <tr>
                 <td class="menutop" nowrap align="right" width="100%">
                   <span id="menu1" class="bottom_text">
-                      <a class="menutop" href="encicl/index.html" target="_blank">Библиотека</a>
-                    | <a class="menutop" href="encicl/faq/" target="_blank">FAQ</a>
-                    | <a class="menutop" href="encicl/law.html" target="_blank">Законы</a>
-                    | <a class="menutop" href="encicl/TOS_RU_encicl.html" target="_blank">Соглашения</a>
-                    | <a class="menutop" href="encicl/FAQ/afer.html" target="_blank">Правила безопасности</a>
+                      <a class="menutop" href="library/index.html" target="_blank">Библиотека</a>
+                    | <a class="menutop" href="library/faq/" target="_blank">FAQ</a>
+                    | <a class="menutop" href="library/law.html" target="_blank">Законы</a>
+                    | <a class="menutop" href="library/TOS_RU_encicl.html" target="_blank">Соглашения</a>
+                    | <a class="menutop" href="library/FAQ/afer.html" target="_blank">Правила безопасности</a>
                   </span>
                   <span id="menu2" class="bottom_text">
-                      <a class="menutop" href="news.php" target="_blank">Новости</a>
+                      <a class="menutop" href="news" target="_blank">Новости</a>
                     | <a class="menutop" href="forum" target="_blank">Форум</a>
                     | <a class="menutop" href="stat.php" target="_blank">Рейтинг</a>
                   </span>
                   <span id="menu3" class="bottom_text">
                       <a class="menutop" id="security" href="#">Смена пароля</a>
                     | <a class="menutop" id="report" href="#">Отчеты</a>
-                    | <a class="menutop" href="encicl/FAQ/afer.html" target="_blank">Правила</a>
+                    | <a class="menutop" href="library/FAQ/afer.html" target="_blank">Правила</a>
                     | <a class="menutop" id="security" href="#">Настройки</a>
                   </span>
                   <span id="menu4" class="bottom_text">
@@ -116,7 +116,7 @@ $(function (){
                     | <a class="menutop" id="info" href="#"><?echo $lang['form'];?></a>
 <?
 if ($admin_level > 0)
-    echo "| <a class='menutop' id='admin' href='#'>Админка</a>";
+  echo "| <a class='menutop' id='admin' href='#'>Админка</a>";
 ?>
                   </span>
                 </td>

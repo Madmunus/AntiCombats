@@ -1,0 +1,7 @@
+$server = $adb->selectRow("SELECT `last_transfer` FROM `server_info`;");
+
+if (date('d.m.y', $server['last_transfer']) != date('d.m.y'))
+{
+  $adb->query("UPDATE `characters` SET `transfers` = '200';");
+  $adb->query("UPDATE `server_info` SET `last_transfer` = ?d", time());
+}

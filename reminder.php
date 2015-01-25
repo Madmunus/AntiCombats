@@ -11,13 +11,13 @@ $adb->query("SET NAMES ? ",$database['db_encoding']);
 $adb->setErrorHandler("databaseErrorHandler");
 
 $step = getVar('step');
-$error_text = 'Пройдите предыдущий шаг!<br><br><a href="?step='.($step-1).'">Назад</a>';
 ?>
 <html>
 <head>
-  <link rel="SHORTCUT ICON" href="img/favicon.ico">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Language" content="ru" />
   <title>Анти Бойцовский Клуб</title>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <link rel="SHORTCUT ICON" href="img/favicon.ico" />
   <style type="text/css">
     body      {margin: 0px; background-color: #000000;}
     a:link    {font-weight: normal; color: #f9f7ea; text-decoration: none;}
@@ -29,49 +29,7 @@ $error_text = 'Пройдите предыдущий шаг!<br><br><a href="?st
     .menu     {font-size: 10pt; color: white; font-family: verdana;}
   </style>
   <script src="scripts/jquery.js" type="text/javascript"></script>
-  <script type="text/javascript">
-    function exploder (data)
-    {
-      var variable = data.split('$$');
-      return variable;
-    }
-    
-    function checkRem1 ()
-    {
-      var login = $('input[name=login]').val();
-      $.post('ajax_register.php', {'do': 'checkrem1', 'login': login}, function (data){
-        var check = exploder(data);
-        if (check[0] == 'complete')
-          location.href = '?step=2';
-        else if (check[0] == 'error')
-          $('#error').html(check[1]);
-      });
-    }
-    
-    function checkRem2 ()
-    {
-      var answer = $('input[name=answer]').val();
-      var birthday = $('input[name=birthday]').val();
-      var code = $('input[name=code]').val();
-      $.post('ajax_register.php', {'do': 'checkrem2', 'answer': answer, 'birthday': birthday, 'code': code}, function (data){
-        var check = exploder(data);
-        if (check[0] == 'complete')
-          location.href = '?step=3';
-        else if (check[0] == 'error')
-          $('#error').html(check[1]);
-      });
-    }
-
-    $(function (){
-      $('input[name=login]').keyup(function (){
-        $(this).val($(this).val().replace(/[^a-zA-Zа-яА-Я\- ]/g, ''));
-      });
-      $('input').keypress(function (e) {
-        if (e.which == 13)
-          $('#next').click();
-      });
-    });
-  </script>
+  <script src="scripts/reminder.js" type="text/javascript"></script>
 </head>
 <body class="menu">
 <table class="menu" height="100%" width="100%" cellSpacing="0" cellPadding="0" border="0">
@@ -101,7 +59,7 @@ if (!($adb->selectCell("SELECT `reminder` FROM `server_info`;")))
           </table>
 <?    break;
       case 2:
-        if (!checks('rem_login')) die($error_text);
+        if (!checks('rem_login')) die('Пройдите предыдущий шаг!<br><br><a href="?step='.($step-1).'">Назад</a>');
         $rem_answer = (checks('rem_answer')) ?$_SESSION['rem_answer'] :'';
         $rem_birthday = (checks('rem_birthday')) ?$_SESSION['rem_birthday'] :'';
         $guid = $adb->selectCell("SELECT `guid` FROM `characters` WHERE `login` = ?s", $_SESSION['rem_login']);
@@ -113,7 +71,7 @@ if (!($adb->selectCell("SELECT `reminder` FROM `server_info`;")))
             echo ($question) ?"<tr><td class='menu'>Ваш ответ:</td><td class='menu'><input type='text' class='inup' size='30' name='answer' value='$rem_answer'></td></tr>" :"";
 ?>          <tr><td class="menu">Ваш день рождения:</td><td><input type="text" class="inup" size="9" name="birthday" value="<?echo $rem_birthday;?>"></td></tr>
             <tr><td colspan="2" class="menu"><small>(день рождения вы указывали при регистрации<br> персонажа в формате dd.mm.yyyy)</small></td></tr>
-            <tr><td class="menu">Код:<br><img src="secpic.php" style="border: 1px solid grey; cursor: pointer;" onclick="location.reload();"></td><td><input type="text" class="inup" size="10" name="code"></td></tr>
+            <tr><td class="menu">Код:<br><img src="engline/secpic.php" style="border: 1px solid grey; cursor: pointer;" onclick="location.reload();"></td><td><input type="text" class="inup" size="10" name="code"></td></tr>
             <tr><td colspan="2"><input type="button" class="inup btn" value="Выслать пароль на email" onclick="checkRem2();" id="next"></td></tr>
             <tr><td colspan="2"><input type="button" class="inup btn" value="Вернуться" onclick="location.href='?step=1';"></td></tr>
           </table>

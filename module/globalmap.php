@@ -168,7 +168,7 @@ switch ($city)
       break;
     }
   break;
-    case 'drm':
+  case 'drm':
     switch ($room)
     {
       case 'centsquare':

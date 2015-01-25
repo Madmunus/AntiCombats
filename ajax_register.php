@@ -3,8 +3,8 @@ session_start();
 define('AntiBK', true);
 
 include("engline/config.php");
+include("engline/data.php");
 include("engline/dbsimple/Generic.php");
-include("engline/data/data.php");
 include("engline/functions/functions.php");
 
 $adb = DbSimple_Generic::connect($database['adb']);
@@ -38,17 +38,18 @@ switch ($do)
     if (!$reminder)
       returnAjax('error', $reminder_error);
     
+    if (!checks('rem_login'))
+      returnAjax('error', 'Пройдите предыдущий шаг!');
+    
     $login = $_SESSION['rem_login'];
     $answer = getVar('answer');
     $birthday = getVar('birthday');
     $code = getVar('code');
     
-    $char_db = $adb->selectRow("SELECT `guid`, `mail` FROM `characters` WHERE `login` = ?s", $_SESSION['rem_login']);
+    $char_db = $adb->selectRow("SELECT `guid`, `mail` FROM `characters` WHERE `login` = ?s", $login);
     $char_info = $adb->selectRow("SELECT `secretquestion`, `secretanswer`, `birthday` FROM `character_info` WHERE `guid` = ?d", $char_db['guid']);
     
-    if (!checks('rem_login'))
-      returnAjax('error', 'Пройдите предыдущий шаг!');
-    else if ($char_info['secretquestion'] != '' && ($answer != $char_info['secretanswer']))
+    if ($char_info['secretquestion'] != '' && ($answer != $char_info['secretanswer']))
       returnAjax('error', 'Неверный ответ на секретный вопрос.');
     else if ($birthday != $char_info['birthday'])
       returnAjax('error', 'Неверно указан день рождения.');
@@ -56,12 +57,13 @@ switch ($do)
       returnAjax('error', 'Ошибка введения кода.');
     
     unset($_SESSION['rem_login'], $_SESSION['secpic']);
+    /*Создание нового пароля*/
     $letters = "qazxswedcvfrtgbnhyujmkiolp1234567890QAZXSWEDCVFRTGBNHYUJMKIOLP";
     $max = 10;
     $password = null;
     while ($max--)
       $password .= $letters[rand(0, (strlen($letters) - 1))];
-    
+    /*Текст письма*/
     $msg = date('d.m.y H:i', time())."\n";
     $msg .= "Кто-то с IP: ".$_SERVER['REMOTE_ADDR']." попросил выслать пароль к персонажу \"$login\".\n";
     $msg .= "Т.к. в анкете у этого персонажа указан email: $char_db[mail], то вы и получили это письмо.\n";
@@ -83,7 +85,7 @@ switch ($do)
     if (!$register)
       returnAjax('error', $register_error);
     
-    if ($adb->selectCell("SELECT COUNT(*) FROM `history_auth` WHERE `action` = 2 and `ip` = ?s and `date` > ?s", $_SERVER['REMOTE_ADDR'] ,time() - 3600))
+    if ($adb->selectCell("SELECT COUNT(*) FROM `history_auth` WHERE `action` = 2 and `ip` = ?s and `date` > ?s", $_SERVER['REMOTE_ADDR'], (time() - 3600)))
       returnAjax('error', "Недавно с вашего IP уже регистрировался персонаж. С одного IP адреса разрешена регистрация персонажей не чаще, чем раз в час. Попробуйте позже.");
     
     unset($_SESSION['reg_login']);
@@ -277,10 +279,10 @@ switch ($do)
     $reg_password = SHA1($guid.':'.$password);
     // Основная база
     $adb->query("INSERT INTO `characters` (`guid`, `login`, `login_sec`, `password`, `mail`, `sex`, `city`, `shape`, `reg_ip`, `last_time`) 
-                 VALUES (?d, ?s, ?s, ?s, ?s, ?s, ?s, ?s, ?s, ?d);", $guid ,$login ,$login ,$reg_password ,$email ,$sex ,$city ,"$sex/0.gif" ,$_SERVER['REMOTE_ADDR'] ,time());
+                 VALUES (?d, ?s, ?s, ?s, ?s, ?s, ?s, ?s, ?s, ?d);", $guid, $login, $login, $reg_password, $email, $sex, $city, "$sex/0.gif", $_SERVER['REMOTE_ADDR'], time());
     // Дополнительная информация
     $adb->query("INSERT INTO `character_info` (`guid`, `name`, `icq`, `secretquestion`, `secretanswer`, `hide_icq`, `town`, `birthday`, `color`, `motto`, `state`, `date`) 
-                 VALUES (?d, ?s, ?s, ?s, ?s, ?d, ?s, ?s, ?s, ?s, ?s, ?d);", $guid ,$name ,$icq ,$secretquestion ,$secretanswer ,$hide_icq ,$town ,$birthday ,$color ,$motto ,$city ,time());
+                 VALUES (?d, ?s, ?s, ?s, ?s, ?d, ?s, ?s, ?s, ?s, ?s, ?d);", $guid, $name, $icq, $secretquestion, $secretanswer, $hide_icq, $town, $birthday, $color, $motto, $city, time());
     // Характеристики
     $adb->query("INSERT INTO `character_stats` (`guid`) 
                  VALUES (?d);", $guid);
@@ -309,7 +311,7 @@ switch ($do)
     
     $adb->query("DELETE FROM `online` WHERE `guid` = ?d", $guid);
     $adb->query("INSERT INTO `online` (`guid`, `login_display`, `sid`, `city`, `room`, `last_time`) 
-                 VALUES (?d, ?s, ?s, ?s, ?s, ?d);", $guid ,$login ,session_id() ,$city ,'novice' ,time());
+                 VALUES (?d, ?s, ?s, ?s, ?s, ?d);", $guid, $login, session_id(), $city, 'novice', time());
     $char->setChar('char_db', array('last_go' => time()));
     $_SESSION['guid'] = $guid;
     $_SESSION['zayavka_c_m'] = 1;

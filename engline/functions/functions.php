@@ -22,7 +22,7 @@ include("class_Error.php");
 /*Вывод js скрипта*/
 function echoScript ($str, $die = false)
 {
-  echo "<script>$str</script>";
+  echo "<script type='text/javascript'>$str</script>";
   if ($die)
     die();
 }
@@ -307,9 +307,15 @@ function showtime ($start_time, &$s)
   $dift_time2 = bcsub(gettime(), $start_time, 6);
   $s .= "Время $dift_time2 секунд";
 }
-
+/*Округление до сотых*/
 function rdf ($float)
 {
   return round($float * 100) / 100;
+}
+/*Вывод ошибки*/
+function error ($text)
+{
+  echoScript("$('title').html('Произошла ошибка');");
+  die("Произошла ошибка:<br><pre>$text</pre><a href='javascript:window.history.go(-1);'><b>Назад</b></a><hr><p align='right'>(c) <a href='../'>Анти Бойцовский клуб</a></p>");
 }
 ?>

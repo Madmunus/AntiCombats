@@ -3,10 +3,10 @@ session_start();
 define('AntiBK', true);
 
 include("engline/config.php");
+include("engline/data.php");
 include("engline/dbsimple/Generic.php");
-include("engline/data/data.php");
 include("engline/functions/functions.php");
-include("token/bootstrap.php");
+include("engline/token/bootstrap.php");
 
 $guid = getGuid();
 
@@ -58,9 +58,7 @@ if ($action == 'enter')
   setCookie('login_mail', '');
 }
 else if ($action == 'exit')
-{
   setCookie('PHPSESSID', '');
-}
 else if ($login_mail == $guid || lowercase($login_mail) == lowercase($char_db['login']))
   $char->error->Map(218);
 else if ($login_mail)
@@ -113,25 +111,25 @@ switch ($action)
 {
   case 'admin':
     if ($admin_level > 1)
-      include("adminbar.php");
+      include("module/adminbar.php");
     else
       $char->error->Map();
   break;
   case 'orden':
-    include("orden.php");
+    include("module/orden.php");
   break;
   case 'inv':
   case 'wear_item':
   case 'wear_set':
   case 'unwear_item':
   case 'unwear_full':
-    include("inventory.php");
+    include("module/inventory.php");
   break;
   case 'skills':
-    include("skills.php");
+    include("module/skills.php");
   break;
   case 'zayavka':
-    include("zayavka.php");
+    include("module/zayavka.php");
   break;
   case 'unwear_thing':
     unwear_t($guid, $item_id);
@@ -140,27 +138,27 @@ switch ($action)
     wear_t($guid, $item_id);
   break;
   case 'perevod':
-    include("give.php");
+    include("module/give.php");
   break;
   case 'clan':
-    include("clan.php");
+    include("module/clan.php");
   break;
   case 'char':
-    include("char.php");
+    include("module/char.php");
   break;
   case 'shape':
   case 'security':
   case 'info':
-    include("form.php");
+    include("module/form.php");
   break;
   case 'report':
-    include("report.php");
+    include("module/report.php");
   break;
   case 'magic':
-    include("magic.php");
+    include("module/magic.php");
   break;
   case 'map':
-    include("map.php");
+    include("module/map.php");
   break;
   case 'gift':
     $item_info = $adb->selectCell("SELECT `id` FROM `character_inventory` WHERE `guid` = ?d and `id` = ?d and `wear` = '0' and `mailed` = '0';", $guid ,$item_id) or $char->error->Inventory(213);
@@ -181,7 +179,7 @@ switch ($action)
 <?
   break;
   case 'gift_conf':
-    gift ($guid, $item_id, $to);
+    gift($guid, $item_id, $to);
   break;
   case 'give':
     $item_info = $adb->selectCell("SELECT `id` FROM `character_inventory` WHERE `guid` = ?d and `id` = ?d and `wear` = '0' and `mailed` = '0';", $guid ,$item_id) or $char->error->Inventory(213);
@@ -205,7 +203,7 @@ switch ($action)
     give ($guid, $item_id, $to);
   break;
   case 'giveName':
-    if (empty($target))    include("giveName.php");
+    if (empty($target))    include("module/giveName.php");
     else
     {
       $adb->query("UPDATE `character_inventory` 
@@ -218,11 +216,11 @@ switch ($action)
     if (!checks('last_t'))
     {
       $id = $adb->selectCell("SELECT `id` FROM `history_auth` WHERE `guid` = ?d ORDER BY `id` DESC", $guid) - 1;
-      $auth = $adb->selectRow("SELECT `ip`, `date` FROM `history_auth` WHERE `guid` = ?d and `id` = ?d", $guid ,$id);
+      $auth = $adb->selectRow("SELECT `ip`, `date` FROM `history_auth` WHERE `guid` = ?d and `id` = ?d", $guid, $id);
       if ($id && $auth && $auth['ip'] != $_SERVER['REMOTE_ADDR'])
         $char->chat->say($guid, date('d.m.y H:i', $auth['date'])." <font color='red'><b>ВНИМАНИЕ!</b></font> В предыдущий раз этим персонажем заходили с другого компьютера.");
     }
-    include("room_detect.php");
+    include("module/room_detect.php");
   break;
   case 'exit':
     $adb->query("DELETE FROM `online` WHERE `guid` = ?d", $guid);
@@ -233,7 +231,7 @@ switch ($action)
   case 'none':
   case 'go':
   case 'return':
-    include("room_detect.php");
+    include("module/room_detect.php");
   break;
 }
 ?>

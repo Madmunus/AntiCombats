@@ -12,43 +12,32 @@ $adb->setErrorHandler("databaseErrorHandler");
 
 $login = getVar('login', '', 2);
 $password = getVar('password', '', 2);
+
 $enter = $adb->selectCell("SELECT `login` FROM `server_info`;");
 ?>
 <html>
 <head>
-<title>Анти Бойцовский Клуб</title>
-<link rel="SHORTCUT ICON" href="img/favicon.ico" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta http-equiv="Content-Language" content="ru" />
-<script src="scripts/jquery.js" type="text/javascript"></script>
-<script type="text/javascript">
-if (!(/Firefox[\/\s](\d+\.\d+)/.test(navigator.userAgent)))
-{
-  alert('Поддерживается только браузер Mozilla Firefox');
-  location.href = 'index.php';
-}
-</script>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Language" content="ru" />
+  <title>Анти Бойцовский Клуб</title>
+  <link rel="SHORTCUT ICON" href="img/favicon.ico" />
+  <script src="scripts/jquery.js" type="text/javascript"></script>
+  <script type="text/javascript">
+    if (!(/Firefox[\/\s](\d+\.\d+)/.test(navigator.userAgent)))
+    {
+      alert('Поддерживается только браузер Mozilla Firefox');
+      location.href = 'index.php';
+    }
+  </script>
 </head>
 <body bgcolor="#ffffff">
 <?
-$top = "Произошла ошибка:<br><pre>";
-$bot = "</pre><a href='javascript: window.history.go(-1);'><b>Назад</b></a><hr>";
-
 if (!$enter)
-{
-  echoScript("$('title').html('Произошла ошибка');");
-  die("$top Сервер оффлайн$bot");
-}
+  error('Сервер оффлайн');
 else if (empty($login))
-{
-  echoScript("$('title').html('Произошла ошибка');");
-  die("$top Вы не ввели логин$bot");
-}
+  error('Вы не ввели логин');
 else if (empty($password))
-{
-  echoScript("$('title').html('Произошла ошибка');");
-  die("$top Укажите пароль$bot");
-}
+  error('Укажите пароль');
 
 $char_info = $adb->selectRow("SELECT `guid`, 
                                      `password`, 
@@ -57,7 +46,8 @@ $char_info = $adb->selectRow("SELECT `guid`,
                                      `room`, 
                                      `city` 
                               FROM `characters` 
-                              WHERE `login` = ?s", $login) or die("$top Логин \"$login\" не найден в базе.$bot");
+                              WHERE `login` = ?s", $login) or error("Логин \"$login\" не найден в базе.");
+
 $guid = $char_info['guid'];
 
 $char = Char::initialization($guid, $adb);
@@ -65,12 +55,12 @@ $char = Char::initialization($guid, $adb);
 if (SHA1($guid.':'.$password) != $char_info['password'])
 {
   $char->history->Auth(0, $char_info['city'], 'wrong_password');
-  die("$top Неверный пароль для \"$login\". Введите логин/пароль на <a href='index.php'>титульной странице</a>$bot");
+  error("Неверный пароль для \"$login\". Введите логин/пароль на <a href='index.php'>титульной странице");
 }
 else if ($char_info['block'])
 {
   $char->history->Auth(0, $char_info['city'], 'blocked');
-  die("$top Внимание!!! Персонаж $login заблокирован!$bot");
+  error("Внимание!!! Персонаж $login заблокирован!");
 }
 
 if (checks('guid'))
@@ -78,12 +68,9 @@ if (checks('guid'))
 
 $adb->query("DELETE FROM `online` WHERE `guid` = ?d", $guid);
 $adb->query("INSERT INTO `online` (`guid`, `login_display`, `sid`, `city`, `room`, `last_time`) 
-             VALUES (?d, ?s, ?s, ?s, ?s, ?d);", $guid ,$login ,session_id() ,$char_info['city'] ,$char_info['room'] ,time());
+             VALUES (?d, ?s, ?s, ?s, ?s, ?d);", $guid, $login, session_id(), $char_info['city'], $char_info['room'], time());
 $char->setChar('char_db', array('last_go' => time()));
 $_SESSION['guid'] = $guid;
-$_SESSION['zayavka_c_m'] = 1;
-$_SESSION['zayavka_c_o'] = 1;
-$_SESSION['battle_ref']  = 0;
 $char->history->Auth(1, $char_info['city']);
 echoScript("location.href = 'game.php';");
 ?>

@@ -1,10 +1,38 @@
 <html>
 <head>
-<title>Смайлы</title>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta http-equiv="Content-Language" content="ru">
-<link rel="StyleSheet" href="styles/style.css" type="text/css">
-<script src="scripts/jquery.js" type="text/javascript"></script>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Language" content="ru" />
+  <title>Смайлы</title>
+  <link rel="StyleSheet" href="styles/style.css" type="text/css" />
+  <script src="scripts/jquery.js" type="text/javascript"></script>
+  <script type="text/javascript">
+    function S (name)
+    {
+      $("#text", window.opener.document).focus().val($("#text", window.opener.document).val() + ':'+name+': ');
+    }
+
+    var sm = new Array ("smile",18,18, "laugh",15,15, "fingal",22,15, "eek",15,15, "smoke",20,20, "hi",31,28, "bye",15,15, "king",21,22, "king2",28,24, "boks",62,28,
+    "gent",15,21, "lady",15,19, "tongue",15,15, "smil",16,16, "rotate",15,15, "ponder",21,15, "bow",15,21, "angel",42,23, "angel2",26,25, "hello",25,27,
+    "dont",26,26, "idea",26,27, "mol",27,22, "beer",15,15, "drink",19,17, "baby",15,18, "tongue2",15,15, "sword",49,18, "agree",37,15, "loveya",27,15,
+    "kiss2",15,15, "kiss3",15,15, "kiss4",37,15, "rose",15,15, "love",27,28, "love2", 55,24, "confused",15,22, "yes",15,15, "no",15,15, "shuffle",15,20,
+    "nono",22,19, "maniac",70,25, "privet",27,29, "ok",22,16, "ninja",15,15, "pif",46,26, "alien",13,15, "pirate",23,19, "gun",40,18, "trup",20,20,
+    "mdr",56,15, "sneeze",15,20, "mad",15,15, "friday",57,28, "cry",16,16, "grust",15,15, "rupor",38,18, "fie",15,15, "row",36,15, "red",15,15, "lick",15,15,
+    "help",23,15, "wink",15,15, "jeer",26,16, "tease",33,19, "nunu",43,19, "duel",100,34, "susel",70,34, "nun",40,28, "kruger",34,27, "flowers",28,29,
+    "horse",60,40, "hug",48,20, "str",35,25, "alch",39,26, "pal",25,21, "mag",37,37, "sniper",37,37, "vamp", 27,27, "doc",37,37, "doc2",37,37, "sharp",37,37, "naem",37,37,
+    "naem2",37,37, "naem3",37,37, "invis",32,23, "chtoza",33,37, "beggar",33,27, "sorry",25,25, "sorry2",25,25, "creator",39, 25, "grace",39,25, "dustman",30,21,
+    "carreat",40,21, "lordhaos",30,21, "ura",31,36, "elix",30,35, "dedmoroz",32,32, "snegur",45,45, "showng",50, 35, "superng",45,41, "podz",31,27, "sten",44,30,
+    "devil",29,20, "cat",29,27, "owl", 29,20, "lightfly",29,20, "snowfight",51,24, "rocket",43,35, "dance1",45,23, "radio1",36,24, "victory", 51, 35, "dance2",41,31,
+    "radio2",29,29, "nail",32,26, "rev",40,25, "obm",37,22, "yar",40,36, "rom",38,33, "sad",23,23, "adolf",20,20, "am",18,23, "angl",88,26, "aplause",31,25, "arrow",20,20,
+    "batman",20,27, "boxing",30,30, "censored",48,18, "cola",45,25, "compkill",34,28, "cool",27,20, "coolman",18,18, "crazy",28,28, "dinner",31,26, "dollar",15,15,
+    "droch",40,30, "evil",20,18, "face1",18,18, "face2",19,19, "face3",33,25, "face4",20,21, "face5",18,28, "fuck",80,26, "fuu",20,20, "girl",18,18, "goodnigth",18,16,
+    "gun1",48,22, "gun2",49,23, "gun_1",54,19, "ha",34,26, "happy",20,20, "heart",19,19, "helloween",18,18, "hummer",41,28, "hummer2",30,26, "ill",20,20, "inlove",20,20,
+    "invalid",76,25, "jack",55,18, "jedy",50,26, "kill",120,20, "killed",38,24, "kiss1",47,27, "knut",54,20, "lips",23,15, "lock",32,23, "loo",24,26, "luck",19,20,
+    "mac",17,18, "man_hat",26,21, "matrix",83,18, "med",65,31, "mediana",74,30, "merlin",96,61, "minet",18,18, "music",26,24, "newyear",21,23, "nuclear",20,20,
+    "nunchak",40,28, "ogo",26,24, "pare",47,18, "police",20,22, "police2",18,24, "prise",31,26, "punk",33,30, "question",20,20, "ravvin",24,29, "ravvin2",24,25, "rip",25,18,
+    "scare",20,21, "shut",49,23, "sleep",38,23, "song",35,20, "sperm",41,20, "strong",32,20, "student",25,22, "t2",18,18, "terminator",52,25, "throwout",65,50,
+    "training",40,30, "trio",64,18, "two",46,20, "user",60,23, "wow",20,21, "yo",30,30
+    );
+  </script>
 </head>
 <body style="margin: 4px; background-color: #999999;">
 <table border="0" width="100%" cellpadding="0" cellspacing="0">
@@ -16,43 +44,16 @@
 	<tr bgcolor="#cccccc">
 		<td width="20"></td>
 		<td>
-<script>
-function S (name)
-{
-  $("#text", window.opener.document).focus().val($("#text", window.opener.document).val() + ':'+name+': ');
-}
-
-var sm = new Array ("smile",18,18, "laugh",15,15, "fingal",22,15, "eek",15,15, "smoke",20,20, "hi",31,28, "bye",15,15, "king",21,22, "king2",28,24, "boks",62,28,
-"gent",15,21, "lady",15,19, "tongue",15,15, "smil",16,16, "rotate",15,15, "ponder",21,15, "bow",15,21, "angel",42,23, "angel2",26,25, "hello",25,27,
-"dont",26,26, "idea",26,27, "mol",27,22, "beer",15,15, "drink",19,17, "baby",15,18, "tongue2",15,15, "sword",49,18, "agree",37,15, "loveya",27,15,
-"kiss2",15,15, "kiss3",15,15, "kiss4",37,15, "rose",15,15, "love",27,28, "love2", 55,24, "confused",15,22, "yes",15,15, "no",15,15, "shuffle",15,20,
-"nono",22,19, "maniac",70,25, "privet",27,29, "ok",22,16, "ninja",15,15, "pif",46,26, "alien",13,15, "pirate",23,19, "gun",40,18, "trup",20,20,
-"mdr",56,15, "sneeze",15,20, "mad",15,15, "friday",57,28, "cry",16,16, "grust",15,15, "rupor",38,18, "fie",15,15, "row",36,15, "red",15,15, "lick",15,15,
-"help",23,15, "wink",15,15, "jeer",26,16, "tease",33,19, "nunu",43,19, "duel",100,34, "susel",70,34, "nun",40,28, "kruger",34,27, "flowers",28,29,
-"horse",60,40, "hug",48,20, "str",35,25, "alch",39,26, "pal",25,21, "mag",37,37, "sniper",37,37, "vamp", 27,27, "doc",37,37, "doc2",37,37, "sharp",37,37, "naem",37,37,
-"naem2",37,37, "naem3",37,37, "invis",32,23, "chtoza",33,37, "beggar",33,27, "sorry",25,25, "sorry2",25,25, "creator",39, 25, "grace",39,25, "dustman",30,21,
-"carreat",40,21, "lordhaos",30,21, "ura",31,36, "elix",30,35, "dedmoroz",32,32, "snegur",45,45, "showng",50, 35, "superng",45,41, "podz",31,27, "sten",44,30,
-"devil",29,20, "cat",29,27, "owl", 29,20, "lightfly",29,20, "snowfight",51,24, "rocket",43,35, "dance1",45,23, "radio1",36,24, "victory", 51, 35, "dance2",41,31,
-"radio2",29,29, "nail",32,26, "rev",40,25, "obm",37,22, "yar",40,36, "rom",38,33, "sad",23,23, "adolf",20,20, "am",18,23, "angl",88,26, "aplause",31,25, "arrow",20,20,
-"batman",20,27, "boxing",30,30, "censored",48,18, "cola",45,25, "compkill",34,28, "cool",27,20, "coolman",18,18, "crazy",28,28, "dinner",31,26, "dollar",15,15,
-"droch",40,30, "evil",20,18, "face1",18,18, "face2",19,19, "face3",33,25, "face4",20,21, "face5",18,28, "fuck",80,26, "fuu",20,20, "girl",18,18, "goodnigth",18,16,
-"gun1",48,22, "gun2",49,23, "gun_1",54,19, "ha",34,26, "happy",20,20, "heart",19,19, "helloween",18,18, "hummer",41,28, "hummer2",30,26, "ill",20,20, "inlove",20,20,
-"invalid",76,25, "jack",55,18, "jedy",50,26, "kill",120,20, "killed",38,24, "kiss1",47,27, "knut",54,20, "lips",23,15, "lock",32,23, "loo",24,26, "luck",19,20,
-"mac",17,18, "man_hat",26,21, "matrix",83,18, "med",65,31, "mediana",74,30, "merlin",96,61, "minet",18,18, "music",26,24, "newyear",21,23, "nuclear",20,20,
-"nunchak",40,28, "ogo",26,24, "pare",47,18, "police",20,22, "police2",18,24, "prise",31,26, "punk",33,30, "question",20,20, "ravvin",24,29, "ravvin2",24,25, "rip",25,18,
-"scare",20,21, "shut",49,23, "sleep",38,23, "song",35,20, "sperm",41,20, "strong",32,20, "student",25,22, "t2",18,18, "terminator",52,25, "throwout",65,50,
-"training",40,30, "trio",64,18, "two",46,20, "user",60,23, "wow",20,21, "yo",30,30
-);
-
-var i = 0;
-while (i < sm.length)
-{
-	var s = sm[i++];
-	if (s == 'adolf')
-		document.write('<br><center><b>Новые смайлы:</b></center>');
-	document.write('<img src="img/smiles/'+s+'.gif" width="'+sm[i++]+'" height="'+sm[i++]+'" border="0" onclick="S(\''+s+'\')" style="cursor: pointer;"> ');
-}
-</script>
+      <script type="text/javascript">
+      var i = 0;
+      while (i < sm.length)
+      {
+        var s = sm[i++];
+        if (s == 'adolf')
+          document.write('<br><center><b>Новые смайлы:</b></center>');
+        document.write('<img src="img/smiles/'+s+'.gif" width="'+sm[i++]+'" height="'+sm[i++]+'" border="0" onclick="S(\''+s+'\')" style="cursor: pointer;"> ');
+      }
+      </script>
 		</td>
 		<td width="20"></td>
 	</tr>
@@ -62,4 +63,5 @@ while (i < sm.length)
 		<td width="20"><img src="img/cor2_r_b.gif"></td>
 	</tr>
 </table>
+</body>
 </html>

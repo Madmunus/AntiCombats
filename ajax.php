@@ -3,10 +3,10 @@ session_start();
 define('AntiBK', true);
 
 include("engline/config.php");
+include("engline/data.php");
 include("engline/dbsimple/Generic.php");
-include("engline/data/data.php");
 include("engline/functions/functions.php");
-include("token/bootstrap.php");
+include("engline/token/bootstrap.php");
 
 $guid = getGuid('ajax');
 

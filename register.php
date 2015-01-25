@@ -3,8 +3,8 @@ session_start();
 define('AntiBK', true);
 
 include_once("engline/config.php");
+include_once("engline/data.php");
 include_once("engline/dbsimple/Generic.php");
-include_once("engline/data/data.php");
 include_once("engline/functions/functions.php");
 
 $adb = DbSimple_Generic::connect($database['adb']);
@@ -16,9 +16,10 @@ $error_text = 'Пройдите предыдущий шаг!<br><br><a href="?st
 ?>
 <html>
 <head>
-  <link rel="SHORTCUT ICON" href="img/favicon.ico" />
-  <title>Анти Бойцовский Клуб</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Language" content="ru" />
+  <title>Анти Бойцовский Клуб</title>
+  <link rel="SHORTCUT ICON" href="img/favicon.ico" />
   <link href="styles/main.css" rel="stylesheet" type="text/css" />
   <script src="scripts/jquery.js" type="text/javascript"></script>
   <script src="scripts/register.js" type="text/javascript"></script>
@@ -266,7 +267,7 @@ if (!($adb->selectCell("SELECT `registration` FROM `server_info`;")))
                   <tr height="30"><td colspan="2"><span class="style5">*</span> <input type="checkbox" name="rules2" value="1" />Я ознакомился с <a href="encicl/TOS.html" target="_blank"><b>Соглашением о предоставлении сервиса игры "Анти Бойцовский Клуб"</b></a> и согласен по всем пунктам.</b></a></td></tr>
                   <tr>
                     <td><span class="style5">*</span><font style="margin-left: 8px;">Введите изображенный на рисунке код</font><br><font style="margin-left: 18px;"><input type="text" name="code" maxlength="7" size="7"></font></td>
-                    <td><img src="secpic.php" style="border: 1px solid grey; cursor: pointer;" onclick="location.reload();"></td>
+                    <td><img src="engline/secpic.php" style="border: 1px solid grey; cursor: pointer;" onclick="location.reload();"></td>
                   </tr>
                   <tr>
                     <td><br><input onclick="location.href='?step=4';" type="button" class="btn" value="Вернуться"></td>
