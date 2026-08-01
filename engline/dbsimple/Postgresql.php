@@ -25,15 +25,15 @@ require_once dirname(__FILE__) . '/Generic.php';
 class DbSimple_Postgresql extends DbSimple_Generic_Database
 {
 
-    var $DbSimple_Postgresql_USE_NATIVE_PHOLDERS = null;
-    var $prepareCache = array();
-    var $link;
+    public $DbSimple_Postgresql_USE_NATIVE_PHOLDERS = null;
+    public $prepareCache = array();
+    public $link;
     
     /**
      * constructor(string $dsn)
      * Connect to PostgresSQL.
      */
-    function DbSimple_Postgresql($dsn)
+    function __construct($dsn)
     {
         $p = DbSimple_Generic::parseDSN($dsn);
         if (!is_callable('pg_connect')) {
@@ -79,9 +79,9 @@ class DbSimple_Postgresql extends DbSimple_Generic_Database
     }
 
 
-    function& _performNewBlob($blobid=null)
+    function _performNewBlob($blobid=null)
     {
-        $obj =& new DbSimple_Postgresql_Blob($this, $blobid);
+        $obj = new DbSimple_Postgresql_Blob($this, $blobid);
         return $obj;
     }
 
@@ -238,11 +238,11 @@ class DbSimple_Postgresql extends DbSimple_Generic_Database
 
 class DbSimple_Postgresql_Blob extends DbSimple_Generic_Blob
 {
-    var $blob; // resourse link
-    var $id;
-    var $database;
+    public $blob; // resourse link
+    public $id;
+    public $database;
 
-    function DbSimple_Postgresql_Blob(&$database, $id=null)
+    function __construct(&$database, $id=null)
     {
         $this->database =& $database;
         $this->database->transaction();

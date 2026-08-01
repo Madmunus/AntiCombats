@@ -208,7 +208,7 @@ switch ($action)
     ArrToVar($char_info, 's_');
     $s_hobie = str_replace(array("<br>", '\&quot;', "\'"), array("\n", '"', "'"), $s_hobie);
     $s_hide_icq = ($s_hide_icq) ?" checked" :"";
-    $s_birthday = split('\.', $s_birthday);
+    $s_birthday = explode('\.', $s_birthday);
     
     if (!empty($error))
       echo "<font color='red'><b>$error</b></font>";

@@ -2,7 +2,7 @@
 defined('AntiBK') or die("Доступ запрещен!");
 
 $date = (isset($_POST['date']) && eregi("^[0-9]+\.[0-9]+", $_POST['date'])) ?utf8_substr(htmlspecialchars($_POST['date']), 0, 5) :date('m.y');
-$split = split('\.', $date);
+$split = explode('\.', $date);
 $first_time  = mktime(0, 0, 0, $split[0], 01, $split[1]);
 $second_time = mktime(0, 0, 0, $split[0], date("t", $first_time), $split[1]);
 

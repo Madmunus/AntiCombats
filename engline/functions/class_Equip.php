@@ -188,10 +188,10 @@ class Equip extends Char
     {
       $name = (isset($lang['travm_p_'.$travm['power']])) ?$lang['travm_p_'.$travm['power']].' ('.$travm['name'].')' :$travm['name'];
       $stats = ($travm['type'] == 1) ?'<br>У персонажа '.lowercase($lang['travm_p_'.$travm['power']]).' - ослаблены характеристики.' :'';
-      $modifiers = split(",", $travm['stats']);
+      $modifiers = explode(",", $travm['stats']);
       foreach ($modifiers as $modifier)
       {
-        $stat = split("=", $modifier);
+        $stat = explode("=", $modifier);
         $stats .= '<br>'.$lang[$stat[0]].' -'.$stat[1];
       }
       $end_time = 'Осталось: '.getFormatedTime($travm['end_time']);

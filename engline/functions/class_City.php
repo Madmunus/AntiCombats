@@ -118,7 +118,7 @@ class City extends Char
       if (!$need)
         continue;
       
-      $need = split('\=', $need);
+      $need = explode('=', $need);
       
       if ($char_db[$need[0]] >= $need[1])
       {
