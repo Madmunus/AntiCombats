@@ -2,7 +2,8 @@
 SQLyog Ultimate v11.52 (64 bit)
 MySQL - 5.5.28 : Database - abk
 *********************************************************************
-*/
+*/
+
 
 /*!40101 SET NAMES utf8mb4 */;
 
@@ -12,7 +13,7 @@ MySQL - 5.5.28 : Database - abk
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-CREATE DATABASE /*!32312 IF NOT EXISTS*/`abk` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci */;
+CREATE DATABASE /*!32312 IF NOT EXISTS*/`abk` /*!40100 DEFAULT CHARACTER SET utf8mb4 */;
 
 USE `abk`;
 
@@ -21,160 +22,160 @@ USE `abk`;
 DROP TABLE IF EXISTS `admin_item_create`;
 
 CREATE TABLE `admin_item_create` (
-  `name` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `img` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `section` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `type` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `item_flags` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `mass` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `price` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `price_euro` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `tear` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `min_level` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `min_dex` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `min_con` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `min_str` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `min_vit` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `min_int` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `min_wis` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `min_sword` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `min_axe` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `min_fail` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `min_knife` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `min_staff` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `min_fire` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `min_water` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `min_air` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `min_earth` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `min_light` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `min_gray` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `min_dark` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `min_mp_all` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `add_str` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `add_dex` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `add_con` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `add_int` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `add_hp` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `add_mp` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `mp_cons` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `hp_regen` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `mp_regen` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `def_h` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `def_a` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `def_b` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `def_l` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `attack` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `brick` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `add_hit_min` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `add_hit_max` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `res_magic` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `res_fire` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `res_water` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `res_air` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `res_earth` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `res_light` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `res_gray` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `res_dark` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `res_dmg` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `res_dmg_h` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `res_dmg_a` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `res_dmg_b` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `res_dmg_l` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `res_sting` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `res_sting_h` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `res_sting_a` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `res_sting_b` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `res_sting_l` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `res_slash` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `res_slash_h` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `res_slash_a` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `res_slash_b` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `res_slash_l` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `res_crush` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `res_crush_h` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `res_crush_a` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `res_crush_b` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `res_crush_l` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `res_sharp` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `res_sharp_h` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `res_sharp_a` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `res_sharp_b` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `res_sharp_l` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `mf_dmg` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `mf_dmg_h` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `mf_sting` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `mf_sting_h` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `mf_slash` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `mf_slash_h` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `mf_crush` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `mf_crush_h` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `mf_sharp` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `mf_sharp_h` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `mf_magic` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `mf_fire` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `mf_water` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `mf_air` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `mf_earth` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `mf_light` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `mf_gray` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `mf_dark` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `mf_acrit` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `mf_adodge` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `mf_adodge_h` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `mf_parry` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `mf_dodge` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `mf_contr` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `mf_crit` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `mf_crit_h` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `mf_critp` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `mf_critp_h` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `mf_parmour` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `mf_parmour_h` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `mf_shieldb` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `all_magic` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `fire` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `water` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `air` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `earth` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `light` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `gray` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `dark` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `all_mastery` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `sword` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `sword_h` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `axe` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `axe_h` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `fail` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `fail_h` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `knife` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `knife_h` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `staff` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `rep_magic` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `rep_fire` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `rep_water` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `rep_air` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `rep_earth` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `ch_sting` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `ch_slash` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `ch_crush` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `ch_sharp` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `ch_fire` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `ch_water` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `ch_air` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `ch_earth` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `ch_light` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `ch_dark` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `inc_count` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `personal_owner` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `block` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `orden` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `sex` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `itemset` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `hands` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `description` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `validity` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
+  `name` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `img` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `section` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `type` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `item_flags` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `mass` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `price` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `price_euro` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `tear` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `min_level` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `min_dex` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `min_con` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `min_str` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `min_vit` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `min_int` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `min_wis` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `min_sword` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `min_axe` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `min_fail` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `min_knife` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `min_staff` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `min_fire` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `min_water` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `min_air` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `min_earth` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `min_light` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `min_gray` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `min_dark` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `min_mp_all` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `add_str` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `add_dex` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `add_con` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `add_int` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `add_hp` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `add_mp` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `mp_cons` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `hp_regen` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `mp_regen` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `def_h` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `def_a` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `def_b` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `def_l` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `attack` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `brick` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `add_hit_min` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `add_hit_max` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `res_magic` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `res_fire` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `res_water` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `res_air` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `res_earth` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `res_light` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `res_gray` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `res_dark` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `res_dmg` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `res_dmg_h` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `res_dmg_a` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `res_dmg_b` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `res_dmg_l` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `res_sting` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `res_sting_h` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `res_sting_a` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `res_sting_b` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `res_sting_l` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `res_slash` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `res_slash_h` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `res_slash_a` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `res_slash_b` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `res_slash_l` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `res_crush` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `res_crush_h` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `res_crush_a` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `res_crush_b` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `res_crush_l` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `res_sharp` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `res_sharp_h` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `res_sharp_a` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `res_sharp_b` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `res_sharp_l` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `mf_dmg` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `mf_dmg_h` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `mf_sting` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `mf_sting_h` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `mf_slash` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `mf_slash_h` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `mf_crush` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `mf_crush_h` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `mf_sharp` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `mf_sharp_h` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `mf_magic` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `mf_fire` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `mf_water` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `mf_air` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `mf_earth` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `mf_light` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `mf_gray` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `mf_dark` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `mf_acrit` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `mf_adodge` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `mf_adodge_h` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `mf_parry` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `mf_dodge` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `mf_contr` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `mf_crit` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `mf_crit_h` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `mf_critp` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `mf_critp_h` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `mf_parmour` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `mf_parmour_h` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `mf_shieldb` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `all_magic` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `fire` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `water` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `air` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `earth` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `light` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `gray` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `dark` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `all_mastery` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `sword` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `sword_h` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `axe` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `axe_h` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `fail` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `fail_h` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `knife` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `knife_h` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `staff` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `rep_magic` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `rep_fire` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `rep_water` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `rep_air` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `rep_earth` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `ch_sting` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `ch_slash` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `ch_crush` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `ch_sharp` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `ch_fire` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `ch_water` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `ch_air` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `ch_earth` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `ch_light` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `ch_dark` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `inc_count` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `personal_owner` varchar(30) utf8mb4 DEFAULT NULL,
+  `block` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `orden` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `sex` varchar(30) utf8mb4 DEFAULT NULL,
+  `itemset` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `hands` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `description` varchar(30) utf8mb4 DEFAULT NULL,
+  `validity` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
   PRIMARY KEY (`type`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `admin_item_create` */
 
@@ -203,10 +204,10 @@ DROP TABLE IF EXISTS `admin_menu`;
 
 CREATE TABLE `admin_menu` (
   `id` int(4) NOT NULL DEFAULT '0',
-  `href` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `name` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `href` varchar(30) utf8mb4 DEFAULT NULL,
+  `name` varchar(40) utf8mb4 NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `admin_menu` */
 
@@ -243,10 +244,10 @@ DROP TABLE IF EXISTS `battles`;
 CREATE TABLE `battles` (
   `id` int(4) NOT NULL AUTO_INCREMENT,
   `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `type` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `win` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `status` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `creator_id` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `type` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `win` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `status` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `creator_id` varchar(30) utf8mb4 NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   KEY `id` (`id`),
   KEY `id_2` (`id`),
@@ -256,7 +257,7 @@ CREATE TABLE `battles` (
   KEY `id_6` (`id`),
   KEY `id_7` (`id`),
   KEY `id_8` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `battles` */
 
@@ -270,29 +271,29 @@ DROP TABLE IF EXISTS `book`;
 
 CREATE TABLE `book` (
   `id` int(4) NOT NULL AUTO_INCREMENT,
-  `name` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `img` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `mass` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `price` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `min_intellekt` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `min_vospriyatie` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `min_level` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `add_intellekt` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `add_mana` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `iznos_min` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `iznos_max` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `type` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `mountown` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `orden` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `add_water` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `add_earth` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `add_fire` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `add_air` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `pages` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `desc` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(30) utf8mb4 DEFAULT NULL,
+  `img` varchar(30) utf8mb4 DEFAULT NULL,
+  `mass` varchar(30) utf8mb4 DEFAULT NULL,
+  `price` varchar(30) utf8mb4 DEFAULT NULL,
+  `min_intellekt` varchar(30) utf8mb4 DEFAULT NULL,
+  `min_vospriyatie` varchar(30) utf8mb4 DEFAULT NULL,
+  `min_level` varchar(30) utf8mb4 DEFAULT NULL,
+  `add_intellekt` varchar(30) utf8mb4 DEFAULT NULL,
+  `add_mana` varchar(30) utf8mb4 DEFAULT NULL,
+  `iznos_min` varchar(30) utf8mb4 DEFAULT NULL,
+  `iznos_max` varchar(30) utf8mb4 DEFAULT NULL,
+  `type` varchar(30) utf8mb4 DEFAULT NULL,
+  `mountown` varchar(30) utf8mb4 DEFAULT NULL,
+  `orden` varchar(30) utf8mb4 DEFAULT NULL,
+  `add_water` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `add_earth` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `add_fire` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `add_air` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `pages` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `desc` text utf8mb4 NOT NULL,
   PRIMARY KEY (`id`),
   KEY `id` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `book` */
 
@@ -306,17 +307,17 @@ DROP TABLE IF EXISTS `bot_temp`;
 
 CREATE TABLE `bot_temp` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `bot_name` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `hp` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `hp_all` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `battle_id` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `prototype` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `team` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `mana` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `mana_all` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `bot_name` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `hp` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `hp_all` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `battle_id` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `prototype` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `team` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `mana` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `mana_all` varchar(30) utf8mb4 NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   KEY `id` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `bot_temp` */
 
@@ -331,12 +332,12 @@ DROP TABLE IF EXISTS `character_bank`;
 CREATE TABLE `character_bank` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `guid` int(11) unsigned NOT NULL,
-  `password` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `password` varchar(40) utf8mb4 NOT NULL DEFAULT '',
   `cash` double NOT NULL DEFAULT '0',
   `euro` double NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `id` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `character_bank` */
 
@@ -350,14 +351,14 @@ DROP TABLE IF EXISTS `character_bars`;
 
 CREATE TABLE `character_bars` (
   `guid` int(11) unsigned NOT NULL,
-  `stat` varchar(3) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '1|1',
-  `mod` varchar(3) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `power` varchar(3) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `def` varchar(3) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `set` varchar(3) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `btn` varchar(3) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
+  `stat` varchar(3) utf8mb4 NOT NULL DEFAULT '1|1',
+  `mod` varchar(3) utf8mb4 NOT NULL DEFAULT '0',
+  `power` varchar(3) utf8mb4 NOT NULL DEFAULT '0',
+  `def` varchar(3) utf8mb4 NOT NULL DEFAULT '0',
+  `set` varchar(3) utf8mb4 NOT NULL DEFAULT '0',
+  `btn` varchar(3) utf8mb4 NOT NULL DEFAULT '0',
   PRIMARY KEY (`guid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `character_bars` */
 
@@ -374,7 +375,7 @@ CREATE TABLE `character_effects` (
   `effect_id` int(11) unsigned NOT NULL,
   `end_time` bigint(20) NOT NULL DEFAULT '0',
   PRIMARY KEY (`guid`,`effect_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `character_effects` */
 
@@ -392,7 +393,7 @@ CREATE TABLE `character_equip` (
   `bracer` int(11) NOT NULL DEFAULT '0',
   `hand_r` int(11) NOT NULL DEFAULT '0',
   `hand_r_free` tinyint(3) NOT NULL DEFAULT '1',
-  `hand_r_type` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'phisic',
+  `hand_r_type` varchar(30) utf8mb4 NOT NULL DEFAULT 'phisic',
   `cloak` int(11) NOT NULL DEFAULT '0',
   `armor` int(11) NOT NULL DEFAULT '0',
   `shirt` int(11) NOT NULL DEFAULT '0',
@@ -405,11 +406,11 @@ CREATE TABLE `character_equip` (
   `gloves` int(11) NOT NULL DEFAULT '0',
   `hand_l` int(11) NOT NULL DEFAULT '0',
   `hand_l_free` tinyint(3) NOT NULL DEFAULT '1',
-  `hand_l_type` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'none',
+  `hand_l_type` varchar(30) utf8mb4 NOT NULL DEFAULT 'none',
   `pants` int(11) NOT NULL DEFAULT '0',
   `boots` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`guid`)
-) ENGINE=InnoDB AUTO_INCREMENT DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `character_equip` */
 
@@ -427,22 +428,22 @@ DROP TABLE IF EXISTS `character_info`;
 
 CREATE TABLE `character_info` (
   `guid` int(11) unsigned NOT NULL DEFAULT '0',
-  `name` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `name` varchar(30) utf8mb4 DEFAULT NULL,
   `secretquestion` text,
   `secretanswer` text,
-  `icq` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `icq` varchar(30) utf8mb4 DEFAULT NULL,
   `hide_icq` tinyint(3) unsigned NOT NULL DEFAULT '0',
-  `url` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `town` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `birthday` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `color` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `motto` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `hobie` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `url` varchar(50) utf8mb4 DEFAULT NULL,
+  `town` varchar(30) utf8mb4 DEFAULT NULL,
+  `birthday` varchar(30) utf8mb4 DEFAULT NULL,
+  `color` varchar(30) utf8mb4 DEFAULT NULL,
+  `motto` varchar(30) utf8mb4 DEFAULT NULL,
+  `hobie` longtext utf8mb4,
   `bank_note` longtext,
   `state` varchar(32) NOT NULL DEFAULT '',
   `date` bigint(20) NOT NULL DEFAULT '0',
   PRIMARY KEY (`guid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `character_info` */
 
@@ -471,19 +472,19 @@ CREATE TABLE `character_inventory` (
   `inc_con` tinyint(3) NOT NULL DEFAULT '0',
   `inc_int` tinyint(3) NOT NULL DEFAULT '0',
   `is_modified` tinyint(2) NOT NULL DEFAULT '0',
-  `gift` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `gift_author` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `is_personal` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `personal_owner` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `locked` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `password` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `gift` varchar(30) utf8mb4 DEFAULT NULL,
+  `gift_author` varchar(30) utf8mb4 DEFAULT NULL,
+  `is_personal` varchar(30) utf8mb4 DEFAULT NULL,
+  `personal_owner` varchar(30) utf8mb4 DEFAULT NULL,
+  `locked` varchar(30) utf8mb4 DEFAULT NULL,
+  `password` varchar(30) utf8mb4 DEFAULT NULL,
   `pages_used` tinyint(3) NOT NULL DEFAULT '0',
   `mailed` tinyint(3) NOT NULL DEFAULT '0',
   `date` bigint(20) NOT NULL DEFAULT '0',
   `made_in` varchar(30) NOT NULL,
   `last_update` bigint(20) NOT NULL,
   PRIMARY KEY (`id`,`guid`)
-) ENGINE=InnoDB AUTO_INCREMENT DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `character_inventory` */
 
@@ -497,7 +498,7 @@ DROP TABLE IF EXISTS `character_sets`;
 
 CREATE TABLE `character_sets` (
   `guid` int(11) unsigned NOT NULL,
-  `name` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(32) utf8mb4 NOT NULL,
   `helmet` int(11) NOT NULL DEFAULT '0',
   `bracer` int(11) NOT NULL DEFAULT '0',
   `hand_r` int(11) NOT NULL DEFAULT '0',
@@ -515,7 +516,7 @@ CREATE TABLE `character_sets` (
   `pants` int(11) NOT NULL DEFAULT '0',
   `boots` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`guid`,`name`)
-) ENGINE=InnoDB AUTO_INCREMENT DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `character_sets` */
 
@@ -666,7 +667,7 @@ CREATE TABLE `character_stats` (
   `hand_r_hitmax` int(10) NOT NULL DEFAULT '0',
   `hand_l_hitmax` int(10) NOT NULL DEFAULT '0',
   PRIMARY KEY (`guid`)
-) ENGINE=InnoDB AUTO_INCREMENT DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `character_stats` */
 
@@ -685,10 +686,10 @@ DROP TABLE IF EXISTS `character_travms`;
 CREATE TABLE `character_travms` (
   `guid` int(11) unsigned NOT NULL,
   `travm_id` int(11) NOT NULL DEFAULT '0',
-  `stats` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `stats` text utf8mb4,
   `end_time` bigint(20) NOT NULL DEFAULT '0',
   PRIMARY KEY (`guid`,`travm_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `character_travms` */
 
@@ -702,53 +703,53 @@ DROP TABLE IF EXISTS `characters`;
 
 CREATE TABLE `characters` (
   `guid` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `login` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `login_sec` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `password` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `login` varchar(32) utf8mb4 NOT NULL DEFAULT '',
+  `login_sec` varchar(32) utf8mb4 NOT NULL DEFAULT '',
+  `password` varchar(40) utf8mb4 NOT NULL DEFAULT '',
   `level` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `exp` int(10) NOT NULL DEFAULT '0',
   `next_up` int(10) NOT NULL DEFAULT '20',
   `admin_level` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `money` double NOT NULL DEFAULT '0',
-  `city` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `room` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'novice',
-  `clan` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `city` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `room` varchar(30) utf8mb4 NOT NULL DEFAULT 'novice',
+  `clan` varchar(30) utf8mb4 DEFAULT NULL,
   `orden` smallint(3) unsigned NOT NULL DEFAULT '0',
   `rang` smallint(3) unsigned NOT NULL DEFAULT '0',
   `win` int(10) NOT NULL DEFAULT '0',
   `lose` int(10) NOT NULL DEFAULT '0',
   `draw` int(10) NOT NULL DEFAULT '0',
-  `glava` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `chin` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `passport` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `glava` varchar(30) utf8mb4 DEFAULT NULL,
+  `chin` varchar(30) utf8mb4 DEFAULT NULL,
+  `passport` varchar(30) utf8mb4 DEFAULT NULL,
   `prison` bigint(20) NOT NULL DEFAULT '0',
-  `prison_reason` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `prison_reason` varchar(255) utf8mb4 DEFAULT NULL,
   `block` tinyint(3) NOT NULL DEFAULT '0',
-  `block_reason` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `battle` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT '0',
-  `weapon_type` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `reg_ip` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `battle_pos` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `battle_team` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `battle_opponent` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `clan_short` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `clan_take` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `block_reason` varchar(255) utf8mb4 DEFAULT NULL,
+  `battle` varchar(30) utf8mb4 DEFAULT '0',
+  `weapon_type` varchar(30) utf8mb4 DEFAULT NULL,
+  `reg_ip` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `battle_pos` varchar(30) utf8mb4 DEFAULT NULL,
+  `battle_team` varchar(30) utf8mb4 DEFAULT NULL,
+  `battle_opponent` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `clan_short` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `clan_take` varchar(30) utf8mb4 NOT NULL DEFAULT '',
   `dealer` tinyint(3) NOT NULL DEFAULT '0',
-  `otdel` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `otdel` varchar(30) utf8mb4 NOT NULL DEFAULT '',
   `checkup` bigint(20) NOT NULL DEFAULT '0',
-  `acsess1` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `acsess2` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `animal` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `navik_wood` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `acsess1` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `acsess2` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `animal` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `navik_wood` varchar(30) utf8mb4 NOT NULL DEFAULT '',
   `vote` tinyint(3) NOT NULL DEFAULT '0',
   `add_resourses` int(4) NOT NULL DEFAULT '0',
-  `podval` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `semija` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `podval` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `semija` varchar(30) utf8mb4 NOT NULL DEFAULT '',
   `sex` tinyint(3) NOT NULL DEFAULT '0',
-  `mail` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
-  `shape` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `mail` text utf8mb4,
+  `shape` varchar(30) utf8mb4 DEFAULT NULL,
   `transfers` tinyint(3) unsigned NOT NULL DEFAULT '0',
-  `delo` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `delo` text utf8mb4,
   `afk` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `dnd` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `message` text,
@@ -766,7 +767,7 @@ CREATE TABLE `characters` (
   `last_time` bigint(20) NOT NULL DEFAULT '0',
   `next_change` bigint(20) NOT NULL DEFAULT '0',
   PRIMARY KEY (`guid`)
-) ENGINE=InnoDB AUTO_INCREMENT DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `characters` */
 
@@ -784,19 +785,19 @@ DROP TABLE IF EXISTS `city_chat`;
 
 CREATE TABLE `city_chat` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `city` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `room` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `city` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `room` varchar(30) utf8mb4 NOT NULL DEFAULT '',
   `sender` varchar(32) NOT NULL,
   `to` longtext NOT NULL,
-  `msg` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `class` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `msg` longtext utf8mb4 NOT NULL,
+  `class` varchar(30) utf8mb4 NOT NULL DEFAULT '',
   `date_stamp` bigint(20) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`,`city`,`room`),
   KEY `id` (`id`),
   KEY `id_2` (`id`),
   KEY `id_3` (`id`),
   KEY `id_4` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `city_chat` */
 
@@ -817,7 +818,7 @@ CREATE TABLE `city_mail_items` (
   `delivery_time` bigint(20) NOT NULL,
   `date` bigint(20) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `city_mail_items` */
 
@@ -830,26 +831,26 @@ UNLOCK TABLES;
 DROP TABLE IF EXISTS `city_rooms`;
 
 CREATE TABLE `city_rooms` (
-  `room` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `room` varchar(32) utf8mb4 NOT NULL,
   `city` int(11) NOT NULL,
-  `name` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `from` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(32) utf8mb4 NOT NULL,
+  `from` text utf8mb4 NOT NULL,
   `time` tinyint(3) NOT NULL DEFAULT '0',
   `min_level` tinyint(3) NOT NULL DEFAULT '0',
   `max_level` tinyint(3) NOT NULL DEFAULT '12',
   `need_orden` tinyint(3) NOT NULL DEFAULT '0',
   `sex` tinyint(3) DEFAULT NULL,
-  `desc1` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
-  `desc1_need` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `desc2` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
-  `desc2_need` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `desc3` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
-  `desc3_need` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `buttons` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `desc1` longtext utf8mb4,
+  `desc1_need` varchar(30) utf8mb4 DEFAULT NULL,
+  `desc2` longtext utf8mb4,
+  `desc2_need` varchar(30) utf8mb4 DEFAULT NULL,
+  `desc3` longtext utf8mb4,
+  `desc3_need` varchar(30) utf8mb4 DEFAULT NULL,
+  `buttons` text utf8mb4,
   `flags` int(11) NOT NULL DEFAULT '0',
-  `shop_section` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `shop_section` varchar(32) utf8mb4 DEFAULT NULL,
   PRIMARY KEY (`room`,`city`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `city_rooms` */
 
@@ -884,13 +885,13 @@ DROP TABLE IF EXISTS `city_stella_main`;
 
 CREATE TABLE `city_stella_main` (
   `id` int(4) NOT NULL AUTO_INCREMENT,
-  `question` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `question` varchar(250) utf8mb4 NOT NULL DEFAULT '',
   `min_level` tinyint(3) NOT NULL,
   `open` tinyint(3) NOT NULL DEFAULT '0',
-  `city` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `city` varchar(32) utf8mb4 NOT NULL,
   `date` date NOT NULL DEFAULT '0000-00-00',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `city_stella_main` */
 
@@ -905,10 +906,10 @@ DROP TABLE IF EXISTS `city_stella_question`;
 CREATE TABLE `city_stella_question` (
   `id` int(4) NOT NULL AUTO_INCREMENT,
   `question` int(4) NOT NULL DEFAULT '0',
-  `answer` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `answer` varchar(250) utf8mb4 NOT NULL DEFAULT '',
   `count` int(10) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`,`question`)
-) ENGINE=InnoDB AUTO_INCREMENT DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `city_stella_question` */
 
@@ -922,15 +923,15 @@ DROP TABLE IF EXISTS `clan`;
 
 CREATE TABLE `clan` (
   `id` bigint(30) NOT NULL AUTO_INCREMENT,
-  `name` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `name_short` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `glava` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `site` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `story` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `orden` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `name` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `name_short` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `glava` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `site` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `story` longtext utf8mb4 NOT NULL,
+  `orden` varchar(30) utf8mb4 NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   KEY `id` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `clan` */
 
@@ -943,25 +944,25 @@ UNLOCK TABLES;
 DROP TABLE IF EXISTS `clan_zayavka`;
 
 CREATE TABLE `clan_zayavka` (
-  `name` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `name_short` varchar(5) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `site` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `znak` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `history` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `orden` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `glava` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `glava_fio` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `sovet1` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `sovet1_fio` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `sovet2` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `sovet2_fio` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `sovet3` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `sovet3_fio` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `sovet4` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `sovet4_fio` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `date` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `confirm` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT ''
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `name` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `name_short` varchar(5) utf8mb4 NOT NULL DEFAULT '',
+  `site` varchar(50) utf8mb4 NOT NULL DEFAULT '',
+  `znak` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `history` mediumtext utf8mb4 NOT NULL,
+  `orden` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `glava` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `glava_fio` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `sovet1` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `sovet1_fio` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `sovet2` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `sovet2_fio` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `sovet3` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `sovet3_fio` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `sovet4` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `sovet4_fio` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `date` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `confirm` varchar(30) utf8mb4 NOT NULL DEFAULT ''
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `clan_zayavka` */
 
@@ -975,19 +976,19 @@ DROP TABLE IF EXISTS `comok`;
 
 CREATE TABLE `comok` (
   `id` int(4) NOT NULL AUTO_INCREMENT,
-  `owner` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `owner` varchar(30) utf8mb4 DEFAULT NULL,
   `price` int(30) DEFAULT '0',
-  `price_ekr` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `object_id` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `object_type` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `object_razdel` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `price_ekr` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `object_id` varchar(30) utf8mb4 DEFAULT NULL,
+  `object_type` varchar(30) utf8mb4 DEFAULT NULL,
+  `object_razdel` varchar(30) utf8mb4 DEFAULT NULL,
   `iznos` int(30) DEFAULT NULL,
-  `iznos_max` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `iznos_max` varchar(30) utf8mb4 DEFAULT NULL,
   `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `term` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `is_modified` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `term` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `is_modified` varchar(30) utf8mb4 NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `comok` */
 
@@ -1000,11 +1001,11 @@ UNLOCK TABLES;
 DROP TABLE IF EXISTS `forum_language`;
 
 CREATE TABLE `forum_language` (
-  `key` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `ru` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `en` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `key` varchar(32) utf8mb4 NOT NULL,
+  `ru` text utf8mb4 NOT NULL,
+  `en` text utf8mb4 NOT NULL,
   PRIMARY KEY (`key`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `forum_language` */
 
@@ -1033,11 +1034,11 @@ CREATE TABLE `forum_menu_en` (
   `id` int(3) unsigned NOT NULL AUTO_INCREMENT,
   `main` int(3) DEFAULT '0',
   `prev` int(3) DEFAULT NULL,
-  `name` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `text` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `name` varchar(32) utf8mb4 NOT NULL DEFAULT '',
+  `text` longtext utf8mb4,
   PRIMARY KEY (`id`),
   KEY `id` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `forum_menu_en` */
 
@@ -1070,11 +1071,11 @@ CREATE TABLE `forum_menu_ru` (
   `id` int(3) unsigned NOT NULL AUTO_INCREMENT,
   `main` int(3) DEFAULT '0',
   `prev` int(3) DEFAULT NULL,
-  `name` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `text` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `name` varchar(32) utf8mb4 NOT NULL DEFAULT '',
+  `text` longtext utf8mb4,
   PRIMARY KEY (`id`),
   KEY `id` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `forum_menu_ru` */
 
@@ -1142,17 +1143,17 @@ DROP TABLE IF EXISTS `forum_posts`;
 CREATE TABLE `forum_posts` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `top_id` bigint(20) NOT NULL DEFAULT '0',
-  `text` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `date` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `poster` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `text` text utf8mb4 NOT NULL,
+  `date` varchar(255) utf8mb4 NOT NULL DEFAULT '',
+  `poster` varchar(40) utf8mb4 NOT NULL DEFAULT '',
   `p_id` bigint(20) NOT NULL DEFAULT '0',
   `p_rank` int(2) NOT NULL DEFAULT '0',
-  `p_tribe` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
+  `p_tribe` varchar(255) utf8mb4 NOT NULL DEFAULT '0',
   `p_level` int(11) NOT NULL DEFAULT '0',
   `p_rase` int(2) NOT NULL DEFAULT '0',
   UNIQUE KEY `id` (`id`),
   KEY `top_id` (`top_id`)
-) ENGINE=InnoDB AUTO_INCREMENT DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `forum_posts` */
 
@@ -1316,15 +1317,15 @@ DROP TABLE IF EXISTS `forum_topic`;
 
 CREATE TABLE `forum_topic` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `msg` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `topic_id` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `login` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `orden` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `clan` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `clan_s` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `level` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `msg` longtext utf8mb4 NOT NULL,
+  `topic_id` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `login` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `orden` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `clan` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `clan_s` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `level` varchar(30) utf8mb4 NOT NULL DEFAULT '',
   KEY `id` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `forum_topic` */
 
@@ -1340,20 +1341,20 @@ CREATE TABLE `forum_topics_ru` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `last_update` bigint(20) NOT NULL DEFAULT '0',
   `fixed` int(1) NOT NULL DEFAULT '0',
-  `cat` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'main',
-  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `cat` varchar(15) utf8mb4 NOT NULL DEFAULT 'main',
+  `title` varchar(255) utf8mb4 NOT NULL DEFAULT '',
   `icon` int(2) NOT NULL DEFAULT '0',
-  `text` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `date` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `poster` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `text` text utf8mb4 NOT NULL,
+  `date` varchar(255) utf8mb4 NOT NULL DEFAULT '',
+  `poster` varchar(40) utf8mb4 NOT NULL DEFAULT '',
   `p_id` bigint(20) NOT NULL DEFAULT '0',
   `p_rank` int(2) NOT NULL DEFAULT '0',
-  `p_tribe` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
+  `p_tribe` varchar(255) utf8mb4 NOT NULL DEFAULT '0',
   `p_level` int(11) NOT NULL DEFAULT '0',
   `p_rase` int(2) NOT NULL DEFAULT '0',
   UNIQUE KEY `id` (`id`),
   KEY `cat` (`cat`)
-) ENGINE=InnoDB AUTO_INCREMENT DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `forum_topics_ru` */
 
@@ -1367,18 +1368,18 @@ DROP TABLE IF EXISTS `gift`;
 
 CREATE TABLE `gift` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `name` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `img` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `price` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `wish` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `mass` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `type` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `is_random` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `g_type` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `g_id` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `mountown` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `name` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `img` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `price` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `wish` varchar(255) utf8mb4 NOT NULL DEFAULT '',
+  `mass` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `type` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `is_random` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `g_type` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `g_id` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `mountown` varchar(10) utf8mb4 NOT NULL DEFAULT '',
   KEY `id` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `gift` */
 
@@ -1392,16 +1393,16 @@ DROP TABLE IF EXISTS `goers`;
 
 CREATE TABLE `goers` (
   `id` bigint(30) NOT NULL AUTO_INCREMENT,
-  `login` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `time` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `destenation` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `dest_game` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `len` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `len_done` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `napr` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `login` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `time` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `destenation` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `dest_game` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `len` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `len_done` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `napr` varchar(30) utf8mb4 NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   KEY `id` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `goers` */
 
@@ -1417,13 +1418,13 @@ CREATE TABLE `history_auth` (
   `id` bigint(20) NOT NULL,
   `guid` int(11) NOT NULL,
   `action` tinyint(2) NOT NULL,
-  `ip` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `city` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `comment` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `ip` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `city` varchar(32) utf8mb4 NOT NULL,
+  `comment` varchar(32) utf8mb4 DEFAULT NULL,
   `date` bigint(20) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`,`guid`),
   KEY `id` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `history_auth` */
 
@@ -1444,7 +1445,7 @@ CREATE TABLE `history_bank` (
   `operation` tinyint(3) NOT NULL DEFAULT '0',
   `date` bigint(20) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`,`credit`)
-) ENGINE=InnoDB AUTO_INCREMENT DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `history_bank` */
 
@@ -1459,12 +1460,12 @@ DROP TABLE IF EXISTS `history_items`;
 CREATE TABLE `history_items` (
   `id` int(11) NOT NULL,
   `guid` int(11) NOT NULL,
-  `receive` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `action` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `item` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `receive` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `action` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `item` longtext utf8mb4 NOT NULL,
   `date` bigint(20) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`,`guid`)
-) ENGINE=InnoDB AUTO_INCREMENT DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `history_items` */
 
@@ -1479,13 +1480,13 @@ DROP TABLE IF EXISTS `history_mail`;
 CREATE TABLE `history_mail` (
   `id` int(11) NOT NULL,
   `guid` int(11) NOT NULL,
-  `receive` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `action` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `item` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `ip` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `receive` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `action` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `item` longtext utf8mb4 NOT NULL,
+  `ip` varchar(30) utf8mb4 NOT NULL DEFAULT '',
   `date` bigint(20) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`,`guid`)
-) ENGINE=InnoDB AUTO_INCREMENT DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `history_mail` */
 
@@ -1498,13 +1499,13 @@ UNLOCK TABLES;
 DROP TABLE IF EXISTS `hit_temp`;
 
 CREATE TABLE `hit_temp` (
-  `attack` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `defend` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `def_hit1` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `def_hit2` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `def_block1` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `def_block2` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT ''
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `attack` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `defend` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `def_hit1` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `def_hit2` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `def_block1` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `def_block2` varchar(30) utf8mb4 NOT NULL DEFAULT ''
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `hit_temp` */
 
@@ -1518,10 +1519,10 @@ DROP TABLE IF EXISTS `item_template`;
 
 CREATE TABLE `item_template` (
   `entry` int(4) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `img` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `section` varchar(11) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `type` varchar(11) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `name` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `img` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `section` varchar(11) utf8mb4 NOT NULL DEFAULT '',
+  `type` varchar(11) utf8mb4 NOT NULL DEFAULT '',
   `item_flags` int(11) unsigned NOT NULL DEFAULT '0',
   `mass` double unsigned NOT NULL DEFAULT '0',
   `price` double NOT NULL DEFAULT '0',
@@ -1664,17 +1665,17 @@ CREATE TABLE `item_template` (
   `ch_light` tinyint(3) NOT NULL DEFAULT '0',
   `ch_dark` tinyint(3) NOT NULL DEFAULT '0',
   `inc_count` tinyint(3) NOT NULL DEFAULT '0',
-  `personal_owner` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `personal_owner` varchar(30) utf8mb4 DEFAULT NULL,
   `block` tinyint(3) NOT NULL DEFAULT '0',
   `orden` tinyint(3) NOT NULL DEFAULT '0',
   `sex` tinyint(3) DEFAULT NULL,
-  `itemset` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT '',
+  `itemset` varchar(30) utf8mb4 DEFAULT '',
   `hands` tinyint(3) NOT NULL DEFAULT '0',
-  `description` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `description` longtext utf8mb4,
   `validity` bigint(20) NOT NULL DEFAULT '0',
   PRIMARY KEY (`entry`),
   KEY `id` (`entry`)
-) ENGINE=InnoDB AUTO_INCREMENT DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `item_template` */
 
@@ -1688,10 +1689,10 @@ DROP TABLE IF EXISTS `lotto`;
 
 CREATE TABLE `lotto` (
   `id` bigint(10) NOT NULL AUTO_INCREMENT,
-  `name` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `number` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `name` varchar(10) utf8mb4 NOT NULL DEFAULT '',
+  `number` varchar(30) utf8mb4 NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `lotto` */
 
@@ -1704,8 +1705,8 @@ UNLOCK TABLES;
 DROP TABLE IF EXISTS `lotto_fond`;
 
 CREATE TABLE `lotto_fond` (
-  `fond` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT ''
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `fond` varchar(30) utf8mb4 NOT NULL DEFAULT ''
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `lotto_fond` */
 
@@ -1719,18 +1720,18 @@ DROP TABLE IF EXISTS `medal`;
 
 CREATE TABLE `medal` (
   `id` bigint(30) NOT NULL AUTO_INCREMENT,
-  `name` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `img` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `msg` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `type` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `price` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `disc` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `add_l` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `add_u` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `mass` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `name` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `img` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `msg` varchar(255) utf8mb4 NOT NULL DEFAULT '',
+  `type` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `price` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `disc` longtext utf8mb4 NOT NULL,
+  `add_l` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `add_u` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `mass` varchar(30) utf8mb4 NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   KEY `id` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `medal` */
 
@@ -1743,13 +1744,13 @@ UNLOCK TABLES;
 DROP TABLE IF EXISTS `miners`;
 
 CREATE TABLE `miners` (
-  `login` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `time` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `resource` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `cell` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `count` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `type` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT ''
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `login` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `time` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `resource` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `cell` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `count` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `type` varchar(30) utf8mb4 NOT NULL DEFAULT ''
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `miners` */
 
@@ -1763,11 +1764,11 @@ DROP TABLE IF EXISTS `news`;
 
 CREATE TABLE `news` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `theme` varchar(60) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `msg` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `theme` varchar(60) utf8mb4 NOT NULL DEFAULT '',
+  `msg` text utf8mb4 NOT NULL,
   `date` varchar(30) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `news` */
 
@@ -1782,14 +1783,14 @@ UNLOCK TABLES;
 DROP TABLE IF EXISTS `online`;
 
 CREATE TABLE `online` (
-  `guid` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `login_display` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `city` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `room` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `sid` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `guid` varchar(32) utf8mb4 NOT NULL DEFAULT '',
+  `login_display` varchar(32) utf8mb4 NOT NULL DEFAULT '',
+  `city` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `room` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `sid` varchar(40) utf8mb4 NOT NULL DEFAULT '',
   `last_time` bigint(20) NOT NULL DEFAULT '0',
   PRIMARY KEY (`guid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `online` */
 
@@ -1803,7 +1804,7 @@ DROP TABLE IF EXISTS `player_effects`;
 
 CREATE TABLE `player_effects` (
   `id` int(4) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(30) utf8mb4 NOT NULL,
   `add_hp` int(4) NOT NULL DEFAULT '0',
   `add_mp` int(4) NOT NULL DEFAULT '0',
   `mp_regen` int(3) NOT NULL DEFAULT '0',
@@ -1819,10 +1820,10 @@ CREATE TABLE `player_effects` (
   `mf_dodge` int(3) NOT NULL DEFAULT '0',
   `mf_adodge` int(3) NOT NULL DEFAULT '0',
   `duration` bigint(20) NOT NULL DEFAULT '0' COMMENT 'sec',
-  `set` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `set` varchar(30) utf8mb4 DEFAULT NULL,
   `power` int(2) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `player_effects` */
 
@@ -1882,9 +1883,9 @@ CREATE TABLE `player_exp_for_level` (
   `vit` int(11) NOT NULL DEFAULT '0',
   `spi` int(11) NOT NULL DEFAULT '0',
   `hp_regen` int(10) NOT NULL DEFAULT '0',
-  `add_bars` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `add_bars` varchar(32) utf8mb4 NOT NULL DEFAULT '',
   PRIMARY KEY (`up`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `player_exp_for_level` */
 
@@ -2014,8 +2015,8 @@ DROP TABLE IF EXISTS `player_shapes`;
 
 CREATE TABLE `player_shapes` (
   `id` int(4) NOT NULL AUTO_INCREMENT,
-  `sex` varchar(11) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `img` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `sex` varchar(11) utf8mb4 NOT NULL DEFAULT '',
+  `img` varchar(30) utf8mb4 NOT NULL,
   `level` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `str` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `dex` tinyint(3) unsigned NOT NULL DEFAULT '0',
@@ -2034,7 +2035,7 @@ CREATE TABLE `player_shapes` (
   `light` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `dark` tinyint(3) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `player_shapes` */
 
@@ -2170,11 +2171,11 @@ CREATE TABLE `player_travms` (
   `type` tinyint(2) unsigned NOT NULL DEFAULT '0',
   `power` tinyint(2) NOT NULL DEFAULT '0',
   `point` tinyint(2) NOT NULL DEFAULT '0',
-  `name` varchar(60) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(60) utf8mb4 NOT NULL,
   `dur_min` bigint(20) NOT NULL DEFAULT '0' COMMENT 'sec',
   `dur_max` bigint(20) NOT NULL DEFAULT '0' COMMENT 'sec',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `player_travms` */
 
@@ -2244,9 +2245,9 @@ UNLOCK TABLES;
 DROP TABLE IF EXISTS `podval`;
 
 CREATE TABLE `podval` (
-  `number` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `number` varchar(40) utf8mb4 NOT NULL DEFAULT '',
   `type` varbinary(40) NOT NULL DEFAULT '                                        '
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `podval` */
 
@@ -2260,15 +2261,15 @@ DROP TABLE IF EXISTS `protocol`;
 
 CREATE TABLE `protocol` (
   `id` bigint(30) NOT NULL AUTO_INCREMENT,
-  `login` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `templier` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `type` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `reason` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `time` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `login` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `templier` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `type` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `reason` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `time` varchar(30) utf8mb4 NOT NULL DEFAULT '',
   `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `id` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `protocol` */
 
@@ -2282,12 +2283,12 @@ DROP TABLE IF EXISTS `protocol_adm`;
 
 CREATE TABLE `protocol_adm` (
   `id` int(4) NOT NULL AUTO_INCREMENT,
-  `date_time` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `login` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `target` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `msg` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `date_time` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `login` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `target` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `msg` longtext utf8mb4,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `protocol_adm` */
 
@@ -2300,11 +2301,11 @@ UNLOCK TABLES;
 DROP TABLE IF EXISTS `res`;
 
 CREATE TABLE `res` (
-  `locate` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `resource` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `time` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `type` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT ''
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `locate` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `resource` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `time` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `type` varchar(30) utf8mb4 NOT NULL DEFAULT ''
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `res` */
 
@@ -2318,13 +2319,13 @@ DROP TABLE IF EXISTS `riba`;
 
 CREATE TABLE `riba` (
   `id` bigint(30) NOT NULL AUTO_INCREMENT,
-  `name` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `img` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `price` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `mass` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `mountown` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `name` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `img` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `price` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `mass` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `mountown` varchar(30) utf8mb4 NOT NULL DEFAULT '',
   KEY `id` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `riba` */
 
@@ -2337,11 +2338,11 @@ UNLOCK TABLES;
 DROP TABLE IF EXISTS `river`;
 
 CREATE TABLE `river` (
-  `login` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `time` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `resource` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `login` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `time` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `resource` varchar(30) utf8mb4 NOT NULL DEFAULT '',
   KEY `login` (`login`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `river` */
 
@@ -2357,12 +2358,12 @@ DROP TABLE IF EXISTS `sapojn`;
 
 CREATE TABLE `sapojn` (
   `id` int(7) NOT NULL AUTO_INCREMENT,
-  `login` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `money` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `num` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `zarplata` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0.2',
+  `login` varchar(30) utf8mb4 DEFAULT NULL,
+  `money` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `num` varchar(30) utf8mb4 NOT NULL DEFAULT '0',
+  `zarplata` varchar(30) utf8mb4 NOT NULL DEFAULT '0.2',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `sapojn` */
 
@@ -2375,11 +2376,11 @@ UNLOCK TABLES;
 DROP TABLE IF EXISTS `server_cities`;
 
 CREATE TABLE `server_cities` (
-  `city` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `name` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `city` varchar(32) utf8mb4 NOT NULL,
+  `name` varchar(32) utf8mb4 NOT NULL,
   `flag` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`city`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `server_cities` */
 
@@ -2406,11 +2407,11 @@ UNLOCK TABLES;
 DROP TABLE IF EXISTS `server_commands`;
 
 CREATE TABLE `server_commands` (
-  `name` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `name` varchar(32) utf8mb4 NOT NULL DEFAULT '',
   `security` int(2) NOT NULL DEFAULT '0',
-  `help` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `help` longtext utf8mb4 NOT NULL,
   PRIMARY KEY (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `server_commands` */
 
@@ -2428,11 +2429,11 @@ DROP TABLE IF EXISTS `server_errors`;
 
 CREATE TABLE `server_errors` (
   `id` int(11) unsigned NOT NULL,
-  `text` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `text` text utf8mb4 NOT NULL,
   `bold` tinyint(3) unsigned NOT NULL DEFAULT '1',
   `hyphen` tinyint(3) unsigned NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `server_errors` */
 
@@ -2540,14 +2541,14 @@ UNLOCK TABLES;
 DROP TABLE IF EXISTS `server_images`;
 
 CREATE TABLE `server_images` (
-  `name` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(30) utf8mb4 NOT NULL,
   `width` int(11) NOT NULL DEFAULT '0',
   `height` int(11) NOT NULL DEFAULT '0',
-  `default` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `low_level` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `default` varchar(30) utf8mb4 DEFAULT NULL,
+  `low_level` varchar(30) utf8mb4 DEFAULT NULL,
   `level` tinyint(3) NOT NULL DEFAULT '0',
   PRIMARY KEY (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `server_images` */
 
@@ -2579,10 +2580,10 @@ CREATE TABLE `server_info` (
   `login` tinyint(3) unsigned NOT NULL,
   `registration` tinyint(3) unsigned NOT NULL,
   `reminder` tinyint(3) unsigned NOT NULL,
-  `language` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `language` varchar(30) utf8mb4 NOT NULL DEFAULT '',
   `last_transfer` bigint(20) NOT NULL,
   PRIMARY KEY (`login`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `server_info` */
 
@@ -2597,10 +2598,10 @@ UNLOCK TABLES;
 DROP TABLE IF EXISTS `server_language`;
 
 CREATE TABLE `server_language` (
-  `key` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `ru` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `key` varchar(32) utf8mb4 NOT NULL,
+  `ru` text utf8mb4 NOT NULL,
   PRIMARY KEY (`key`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `server_language` */
 
@@ -2926,14 +2927,14 @@ UNLOCK TABLES;
 DROP TABLE IF EXISTS `team1`;
 
 CREATE TABLE `team1` (
-  `player` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `ip` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `battle_id` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `player` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `ip` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `battle_id` varchar(30) utf8mb4 NOT NULL DEFAULT '',
   `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `hitted` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `over` varchar(5) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `hitted` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `over` varchar(5) utf8mb4 NOT NULL DEFAULT '',
   KEY `player` (`player`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `team1` */
 
@@ -2947,17 +2948,17 @@ DROP TABLE IF EXISTS `team1_history`;
 
 CREATE TABLE `team1_history` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `player` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `ip` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `hitted` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `battle_id` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `player` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `ip` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `hitted` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `battle_id` varchar(30) utf8mb4 NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   KEY `id` (`id`),
   KEY `id_2` (`id`),
   KEY `id_3` (`id`),
   KEY `id_4` (`id`),
   KEY `id_5` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `team1_history` */
 
@@ -2970,14 +2971,14 @@ UNLOCK TABLES;
 DROP TABLE IF EXISTS `team2`;
 
 CREATE TABLE `team2` (
-  `player` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `ip` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `battle_id` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `player` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `ip` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `battle_id` varchar(30) utf8mb4 NOT NULL DEFAULT '',
   `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `hitted` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `over` varchar(5) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `hitted` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `over` varchar(5) utf8mb4 NOT NULL DEFAULT '',
   KEY `player` (`player`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `team2` */
 
@@ -2991,17 +2992,17 @@ DROP TABLE IF EXISTS `team2_history`;
 
 CREATE TABLE `team2_history` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `player` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `ip` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `hitted` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `battle_id` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `player` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `ip` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `hitted` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `battle_id` varchar(30) utf8mb4 NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   KEY `id` (`id`),
   KEY `id_2` (`id`),
   KEY `id_3` (`id`),
   KEY `id_4` (`id`),
   KEY `id_5` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `team2_history` */
 
@@ -3015,29 +3016,29 @@ DROP TABLE IF EXISTS `thing_book`;
 
 CREATE TABLE `thing_book` (
   `id` int(4) NOT NULL AUTO_INCREMENT,
-  `name` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `img` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `mass` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `price` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `min_intellekt` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `min_vospriyatie` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `min_level` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `add_intellekt` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `add_mana` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `iznos_min` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `iznos_max` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `type` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `mountown` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `orden` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `add_water` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `add_earth` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `add_fire` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `add_air` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `pages` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `desc` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(30) utf8mb4 DEFAULT NULL,
+  `img` varchar(30) utf8mb4 DEFAULT NULL,
+  `mass` varchar(30) utf8mb4 DEFAULT NULL,
+  `price` varchar(30) utf8mb4 DEFAULT NULL,
+  `min_intellekt` varchar(30) utf8mb4 DEFAULT NULL,
+  `min_vospriyatie` varchar(30) utf8mb4 DEFAULT NULL,
+  `min_level` varchar(30) utf8mb4 DEFAULT NULL,
+  `add_intellekt` varchar(30) utf8mb4 DEFAULT NULL,
+  `add_mana` varchar(30) utf8mb4 DEFAULT NULL,
+  `iznos_min` varchar(30) utf8mb4 DEFAULT NULL,
+  `iznos_max` varchar(30) utf8mb4 DEFAULT NULL,
+  `type` varchar(30) utf8mb4 DEFAULT NULL,
+  `mountown` varchar(30) utf8mb4 DEFAULT NULL,
+  `orden` varchar(30) utf8mb4 DEFAULT NULL,
+  `add_water` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `add_earth` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `add_fire` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `add_air` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `pages` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `desc` text utf8mb4 NOT NULL,
   PRIMARY KEY (`id`),
   KEY `id` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `thing_book` */
 
@@ -3085,7 +3086,7 @@ CREATE TABLE `thing_scroll` (
   `school` varchar(30) CHARACTER SET latin1 NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   KEY `id` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `thing_scroll` */
 
@@ -3099,19 +3100,19 @@ DROP TABLE IF EXISTS `thread`;
 
 CREATE TABLE `thread` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `topic` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `thr` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `topic_id` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `topic` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `thr` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `topic_id` varchar(30) utf8mb4 NOT NULL DEFAULT '',
   `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `creator` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `clan` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `clan_s` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `orden` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `level` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `last_post` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `creator` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `clan` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `clan_s` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `orden` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `level` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `last_post` varchar(30) utf8mb4 NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   KEY `id` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `thread` */
 
@@ -3125,11 +3126,11 @@ DROP TABLE IF EXISTS `timeout`;
 
 CREATE TABLE `timeout` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
-  `lasthit` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `creator` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `battle_id` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `lasthit` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `creator` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `battle_id` varchar(30) utf8mb4 NOT NULL DEFAULT '',
   KEY `id` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `timeout` */
 
@@ -3143,14 +3144,14 @@ DROP TABLE IF EXISTS `wood`;
 
 CREATE TABLE `wood` (
   `id` bigint(30) NOT NULL AUTO_INCREMENT,
-  `name` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `img` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `price` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `mass` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `mountown` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `name` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `img` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `price` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `mass` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `mountown` varchar(30) utf8mb4 NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   KEY `id` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `wood` */
 
@@ -3164,25 +3165,25 @@ DROP TABLE IF EXISTS `zayavka`;
 
 CREATE TABLE `zayavka` (
   `id` int(30) NOT NULL AUTO_INCREMENT,
-  `status` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `type` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `date` varchar(5) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `timeout` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `battle` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `creator` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `minlev1` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `maxlev1` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `minlev2` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `maxlev2` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `limit1` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `limit2` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `wait` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `all_z` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `comment` varchar(225) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `status` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `type` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `date` varchar(5) utf8mb4 DEFAULT NULL,
+  `timeout` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `battle` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `creator` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `minlev1` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `maxlev1` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `minlev2` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `maxlev2` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `limit1` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `limit2` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `wait` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `all_z` varchar(30) utf8mb4 NOT NULL DEFAULT '',
+  `comment` varchar(225) utf8mb4 NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   KEY `player1` (`id`),
   KEY `id` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `zayavka` */
 
