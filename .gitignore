@@ -9,50 +9,43 @@
 .env.local
 *.env.*
 
-# Dependencies
-.venv/
-venv/
-node_modules/
-
-# Build artifacts
-dist/
-build/
-target/
-
-# Python
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
-
-# Compiled
-*.o
-*.obj
-*.exe
-*.dll
-*.so
-*.a
-*.out
-
 # Editors
 .vscode/
 .idea/
 
-# System
+# Dependencies
+node_modules/
+.venv/
+venv/
+__pycache__/
+.mypy_cache/
+.pytest_cache/
+dist/
+build/
+target/
+.gradle/
+
+# OS generated files
 .DS_Store
 Thumbs.db
+
+# Compiled files
+*.pyc
+*.class
+*.o
+*.exe
+*.dll
+*.so
+*.a
+*.obj
+*.out
 
 # Coverage
 coverage/
 htmlcov/
 .coverage
 
-# Cache
-.mypy_cache/
-.pytest_cache/
-.gradle/
-
-# Compressed
+# Compressed files
 *.zip
 *.gz
 *.tar
