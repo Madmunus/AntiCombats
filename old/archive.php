@@ -1,4 +1,4 @@
-<?
+<?php
 session_start();
 include("conf.php");
 include("functions.php");
@@ -78,7 +78,7 @@ if ($orden_d==1) {$orden="<img src='img/orden/pal/$rang.gif' width=12 height=15 
   <tr>
     <td align=left valign=middle width=50%>
 <b><font size="2">
-<? showHPMP($login); ?>
+<?php showHPMP($login); ?>
 </font></b>
 </td>
     <td  align=right valign=middle><input type=button value="Обновить" onclick="javascript:location.href='archive.php'">
@@ -90,7 +90,7 @@ if ($orden_d==1) {$orden="<img src='img/orden/pal/$rang.gif' width=12 height=15 
 <table align=center cellSpacing=1 cellPadding=1 width="100%">
   <tr>
   
-<?if($room == "Зал воинов" or $room == "Зал воинов 2" or $room == "Зал воинов 3" or $room == "Будуар" or $room == "Рыцарский Зал" or $room == "Комната Знахаря" or $room == "Торговый Зал" or $room == "Зал закона"){  
+<?phpif($room == "Зал воинов" or $room == "Зал воинов 2" or $room == "Зал воинов 3" or $room == "Будуар" or $room == "Рыцарский Зал" or $room == "Комната Знахаря" or $room == "Торговый Зал" or $room == "Зал закона"){  
 print"<TD class=m width=40>&nbsp;<B>Бои:</B></TD>
 <TD class=m><A href=\"zayavka.php?boy=phisic\" class=nick>Физические</A></TD>
 <TD class=m><A href=\"boy_bot.php\" class=nick>С ботом</A></TD>
@@ -125,14 +125,14 @@ die();}
 <table border=0><TR>
 <td>
 Login:<BR>
-<input type=text class=new style="width=150" name=target value="<?echo $login_t?>">
+<input type=text class=new style="width=150" name=target value="<?phpecho $login_t?>">
 </td><td>
 дата(гггг.мм.дд):<BR>
-<input type=text class=new style="width=150" name=date value="<?echo $date_t?>">
+<input type=text class=new style="width=150" name=date value="<?phpecho $date_t?>">
 </td>
 </tr><tr><td>
 <input type=submit name="view" class=but value="просмотреть" style="width=150">
-<?
+<?php
 if($db["orden"]==1 && $db["admin_level"]>=5 or $db["login"]=='Мироздатель' or $db["login"]=='Смотритель' or $db["orden"]==2 && $db["admin_level"]>=5){
 print "</td><td><input type=submit name=\"scan\" class=but value=\"ip-scan\" style=\"width=150\">";
 }
@@ -140,10 +140,10 @@ print "</td><td><input type=submit name=\"scan\" class=but value=\"ip-scan\" sty
 </td></tr></table>
 </form>
 <hr color=#000000 size=1 width=50% align=left>
-Список боев персонажа <B><?echo $target;?></B> за <B><?echo $date;?></B>
+Список боев персонажа <B><?phpecho $target;?></B> за <B><?phpecho $date;?></B>
 <BR>
 <hr color=#000000 size=1 width=50% align=left>
-<?
+<?php
 
 if(!empty($target) AND !empty($view)){
 $date = str_replace(".","",$date);

@@ -1,9 +1,21 @@
-<?
+<?php
+// Конвертировано для PHP 8.3 - используется DbSimple Generic вместо mysql_*
+defined('AntiBK') or define('AntiBK', true);
+
+// Подключаем необходимые файлы из основной структуры проекта
+require_once dirname(__DIR__) . '/../engline/config.php';
+require_once dirname(__DIR__) . '/../engline/dbsimple/Generic.php';
+
+// Получаем подключение к базе данных через DbSimple
+$adb = DbSimple_Generic::connect($database['adb']);
+$adb->query("SET NAMES ? ", $database['db_encoding']);
+$adb->setErrorHandler("databaseErrorHandler");
+
 if (!empty($name))
 {
     //$w0="INSERT INTO merit(muj,jena,svid_m,svid_j,templer,log) VALUES ($muj,$jena,$svid_m,$svid_j,$templer,$log)";
-    $wo = "UPDATE merit set muj = '$muj' jena = '$jena' svid_m = '$svid_m' svid_j = '$svid_j' templer = 'templer' log = 'log' ";
-    $res=mysql_query($w0);
+    $wo = "UPDATE merit SET muj = ?, jena = ?, svid_m = ?, svid_j = ?, templer = ?, log = ?";
+    $res = $adb->query($wo, $muj, $jena, $svid_m, $svid_j, $templer, $log);
     if ($res)
     {
         print "<center>";
@@ -13,7 +25,8 @@ if (!empty($name))
     else
     {
         print "failed";
-        echo mysql_error();
+        // Для DbSimple используем стандартный механизм обработки ошибок
+        echo "Ошибка базы данных";
     }
 }
 else
@@ -74,6 +87,6 @@ else
 </td></tr>
 </table>
 </form>
-<?
+<?php
 }
 ?>

@@ -1,4 +1,4 @@
-<?
+<?php
 session_start();
 $login = $_SESSION['login'];
 include "conf.php";
@@ -39,24 +39,24 @@ body {
 
 <table border=1 width=100% bordercolor=black bgcolor=#fffbbb>
 <tr>
-<td width=20% valign=top><p>&nbsp&nbsp <? print "<a href='lotto?act=buy'><font color='black'>Купить билет</font></a>"; ?></p>
-  <p>&nbsp&nbsp <? print "<a href='main.php?act=go&room_go=casino' class=us2><font color='black'>Выход</font></a>"; ?></p>
-<?
+<td width=20% valign=top><p>&nbsp&nbsp <?php print "<a href='lotto?act=buy'><font color='black'>Купить билет</font></a>"; ?></p>
+  <p>&nbsp&nbsp <?php print "<a href='main.php?act=go&room_go=casino' class=us2><font color='black'>Выход</font></a>"; ?></p>
+<?php
 $ordensql = mysql_query("SELECT * FROM characters WHERE login='$login'");
 $ordenres = mysql_fetch_array($ordensql);
 $orden = $ordenres['admin_level'];
 if ($orden == 1){
 ?>
-  <p>&nbsp&nbsp <? print "<a href='lotto?act=play'><font color='black'>Провести лотто</font></a>"; ?></p>
+  <p>&nbsp&nbsp <?php print "<a href='lotto?act=play'><font color='black'>Провести лотто</font></a>"; ?></p>
   </td>
-<? } ?>
+<?php } ?>
 <td valign=top>
       <p><strong>Внимание!</strong><br>
         Стоимость билета 1 Кредит.</p>
-  <p>Призовой фонд  <? print "<i>$fond</i>"; ?> Кредитов</p>
+  <p>Призовой фонд  <?php print "<i>$fond</i>"; ?> Кредитов</p>
   <p>Розыгрышь каждую среду в 15:30 (по балтискаму времини)</p></td>
 </tr></table></td></tr></table></td></tr></table></td></tr></table>
-<?
+<?php
 exit();}
 if ($act == "buy"){
     if ($money >= "100000000000000000000000.00"){

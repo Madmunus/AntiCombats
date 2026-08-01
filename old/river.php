@@ -1,7 +1,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 
 <LINK REL=StyleSheet HREF='styles/style.css' TYPE='text/css'>
-<?
+<?php
 
 $city=$db["city_game"];
 $walk = $db["walk"];
@@ -45,7 +45,7 @@ testBattle($login);
         </p>
         </form>
 
-        <?
+        <?php
         testRiver($login);
 
            if(empty($res_count)){
@@ -71,7 +71,7 @@ testBattle($login);
 </table>
 
 </body>
-<?
+<?php
 
 
 ?>

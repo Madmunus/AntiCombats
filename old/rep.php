@@ -1,4 +1,4 @@
-<?
+<?php
 session_start();
 if(empty($login)){
 print "<script>top.location.href='index.html';</script>";
@@ -8,7 +8,7 @@ print "<script>top.location.href='index.html';</script>";
 <meta http-equiv="Content-Language" content="ru">
 <LINK REL=StyleSheet HREF='styles/style.css' TYPE='text/css'>
 <body bgcolor=#dedede topmargin=2>
-<?
+<?php
 include "conf.php";
 if (ereg("[<>\\/-]",$act) or ereg("[<>\\/-]",$t) or ereg("[<>\\/-]",$item_id) or ereg("[<>\\/-]",$level)) {print "?!"; exit();}
 $act=htmlspecialchars($act);
@@ -49,7 +49,7 @@ if($act=="none"){
 <BR><br>
 
 <table align=center><td>
-<?
+<?php
 
 
 
@@ -106,7 +106,7 @@ if($act=="none"){
         </tr>
 </table>
 
-<?
+<?php
 
 
 $SQL=mysql_query("SELECT * FROM inv WHERE owner='$login' AND object_razdel='obj' AND iznos>0");
@@ -118,11 +118,11 @@ $at_all++;
 if($at_all==0){
 ?>
 <table border=0 width=650 bgcolor=#cccccc><TR><TD>
-<?
+<?php
 print "<center><B>У вас нет вещей для ремонта!!!";
 ?>
 </td></tr></table>
-<?
+<?php
 }
 else{
 
@@ -346,7 +346,7 @@ print "&bull; Мф. антиувертливости: $mf_antiuvorot<BR>";
 }
 ?>
 </td></tr></table></td></tr></table> 
-<?
+<?php
 
         }    
     }
@@ -365,7 +365,7 @@ die("<table border=0 width=650 bgcolor=#cccccc><TR><TD>
         </tr>
 </table></td><td valign=top width=\"320\" align=\"right\"><b>У вас в наличии: <FONT COLOR=339900>".$db["money"]."</font> кр.</b></td></table>");
 ?>
-<?
+<?php
       
 
 }?>

@@ -1,4 +1,4 @@
-<?
+<?php
 session_start();
 define('AntiBK', true);
 
@@ -29,8 +29,8 @@ $act = (array_key_exists($act, $acts)) ?$act :'none';
 <script src="../scripts/show.js" type="text/javascript"></script>
 <link rel="stylesheet" type="text/css" href="style.css">
 </head>
-<script type="text/javascript">$('#info', parent.document).html('Информация: <?echo $acts[$act];?>');</script>
-<?
+<script type="text/javascript">$('#info', parent.document).html('Информация: <?phpecho $acts[$act];?>');</script>
+<?php
 switch ($act)
 {
   case 'none':    echo "<center><img src='img/logo.gif'></center>"; break;

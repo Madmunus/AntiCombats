@@ -9,7 +9,7 @@
 
 
 
-<?
+<?php
 
 include "conf.php";
 $data = mysql_connect($base_name, $base_user, $base_pass);
@@ -26,7 +26,7 @@ $money = sprintf ("%01.2f", $money1);
 
 <table cellpadding="0" cellspacing="0" width="100%">
 
-<td align="right"><b>У вас с собой:<?echo $money;?></B> кр.</td>
+<td align="right"><b>У вас с собой:<?phpecho $money;?></B> кр.</td>
 </table>
 
 <table cellpadding="0" cellspacing="0" width="100%" height=100%>
@@ -54,7 +54,7 @@ $money = sprintf ("%01.2f", $money1);
 <center>
 
 <table width="100%" cellspacing="0" border="0" cellpadding="0" bgcolor="#E5D18C" >
-<?
+<?php
 $bgcolor="#EEEEEE";
 if(empty($type)){$type='sword';}
 if(empty($act)){$act="";}
@@ -492,7 +492,7 @@ elseif($mf_anticrit<0){print "<li>Мф. антикрит: <font color=#D50000>$m
 if($mf_uvorot>0){print "<li>Мф. уворота: <b>+$mf_uvorot</b>%<BR>";}
 elseif($mf_uvorot<0){print "<li>Мф. уворота: <font color=#D50000><b>$mf_uvorot</b></font>%<BR>";}
 if($mf_antiuvorot>0){print "<li>Мф. антиуворота: <b>+$mf_antiuvorot</b>%<BR>";}
-elseif($mf_uvorot<0){print "<li>Мф. антиуворота: <font color=#D50000><b>$mf_antiuvorot</b><?font>%<BR>";}
+elseif($mf_uvorot<0){print "<li>Мф. антиуворота: <font color=#D50000><b>$mf_antiuvorot</b><?phpfont>%<BR>";}
 
 if($add_hp>0){print "<li>Уровень HP: <b>+$add_hp</b><BR>";}
 elseif($add_hp<0){print "<li>Уровень HP: <font color=#D50000><b>$add_hp</b></font><BR>";}
@@ -537,7 +537,7 @@ elseif($deist=="sdat"){
 <div align=center><b>Сдать вещи в магазин </b> <br />
 При продаже вашей вещи взымается комиссия 10% от стоимости сделки, но не меньше 1 кр.<br />
 Владелец магазина оставляет за собой право изменения процента комиссии без уведомления клиентов.</div>
-<?
+<?php
 
 //сдать в комок
 
@@ -883,7 +883,7 @@ elseif($mf_anticrit<0){print "<li>Мф. антикрит: <font color=#D50000>$m
 if($mf_uvorot>0){print "<li>Мф. уворота: <b>+$mf_uvorot</b>%<BR>";}
 elseif($mf_uvorot<0){print "<li>Мф. уворота: <font color=#D50000><b>$mf_uvorot</b></font>%<BR>";}
 if($mf_antiuvorot>0){print "<li>Мф. антиуворота: <b>+$mf_antiuvorot</b>%<BR>";}
-elseif($mf_uvorot<0){print "<li>Мф. антиуворота: <font color=#D50000><b>$mf_antiuvorot</b><?font>%<BR>";}
+elseif($mf_uvorot<0){print "<li>Мф. антиуворота: <font color=#D50000><b>$mf_antiuvorot</b><?phpfont>%<BR>";}
 
 if($add_hp>0){print "<li>Уровень HP: <b>+$add_hp</b><BR>";}
 elseif($add_hp<0){print "<li>Уровень HP: <font color=#D50000><b>$add_hp</b></font><BR>";}
@@ -1230,7 +1230,7 @@ elseif($mf_anticrit<0){print "<li>Мф. антикрит: <font color=#D50000>$m
 if($mf_uvorot>0){print "<li>Мф. уворота: <b>+$mf_uvorot</b>%<BR>";}
 elseif($mf_uvorot<0){print "<li>Мф. уворота: <font color=#D50000><b>$mf_uvorot</b></font>%<BR>";}
 if($mf_antiuvorot>0){print "<li>Мф. антиуворота: <b>+$mf_antiuvorot</b>%<BR>";}
-elseif($mf_uvorot<0){print "<li>Мф. антиуворота: <font color=#D50000><b>$mf_antiuvorot</b><?font>%<BR>";}
+elseif($mf_uvorot<0){print "<li>Мф. антиуворота: <font color=#D50000><b>$mf_antiuvorot</b><?phpfont>%<BR>";}
 
 if($add_hp>0){print "<li>Уровень HP: <b>+$add_hp</b><BR>";}
 elseif($add_hp<0){print "<li>Уровень HP: <font color=#D50000><b>$add_hp</b></font><BR>";}
@@ -1343,14 +1343,14 @@ if ($bgcolor=="#EEEEEE"){$bgcolor="#cccccc";}elseif($bgcolor=="#cccccc"){$bgcolo
         <tr height=87px>
           <td width=80  style=" border: 1px solid #999999; border-bottom: none;border-left: none;" bgcolor="#E5D18C" align=center>
 
-<? print"<img border=\"0\" src=\"img/".$comok_type["img"]."\" alt='".$comok_type["name"]."'>"; ?>
-<br /><? print "<a href=\"?type=$type&set=".$comok_type["object_id"]."\" class=us2>подробнее</a>";?>
+<?php print"<img border=\"0\" src=\"img/".$comok_type["img"]."\" alt='".$comok_type["name"]."'>"; ?>
+<br /><?php print "<a href=\"?type=$type&set=".$comok_type["object_id"]."\" class=us2>подробнее</a>";?>
 
 </td>
-        <td style="border:none; border-top: 1px solid #999999" width="10px" bgcolor="<?echo $bgcolor;?>">&nbsp;</td>
+        <td style="border:none; border-top: 1px solid #999999" width="10px" bgcolor="<?phpecho $bgcolor;?>">&nbsp;</td>
         <td align="left" width=*  style="border:none; border-top: 1px solid #999999" bgcolor="#E5D18C" class=us2>
           <font face="Tahoma">
-<?
+<?php
 $price_min = sprintf ("%01.2f", $comok_type["price_min"]);
 $price_max = sprintf ("%01.2f", $comok_type["price_max"]);
 $mass=$comok_type["mass"];

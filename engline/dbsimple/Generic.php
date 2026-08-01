@@ -91,7 +91,14 @@ class DbSimple_Generic
             $dummy = null;
             return $dummy;
         }
-        $class = 'DbSimple_'.ucfirst($parsed['scheme']);
+        
+        // Поддержка алиаса 'pdo' для MySQL через PDO (PHP 8.3 совместимость)
+        $scheme = $parsed['scheme'];
+        if ($scheme === 'pdo') {
+            $scheme = 'PDO';
+        }
+        
+        $class = 'DbSimple_'.ucfirst($scheme);
         if (!class_exists($class)) {
             $file = str_replace('_', '/', $class) . ".php";
             // Try to load library file from standard include_path.

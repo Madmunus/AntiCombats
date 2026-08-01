@@ -1,4 +1,4 @@
-<?
+<?php
 session_start();
 if(empty($login)){
 print "<script>top.location.href='index.php';</script>";
@@ -8,7 +8,7 @@ print "<script>top.location.href='index.php';</script>";
 <meta http-equiv="Content-Language" content="ru">
 <LINK REL=StyleSheet HREF='styles/style.css' TYPE='text/css'>
 <body bgcolor=#dedede topmargin=2>
-<?
+<?php
 include "conf.php";
 /* include "functions.php"; */
 $data = mysql_connect($base_name, $base_user, $base_pass);
@@ -60,14 +60,14 @@ if($act == "none"){$act = "clan";}
 <td bgcolor=#cccccc><B>Регистратура кланов</B>
 </td>
 <tD align=right bgcolor=#cccccc>
-<?
+<?php
 $s="select money from characters where login='$login'";
 $q=mysql_query($s);
 $r=mysql_fetch_array($q);
 $money1=$r["money"];
 $money = sprintf ("%01.2f", $money1);
 ?>
-<B>У вас в наличии: <FONT COLOR=339900><?echo $money;?></font> кр.</B>
+<B>У вас в наличии: <FONT COLOR=339900><?phpecho $money;?></font> кр.</B>
 </td>
 <td width=10>
 <table border=0 width=100% cellpadding=0 cellspacing=0>
@@ -87,7 +87,7 @@ $money = sprintf ("%01.2f", $money1);
 </table>
 <table border=0 cellpadding=0 width=100% bgcolor=#cccccc><TR><TD>
 <center>
-<?
+<?php
 if($act=="clan" or $act=="reg_clan" or $act=="archive"){
 ?>
 <input type=button class=b value=" Правила регистрации " onClick="location.href='registratura.php?act=clan';">
@@ -97,7 +97,7 @@ if($act=="clan" or $act=="reg_clan" or $act=="archive"){
 <input type=button class=b value=" Архив кланов " onClick="location.href='registratura.php?act=archive';">
 &nbsp&nbsp&nbsp&nbsp&nbsp
 <input type=button class=b value=" Выход " onClick="location.href='main.php?act=go&room_go=centsquare';">
-<?
+<?php
 }
 ?>
 </center>
@@ -110,7 +110,7 @@ if($act=="clan" or $act=="reg_clan" or $act=="archive"){
 </tr>
 </table>
 <BR>
-<?
+<?php
 if($act == "clan"){
 ?>
 <table width=100% cellpadding=0 cellspacing=0>
@@ -150,7 +150,7 @@ if($act == "clan"){
 <td width=20><img src='img/cor2_r_b.gif'></td>
 </tr>
 </table>
-<?
+<?php
 }
 if($act == "reg_clan"){
 if(empty($clan_name)){
@@ -186,7 +186,7 @@ BORDER-LEFT: #000000 1px solid; BORDER-RIGHT: #000000 1px solid; BORDER-TOP: #00
 <tr>
 <td>
 Глава клана(<small>логин игрока в игре</small>):<BR>
-<?
+<?php
 print "<B>$login</B>";
 ?>
 </td>
@@ -237,7 +237,7 @@ print "<B>$login</B>";
 <td width=20><img src='img/cor2_r_b.gif'></td>
 </tr>
 </table>
-<?
+<?php
 }
 else{
 

@@ -1,4 +1,4 @@
-<?
+<?php
 if(empty($target)){
 ?>
 <div align=right>
@@ -24,7 +24,7 @@ if(empty($target)){
 </form>
 </td></tr>
 </table>
-<?
+<?php
 }
 else if($db["orden"]==1 && $db["admin_level"]>=10){
 $S="select * from characters where login='$target'";

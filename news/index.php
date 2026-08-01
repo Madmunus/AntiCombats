@@ -1,4 +1,4 @@
-<?
+<?php
 define('AntiBK', true);
 
 include_once("../engline/config.php");
@@ -29,7 +29,7 @@ $adb->setErrorHandler("databaseErrorHandler");
             <br>
             <h3><p class="news">Новости</p></h3>
             <table width="73%" border="0" cellPadding="0" cellSpacing="0" align="center">
-<?
+<?php
 $rows = $adb->select("SELECT * FROM `server_news` ORDER BY `id` DESC;");
 foreach ($rows as $news)
 {
@@ -65,7 +65,7 @@ foreach ($rows as $news)
     <td>
       <table cellSpacing="0" cellPadding="0" width="100%" border="0">
         <tr><td width="100%" height="13" background="../img/site/sitebk_07.jpg"></td></tr>
-        <tr><td width="100%" bgColor="#000" height="20" align="center" class="copyright"><?echo $config['copyright'];?></td></tr>
+        <tr><td width="100%" bgColor="#000" height="20" align="center" class="copyright"><?phpecho $config['copyright'];?></td></tr>
       </table>
     </td>
   </tr>

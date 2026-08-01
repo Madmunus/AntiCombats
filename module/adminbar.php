@@ -1,4 +1,4 @@
-<?
+<?php
 defined('AntiBK') or die("Доступ запрещен!");
 
 $char->test->Admin();
@@ -18,7 +18,7 @@ $(function (){
 <style>
 .remove {cursor: pointer;}
 </style>
-<font color='red' id='error'><?$char->error->getFormattedError($error, $parameters);?></font>
+<font color='red' id='error'><?php$char->error->getFormattedError($error, $parameters);?></font>
 <table width="100%">
   <tr>
     <td align="left">
@@ -26,8 +26,8 @@ $(function (){
     </td>
     <td align="right">
       <input type="button" class="nav" value="Админ панель" onclick="window.open('admin/index.php', '', 'menubar=no,status=no');">
-      <input type="button" class="nav" value="<?echo $lang['refresh'];?>" id="link" link="admin">
-      <input type="button" class="nav" value="<?echo $lang['return'];?>" id="link" link="inv">
+      <input type="button" class="nav" value="<?phpecho $lang['refresh'];?>" id="link" link="admin">
+      <input type="button" class="nav" value="<?phpecho $lang['return'];?>" id="link" link="inv">
     </td>
   </tr>
 </table>
@@ -35,13 +35,13 @@ $(function (){
 <font color='red'>Глобальные переменные:</font>
 <table border="1" cellspacing="0" cellpadding="0" width="100%">
 <tr style="font-weight: bold;">
-<?
+<?php
 foreach ($_SESSION as $key => $value)
   echo "<td>$key</td>";
 ?>
 </tr>
 <tr>
-<?
+<?php
 foreach ($_SESSION as $key => $value)
   echo "<td>$value</td>";
 ?>
@@ -49,13 +49,13 @@ foreach ($_SESSION as $key => $value)
 <font color='red'>Cookies:</font>
 <table border="1" cellspacing="0" cellpadding="0" width="100%">
 <tr style="font-weight: bold;">
-<?
+<?php
 foreach ($_COOKIE as $key => $value)
   echo "<td>$key</td>";
 ?>
 </tr>
 <tr>
-<?
+<?php
 foreach ($_COOKIE as $key => $value)
   echo "<td>$value</td>";
 ?>
@@ -69,7 +69,7 @@ foreach ($_COOKIE as $key => $value)
 <td>last_time</td>
 </tr>
 <tr>
-<?
+<?php
 echo "<td>".date('d.m.y H:i:s', $char_db['next_shape'])."</td>";
 echo "<td>".date('d.m.y H:i:s', $char_db['last_go'])."</td>";
 echo "<td>".date('d.m.y H:i:s', $char_db['last_return'])."</td>";
@@ -80,7 +80,7 @@ echo "<td>".date('d.m.y H:i:s', $char_db['last_time'])."</td>";
 <font color='red'>SHA1:</font>
 <input type='text' id='text' style='width: 40%;'><input type='submit' id='getSHA1' value='Зашифровать'><input type='text' id='sha1text' readonly style='width: 40%;'><br>
 </div>
-<?
+<?php
 $password = null;
 $max = 10;
 $letters = "qazxswedcvfrtgbnhyujmkiolp1234567890QAZXSWEDCVFRTGBNHYUJMKIOLP";

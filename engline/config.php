@@ -1,9 +1,9 @@
-<?
+<?php
 defined('AntiBK') or die("Доступ запрещен!");
 
 $database = array(
-  'adb'         => 'mysql://root:password@localhost:3306/abk', // Настройки подключения к abk
-  'db_encoding' => 'utf8'                                      // Кодировка баз данных
+  'adb'         => 'pdo://root:password@localhost:3306/abk', // Настройки подключения к abk (PDO для PHP 8.3)
+  'db_encoding' => 'utf8mb4'                                 // Кодировка баз данных
 );
 
 $config = array(

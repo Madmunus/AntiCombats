@@ -1,4 +1,4 @@
-<?
+<?php
 define('AntiBK', true);
 
 include_once("engline/config.php");
@@ -112,14 +112,14 @@ $images = $adb->selectRow("SELECT * FROM `server_index` WHERE `month` = ?s", dat
 </head>
 <body>
 <table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0">
-  <tr height="30%"><td colspan="3" width="100%" align="center"><img src="img/site/<?echo $images['top'];?>"></td></tr>
+  <tr height="30%"><td colspan="3" width="100%" align="center"><img src="img/site/<?phpecho $images['top'];?>"></td></tr>
   <tr height="205">
-    <td colspan="3" width="100%" align="center" scope="col" background="img/site/<?echo $images['back'];?>" style="background-repeat: repeat-x;">
+    <td colspan="3" width="100%" align="center" scope="col" background="img/site/<?phpecho $images['back'];?>" style="background-repeat: repeat-x;">
       <table width="100%"  border="0" cellspacing="0" cellpadding="0" style="background-repeat: repeat-x;">
         <tr height="205" valign="top">
-          <td width="195" align="right" valign="bottom" style="padding-bottom: 42px;"><img src="img/site/<?echo $images['winer'];?>"></td>
-          <td align="center"><p><img src="img/site/<?echo $images['icon'];?>"></p></td>
-          <td width="195" valign="bottom" style="padding-bottom: 42px; padding-right: 5px;" align="right"><img src="img/site/<?echo $images['best'];?>"></td>
+          <td width="195" align="right" valign="bottom" style="padding-bottom: 42px;"><img src="img/site/<?phpecho $images['winer'];?>"></td>
+          <td align="center"><p><img src="img/site/<?phpecho $images['icon'];?>"></p></td>
+          <td width="195" valign="bottom" style="padding-bottom: 42px; padding-right: 5px;" align="right"><img src="img/site/<?phpecho $images['best'];?>"></td>
         </tr>
       </table>
     </td>

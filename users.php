@@ -1,4 +1,4 @@
-<?
+<?php
 session_start();
 define('AntiBK', true);
 
@@ -28,7 +28,7 @@ $chat_list = $char->getChar('char_db', 'chat_list');
     try {top.checkGame();} catch(e) {location.href = 'index.php';}
 
     var TimerOnline = -1;
-    var autorefresh = <?echo $chat_list;?>;
+    var autorefresh = <?phpecho $chat_list;?>;
 
     function updateUsers ()
     {

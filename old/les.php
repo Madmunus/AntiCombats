@@ -1,4 +1,4 @@
-<?
+<?php
 if(empty($login)){
 print "<script>top.location.href='index.php';</script>";
 }
@@ -9,7 +9,7 @@ $test = new test;
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta http-equiv="Content-Language" content="ru">
 <LINK REL=StyleSheet HREF='styles/style.css' TYPE='text/css'>
-<?
+<?php
 
 $city=$db["city_game"];
 $walk = $db["walk"];

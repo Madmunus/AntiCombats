@@ -1,4 +1,4 @@
-<?
+<?php
 function lpg_getallheaders ()
 {
   $arr = getallheaders();

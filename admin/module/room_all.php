@@ -1,4 +1,4 @@
-<?
+<?php
 defined('AntiBK') or die ("Доступ запрещен!");
 
 $room = (isset($_POST['room'])) ?$_POST['room'] :"";
@@ -36,7 +36,7 @@ $room = (isset($_POST['room'])) ?$_POST['room'] :"";
 <option value="Телеграф">Телеграф</option>
 </select>
 <input type="submit" name="submit" value="Сменить"></form>
-<?
+<?php
 if (isset($_POST['room']))
 {
     $sql = $adb->query("UPDATE `characters` SET `room` = '$room';");

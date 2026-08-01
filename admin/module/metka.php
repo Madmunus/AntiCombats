@@ -1,4 +1,4 @@
-<?
+<?php
 defined('AntiBK') or die ("Доступ запрещен!");
 
 $r_login = (isset($_POST['r_login'])) ?$_POST['r_login'] :"";
@@ -10,7 +10,7 @@ $metka = (isset($_POST['metka'])) ?$_POST['metka'] :"";
 <strong>Метка</strong><br>
 <input type="text" name="metka" size="25"><br>
 <input type="submit" name="submit" value="Далее"></form>
-<?
+<?php
 if (isset($_POST['r_login']) && $r_login == '')
     echo "Вы не ввели Логин.";
 else if (isset($_POST['metka']) && $metka == '')

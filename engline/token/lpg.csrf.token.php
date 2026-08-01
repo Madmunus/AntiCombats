@@ -1,4 +1,4 @@
-<?
+<?php
 function create_token ($token_key)
 {
   $_SESSION['token'] = md5(time().$_SERVER['REMOTE_ADDR'].$_SERVER['HTTP_USER_AGENT'].$token_key);

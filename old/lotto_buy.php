@@ -1,4 +1,4 @@
-<?
+<?php
 session_start();
 $login = $_SESSION['login'];
 include "conf.php";
@@ -38,8 +38,8 @@ body {
 
 <table border=1 width=100% bordercolor=black bgcolor=#fffbbb>
 <tr>
-<td width=20% valign=top><p>&nbsp&nbsp <? print "<a href='lotto.php?act=none'><font color='black'>Главный холл</font></a>"; ?></p>
+<td width=20% valign=top><p>&nbsp&nbsp <?php print "<a href='lotto.php?act=none'><font color='black'>Главный холл</font></a>"; ?></p>
  </td>
 <td valign=top><p>&#1041;&#1080;&#1083;&#1077;&#1090; &#1082;&#1091;&#1087;&#1083;&#1077;&#1085;</p>
-  <p>&#1042;&#1072;&#1096; &#1085;&#1086;&#1084;&#1077;&#1088; <? print "$num"; ?> </p></td>
+  <p>&#1042;&#1072;&#1096; &#1085;&#1086;&#1084;&#1077;&#1088; <?php print "$num"; ?> </p></td>
 </tr></table></td></tr></table></td></tr></table></td></tr></table>

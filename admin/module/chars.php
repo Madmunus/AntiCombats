@@ -1,4 +1,4 @@
-<?
+<?php
 defined('AntiBK') or die("Доступ запрещен!");
 
 $sort = getVar('sort', 'guid', 2);
@@ -37,7 +37,7 @@ $(function (){
 <form id="sort" action="" method="post">
   Сортировать по: 
   <select class="small" name="sort">
-<?
+<?php
   foreach ($sort_c as $key => $val)
   {
     $select = ($sort == $key) ?" selected" :"";
@@ -48,13 +48,13 @@ $(function (){
 </form>
 <table width="100%" border="1" cellspacing="0" cellpadding="3" align="center">
   <tr align="center">
-<?
+<?php
   foreach ($sort_c as $key => $val)
     echo "<td><strong>$val</strong></td>";
 ?>
     <td> </td>
   </tr>
-<?
+<?php
 $characters = $adb->select("SELECT `guid`, `login`, `level`, `exp`, `admin_level`, `money`, `city`, `room` FROM `characters` ORDER BY ?#", $sort);
 foreach ($characters as $character)
 {

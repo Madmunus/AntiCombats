@@ -1,4 +1,4 @@
-<?
+<?php
 defined('AntiBK') or die ("Доступ запрещен!");
 
 $answer = (isset($_POST['answer'])) ?$_POST['answer'] :"";
@@ -10,7 +10,7 @@ $answer = (isset($_POST['answer'])) ?$_POST['answer'] :"";
 <option value="yes">Да</option>
 </select>
 <input type="submit" name="submit" value="Далее"></form>
-<?
+<?php
 if ($answer == 'yes')
 {
     $sql1 = $adb->query("UPDATE `inv` SET `wear` = '0';");
