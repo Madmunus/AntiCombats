@@ -1,4 +1,4 @@
-<?
+<?php
 class database{
     function connect(){
      include "conf.php";//Загружаем конфигурацию...
@@ -914,7 +914,7 @@ $equip -> showCharacter($login, "");
 <style>
 .small {font-size: 9pt; color: #000000}
 </style>
-<?
+<?php
 print "<center><B>$city</B></center>";
 if($online==1){
 print "<small>Персонаж сейчас находится в клубе.<BR>";
@@ -979,12 +979,12 @@ print "<table valign=\"bottom\" border=0 cellpadding=0 cellspacing=0 width=260><
 
 
 <script language=javascript>
-setsHP(<?echo "$hp[0],$hp[1],100"?>);
-<?
+setsHP(<?phpecho "$hp[0],$hp[1],100"?>);
+<?php
 if($level>=6 && $wis!=0){
 ?>
-showMN(<?echo "$mp[0],$mp[1]"?>);
-<?
+showMN(<?phpecho "$mp[0],$mp[1]"?>);
+<?php
 }
 ?>
 var rnd = Math.random();
@@ -1036,7 +1036,7 @@ document.write("<table border=0 cellpadding=0 cellspacing=0 width=260 height=8 b
 
 </script>
 
-<?
+<?php
 }
 /*======================================================*/
 
@@ -1081,12 +1081,12 @@ print "<table valign=\"bottom\" border=0 cellpadding=0 cellspacing=0 width=260><
 </table>";?>
 
 <script language=javascript>
-show(<?echo "$hp[0],$hp[1]"?>);
-<?
+show(<?phpecho "$hp[0],$hp[1]"?>);
+<?php
 if($level>=6 && $wis!=0){
 ?>
-showMN(<?echo "$mp[0],$mp[1]"?>);
-<?
+showMN(<?phpecho "$mp[0],$mp[1]"?>);
+<?php
 }
 ?>
 function show(min, max){
@@ -1112,7 +1112,7 @@ document.write("<table border=0 cellpadding=0 cellspacing=0 width=260 height=8 b
 }
 
 </script>
-<?
+<?php
 }
 /*======================================================*/
 
@@ -3054,14 +3054,14 @@ $two_hands     = false;
 ?>
 <img border="0" src="img/line2.gif" width="360" height="10">
 <FORM NAME="battle" ACTION="battle.php?act=hit" METHOD="POST">
-<?
+<?php
  /* if($db["level"]>4){
 ?>
 
 <center><img border="0" src="buttons/magic.gif" onClick="javascript:location.href='battle.php?act=showMagic';"></center>
 
 
-<?
+<?php
   }*/
 ?>
 <table border=0 cellpadding=0 cellspacing=0 width=350><tr>
@@ -3070,7 +3070,7 @@ $two_hands     = false;
 <td align=center bgcolor=#f2f0f0><B>Защита</B></td>
 </tr>
 <tr>
-<?
+<?php
   if(!$two_hands){
 ?>
 <td>
@@ -3080,7 +3080,7 @@ $two_hands     = false;
 <INPUT TYPE=radio NAME="hit" VALUE="4" ID=A4><LABEL FOR=A3>удар в пояс</LABEL><br>
 <INPUT TYPE=radio NAME="hit" VALUE="5" ID=A5><LABEL FOR=A4>удар в ноги</LABEL><br></B>
 </td>
-<?
+<?php
   }
   else{
 ?>
@@ -3091,7 +3091,7 @@ $two_hands     = false;
 <INPUT TYPE=radio NAME="udar" VALUE="4" ID=b4><INPUT TYPE=radio NAME="udar2" VALUE="4" ID=A4><LABEL FOR=A4>удар в пояс</LABEL><br>
 <INPUT TYPE=radio NAME="udar" VALUE="5" ID=b5><INPUT TYPE=radio NAME="udar2" VALUE="5" ID=A5><LABEL FOR=A5>удар в ноги</LABEL><br></B>
 </td>
-<?
+<?php
   }
 ?>
 <td>
@@ -3112,7 +3112,7 @@ $two_hands     = false;
 </table>
 </FORM>
 <img border="0" src="img/line2.gif" width="360" height="10">
-<?
+<?php
 }
 /*=======================================================================*/
 /*=============genMagicForm==============================================*/

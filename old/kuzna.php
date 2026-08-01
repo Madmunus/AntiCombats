@@ -44,7 +44,7 @@ if($num == "1"){
 </td>
 <td valign=top>
 
-<?
+<?php
 
 
 print "<table border=0 bordercolor=black width=100% cellpadding=0 cellspacing=0><tr><td><table border=0 bgcolor=#fffbbb width=100% cellpadding=0 cellspacing=0><tr><td>";
@@ -59,19 +59,19 @@ print "<td valign=top bgcolor=#fffbbb><span class=usuallyb>";
                  <TR>
 
                 <TD>Работник:</TD>
-                <TD><b><? echo $dat["login"]; ?></b></TD>
+                <TD><b><?php echo $dat["login"]; ?></b></TD>
               </TR>
 
                  <TR>
 
                 <TD>Стаж:</TD>
-                <TD><b><? echo $dat["num"]; ?></b>  (кол. вещей)</TD>
+                <TD><b><?php echo $dat["num"]; ?></b>  (кол. вещей)</TD>
               </TR>
 
                  <TR>
 
                 <TD>Зарплата:</TD>
-                <TD><b><? echo $zarplata; ?></b> Ст.</TD>
+                <TD><b><?php echo $zarplata; ?></b> Ст.</TD>
               </TR>
 
                  <TR>
@@ -98,7 +98,7 @@ print "<td valign=top bgcolor=#fffbbb><span class=usuallyb>";
 
 
 </td></tr></table>
-<?
+<?php
 
 
           }
@@ -128,7 +128,7 @@ mysql_query("SET NAMES cp1251");
 
 
 
-<?
+<?php
 
 
 
@@ -152,7 +152,7 @@ print "<td valign=top bgcolor=#fffbbb><span class=usuallyb>";
 &nbsp&nbsp&nbsp&nbsp<a href='main.php?act=go&room_go=centsquare' class=us2>Выход</a><br>
 </td>
 <td valign=top>
-<?
+<?php
 print "</td></tr></table></td></tr></table></td></tr></table></td></tr></table>";
 
 }

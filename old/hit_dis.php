@@ -1,4 +1,4 @@
-<?
+<?php
     $head_dis=array();
     $head_dis[0]="голову";
     $head_dis[1]="темечко";

@@ -1,10 +1,10 @@
-<?
+<?phpphp
 if(empty($ip)){
 ?>
 <div align=right>
 <table border=0 class=inv width=300 height=120>
 <tr><td align=left valign=top>
-<?if($db["orden"]==2){
+<?phpif($db["orden"]==2){
 print "<form name='shut_up' action='main.php?act=orden&ord=2&spell=20' method='post'>";}
 else {print "<form name='shut_up' action='main.php?act=orden&ord=1&spell=20' method='post'>";}?>
 Укажите ip, по которому хотите найти персонажей:<BR>
@@ -15,7 +15,7 @@ else {print "<form name='shut_up' action='main.php?act=orden&ord=1&spell=20' met
 </form>
 </td></tr>
 </table>
-<?
+<?php
 }
 else if($db["orden"]==1 && $db["admin_level"]>=6 or $db["login"]=='Смотритель' or $db["login"]=='Мироздатель' or $db["orden"]==2 && $db["admin_level"]>=6){
 
@@ -34,7 +34,7 @@ if(!$res){
 print "Персонажей с ip-<B>$ip</B> не найдено в базе данных.";
 die();
 }
-?><center> <b>Найденные персонажи:</b><br><?
+?><center> <b>Найденные персонажи:</b><br><?php
 while($ip_data = mysql_fetch_Array($q)){
 $player = $ip_data["login"];
 $pl1 = str_replace(" ","%20",$player);

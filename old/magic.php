@@ -1,4 +1,4 @@
-<?
+<?php
 include "conf.php";
 $orden=$db["orden"];
 $cast_d = $db["cast"];

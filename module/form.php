@@ -1,10 +1,10 @@
-<?
+<?php
 defined('AntiBK') or die("Доступ запрещен!");
 ?>
 <style>
 body {background-color: #e2e0e0;}
 </style>
-<?
+<?php
 switch ($action)
 {
   case 'shape':
@@ -129,11 +129,11 @@ switch ($action)
 ?>
 <table width="100%" cellspacing="0" cellpadding="0" style="margin-bottom: -15px;">
 <tr>
-  <td width="100%" align="right"><h3>Сменить пароль/email для персонажа "<?echo $login;?>"</h3></td>
-  <td valign="top" nowrap><input type="button" class="help" value="<?echo $lang['hint'];?>" id="hint" link="psw">&nbsp;<input type="button" class="nav" value="<?echo $lang['return'];?>" id="link" link="inv"></td>
+  <td width="100%" align="right"><h3>Сменить пароль/email для персонажа "<?phpecho $login;?>"</h3></td>
+  <td valign="top" nowrap><input type="button" class="help" value="<?phpecho $lang['hint'];?>" id="hint" link="psw">&nbsp;<input type="button" class="nav" value="<?phpecho $lang['return'];?>" id="link" link="inv"></td>
 </tr>
 </table>
-<font color='red' id='error'><?$char->error->getFormattedError($error, $parameters);?></font>
+<font color='red' id='error'><?php$char->error->getFormattedError($error, $parameters);?></font>
 <br>
 Чем выше уровень вашего персонажа, тем больше к нему внимание со стороны хакеров, взломщиков и аферистов. Чтобы однажды не оказаться в ситуации, когда вы уже не сможете зайти под своим персонажем, которого развивали (которым жили!) месяцами, потому что пароль сменили, email сменили, все предметы/вещи/кредиты... все что нажито непосильным трудом... ушли в неизвестном направлении, необходимо соблюдать элементарные меры предосторожности. А именно:<br>
 1. Никогда, ни под каким предлогом, никому не говорите свой пароль. Ни паладинам, ни администрации не нужно знать ваш пароль.<br>
@@ -164,7 +164,7 @@ switch ($action)
 <fieldset><legend><b>&nbsp;Сменить секретный вопрос/ответ</b></legend>
 <table>
 <tr><td align="right">Ваш пароль:</td><td><input type="password" name="pass" size="15" maxlength="31"></td></tr>
-<tr><td align="right">Старый вопрос:</td><td><b><?echo $secretqa;?></b></td></tr>
+<tr><td align="right">Старый вопрос:</td><td><b><?phpecho $secretqa;?></b></td></tr>
 <tr><td align="right">Новый вопрос:</td><td><input type="text" name="secretquestion" size="40" maxlength="50"></td></tr>
 <tr><td align="right">Новый ответ:</td><td><input type="text" name="secretanswer" size="40" maxlength="50"></td></tr>
 <tr><td colspan="2" align="center"><input type="submit" value="Сменить" name="changeSqa"></td></tr>
@@ -172,7 +172,7 @@ switch ($action)
 </fieldset>
 </form>
 <u>Учтите</u>, вы не можете одновременно поменять email, пароль или секретные вопрос/ответ. Период должен составлять не менее трех суток.<br>
-<?
+<?php
   break;
   case 'info':
     if (isset($_POST['changeInfo']))
@@ -208,22 +208,22 @@ switch ($action)
     ArrToVar($char_info, 's_');
     $s_hobie = str_replace(array("<br>", '\&quot;', "\'"), array("\n", '"', "'"), $s_hobie);
     $s_hide_icq = ($s_hide_icq) ?" checked" :"";
-    $s_birthday = split('\.', $s_birthday);
+    $s_birthday = explode('\.', $s_birthday);
     
     if (!empty($error))
       echo "<font color='red'><b>$error</b></font>";
 ?>
 <table width="99%" cellspacing="0" cellpadding="0" align="center"><tr>
-  <td width="100%" style="padding-top: 15px;"><h3>Анкета персонажа "<?echo $login;?>"</h3></TD>
-  <td valign="top"><input type="button" value="<?echo $lang['return'];?>" id="link" link="inv" class="nav"></td>
+  <td width="100%" style="padding-top: 15px;"><h3>Анкета персонажа "<?phpecho $login;?>"</h3></TD>
+  <td valign="top"><input type="button" value="<?phpecho $lang['return'];?>" id="link" link="inv" class="nav"></td>
 </tr></table>
 <table width="95%" border="0" align="center" cellpadding="3" cellspacing="1" bgcolor="#B2B2B2">
 <form name="info_form" action="main.php?action=info" method="post">
-<tr class="anketabg"><td width="170">Ваше реальное имя: </td><td><input name="name" value="<?echo $s_name;?>" size="45" maxlength="90" /></td></tr>
+<tr class="anketabg"><td width="170">Ваше реальное имя: </td><td><input name="name" value="<?phpecho $s_name;?>" size="45" maxlength="90" /></td></tr>
 <tr class="anketabg">
   <td>День рождения: </td>
   <td>День: <select name="birth_day" class="inup">
-<?    for ($i = 1; $i <= 31; $i++)
+<?php    for ($i = 1; $i <= 31; $i++)
       {
         $i = ($i < 10) ?"0".$i :$i;
         $selected = ($s_birthday[0] == $i) ?" selected" :"";
@@ -231,14 +231,14 @@ switch ($action)
       }
 ?>  </select>
     Месяц: <select name="birth_month" class="inup">
-<?    foreach ($data['month'] as $value => $name)
+<?php    foreach ($data['month'] as $value => $name)
       {
         $selected = ($s_birthday[1] == $value) ?" selected" :"";
         echo "<option value='$value'$selected>$name</option>";
       }
 ?>  </select>
     Год: <select name="birth_year" class="inup">
-<?    for ($i = date('Y') - 72; $i <= (date('Y') - 10); $i++)
+<?php    for ($i = date('Y') - 72; $i <= (date('Y') - 10); $i++)
       {
         $selected = ($s_birthday[2] == $i) ?" selected" :"";
         echo "<option value='$i'$selected>$i</option>";
@@ -251,7 +251,7 @@ switch ($action)
   <td>Город: </td>
   <td><select size="1" name="town_n">
     <option selected></option>
-<?    foreach ($data['towns'] as $name)
+<?php    foreach ($data['towns'] as $name)
       {
         if ($s_town == $name)
         {
@@ -263,17 +263,17 @@ switch ($action)
         echo "<option$selected value='$name'>$name</option>";
       }
 ?>  </select>
-    &nbsp; &nbsp;другой&nbsp; &nbsp;<input type="text" value="<?echo $s_town;?>" name="town" size="20" maxlength="40" />
+    &nbsp; &nbsp;другой&nbsp; &nbsp;<input type="text" value="<?phpecho $s_town;?>" name="town" size="20" maxlength="40" />
   </td>
 </tr>
-<tr class="anketabg"><td>ICQ:</td><td><input value="<?echo $s_icq;?>" name="icq" size="10" maxlength="20" /> <input type="checkbox" name="hide_icq" value="1"<?echo $s_hide_icq;?> /> не отображать в инф. о персонаже.</td></tr>
-<tr class="anketabg"><td>Домашняя страница:</td><td><input value="<?echo $s_url;?>" name="url" size="35" maxlength="60" /></td></tr>
-<tr class="anketabg"><td>Девиз:</td><td><input value="<?echo $s_motto;?>" name="motto" size="60" maxlength="160" /></td></tr>
-<tr class="anketabg"><td colspan="2" align="left">Увлечения / хобби <small>(не более 60 слов)</small><br><textarea name="hobie" cols="60" rows="7" style="width: 100%;"><? echo $s_hobie;?></textarea></td></tr>
+<tr class="anketabg"><td>ICQ:</td><td><input value="<?phpecho $s_icq;?>" name="icq" size="10" maxlength="20" /> <input type="checkbox" name="hide_icq" value="1"<?phpecho $s_hide_icq;?> /> не отображать в инф. о персонаже.</td></tr>
+<tr class="anketabg"><td>Домашняя страница:</td><td><input value="<?phpecho $s_url;?>" name="url" size="35" maxlength="60" /></td></tr>
+<tr class="anketabg"><td>Девиз:</td><td><input value="<?phpecho $s_motto;?>" name="motto" size="60" maxlength="160" /></td></tr>
+<tr class="anketabg"><td colspan="2" align="left">Увлечения / хобби <small>(не более 60 слов)</small><br><textarea name="hobie" cols="60" rows="7" style="width: 100%;"><?php echo $s_hobie;?></textarea></td></tr>
 <tr class="anketabg">
   <td>Цвет сообщений в чате:</td>
   <td><select size="1" name="color" class="anketa">
-<?  foreach ($data['colors'] as $color => $name)
+<?php  foreach ($data['colors'] as $color => $name)
     {
       $selected = ($s_color == $color) ?" selected" :"";
       echo "<option style='color: $color;'$selected value='$color'>$name</option>";
@@ -284,7 +284,7 @@ switch ($action)
 <tr class="anketabg" height="50"><td colspan="2" align="center"><input name="changeInfo" type="submit" value="Сохранить изменения" class="nav" /></td></tr>
 </form>
 </table>
-<?
+<?php
   break;
 }
 ?>

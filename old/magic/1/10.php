@@ -1,4 +1,4 @@
-<?
+<?php
 $S = mysql_query("SELECT * FROM clan_zayavka");
 $i = 0;
 if($conf == ''){$conf="2";}

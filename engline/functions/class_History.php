@@ -1,4 +1,4 @@
-<?
+<?php
 defined('AntiBK') or die("Доступ запрещен!");
 
 class History extends Char

@@ -1,4 +1,4 @@
-<?
+<?php
 /*-= Школа Некромантов II. Нанести вред =-*/
 
 if(empty($target)){
@@ -25,7 +25,7 @@ if(empty($target)){
 <td width=10><img src='img/cor_l_b.gif'></td><td bgcolor=#cccccc><img src='img/10_10.gif'></td><td width=10><img src='img/cor_r_b.gif'></td>
 </table>
 </div>
-<?
+<?php
 }
 else if($db["orden"]==2 AND $db["battle"]!=0){
 $S="select * from characters where login='$target'";

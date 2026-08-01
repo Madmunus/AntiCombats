@@ -1,4 +1,4 @@
-<?
+<?php
 defined('AntiBK') or die("Доступ запрещен!");
 
 $do = getVar('do');
@@ -46,7 +46,7 @@ $hps = array('fiz', 'dgv', 'group', 'haos');
 <table align="center" width="100%" border="0" cellspacing="0" cellpadding="0" style="padding-top: 10px;">
   <tr>
     <td align="left" valign="middle" width="50%" style="padding-bottom: 2px;">
-<?
+<?php
     if (in_array($fight, $hps))
     {
       echo $char->getLogin('clan');
@@ -57,23 +57,23 @@ $hps = array('fiz', 'dgv', 'group', 'haos');
 ?>
     </td>
     <td align="right" valign="middle">
-      <input type="button" class="help" value="<?echo $lang['hint'];?>" id="hint" link="combats">
-      <input type="button" class="nav" value="<?echo $lang['return'];?>" id="link" link="none">
+      <input type="button" class="help" value="<?phpecho $lang['hint'];?>" id="hint" link="combats">
+      <input type="button" class="nav" value="<?phpecho $lang['return'];?>" id="link" link="none">
     </td>
   </tr>
 </table>
 <table align="center" cellSpacing="1" cellPadding="1" width="100%">
   <tr>
     <td class="m" width="40">&nbsp;<b>Бои:</b></td>
-    <td class="<?echo ($fight == 'fiz') ?"s" :"m"?>"><a href="?action=zayavka&fight=fiz" class="nick">1 на 1</a></td>
-    <td class="<?echo ($fight == 'dgv') ?"s" :"m"?>"><a href="?action=zayavka&fight=dgv" class="nick">Учебные</a></td>
-    <td class="<?echo ($fight == 'group') ?"s" :"m"?>"><a href="?action=zayavka&fight=group" class="nick">Групповые</a></td>
-    <td class="<?echo ($fight == 'haos') ?"s" :"m"?>"><a href="?action=zayavka&fight=haos" class="nick">Хаотичные</a></td>
-    <td class="<?echo ($fight == 'tklogs') ?"s" :"m"?>"><a href="?action=zayavka&fight=tklogs" class="nick">Текущие</a></td>
-    <td class="<?echo ($fight == 'logs') ?"s" :"m"?>"><a href="?action=zayavka&fight=logs" class="nick">Завершенные</a></td>
+    <td class="<?phpecho ($fight == 'fiz') ?"s" :"m"?>"><a href="?action=zayavka&fight=fiz" class="nick">1 на 1</a></td>
+    <td class="<?phpecho ($fight == 'dgv') ?"s" :"m"?>"><a href="?action=zayavka&fight=dgv" class="nick">Учебные</a></td>
+    <td class="<?phpecho ($fight == 'group') ?"s" :"m"?>"><a href="?action=zayavka&fight=group" class="nick">Групповые</a></td>
+    <td class="<?phpecho ($fight == 'haos') ?"s" :"m"?>"><a href="?action=zayavka&fight=haos" class="nick">Хаотичные</a></td>
+    <td class="<?phpecho ($fight == 'tklogs') ?"s" :"m"?>"><a href="?action=zayavka&fight=tklogs" class="nick">Текущие</a></td>
+    <td class="<?phpecho ($fight == 'logs') ?"s" :"m"?>"><a href="?action=zayavka&fight=logs" class="nick">Завершенные</a></td>
   </tr>
 </table>
-<?
+<?php
 switch ($fight)
 {
   case 'fiz':
@@ -335,7 +335,7 @@ if ($zayavka_status == "no")
     <td align="right" valign="top"><input type="button" value="Обновить" onclick="location.href = 'zayavka.php?boy=phisic';"></td>
   </tr>
 </table>
-<?
+<?php
 }
 else if ($zayavka_status == "awaiting")
 {
@@ -352,7 +352,7 @@ else if ($zayavka_status == "awaiting")
     <td align="right" valign="top"><input type="button" value="Обновить" onclick="location.href = 'zayavka.php?boy=phisic';"></td>
   </tr>
 </table>
-<?
+<?php
 }
 else if ($zayavka_status == "confirm_mine")
 {
@@ -365,7 +365,7 @@ else if ($zayavka_status == "confirm_mine")
         <tr>
           <td>
             <form name="accept" action="zayavka.php?boy=phisic&act=confirm" method="post">
-              <font color="red"><b>Персонаж </b></font><?echo "<b>$opponent</b> [$op_level]<a href='info.php?log=$pl1' target='_blank'><img src='img/inf.gif' border='0' title='Информация о персонаже $opponent'></a>";?><font color="red"><b> принял ваш вызов!</b></font>
+              <font color="red"><b>Персонаж </b></font><?phpecho "<b>$opponent</b> [$op_level]<a href='info.php?log=$pl1' target='_blank'><img src='img/inf.gif' border='0' title='Информация о персонаже $opponent'></a>";?><font color="red"><b> принял ваш вызов!</b></font>
               <input type="hidden" name="ac" value="1">
               <input type="submit" name="accept" value="Битва!">
               <input type="hidden" name="ac" value="2">
@@ -378,7 +378,7 @@ else if ($zayavka_status == "confirm_mine")
     <td align="right" valign="top"><input type="button" value="Обновить" onclick="location.href = 'zayavka.php?boy=phisic';"></td>
   </tr>
 </table>
-<?
+<?php
 }
 else if ($zayavka_status == "confirm_opp")
 {
@@ -391,7 +391,7 @@ else if ($zayavka_status == "confirm_opp")
         <tr>
           <td>
             <form name="accept2" action="zayavka.php?boy=phisic&act=recallbattle" method="post">
-              <font color="red"><b>Ожидается подтверждение боя от персонажа</b></font> <?echo "<b>$opponent</b> [$op_level]<a href='info.php?log=$pl1' target='_blank'><img src='img/inf.gif' border='0' title='Информация о персонаже $opponent'></a>";?>
+              <font color="red"><b>Ожидается подтверждение боя от персонажа</b></font> <?phpecho "<b>$opponent</b> [$op_level]<a href='info.php?log=$pl1' target='_blank'><img src='img/inf.gif' border='0' title='Информация о персонаже $opponent'></a>";?>
               <input type="hidden" name="otkaz" value="1">
               <input type="submit" value="Отозвать вызов">
             </form>
@@ -402,7 +402,7 @@ else if ($zayavka_status == "confirm_opp")
     <td align="right" valign="top"><input type="button" value="Обновить" onclick="location.href = 'zayavka.php?boy=phisic';"></td>
   </tr>
 </table>
-<?
+<?php
 }
 echo "<form name='prinatie' action='zayavka.php?boy=phisic&act=a' method='POST'><br>";
 $data_p = $adb->select("SELECT * FROM `zayavka` WHERE `type` = '1' or `type` = '2' ORDER BY `date` DESC;");

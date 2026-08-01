@@ -1,4 +1,4 @@
-<?
+<?php
 session_start();
 define('AntiBK', true);
 
@@ -36,11 +36,11 @@ $(function (){
 </head>
 <body bgColor="#3D3D3B">
 <table align="center" cellpadding="0" cellspacing="0" width="100%" height="100%" style="padding: 10px;">
-  <tr><td align="center" colspan="2"><img src="img/enter.gif"><div align='right'>Здравствуйте, <strong><?echo $char->getLogin();?></strong> (<a href='javascript:window.close();' style='color: red; text-decoration: underline;'>Выход</a>)</div></td></tr>
+  <tr><td align="center" colspan="2"><img src="img/enter.gif"><div align='right'>Здравствуйте, <strong><?phpecho $char->getLogin();?></strong> (<a href='javascript:window.close();' style='color: red; text-decoration: underline;'>Выход</a>)</div></td></tr>
   <tr height="100%">
     <td valign="top" width="240">
         <div class="white">Навигация</div><hr>
-<?
+<?php
 $rows = $adb->select("SELECT * FROM `admin_menu` ORDER BY `id`;");
 foreach ($rows as $menu)
 {

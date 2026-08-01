@@ -1,4 +1,4 @@
-<?
+<?php
 session_start();
 define('AntiBK', true);
 
@@ -29,10 +29,10 @@ ArrToVar($char_db);
     try {top.checkGame();} catch(e) {location.href = 'index.php';}
 
     var chat = new Array();
-    chat['filter'] = <?echo $chat_filter;?>;
-    chat['sys'] = <?echo $chat_sys;?>;
-    chat['slow'] = (<?echo $chat_update;?> == 10) ?false :true;
-    chat['translit'] = <?echo $chat_translit;?>;
+    chat['filter'] = <?phpecho $chat_filter;?>;
+    chat['sys'] = <?phpecho $chat_sys;?>;
+    chat['slow'] = (<?phpecho $chat_update;?> == 10) ?false :true;
+    chat['translit'] = <?phpecho $chat_translit;?>;
 
     function changeButtonState (button)
     {
@@ -137,10 +137,10 @@ ArrToVar($char_db);
   <td id="T4">
     <span id="buttons1">
     <img class="button" src="img/talk/b_clear.gif" title="Очистить строку ввода/Чат" onclick="clean();" />
-    <img class="button" src="img/talk/b_filter_<?echo ($chat_filter) ?'on' :'off';?>.gif" id="filter" title="Показывать в чате только сообщения адресованные мне" />
-    <img class="button" src="img/talk/b_sys_<?echo ($chat_sys) ?'on' :'off';?>.gif" id="sys" title="Показывать в чате системные сообщения" />
-    <img class="button" src="img/talk/b_slow_<?echo ($chat_update == 60) ?'on' :'off';?>.gif" id="slow" title="Медленное обновление чата (раз в минуту)" />
-    <img class="button" src="img/talk/b_translit_<?echo ($chat_translit) ?'on' :'off';?>.gif" id="translit" title="Преобразовывать транслит в русский текст (правила перевода см. в энциклопедии)" />
+    <img class="button" src="img/talk/b_filter_<?phpecho ($chat_filter) ?'on' :'off';?>.gif" id="filter" title="Показывать в чате только сообщения адресованные мне" />
+    <img class="button" src="img/talk/b_sys_<?phpecho ($chat_sys) ?'on' :'off';?>.gif" id="sys" title="Показывать в чате системные сообщения" />
+    <img class="button" src="img/talk/b_slow_<?phpecho ($chat_update == 60) ?'on' :'off';?>.gif" id="slow" title="Медленное обновление чата (раз в минуту)" />
+    <img class="button" src="img/talk/b_translit_<?phpecho ($chat_translit) ?'on' :'off';?>.gif" id="translit" title="Преобразовывать транслит в русский текст (правила перевода см. в энциклопедии)" />
     <!--TODO: <img class="button" src="img/talk/b_sound_off.gif" id="b_sound" title="Не работает" />-->
     <object><embed width="1" height="1" src="img/talk/Sound2.swf" quality="high" scale="noscale" wmode="transparent" id="sound" align="middle" allowScriptAccess="always" type="application/x-shockwave-flash" /></object>
     <img class="button" src="img/talk/b_smile.gif" title="Смайлики" onclick="smiles();" />
@@ -150,14 +150,14 @@ ArrToVar($char_db);
   <td id="T6">
     <span id="buttons2">
     <img class="button" src="img/talk/a_inv.gif" title="Настройки/Инвентарь" onClick=\'top.linkAction("inv");\' />
-<?
+<?php
     echo ($level >= 4) ?'<img class="button" src="img/talk/a_trf.gif" title="Передать предметы/кредиты" onClick=\'top.linkAction("perevod");\' />' :'';
     echo ($orden == 1) ?'<img class="button" src="img/talk/a_pal.gif" title="Власть" onClick=\'top.linkAction("orden");\' />' :'';
     echo ($orden == 2) ?'<img class="button" src="img/talk/a_drk.gif" title="Власть" onClick=\'top.linkAction("orden");\' />' :'';
     echo ($clan) ?'<img class="button" src="img/talk/a_kln.gif" title="Клан" onClick=\'top.linkAction("clan");\' />' :'';
 ?>
     <img class="button" src="img/talk/a_ext.gif" title="Выход из игры" onClick="top.exit();" />
-    <object><embed width="70" height="26" src="img/talk/clock.swf?hours=<?echo date('H');?>&minutes=<?echo date('i');?>&sec=<?echo date('s');?>" type="application/x-shockwave-flash" /></object>
+    <object><embed width="70" height="26" src="img/talk/clock.swf?hours=<?phpecho date('H');?>&minutes=<?phpecho date('i');?>&sec=<?phpecho date('s');?>" type="application/x-shockwave-flash" /></object>
     </span>
   </td>
   <td id="T7"><img src="img/1x1.gif" width="9" /></td>

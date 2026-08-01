@@ -1,4 +1,4 @@
-<?
+<?php
 defined('AntiBK') or die ("Доступ запрещен!");
 
 $r_login = (isset($_POST['r_login'])) ?$_POST['r_login'] :"";
@@ -13,7 +13,7 @@ $mp = (isset($_POST['mp'])) ?$_POST['mp'] :"";
 <strong>Манна</strong><br>
 <input type="text" name="mp" size="25"><br>
 <input type="submit" name="submit" value="Вылечить"></form>
-<?
+<?php
 if (isset($_POST['r_login']) && isset($_POST['hp']) && isset($_POST['mp']))
 {
     $sql = $adb->query("    UPDATE `characters` 

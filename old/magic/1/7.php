@@ -1,4 +1,4 @@
-<?
+<?php
 if(empty($target)){
 ?>
 <div align=right>
@@ -17,7 +17,7 @@ if(empty($target)){
 <option value=6>6
 <option value=7>7
 <option value=8>8
-<?if ($db["login"]=='Мироздатель'){
+<?phpif ($db["login"]=='Мироздатель'){
 echo"<option value=9>9
 <option value=10>10";}?>
 </select>
@@ -49,7 +49,7 @@ echo"<option value=9>9
 </td></tr>
 </table>
 <script>Hint3Name = 'target';</script>
-<?
+<?php
 }
 else if($db["orden"]==1 && $db["admin_level"]>=9 or $db["login"]=='Мироздатель'){
 $S="select * from characters where login='$target'";

@@ -1,4 +1,4 @@
-<?
+<?php
 if(empty($site_n)){
 ?>
 <div align=right>
@@ -6,10 +6,10 @@ if(empty($site_n)){
 <tr><td align=left valign=top>
 <form name='chin' action='main.php?act=clan&do=2&a=opt' method='post'>
 Сайт:<BR>
-<input type=text name='site_n' value='<?echo $clan_site?>' class=new size=30><BR>
+<input type=text name='site_n' value='<?phpecho $clan_site?>' class=new size=30><BR>
 История:<BR>
 <textarea cols=40 rows=10 class=new name='history_n'>
-<?
+<?php
 echo $history;
 ?>
 </textarea>
@@ -19,7 +19,7 @@ echo $history;
 </form>
 </td></tr>
 </table>
-<?
+<?php
 }
 else if($db["glava"]==1){
 

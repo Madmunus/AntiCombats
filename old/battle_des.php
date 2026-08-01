@@ -1,4 +1,4 @@
-<?
+<?php
     if($ATTACK_DATA["sex"]=="female"){
     $prefix="а";
     }

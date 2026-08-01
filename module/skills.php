@@ -1,4 +1,4 @@
-<?
+<?php
 defined('AntiBK') or die("Доступ запрещен!");
 
 $stats = array();
@@ -57,13 +57,13 @@ $char->showStatAddition();
 ?>
 <script src="scripts/skills.js" type="text/javascript"></script>
 <img src="img/1x1.gif" width="1" height="5"><br>
-<font color='red' id='error'><?$char->error->getFormattedError($error, $parameters);?></font>
+<font color='red' id='error'><?php$char->error->getFormattedError($error, $parameters);?></font>
 <table width="100%">
   <tr>
-    <td>&nbsp; &nbsp;<?echo $char->getLogin();?></td>
+    <td>&nbsp; &nbsp;<?phpecho $char->getLogin();?></td>
     <td valign="top" align="right">
-      <input type="button" class="nav" value="<?echo $lang['refresh'];?>" id="link" link="skills">
-      <input type="button" class="nav" value="<?echo $lang['return'];?>" id="link" link="inv">
+      <input type="button" class="nav" value="<?phpecho $lang['refresh'];?>" id="link" link="skills">
+      <input type="button" class="nav" value="<?phpecho $lang['return'];?>" id="link" link="inv">
     </td>
   </tr>
 </table>
@@ -75,7 +75,7 @@ $char->showStatAddition();
         <td style="padding-left: 5px;">
           <table cellspacing="0">
             <form action='?action=skills' name='SaveAbilityPoints' method='post'>
-<?          foreach ($behaviour as $key => $min_level)
+<?php          foreach ($behaviour as $key => $min_level)
             {
               if ($level < $min_level)
                 continue;
@@ -91,7 +91,7 @@ $char->showStatAddition();
           <input type='submit' name='save_ability' value='сохранить' id='save_button0' class='nonactive' disabled><input type='checkbox' onClick='ChangeButtonState(0)' style='vertical-align: middle;'><br>
           </form>
           <font color="green">
-<?        if ($char_stats['ups'] > 0)
+<?php        if ($char_stats['ups'] > 0)
             echo "<br>&nbsp;Возможных увеличений: <font id='ups'>$char_stats[ups]</font>";
           if ($char_stats['skills'] > 0 && $level > 0)
             echo "<br>&nbsp;Свободных умений: <font id='skills'>$char_stats[skills]</font>";
@@ -105,34 +105,34 @@ $char->showStatAddition();
   <td valign="top">
 <table border="0" cellspacing="1" cellpadding="0" width="100%">
   <tr>
-<?
+<?php
 if ($level > 0)
 {
 ?>
   <td class="tz" id="L1">Мастерство</td>
-<?
+<?php
 }
 if ($level > 1)
 {
 ?>
   <td class="tz" id="L3">Особенности</td>
   <td class="tz" id="L4">Приемы</td>
-<?
+<?php
 }
 if ($level > 4)
 {
 ?>
   <td class="tz" id="L7">Знания</td>
-<?
+<?php
 }
 ?>
   <td class="tz" id="L5">Состояние</td>
-<?
+<?php
 if ($level > 1)
 {
 ?>
   <td class="tz" id="L6">Репутация</td>
-<?
+<?php
 }
 ?>
   <td class="notz">&nbsp;</td>
@@ -141,7 +141,7 @@ if ($level > 1)
 <table border="0" cellspacing="1" cellpadding="0" width="100%">
   <td width="100%" style="padding-left: 7px;">
 <div class="dtz" id="dL1">
-<?
+<?php
 if ($level > 0)
 {
   echo "<form action='?action=skills' name='SaveAbilityPoints' method='post'>";
@@ -193,7 +193,7 @@ if ($level > 0)
 </div>
 <div class="dtz" id="dL3">
 Не реализовано!
-<?
+<?php
   // <br>
   // &bull; <a href="#" onclick='return confirm("Вы уверены, что хотите выбрать особенность \"Изворотливый\"?")'>Изворотливый</a><br>
   // <small>Снижение стоимости передач на 0.1 кр.</small><br><br>
@@ -225,13 +225,13 @@ if ($level > 0)
 Не реализовано!
 </div>
 <div class="dtz" id="dL5">
-<?
+<?php
   if ($char_db['chat_shut'])
     echo "<img src='img/icon/sleeps$sex.gif'><small>На персонажа наложено заклятие молчания. Будет молчать еще ".getFormatedTime($char_db['chat_shut'])."</small><br>";
 ?>
 <b>Эффекты:</b><br>
 <div style="padding-left: 10">
-<?
+<?php
   $effects = $adb->select("SELECT * FROM `character_effects` WHERE `guid` = ?d and `end_time` = '0';", $guid);
   foreach ($effects as $effect)
   {

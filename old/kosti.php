@@ -1,4 +1,4 @@
-<?
+<?phpphp
 $login = $_SESSION['login'];
 include "conf.php";
 $conn = @mysql_connect("$base_name","$base_user","$base_pass");
@@ -26,7 +26,7 @@ $money = $res['money'];
 <br>
 Выигрыш складывается из Ваших ставок.
 </FIELDSET>
-<?
+<?php
 function new_game () {
         ?>
         <form action='?casino=kosti&set=game' method=post>
@@ -40,7 +40,7 @@ function new_game () {
         </td>
         </tr>
         </table>
-        <?
+        <?php
         }
 if (!$_GET[set])
 {
@@ -66,21 +66,21 @@ if ($_GET[set]==game) {
 <td width=50%>
 <FIELDSET><LEGEND>Игрок №1</LEGEND>
 <center>
-<script language=JavaScript>show_inf('<?=$stat[user]?>','<?=$stat[id]?>','<?=$stat[level]?>','<?=$stat[rank]?>','<?=$stat[tribe]?>');</script>
+<script language=JavaScript>show_inf('<?php=$stat[user]?>','<?php=$stat[id]?>','<?php=$stat[level]?>','<?php=$stat[rank]?>','<?php=$stat[tribe]?>');</script>
 </center>
 <br>
-Деньги: <b><?=$stat[money]?> кр.</b>
+Деньги: <b><?php=$stat[money]?> кр.</b>
 <br>
-Ставка: <b><?=$st?> кр.</b>
-<?
+Ставка: <b><?php=$st?> кр.</b>
+<?php
 if ($_POST[play]==1) {
 ?>
 <br>
 Выпало:
 <center>
-<img src='i/bone/<?=$player_1?>.gif' alt='<?=$player_1?>'><p><img src='i/bone/<?=$player_2?>.gif' alt='<?=$player_2?>'>
+<img src='i/bone/<?php=$player_1?>.gif' alt='<?php=$player_1?>'><p><img src='i/bone/<?php=$player_2?>.gif' alt='<?php=$player_2?>'>
 </center>
-<?
+<?php
   }
 ?>
 </FIELDSET>
@@ -93,16 +93,16 @@ if ($_POST[play]==1) {
 <br>
 Деньги: <b>??? зм.</b>
 <br>
-Ставка: <b><?=$st?> зм.</b>
-<?
+Ставка: <b><?php=$st?> зм.</b>
+<?php
 if ($_POST['play']==1) {
 ?>
 <br>
 Выпало:
 <center>
-<img src='i/bone/<?=$comp_1?>.gif' alt='<?=$comp_1?>'><p><img src='i/bone/<?=$comp_2?>.gif' alt='<?=$comp_2?>'>
+<img src='i/bone/<?php=$comp_1?>.gif' alt='<?php=$comp_1?>'><p><img src='i/bone/<?php=$comp_2?>.gif' alt='<?php=$comp_2?>'>
 </center>
-<?
+<?php
   }
 ?>
 </FIELDSET>
@@ -110,11 +110,11 @@ if ($_POST['play']==1) {
 </tr>
 </table>
 <form action='?gameroom=1&set=game' method=post>
-<input type="hidden" name="type" value="<?=$_POST[type]?>">
+<input type="hidden" name="type" value="<?php=$_POST[type]?>">
 <input type="hidden" name="play" value="1">
 <FIELDSET><LEGEND>Действия</LEGEND>
 <center>
-<? if ($_POST[play]==1) {
+<?php if ($_POST[play]==1) {
         $summa_player = $player_1+$player_2;
         $summa_comp = $comp_1+$comp_2;
         if ($summa_player>$summa_comp) {
@@ -144,7 +144,7 @@ if ($_POST['play']==1) {
 </td>
 </tr>
 </table>
-<?
+<?php
                  }
                  else {
                          echo "<p><center><font class=blocked>У Вас недостаточно денег!</font></center><p>";

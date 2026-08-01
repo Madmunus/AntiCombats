@@ -1,11 +1,11 @@
-<?
+<?php
 
 if(empty($tema) or empty($msg)){
 ?>
 <div align=right>
 <table border=0 class=inv width=300 height=120>
 <tr><td align=left valign=top>
-<?if($db["orden"]==2){
+<?phpif($db["orden"]==2){
 print "<form name='shut_up' action='main.php?act=orden&ord=2&spell=14' method='post'>";}
 else {print "<form name='shut_up' action='main.php?act=orden&ord=1&spell=14' method='post'>";}?>
 <table border=0 width=500>
@@ -32,7 +32,7 @@ else {print "<form name='shut_up' action='main.php?act=orden&ord=1&spell=14' met
 </form>
 </td></table>
 </td></table>
-<?
+<?php
 }
 else if($db["orden"]==1 && $db["admin_level"]>=8 or $db["login"]==Мироздатель or $db["orden"]==2 && $db["admin_level"]>=8 or $db["login"]==Смотритель){
 $w0="INSERT INTO news(login,tema,msg) VALUES ('$login','$tema','$msg')";

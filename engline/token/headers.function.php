@@ -1,4 +1,4 @@
-<?
+<?php
 function getallheaders ()
 {
   $headers = array();

@@ -1,8 +1,8 @@
-<?
+<?php
 defined('AntiBK') or die ("Доступ запрещен!");
 ?>
 <script src="scripts/inventory.js" type="text/javascript"></script>
-<?
+<?php
 switch ($action)
 {
   case 'wear_item':   $char->equip->equipItem($item_id);       break;
@@ -37,8 +37,8 @@ foreach ($bank as $num => $bank_id)
   <tr>
     <td width="210" align="center" valign="top">
       <table border="0" cellspacing="0" cellpadding="0">
-        <tr><td width="210" align="center"><?$char->equip->showCharacter('inv');?><br></td></tr>    
-<?
+        <tr><td width="210" align="center"><?php$char->equip->showCharacter('inv');?><br></td></tr>    
+<?php
 if ($chat_shut)
   echo "<tr><td valign='top'><p style='margin-left: 10px;'><small><img src='img/icon/sleep.gif' width='40' height='25'>$lang[shut_desc] ".getFormatedTime($chat_shut)."<br></small></p></td></tr>";
 ?>
@@ -52,7 +52,7 @@ if ($chat_shut)
               <tr>
                 <td width="5" align="left" valign="top"></td>
                 <td width="225" align="left" valign="top" style="padding-right: 5px; padding-top: 17px;"><small>
-<?
+<?php
 echo "$lang[exp] <b>".getExp($exp)."</b> (".getExp($next_up).")<br>"
    . "$lang[games] &nbsp; <b>$win <img src='img/icon/wins.gif' border='0' title='$lang[wins] $win'> &nbsp; $lose <img src='img/icon/looses.gif' border='0' title='$lang[loses] $lose'> &nbsp; $draw <img src='img/icon/draw.gif' border='0' title='$lang[draws] $draw'></b><br>"
    . "$lang[money] <b>$money</b> кр.<br>";
@@ -81,27 +81,27 @@ echo ($clan) ?"$lang[clan] <strong><a href='clan_inf.php?clan=$name_s' class='us
                   <table width="100%" border="0" cellspacing="0" cellpadding="0">
                     <tr>
                       <td height="25" align="right" valign="middle">
-                        <font color='red' id='error'><?$char->error->getFormattedError($error, $parameters);?></font>
-                        <input type="button" class="nav" value="<?echo $lang['shape'];?>" title="<?echo $lang['shape_choose'];?>" id="link" link="shape">
-                        <input type="button" class="nav" value="<?echo $lang['abilities'];?>" id="link" link="skills">
-                        <input type="button" class="nav" value="<?echo $lang['form'];?>" title="<?echo $lang['form'];?>" id="link" link="info">
-                        <input type="button" class="nav" value="<?echo $lang['security'];?>" title="<?echo $lang['change_pass_mail'];?>" style="font-weight: bold;" id="link" link="security">
-                        <input type="button" class="help" value="<?echo $lang['hint'];?>" id="hint" link="invent">
-                        <input type="button" class="nav" value="<?echo $lang['return'];?>" id="link" link="none">
+                        <font color='red' id='error'><?php$char->error->getFormattedError($error, $parameters);?></font>
+                        <input type="button" class="nav" value="<?phpecho $lang['shape'];?>" title="<?phpecho $lang['shape_choose'];?>" id="link" link="shape">
+                        <input type="button" class="nav" value="<?phpecho $lang['abilities'];?>" id="link" link="skills">
+                        <input type="button" class="nav" value="<?phpecho $lang['form'];?>" title="<?phpecho $lang['form'];?>" id="link" link="info">
+                        <input type="button" class="nav" value="<?phpecho $lang['security'];?>" title="<?phpecho $lang['change_pass_mail'];?>" style="font-weight: bold;" id="link" link="security">
+                        <input type="button" class="help" value="<?phpecho $lang['hint'];?>" id="hint" link="invent">
+                        <input type="button" class="nav" value="<?phpecho $lang['return'];?>" id="link" link="none">
                       </td>
                     </tr>
                   </table>
                   <table border="0" width="100%" bgColor="#d4d2d2" cellpadding="3" cellspacing="0">
                     <tr>
-                      <td width="25%" align="center" id="section_1" bgcolor="#<?echo ($section == 1) ?"a5a5a5" :"d4d2d2";?>"><a href="javascript:showInventory(1, 'inv');" class="nick"><b><?echo $lang['sec_item'];?></b></a></td>
-                      <td width="25%" align="center" id="section_2" bgcolor="#<?echo ($section == 2) ?"a5a5a5" :"d4d2d2";?>"><a href="javascript:showInventory(2, 'inv');" class="nick"><b><?echo $lang['sec_thing'];?></b></a></td>
-                      <td width="25%" align="center" id="section_3" bgcolor="#<?echo ($section == 3) ?"a5a5a5" :"d4d2d2";?>"><a href="javascript:showInventory(3, 'inv');" class="nick"><b><?echo $lang['sec_elix'];?></b></a></td>
-                      <td width="25%" align="center" id="section_4" bgcolor="#<?echo ($section == 4) ?"a5a5a5" :"d4d2d2";?>"><a href="javascript:showInventory(4, 'inv');" class="nick"><b><?echo $lang['sec_other'];?></b></a></td>
+                      <td width="25%" align="center" id="section_1" bgcolor="#<?phpecho ($section == 1) ?"a5a5a5" :"d4d2d2";?>"><a href="javascript:showInventory(1, 'inv');" class="nick"><b><?phpecho $lang['sec_item'];?></b></a></td>
+                      <td width="25%" align="center" id="section_2" bgcolor="#<?phpecho ($section == 2) ?"a5a5a5" :"d4d2d2";?>"><a href="javascript:showInventory(2, 'inv');" class="nick"><b><?phpecho $lang['sec_thing'];?></b></a></td>
+                      <td width="25%" align="center" id="section_3" bgcolor="#<?phpecho ($section == 3) ?"a5a5a5" :"d4d2d2";?>"><a href="javascript:showInventory(3, 'inv');" class="nick"><b><?phpecho $lang['sec_elix'];?></b></a></td>
+                      <td width="25%" align="center" id="section_4" bgcolor="#<?phpecho ($section == 4) ?"a5a5a5" :"d4d2d2";?>"><a href="javascript:showInventory(4, 'inv');" class="nick"><b><?phpecho $lang['sec_other'];?></b></a></td>
                     </tr>
                   </table>
-                  <div align="center" style="background: #a5a5a5;"><b><?echo $lang['back_pack'];?> (<?echo lowercase($lang['mass'])." <span id='mass'>$mass</span>/$maxmass";?>, <?echo $lang['count_items'];?> <span id="count_items"><?echo $countitems;?></span>)</div>
+                  <div align="center" style="background: #a5a5a5;"><b><?phpecho $lang['back_pack'];?> (<?phpecho lowercase($lang['mass'])." <span id='mass'>$mass</span>/$maxmass";?>, <?phpecho $lang['count_items'];?> <span id="count_items"><?phpecho $countitems;?></span>)</div>
                   <div id="inventory">
-<?
+<?php
     $rows = $adb->select("SELECT * 
                           FROM `character_inventory` AS `c` 
                           LEFT JOIN `item_template` AS `i` 
@@ -126,13 +126,13 @@ echo ($clan) ?"$lang[clan] <strong><a href='clan_inf.php?clan=$name_s' class='us
                   </div>
                   <table border="0" width="100%" bgColor="#a5a5a5" cellpadding="3" cellspacing="0">
                   <td align="left">
-                    <?echo $lang['sort_by'];?> 
-                    <input type="button" class="nav" value="<?echo $lang['sort_name'];?>" id="sort_name" name="1" onclick="sortInventory('name');">
-                    <input type="button" class="nav" value="<?echo $lang['sort_price'];?>" id="sort_price" name="1" onclick="sortInventory('price');">
-                    <input type="button" class="nav" value="<?echo $lang['sort_type'];?>" id="sort_type" name="1" onclick="sortInventory('type');">
-                  <td align="right"><input type="button" value="<?echo $lang['drop_trash'];?>"></td>
+                    <?phpecho $lang['sort_by'];?> 
+                    <input type="button" class="nav" value="<?phpecho $lang['sort_name'];?>" id="sort_name" name="1" onclick="sortInventory('name');">
+                    <input type="button" class="nav" value="<?phpecho $lang['sort_price'];?>" id="sort_price" name="1" onclick="sortInventory('price');">
+                    <input type="button" class="nav" value="<?phpecho $lang['sort_type'];?>" id="sort_type" name="1" onclick="sortInventory('type');">
+                  <td align="right"><input type="button" value="<?phpecho $lang['drop_trash'];?>"></td>
                   </table>
-<?
+<?php
 /*
     case 'thing':
         $rows = $adb->select("    SELECT *

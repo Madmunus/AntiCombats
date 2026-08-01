@@ -1,4 +1,4 @@
-<?
+<?php
 define('AntiBK', true);
 
 include("engline/config.php");
@@ -25,7 +25,7 @@ $char = Char::initialization(0, $adb);
   <thead><tr><td background="img/site/sitebk_02.jpg" scope="col" align="center"><img src="img/site/sitebk_03ru.gif" width="194" height="135"></td></tr></thead>
   <tfoot>
     <tr><td width="100%" height="13" background="img/site/sitebk_07.jpg"></td></tr>
-    <tr><td width="100%" bgColor="#000" height="20" align="center" class="copyright"><?echo $config['copyright'];?></td></tr>
+    <tr><td width="100%" bgColor="#000" height="20" align="center" class="copyright"><?phpecho $config['copyright'];?></td></tr>
   </tfoot>
   <tbody>
   <tr>
@@ -40,7 +40,7 @@ $char = Char::initialization(0, $adb);
                 <td>
                   <img src="img/site/ratin_10.gif" border="0"><br><br>
                   <table width="100%"><tr><td>&nbsp; &nbsp; Рейтинг бойцов клуба<td>
-                  <td align="right">Статистика на <code><?echo DATE_NO_SEC;?></code></td></tr></table>
+                  <td align="right">Статистика на <code><?phpecho DATE_NO_SEC;?></code></td></tr></table>
                   <br>
                   <table width="100%" border="0" cellpadding="0" cellspacing="0" background="img/site/ram12_34.gif" align="center">
                     <tr>
@@ -55,7 +55,7 @@ $char = Char::initialization(0, $adb);
                       <td>&nbsp;</td>
                       <td align="right"><b>рейтинг</b></td>
                     </tr>
-<?
+<?php
 $players = $adb->select("SELECT `guid`, `login`, `exp` FROM `characters` WHERE `admin_level` = '0' ORDER BY `exp` DESC LIMIT 200;");
 for ($i = 0; $i < count($players); $i++)
 {

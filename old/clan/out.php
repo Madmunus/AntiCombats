@@ -1,4 +1,4 @@
-<?
+<?php
 if(empty($target)){
 ?>
 <div align=right>
@@ -13,7 +13,7 @@ if(empty($target)){
 </form>
 </td></tr>
 </table>
-<?
+<?php
 }
 else if($db["glava"]==1){
 $S="select * from characters where login='$target'";

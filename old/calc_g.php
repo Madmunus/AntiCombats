@@ -1,4 +1,4 @@
-<?
+<?php
 /*====определение характеристик атакующего===============*/
 $attack_str       = $ATTACK_DATA["str"];
 $attack_dex    = $ATTACK_DATA["dex"];

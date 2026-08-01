@@ -1,4 +1,4 @@
-<?
+<?php
 defined('AntiBK') or die ("Доступ запрещен!");
 
 $r_login = (isset($_POST['r_login'])) ?$_POST['r_login'] :"";
@@ -7,7 +7,7 @@ $r_login = (isset($_POST['r_login'])) ?$_POST['r_login'] :"";
 <strong>Логин</strong><br>
 <input type="text" name="r_login" size="25">
 <input type="submit" name="submit" value="Далее"></form>
-<?
+<?php
 if (isset($_POST['r_login']))
 {
     $data = $adb->selectRow("SELECT `travm_old_stat`, `travm_stat` FROM `characters` WHERE `login` = '$r_login';") or die ("Персонаж не найден!");

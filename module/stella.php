@@ -1,4 +1,4 @@
-<?
+<?php
 defined('AntiBK') or die("Доступ запрещен!");
 
 $dat = $adb->selectRow("SELECT * FROM `city_stella_main` WHERE `city` = ?s", $city);
@@ -19,11 +19,11 @@ $vote = $adb->selectCell("SELECT `vote` FROM `characters` WHERE `guid` = ?d", $g
 <tr>
   <td><h3>Голосование</h3></td>
   <td align="right">
-    <?getUpdateBar();?>
+    <?phpgetUpdateBar();?>
     <table width="148" border="0" cellpadding="0" cellspacing="1" bgcolor="#DEDEDE">
       <tr>
         <td bgcolor="#D3D3D3"><img src="img/links.gif" width="9" height="7" /></td>
-        <td bgcolor="#D3D3D3" nowrap><a href="main.php?action=go&room_go=centsquare" class="passage" alt="<?echo $char->city->getRoomOnline('centsquare', 'mini');?>">Центральная Площадь</a></td>
+        <td bgcolor="#D3D3D3" nowrap><a href="main.php?action=go&room_go=centsquare" class="passage" alt="<?phpecho $char->city->getRoomOnline('centsquare', 'mini');?>">Центральная Площадь</a></td>
       </tr>
     </table>
   </td>
@@ -32,7 +32,7 @@ $vote = $adb->selectCell("SELECT `vote` FROM `characters` WHERE `guid` = ?d", $g
 <br>
 <table width="98%" border="0" cellpadding="0" cellspacing="1" align="center"><td>
 <form name="vote" method="post">
-<?
+<?php
 $rows = $adb->select("SELECT `id`, 
                              `answer`, 
                              `count` 
@@ -62,7 +62,7 @@ else
 </form>
 </td></tr></table>
 </div>
-<?
+<?php
   echo "Всего голосов: $count<br>";
   echo "Время голосования: <b>$open</b><br>";
   echo "Минимальный уровень: $dat[min_level]<br>";
