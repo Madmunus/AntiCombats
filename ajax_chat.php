@@ -46,7 +46,7 @@ switch ($do)
     }
     
     $h = str_replace("\n", "", $h);
-    $to = split(']', str_replace(array('to [', 'private ['), "]", $h));
+    $to = explode(']', str_replace(array('to [', 'private ['), "]", $h));
     
     if (isset($to[1]))
     {
@@ -118,11 +118,11 @@ switch ($do)
       $date = (bcsub(time(), $_SESSION['last_t']) <= 86400) ?date('H:i', $_SESSION['last_t']) :date('d.m.y H:i', $_SESSION['last_t']);
       $sender2 = str_replace(" ", "%20", $sender);
       $to2 = str_replace(" ", "%20", $to);
-      $smiles = split(':', $msg);
+      $smiles = explode(':', $msg);
       if ($class == 'private')
       {
         $sent = '';
-        $names = split(',', $to);
+        $names = explode(',', $to);
         foreach ($names as $key => $name)
         {
           $name_link = ($name == $login) ?str_replace(" ", "%20", $sender) :str_replace(" ", "%20", $name);

@@ -264,10 +264,10 @@ class Char
     $travms = $this->db->select("SELECT `stats` FROM `character_travms` WHERE `guid` = ?d and `stats` != '';", $this->guid);
     foreach ($travms as $travm)
     {
-      $stats = split(",", $travm['stats']);
+      $stats = explode(",", $travm['stats']);
       foreach ($stats as $stat)
       {
-        $stat = split("=", $stat);
+        $stat = explode("=", $stat);
         
         if (array_key_exists($stat[0], $added))
           $added[$stat[0]] += -$stat[1];
@@ -641,10 +641,10 @@ class Char
     
     if ($t_info['stats'])
     {
-      $modifiers = split(",", $t_info['stats']);
+      $modifiers = explode(",", $t_info['stats']);
       foreach ($modifiers as $modifier)
       {
-        $stat = split("=", $modifier);
+        $stat = explode("=", $modifier);
         
         if (array_key_exists($stat[0], $stats))
           $stats[$stat[0]] = -$stat[1]*$type;

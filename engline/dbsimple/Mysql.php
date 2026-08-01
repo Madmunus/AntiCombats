@@ -24,13 +24,13 @@ require_once dirname(__FILE__) . '/Generic.php';
  */
 class DbSimple_Mysql extends DbSimple_Generic_Database
 {
-    var $link;
+    public $link;
 
     /**
      * constructor(string $dsn)
      * Connect to MySQL.
      */
-    function DbSimple_Mysql($dsn)
+    function __construct($dsn)
     {
         $p = DbSimple_Generic::parseDSN($dsn);
         if (!is_callable('mysql_connect')) {
@@ -68,9 +68,9 @@ class DbSimple_Mysql extends DbSimple_Generic_Database
     }
 
 
-    function& _performNewBlob($blobid=null)
+    function _performNewBlob($blobid=null)
     {
-        $obj =& new DbSimple_Mysql_Blob($this, $blobid);
+        $obj = new DbSimple_Mysql_Blob($this, $blobid);
         return $obj;
     }
 
@@ -200,10 +200,10 @@ class DbSimple_Mysql extends DbSimple_Generic_Database
 class DbSimple_Mysql_Blob extends DbSimple_Generic_Blob
 {
     // MySQL does not support separate BLOB fetching. 
-    var $blobdata = null;
-    var $curSeek = 0;
+    public $blobdata = null;
+    public $curSeek = 0;
 
-    function DbSimple_Mysql_Blob(&$database, $blobdata=null)
+    function __construct(&$database, $blobdata=null)
     {
         $this->blobdata = $blobdata;
         $this->curSeek = 0;
