@@ -1,4 +1,4 @@
-<?
+<?php
 session_start();
 include "conf.php";
 include "functions.php";
@@ -22,19 +22,19 @@ else{$date_t = $datei;}
 <LINK REL=StyleSheet HREF='styles/style.css' TYPE='text/css'>
 <form action='?act=view' method="POST">
 Национальный Банк Капитолия.<BR>
-Выписка переводов по счету #<?echo $_SESSION["bankCheck"]?><BR>
+Выписка переводов по счету #<?phpecho $_SESSION["bankCheck"]?><BR>
 Выдать выпискку за число:<BR>
 <table border=0><TR>
 <td>
 дата(дд.мм.гггг):<BR>
-<input type=text class=new style="width=150" name=datei value="<?echo $date_t?>">
+<input type=text class=new style="width=150" name=datei value="<?phpecho $date_t?>">
 </td>
 </tr><tr><td>
 <input type=submit class=but value="просмотреть" style="width=150">
 </td></tr></table>
 </form>
 
-<?
+<?php
   if($act == 'view'){
    $SQL = mysql_query("SELECT * FROM history_bank WHERE `check` = '".$_SESSION["bankCheck"]."' OR `check2` = '".$_SESSION["bankCheck"]."' ORDER BY `date` ASC");
    $in_data = explode(".",$datei);

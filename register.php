@@ -1,4 +1,4 @@
-<?
+<?php
 session_start();
 define('AntiBK', true);
 
@@ -29,7 +29,7 @@ $error_text = 'Пройдите предыдущий шаг!<br><br><a href="?st
   <thead><tr><td background="img/site/sitebk_02.jpg" align="center"><img src="img/site/sitebk_03ru.gif" width="194" height="135"></td></tr></thead>
   <tfoot>
     <tr><td width="100%" height="13" background="img/site/sitebk_07.jpg"></td></tr>
-    <tr><td width="100%" bgColor="#000" height="20" align="center" class="copyright"><?echo $config['copyright'];?></td></tr>
+    <tr><td width="100%" bgColor="#000" height="20" align="center" class="copyright"><?phpecho $config['copyright'];?></td></tr>
   </tfoot>
   <tbody>
   <tr>
@@ -42,7 +42,7 @@ $error_text = 'Пройдите предыдущий шаг!<br><br><a href="?st
             <table width="100%" border="0" cellpadding="0" cellspacing="0">
               <tr><td><br><br><img src="img/site/regen_10.gif"><br><br><div id="error" readonly cols="100" rows="1" style="color: red; font-weight: bold; background-color: #f2e5b1; border: 0; display: none; margin-bottom: 5px;"></div></td></tr>
               <tr><td>
-<?
+<?php
 if (!($adb->selectCell("SELECT `registration` FROM `server_info`;")))
   $step = 'stop';
 
@@ -50,13 +50,13 @@ if (!($adb->selectCell("SELECT `registration` FROM `server_info`;")))
     {
       case 'stop':
 ?>              <div style="padding: 0 0 0 20px;">Регистрация закрыта!<br><a href="../" class="us2">Вернуться на главную</a></div>
-<?    break;
+<?php    break;
       default :
       case '':
         $reg_login = (checks('reg_login')) ?$_SESSION['reg_login'] :'';
 ?>              <table class="g" align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
                   <tr class="bg6">
-                    <td><span class="style5">* </span>&nbsp;Имя вашего персонажа (login): <input type="text" name="reg_login" class="inup" size="25" maxlength="15" value="<?echo $reg_login;?>"> &nbsp;<input type="button" class="btn" value="Продолжить" onclick="checkStep1();" id="next"></td>
+                    <td><span class="style5">* </span>&nbsp;Имя вашего персонажа (login): <input type="text" name="reg_login" class="inup" size="25" maxlength="15" value="<?phpecho $reg_login;?>"> &nbsp;<input type="button" class="btn" value="Продолжить" onclick="checkStep1();" id="next"></td>
                   </tr>
                   <tr>
                     <td style="padding: 5px 0 0 20px;">
@@ -92,22 +92,22 @@ if (!($adb->selectCell("SELECT `registration` FROM `server_info`;")))
                     </td>
                   </tr>
                 </table>
-<?    break;
+<?php    break;
       case 2:
         if (!checks('reg_login')) die($error_text);
         $reg_password = (checks('reg_password')) ?$_SESSION['reg_password'] :'';
 ?>              <table class="g" align="center" border="0" cellpadding="0" cellspacing="0">
                   <tr class="bg6">
                     <td width="500"><span class="style5">*</span><font style="margin-left: 20px;">Имя вашего персонажа:</font></td>
-                    <td width="300"><p><?echo $_SESSION['reg_login'];?></p></td>
+                    <td width="300"><p><?phpecho $_SESSION['reg_login'];?></p></td>
                   </tr>
                   <tr>
                     <td><span class="style5">*</span><font style="margin-left: 20px;">Пароль:</font></td>
-                    <td><input type="password" name="password" class="inup" size="20" maxlength="21" value="<?echo $reg_password;?>"></td>
+                    <td><input type="password" name="password" class="inup" size="20" maxlength="21" value="<?phpecho $reg_password;?>"></td>
                   </tr>
                   <tr>
                     <td><span class="style5">*</span><font style="margin-left: 20px;">Пароль повторно:</font></td>
-                    <td><input type="password" name="password_confirm" class="inup" size="20" maxlength="21" value="<?echo $reg_password;?>"></td>
+                    <td><input type="password" name="password_confirm" class="inup" size="20" maxlength="21" value="<?phpecho $reg_password;?>"></td>
                   </tr>
                   <tr>
                     <td colspan="2" style="padding: 5px 0 0 29px;">
@@ -134,7 +134,7 @@ if (!($adb->selectCell("SELECT `registration` FROM `server_info`;")))
                     <td><input type="button" class="btn" value="Продолжить" onclick="checkStep2();" id="next"></td>
                   </tr>
                 </table>
-<?    break;
+<?php    break;
       case 3:
         if (!checks('reg_login', 'reg_password')) die($error_text);
         $reg_email = (checks('reg_email')) ?$_SESSION['reg_email'] :'';
@@ -143,11 +143,11 @@ if (!($adb->selectCell("SELECT `registration` FROM `server_info`;")))
 ?>              <table class="g" align="center" border="0" cellpadding="1" cellspacing="0">
                   <tr class="bg6">
                     <td width="500"><span class="style5">*</span><font style="margin-left: 15px;">Имя вашего персонажа:</font></td>
-                    <td width="300"><p><?echo $_SESSION['reg_login'];?></p></td>
+                    <td width="300"><p><?phpecho $_SESSION['reg_login'];?></p></td>
                   </tr>
                   <tr>
                     <td><span class="style5">*</span><font style="margin-left: 15px;">Ваш e-mail:</font></td>
-                    <td><input type="text" name="email" class="inup" size="30" maxlength="50" value="<?echo $reg_email;?>"></td>
+                    <td><input type="text" name="email" class="inup" size="30" maxlength="50" value="<?phpecho $reg_email;?>"></td>
                   </tr>
                   <tr>
                     <td colspan="2" style="padding: 5px 0 10px 27px;"><p>(используется <u>только</u> для напоминания пароля, нигде не отображается и не 
@@ -156,11 +156,11 @@ if (!($adb->selectCell("SELECT `registration` FROM `server_info`;")))
                   </tr>
                   <tr>
                     <td width="146" style="padding: 5px 0 10px 27px;">Ваш секретный вопрос:</td>
-                    <td><input type="text" name="secretquestion" class="inup" value="<?echo $reg_secretquestion;?>" size="30" maxlength="50"></td>
+                    <td><input type="text" name="secretquestion" class="inup" value="<?phpecho $reg_secretquestion;?>" size="30" maxlength="50"></td>
                   </tr>
                   <tr>
                     <td style="padding: 5px 0 10px 27px;">Ответ на секретный вопрос: </td>
-                    <td><input type="text" name="secretanswer" class="inup" value="<?echo $reg_secretanswer;?>" size="30" maxlength="50"></td>
+                    <td><input type="text" name="secretanswer" class="inup" value="<?phpecho $reg_secretanswer;?>" size="30" maxlength="50"></td>
                   </tr>
                   <tr><td colspan="2" style="padding: 5px 0 10px 27px;"><span class="style7"><small>(Если указаны вопрос и ответ, то высылка пароля на email будет производится лишь при правильном ответе)</small></span></td></tr>
                   <tr>
@@ -168,7 +168,7 @@ if (!($adb->selectCell("SELECT `registration` FROM `server_info`;")))
                     <td><input type="button" class="btn" value="Продолжить" onclick="checkStep3();" id="next"></td>
                   </tr>
                 </table>
-<?    break;
+<?php    break;
       case 4:
         if (!checks('reg_login', 'reg_password', 'reg_email', 'reg_secretquestion', 'reg_secretanswer')) die($error_text);
         $reg_name = (checks('reg_name')) ?$_SESSION['reg_name'] :'';
@@ -178,18 +178,18 @@ if (!($adb->selectCell("SELECT `registration` FROM `server_info`;")))
 ?>              <table class="g" align="center" border="0" cellpadding="1" cellspacing="0" width="100%">
                   <tr class="bg6">
                     <td><span class="style5">*</span><font style="margin-left: 8px;">Имя вашего персонажа:</font></td>
-                    <td><?echo $_SESSION['reg_login'];?></td>
+                    <td><?phpecho $_SESSION['reg_login'];?></td>
                   </tr>
                   <tr>
                     <td><span class="style5">*</span><font style="margin-left: 8px;">Ваше реальное имя: </font> </td>
-                    <td><input type="text" name="name" class="inup" value="<?echo $reg_name;?>" size="45" maxlength="90"></td>
+                    <td><input type="text" name="name" class="inup" value="<?phpecho $reg_name;?>" size="45" maxlength="90"></td>
                   </tr>
                   <tr>
                     <td><span class="style5">*</span><font style="margin-left: 8px;">День рождения:</font></td>
                     <td>
                       День: <select name="birth_day" class="inup">
                         <option selected></option>
-<?                      for ($i = 1; $i <= 31; $i++)
+<?php                      for ($i = 1; $i <= 31; $i++)
                         {
                           $i = ($i < 10) ?"0".$i :$i;
                           $s = ($i == $reg_birth_day) ?" selected" :"";
@@ -198,7 +198,7 @@ if (!($adb->selectCell("SELECT `registration` FROM `server_info`;")))
 ?>                    </select>
                       Месяц: <select name="birth_month" class="inup">
                         <option selected></option>
-<?                      foreach ($data['month'] as $value => $name)
+<?php                      foreach ($data['month'] as $value => $name)
                         {
                           $s = ($value == $reg_birth_month) ?" selected" :"";
                           echo "<option value='$value'$s>$name</option>";
@@ -206,7 +206,7 @@ if (!($adb->selectCell("SELECT `registration` FROM `server_info`;")))
 ?>                    </select>
                       Год: <select name="birth_year" class="inup">
                         <option selected></option>
-<?                      for ($i = date('Y') - 10; $i >= (date('Y') - 72); $i--)
+<?php                      for ($i = date('Y') - 10; $i >= (date('Y') - 72); $i--)
                         {
                           $s = ($i == $reg_birth_year) ?" selected" :"";
                           echo "<option value='$i'$s>$i</option>";
@@ -227,7 +227,7 @@ if (!($adb->selectCell("SELECT `registration` FROM `server_info`;")))
                     <td style="padding-left: 16px;">Город:</td>
                     <td><select name="city_n" class="inup">
                       <option selected></option>
-<?                      foreach ($data['towns'] as $name)
+<?php                      foreach ($data['towns'] as $name)
                           echo "<option value='$name'>$name</option>";
 ?>                  </select></td>
                   </tr>
@@ -246,7 +246,7 @@ if (!($adb->selectCell("SELECT `registration` FROM `server_info`;")))
                   <tr style="padding-bottom: 27px;">
                     <td style="padding-left: 16px; padding-bottom: 20px;">Цвет сообщений в<br> чате:</td>
                     <td style="padding-bottom: 20px;"><select name="color" class="inup">
-<?                    foreach ($data['colors'] as $color => $name)
+<?php                    foreach ($data['colors'] as $color => $name)
                         echo "<option style='color: $color;' value='$color'>$name</option>";
 ?>                  </select></td>
                   </tr>
@@ -255,13 +255,13 @@ if (!($adb->selectCell("SELECT `registration` FROM `server_info`;")))
                     <td><input type="button" class="btn" value="Продолжить" onclick="checkStep4();" id="next"></td>
                   </tr>
                 </table>
-<?    break;
+<?php    break;
       case 5:
         if (!checks('reg_login', 'reg_password', 'reg_email', 'reg_secretquestion', 'reg_secretanswer', 'reg_name', 'reg_birth_day', 'reg_birth_month', 'reg_birth_year', 'reg_sex', 'reg_city', 'reg_icq', 'reg_hide_icq', 'reg_motto', 'reg_color')) die($error_text);
 ?>              <table align="center" border="0" cellpadding="1" cellspacing="0" width="100%">
                   <tr class="bg6">
                     <td><span class="style5">*</span><font style="margin-left: 8px;">Имя вашего персонажа:</font></td>
-                    <td><?echo $_SESSION['reg_login'];?></td>
+                    <td><?phpecho $_SESSION['reg_login'];?></td>
                   </tr>
                   <tr height="30"><td colspan="2"><span class="style5">*</span> <input type="checkbox" name="rules1" value="1" />Я обязуюсь соблюдать <a href="encicl/law.html" target="_blank"><b>Законы Анти Бойцовского Клуба</b></a></td></tr>
                   <tr height="30"><td colspan="2"><span class="style5">*</span> <input type="checkbox" name="rules2" value="1" />Я ознакомился с <a href="encicl/TOS.html" target="_blank"><b>Соглашением о предоставлении сервиса игры "Анти Бойцовский Клуб"</b></a> и согласен по всем пунктам.</b></a></td></tr>
@@ -274,7 +274,7 @@ if (!($adb->selectCell("SELECT `registration` FROM `server_info`;")))
                     <td><br><input type="button" class="btn" value="Начать" onclick="checkStep5();" id="next"></td>
                   </tr>
                 </table>
-<?    break;
+<?php    break;
     }
 ?>              <br><br><br>
                 </td>

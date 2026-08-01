@@ -1,4 +1,4 @@
-<?
+<?php
 include "conf.php";
 include "functions.php";
 

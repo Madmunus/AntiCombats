@@ -1,4 +1,4 @@
-<?
+<?php
 session_start();
 define('AntiBK', true);
 
@@ -77,12 +77,12 @@ else if ($login_mail)
   <script src="scripts/dialog.js" type="text/javascript"></script>
   <script type="text/javascript">
     try{top.checkGame();} catch(e) {location.href = 'index.php';}
-    $.ajaxSetup({headers: {'X-Csrf-Token': '<?echo $_SESSION['token'];?>'}});
+    $.ajaxSetup({headers: {'X-Csrf-Token': '<?phpecho $_SESSION['token'];?>'}});
   </script>
 </head>
 <body>
 <div id="hint3"></div>
-<?
+<?php
 $login = $char_db['login'];
 $sex = $char_db['sex'];
 
@@ -171,12 +171,12 @@ switch ($action)
     $name = $adb->selectCell("SELECT `name` FROM `$obj_type` WHERE `id` = ?d", $obj_id);
 ?>
 <script>
-    if (confirm ('Вы уверены что хотите подарить "<?echo $name;?>" персонажу <?echo $to;?>?'))
-      location.href='main.php?action=gift_conf&item_id=<?echo $item_id;?>&to=<?echo $to;?>';
+    if (confirm ('Вы уверены что хотите подарить "<?phpecho $name;?>" персонажу <?phpecho $to;?>?'))
+      location.href='main.php?action=gift_conf&item_id=<?phpecho $item_id;?>&to=<?phpecho $to;?>';
     else
-      location.href='main.php?action=perevod&target=<?echo $to;?>';
+      location.href='main.php?action=perevod&target=<?phpecho $to;?>';
 </script>
-<?
+<?php
   break;
   case 'gift_conf':
     gift($guid, $item_id, $to);
@@ -192,12 +192,12 @@ switch ($action)
     $name = $adb->selectCell("SELECT `name` FROM `$obj_type` WHERE `id` = ?d", $obj_id);
 ?>
 <script>
-    if (confirm ('Вы уверены что хотите передать "<?echo $name;?>" персонажу <?echo $to;?>?'))
-      location.href = 'main.php?action=give_conf&item_id=<?echo $item_id;?>&to=<?echo $to;?>';}
+    if (confirm ('Вы уверены что хотите передать "<?phpecho $name;?>" персонажу <?phpecho $to;?>?'))
+      location.href = 'main.php?action=give_conf&item_id=<?phpecho $item_id;?>&to=<?phpecho $to;?>';}
     else
-      location.href = 'main.php?action=perevod&target=<?echo $to;?>';
+      location.href = 'main.php?action=perevod&target=<?phpecho $to;?>';
 </script>
-<?
+<?php
   break;
   case 'give_conf':
     give ($guid, $item_id, $to);

@@ -91,7 +91,14 @@ class DbSimple_Generic
             $dummy = null;
             return $dummy;
         }
-        $class = 'DbSimple_'.ucfirst($parsed['scheme']);
+        
+        // Поддержка алиаса 'pdo' для MySQL через PDO (PHP 8.3 совместимость)
+        $scheme = $parsed['scheme'];
+        if ($scheme === 'pdo') {
+            $scheme = 'PDO';
+        }
+        
+        $class = 'DbSimple_'.ucfirst($scheme);
         if (!class_exists($class)) {
             $file = str_replace('_', '/', $class) . ".php";
             // Try to load library file from standard include_path.
@@ -110,7 +117,7 @@ class DbSimple_Generic
                 }
             }
         }
-        $object =& new $class($parsed);
+        $object = new $class($parsed);
         if (isset($parsed['ident_prefix'])) {
             $object->setIdentPrefix($parsed['ident_prefix']);
         }
@@ -130,7 +137,7 @@ class DbSimple_Generic
                     fclose($fp);
                     unlink($testFile);                
                     require_once 'Cache' . '/Lite.php'; // "." -> no phpEclipse notice
-                    $t =& new Cache_Lite(array('cacheDir' => $dir.'/', 'lifeTime' => null, 'automaticSerialization' => true));
+                    $t = new Cache_Lite(array('cacheDir' => $dir.'/', 'lifeTime' => null, 'automaticSerialization' => true));
                     $object->_cacher =& $t;
                     break;
                 }
@@ -1130,32 +1137,32 @@ class DbSimple_Generic_Database extends DbSimple_Generic_LastError
      * 
      * Prevent from direct creation of this object.
      */
-    function DbSimple_Generic_Database()
+    function __construct()
     {
         die("This is protected constructor! Do not instantiate directly at ".__FILE__." line ".__LINE__);
     }
     
     // Identifiers prefix (used for ?_ placeholder).
-    var $_identPrefix = '';
+    protected $_identPrefix = '';
 
     // Queries statistics.
-    var $_statistics = array(
+    protected $_statistics = array(
         'time'  => 0,
         'count' => 0,
     );
     
-    var $_cachePrefix = '';
+    protected $_cachePrefix = '';
 
-    var $_logger = null;
-    var $_cacher = null;
-    var $_placeholderArgs, $_placeholderNativeArgs, $_placeholderCache=array();
-    var $_placeholderNoValueFound;
+    protected $_logger = null;
+    protected $_cacher = null;
+    protected $_placeholderArgs, $_placeholderNativeArgs, $_placeholderCache=array();
+    protected $_placeholderNoValueFound;
     
     /**
      * When string representation of row (in characters) is greater than this,
      * row data will not be logged.
     */
-    var $MAX_LOG_ROW_LEN = 128;
+    public $MAX_LOG_ROW_LEN = 128;
 }
 
 
@@ -1209,10 +1216,10 @@ class DbSimple_Generic_Blob extends DbSimple_Generic_LastError
  */
 class DbSimple_Generic_LastError
 {
-    var $error = null;
-    var $errmsg = null;
-    var $errorHandler = null;
-    var $ignoresInTraceRe = 'DbSimple_.*::.* | call_user_func.*';
+    public $error = null;
+    public $errmsg = null;
+    public $errorHandler = null;
+    public $ignoresInTraceRe = 'DbSimple_.*::.* | call_user_func.*';
 
     /**
      * abstract void _logQuery($query)

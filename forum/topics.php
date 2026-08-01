@@ -1,9 +1,17 @@
-<?
+<?php
+define('AntiBK', true);
+include("../engline/config.php");
+include("../engline/dbsimple/Generic.php");
+include("../engline/functions/functions.php");
+
+$adb = DbSimple_Generic::connect($database['adb']);
+$adb->query("SET NAMES ? ", $database['db_encoding']);
+$adb->setErrorHandler("databaseErrorHandler");
 
 $f = addslashes($f);
 $topic = addslashes($topic);
 
-$conf=mysql_fetch_array(mysql_query("SELECT title FROM forums where name='".$f."'"));
+$conf = $adb->selectRow("SELECT title FROM forums WHERE name=?", $f);
 echo"<br><center><B class=title><U>Форум :: \"".$conf['title']."\"</U></B></center><br>";
 
 echo"<script language=JavaScript>
@@ -14,12 +22,12 @@ document.all.addtext.value+= ''+text+''; }
 
 
 
-$topics=mysql_fetch_array(mysql_query("SELECT * FROM topics where id='$topic'"));
+$topics = $adb->selectRow("SELECT * FROM topics WHERE id=?", $topic);
 if (empty($topics['id'])) { $err="Указанная Вами тема не найдена!"; } else {
 
 
         // Разбиваем на страницы
-        $numo = mysql_numrows(mysql_query("SELECT * FROM posts where top_id='$topic'")); // Число топиков в данной категории
+        $numo = $adb->selectCell("SELECT COUNT(*) FROM posts WHERE top_id=?", $topic); // Число топиков в данной категории
 
         if ($p=="" or $p=="0" or !isset($p)) { $p="1"; }
 
@@ -89,10 +97,9 @@ if (empty($topics['id'])) { $err="Указанная Вами тема не на
 
 
         // Посты юзеров
-        $post=mysql_query("SELECT * FROM posts where top_id='".$topic."' ORDER BY id LIMIT ".$l1.", ".$l2."");
+        $posts_list = $adb->select("SELECT * FROM posts WHERE top_id=? ORDER BY id LIMIT ?d, ?d", $topic, $l1, $l2);
 
-        for ($i=0; $i<mysql_num_rows($post); $i++) {
-                $posts=mysql_fetch_array($post);
+        foreach ($posts_list as $posts) {
 
                 echo"
                 <TABLE width=95% cellspacing=0 cellpadding=0 border=0>
@@ -201,7 +208,8 @@ if ($p != $i) $pages .= " <a href=?f=".$f."&p=".$i.">[".$i."]</a>";
 else $pages .= " <b>[$i]</b>"; }
 //
 
-$conf=mysql_fetch_array(mysql_query("SELECT title FROM forums where name='".$f."'"));
+// Конвертировано для PHP 8.3 - используется DbSimple вместо mysql_*
+$conf = $adb->selectRow("SELECT title FROM forums WHERE name = ?s", $f);
 echo"<br><center><B class=title><U>Форум :: \"".$conf['title']."\"</U></B></center><br>";
 
 echo"<script language=JavaScript>

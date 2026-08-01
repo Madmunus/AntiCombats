@@ -1,8 +1,8 @@
-<?
+<?php
 defined('AntiBK') or die("Доступ запрещен!");
 
 $date = (isset($_POST['date']) && eregi("^[0-9]+\.[0-9]+", $_POST['date'])) ?utf8_substr(htmlspecialchars($_POST['date']), 0, 5) :date('m.y');
-$split = split('\.', $date);
+$split = explode('\.', $date);
 $first_time  = mktime(0, 0, 0, $split[0], 01, $split[1]);
 $second_time = mktime(0, 0, 0, $split[0], date("t", $first_time), $split[1]);
 
@@ -20,21 +20,21 @@ $rows = $adb->select("SELECT `action`,
 <style>
 body {background-color: #e2e0e0;}
 </style>
-<p align="right"><input type="button" class="nav" value="<?echo $lang['return'];?>" id="link" link="inv"></p>
+<p align="right"><input type="button" class="nav" value="<?phpecho $lang['return'];?>" id="link" link="inv"></p>
 <h3>Отчет системы безопасности</h3>
 <form action="?action=report" method="post">
 Вы можете получить отчет о заходах за указанный месяц<br>
-<?
+<?php
 if (count($rows) == 0)
   echo "<center><font color='red'>Нет данных за этот период.</font></center>";
 ?>
-Укажите месяц, на который хотите получить отчет <small>(в формате mm.yy)</small>: <input type="text" name="date" value="<?echo $date;?>"> <input type="submit" value="Посмотреть">
+Укажите месяц, на который хотите получить отчет <small>(в формате mm.yy)</small>: <input type="text" name="date" value="<?phpecho $date;?>"> <input type="submit" value="Посмотреть">
 </form><br>
 <table width="100%" bgcolor="#F0F0F0">
 <tr>
 <td>
-<h3>Отчет системы безопасности за <?echo $date;?></h3>
-<?
+<h3>Отчет системы безопасности за <?phpecho $date;?></h3>
+<?php
 $reports = '';
 foreach ($rows as $auth)
 {

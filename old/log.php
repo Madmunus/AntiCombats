@@ -1,4 +1,4 @@
-<?
+<?php
 session_start();
 include "functions.php";
 include "conf.php";
@@ -11,9 +11,9 @@ mysql_query("SET CHARSET cp1251");
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta http-equiv="Content-Language" content="ru">
 <LINK REL=StyleSheet HREF='styles/style.css' TYPE='text/css'>
-<title>Просмотр лога боя #<?echo $log;?></title>
+<title>Просмотр лога боя #<?phpecho $log;?></title>
 <body bgcolor=#dedede>
-<?
+<?php
 if(empty($log)){
 print "Не указан ID боя!";
 die();

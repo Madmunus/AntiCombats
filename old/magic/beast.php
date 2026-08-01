@@ -1,4 +1,4 @@
-<?
+<?php
 if(empty($conf)){
 ?>
 <div align=right>
@@ -7,7 +7,7 @@ if(empty($conf)){
 </table>
 <table border=0 bgcolor=#cccccc cellpadding=0 cellspacing=0 width=300 height=60>
 <tr><td align=left valign=top>
-<form name='ligthning' action='?act=magic&school=earth&scroll=<?echo $scroll?>&conf=1' method='post'>
+<form name='ligthning' action='?act=magic&school=earth&scroll=<?phpecho $scroll?>&conf=1' method='post'>
 <small>
 &nbsp&nbspСитхия земли<BR>
 &nbsp&nbspЗаклятие "Призвать зверя"<BR>
@@ -21,7 +21,7 @@ if(empty($conf)){
 <td width=10><img src='img/cor_l_b.gif'></td><td bgcolor=#cccccc><img src='img/10_10.gif'></td><td width=10><img src='img/cor_r_b.gif'></td>
 </table>
 </div>
-<?
+<?php
 }
 else if($db["battle"]!=0 AND $conf == 1){
 $bid = $db["battle"];

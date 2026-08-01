@@ -1,4 +1,4 @@
-<?
+<?php
 defined('AntiBK') or die ("Доступ запрещен!");
 
 $r_login = (isset($_POST['r_login'])) ?$_POST['r_login'] :"";
@@ -7,7 +7,7 @@ $r_login = (isset($_POST['r_login'])) ?$_POST['r_login'] :"";
 <strong>Логин</strong><br>
 <input type="text" name="r_login" size="25">
 <input type="submit" name="submit" value="Далее"></form>
-<?
+<?php
 if (isset($_POST['r_login']))
 {
     $sql1 = $adb->query("UPDATE `inv` SET `wear` = '0' WHERE `owner` = '$r_login';");

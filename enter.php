@@ -1,4 +1,4 @@
-<?
+<?php
 session_start();
 define('AntiBK', true);
 
@@ -31,7 +31,7 @@ $enter = $adb->selectCell("SELECT `login` FROM `server_info`;");
   </script>
 </head>
 <body bgcolor="#ffffff">
-<?
+<?php
 if (!$enter)
   error('Сервер оффлайн');
 else if (empty($login))

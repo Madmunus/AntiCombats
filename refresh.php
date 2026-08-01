@@ -1,4 +1,4 @@
-<?
+<?php
 session_start();
 define('AntiBK', true);
 
@@ -25,7 +25,7 @@ $char->test->Zayavka();
 <script src="scripts/jquery.js" type="text/javascript"></script>
 </head>
 <body topmargin="0">
-<?
+<?php
 $char_db = $char->getChar('char_db', 'login', 'room', 'city', 'battle', 'battle_opponent');
 ArrToVar($char_db);
 

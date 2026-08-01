@@ -1,4 +1,4 @@
- <?
+<?php
  $mine_level = $WINNER_DATA["next_up"];
 
        $exp_table=array();

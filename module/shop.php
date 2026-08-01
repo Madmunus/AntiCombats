@@ -1,4 +1,4 @@
-<?
+<?php
 defined('AntiBK') or die("Доступ запрещен!");
 
 $shop_section = $char->city->getRoom($room, $city, 'shop_section');
@@ -11,25 +11,25 @@ $section_shop = (array_key_exists($section_shop, $data['sections_shop'])) ?$sect
 <tr>
 <td valign='top'>
 <center><h3>Магазин</h3></center>
-  <font color='red' id='error'><?$char->error->getFormattedError($error, $parameters);?></font>
+  <font color='red' id='error'><?php$char->error->getFormattedError($error, $parameters);?></font>
   <table border='0' width='100%' cellpadding='0' cellspacing='0' bgcolor='#A5A5A5'>
-    <tr><td align='center'><b>Отдел "<span id="shop_title"><?echo $lang[$data['sections_shop'][$section_shop][1]].$lang['shop_'.$section_shop];?></span>"</b>
-<?    echo ($section_shop == 'sell') ?"<br>Здесь вы можете продать свои вещи, за жалкие гроши...<br>У вас в наличии:" :"";?>
+    <tr><td align='center'><b>Отдел "<span id="shop_title"><?phpecho $lang[$data['sections_shop'][$section_shop][1]].$lang['shop_'.$section_shop];?></span>"</b>
+<?php    echo ($section_shop == 'sell') ?"<br>Здесь вы можете продать свои вещи, за жалкие гроши...<br>У вас в наличии:" :"";?>
     </td></tr>
     <tr><td align='left'>
-<?if ($section_shop != 'sell'){?>
+<?phpif ($section_shop != 'sell'){?>
       <table cellspacing='4' cellpadding='0' width='100%'><tr>
         <td width='60'><b>Фильтр:</b>&nbsp;</td>
-        <td width='60'>ур.:<input type="text" name="level_filter" size="4" value='<?echo $level_filter;?>'></td>
-        <td width='180'>название:<input type="text" name="name_filter" value='<?echo $name_filter;?>'></td>
+        <td width='60'>ур.:<input type="text" name="level_filter" size="4" value='<?phpecho $level_filter;?>'></td>
+        <td width='180'>название:<input type="text" name="name_filter" value='<?phpecho $name_filter;?>'></td>
         <td width='60'><input type="button" value="Применить" onclick="shopSection();"></td>
         <td align='right'><img id='loadbar' src='img/loadbar.gif' class='loadbar'></td>
       </tr></table>
-<?}?>
+<?php}?>
     </td></tr>
   </table>
   <div id="section">
-<?
+<?php
 $check_level = ($level_filter > 0 || $level_filter == '0');
 if ($section_shop == 'sell')
 {
@@ -57,23 +57,23 @@ else
   </div>
 </td>
 <td width='260' valign='top'>
-  <div align='right'><?getUpdateBar();?></div>
+  <div align='right'><?phpgetUpdateBar();?></div>
   <table width="148" align='right' border="0" cellpadding="0" cellspacing="1" bgcolor="#DEDEDE">
     <tr>
       <td bgcolor="#D3D3D3"><img src="img/links.gif" width="9" height="7" /></td>
-      <td bgcolor="#D3D3D3" nowrap><a href="?action=go&room_go=centsquare" class="passage" alt="<?echo $char->city->getRoomOnline('centsquare', 'mini');?>">Центральная Площадь</a></td>
+      <td bgcolor="#D3D3D3" nowrap><a href="?action=go&room_go=centsquare" class="passage" alt="<?phpecho $char->city->getRoomOnline('centsquare', 'mini');?>">Центральная Площадь</a></td>
     </tr>
   </table><br><br>
   <div align='right'><small>
-  Масса: <b><?echo "<span id='mass'>$mass</span>/$maxmass";?></b><br>
-  У вас в наличии: <b><font color='#339900' id='money'><?echo getMoney($money);?></font></b> кр.
+  Масса: <b><?phpecho "<span id='mass'>$mass</span>/$maxmass";?></b><br>
+  У вас в наличии: <b><font color='#339900' id='money'><?phpecho getMoney($money);?></font></b> кр.
   </small></div>
 <div style="margin-left: 25px; margin-top: 10px;">
-<?
+<?php
 echo ($section_shop == 'sell') ?"<input type='button' value='Купить вещи' id='link' link='none' class='nav'>" :"<input type='button' value='Продать вещи' id='link' link='none&section_shop=sell' class='nav'>";
 ?>
 <div style="background-color: #A5A5A5; padding: 1px; font-weight: bold; text-align: center;">Отделы магазина</div>
-<?
+<?php
 foreach ($data['sections_shop'] as $key => $value)
 {
   if ($section_shop == 'sell')

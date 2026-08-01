@@ -1,4 +1,4 @@
-<?
+<?php
 if(empty($target)){
 ?>
 <div align=right>
@@ -7,7 +7,7 @@ if(empty($target)){
 </table>
 <table border=0 bgcolor=#cccccc cellpadding=0 cellspacing=0 width=300 height=60>
 <tr><td align=left valign=top>
-<form name='ligthning' action='?act=magic&school=fire&scroll=<?echo $scroll?>' method='post'>
+<form name='ligthning' action='?act=magic&school=fire&scroll=<?phpecho $scroll?>' method='post'>
 <small>
 &nbsp&nbspСитхия огня<BR>
 &nbsp&nbspЗаклятие "Молния"<BR>
@@ -23,7 +23,7 @@ if(empty($target)){
 <td width=10><img src='img/cor_l_b.gif'></td><td bgcolor=#cccccc><img src='img/10_10.gif'></td><td width=10><img src='img/cor_r_b.gif'></td>
 </table>
 </div>
-<?
+<?php
 }
 else if($db["battle"]!=0){
 $S="select * from characters where login='$target'";

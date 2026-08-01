@@ -3,7 +3,7 @@
 <LINK REL=StyleSheet HREF='styles/style.css' TYPE='text/css'>
 
 
-<?
+<?php
 //детект логина из мэйна и данных юзера
 $login=$_SESSION["login"];
 if(empty($login) or $login!=$db["login"]){
@@ -28,19 +28,19 @@ $pr_3=10;
 </tr>
 <tr>
   <td bgcolor='#ffffff'>XXY, YXX</td>
-  <td bgcolor='#ffffff'>*<?=$pr_1?></td>
+  <td bgcolor='#ffffff'>*<?php=$pr_1?></td>
 </tr>
 <tr>
   <td bgcolor='#ffffff'>XYX</td>
-  <td bgcolor='#ffffff'>*<?=$pr_2?></td>
+  <td bgcolor='#ffffff'>*<?php=$pr_2?></td>
 </tr>
 <tr>
   <td bgcolor='#ffffff'>XXX</td>
-  <td bgcolor='#ffffff'>*<?=$pr_3?></td>
+  <td bgcolor='#ffffff'>*<?php=$pr_3?></td>
 </tr>
 <tr>
   <td bgcolor='#ffffff' colspan='2' align="center">
-  <?
+  <?php
   $gr_1=rand(0,9);
 $gr_2=rand(0,9);
 $gr_3=rand(0,9);
@@ -86,7 +86,7 @@ history($login,'проиграл',$gm,$ip,'казино');
 print"вы проиграли $gm кр.";
 }
 }elseif($gm<=0 and $game=="1" and $_SESSION["sc"]==$ses){print "поставьте хоть 1 кр.";}
-elseif($gm>$db["money"] and $_SESSION["sc"]==$ses){print "у вас нет столько кредитов";}else{?>&nbsp;<?}
+elseif($gm>$db["money"] and $_SESSION["sc"]==$ses){print "у вас нет столько кредитов";}else{?>&nbsp;<?php}
 $b = rand(0,9);
 $c = rand(0,9);
 $d = rand(0,9);
@@ -101,7 +101,7 @@ $_SESSION["sc"]=$sescode;
 
 <tr>
   <td bgcolor='#ffffff'>Ваши деньги</td>
-  <td bgcolor='#ffffff'> <?=$db["money"]?> кр.</td>
+  <td bgcolor='#ffffff'> <?php=$db["money"]?> кр.</td>
 </tr>
 <tr>
   <td bgcolor='#ffffff'>Ставка</td>
@@ -111,6 +111,6 @@ $_SESSION["sc"]=$sescode;
 <td colspan="2" align="center">
 <input type=button class=but value=" Выйти " style="height=18;font-size:11 px" onclick="location.href='main.php?act=go&room_go=casino'">
 <input type="hidden" name="game" value="1">
-<input type="hidden" name="ses" value="<?=$sescode?>">
+<input type="hidden" name="ses" value="<?php=$sescode?>">
 <input type="submit" class=but name="" value="Сыграть" style="height=18;font-size:11 px"/>
 </td></tr></table></form>

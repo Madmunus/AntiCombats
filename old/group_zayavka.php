@@ -1,4 +1,4 @@
-<?
+<?php
 session_start();
 include "conf.php";
 if (ereg("[<>\\/-]",$act) or ereg("[<>\\/-]",$log) or ereg("[<>\\/-]",$boy) or ereg("[<>\\/-]",$timeout) or ereg("[<>\\/-]",$enemy_count)
@@ -76,12 +76,12 @@ print "<table valign=\"bottom\" border=0 cellpadding=0 cellspacing=0 width=260><
 
 
 <script language=javascript>
-show(<?echo "$hp[0],$hp[1],100"?>);
-<?
+show(<?phpecho "$hp[0],$hp[1],100"?>);
+<?php
 if($level>=6){
 ?>
-showMN(<?echo "$mp[0],$mp[1]"?>);
-<?
+showMN(<?phpecho "$mp[0],$mp[1]"?>);
+<?php
 }
 ?>
 var rnd = Math.random();
@@ -131,7 +131,7 @@ document.write("<table border=0 cellpadding=0 cellspacing=0 width=260 height=8 b
 }
 
 </script>
-<?
+<?php
 }
 
 $data = mysql_connect($base_name, $base_user, $base_pass);
@@ -182,7 +182,7 @@ if ($orden_d==1) {$orden="<img src='img/orden/pal/$rang.gif' width=12 height=15 
     
 <td align=left valign=middle width=50%>
 <b><font size="2">
-<? showHPMPg($login); ?>
+<?php showHPMPg($login); ?>
 </font></b>
 </td>
 
@@ -194,7 +194,7 @@ if ($orden_d==1) {$orden="<img src='img/orden/pal/$rang.gif' width=12 height=15 
 <table align=center cellSpacing=1 cellPadding=1 width="100%">
   <tr>
   
-<?if($room == "Зал воинов" or $room == "Зал воинов 2" or $room == "Зал воинов 3" or $room == "Будуар" or $room == "Рыцарский Зал" or $room == "Комната Знахаря" or $room == "Торговый Зал" or $room == "Зал закона"){  
+<?phpif($room == "Зал воинов" or $room == "Зал воинов 2" or $room == "Зал воинов 3" or $room == "Будуар" or $room == "Рыцарский Зал" or $room == "Комната Знахаря" or $room == "Торговый Зал" or $room == "Зал закона"){  
 print"<TD class=m width=40>&nbsp;<B>Бои:</B></TD>
 <TD class=m><A href=\"zayavka.php?boy=phisic\" class=nick>Физические</A></TD>
 <TD class=m><A href=\"boy_bot.php\" class=nick>С ботом</A></TD>
@@ -222,7 +222,7 @@ print"<TD class=m width=40>&nbsp;<B>Бои:</B></TD>
 die();}
 ?>
 </div> 
-<?
+<?php
 $data = mysql_connect($base_name, $base_user, $base_pass);
 mysql_select_db($db_name,$data);
 mysql_query("SET CHARSET cp1251");
@@ -428,7 +428,7 @@ if(empty($act)){
 <input type=button value="Обновить" onclick="javascript:location.href='group_zayavka.php'">
 </td>
 </tr></table>
-<?
+<?php
 }
 else if($act=="podat"){
 $enemy_count=htmlspecialchars($enemy_count);
@@ -494,7 +494,7 @@ $comment=htmlspecialchars($comment);
 <input type=button value="Обновить" onclick="javascript:location.href='group_zayavka.php'">
 </td></tr></table>
 </form>
-<?
+<?php
 }
 }
 
@@ -508,7 +508,7 @@ if($act=="get" or $act=="submit"){
 <input type=button value="Обновить" onclick="javascript:location.href='group_zayavka.php'">
 </td>
 </tr></table>
-<?
+<?php
 }
 
 $creator=array();

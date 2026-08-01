@@ -1,4 +1,4 @@
-<?
+<?php
 session_start();
 if(empty($login)){
 print "<script>top.location.href='index.php';</script>";
@@ -8,7 +8,7 @@ print "<script>top.location.href='index.php';</script>";
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta http-equiv="Content-Language" content="ru">
 <LINK REL=StyleSheet HREF='styles/style.css' TYPE='text/css'>
-<?
+<?php
 include "conf.php";
 if (ereg("[<>\\/-]",$per) or ereg("[<>\\/-]",$tar) or ereg("[<>\\/-]",$n_date)) {print "?!"; exit();}
 $per=htmlspecialchars($per);
@@ -35,10 +35,10 @@ $d=date("d.m.Y", mktime($chas-$GSM));
 Введите логин персонажа и дату(дд.мм.гггг):<BR>
 <small>Оставьте поле дата пустым, чтобы просмотреть ВСЕ переводы персонажа</small><BR>
 <input type=text class=new name=tar>&nbsp
-<input typy=text class=new name=n_date value=<?echo $d;?>>
+<input typy=text class=new name=n_date value=<?phpecho $d;?>>
 <input type=submit value="  OK  " class=new>
 </form>
-<?
+<?php
 }
 
 else{

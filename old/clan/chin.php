@@ -1,4 +1,4 @@
-<?
+<?php
 if(empty($target)){
 ?>
 <div align=right>
@@ -13,7 +13,7 @@ if(empty($target)){
 </form>
 </td></tr>
 </table>
-<?
+<?php
 }
 else if($db["glava"]==1){
 $S="select * from characters where login='$target'";
@@ -29,7 +29,7 @@ if(empty($new_c)){
 <div align=right>
 <table border=0 class=inv width=300 height=120>
 <tr><td align=left valign=top>
-<form name='chin' action='main.php?act=clan&do=2&a=chin&target=<?echo $target?>' method='post'>
+<form name='chin' action='main.php?act=clan&do=2&a=chin&target=<?phpecho $target?>' method='post'>
 статус:<BR>
 <input type=text name='new_c' class=new size=15>
 
@@ -38,7 +38,7 @@ if(empty($new_c)){
 </form>
 </td></tr>
 </table>
-<?
+<?php
 
 }
 else{

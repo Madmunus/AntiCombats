@@ -1,4 +1,4 @@
-<?
+<?php
 if (!function_exists("getallheaders"))
   include(dirname(__FILE__)."/headers.function.php");
 

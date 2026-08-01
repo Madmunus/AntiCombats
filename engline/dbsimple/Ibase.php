@@ -32,18 +32,18 @@ define('IBASE_BEST_FETCH', IBASE_UNIXTIME);
 
 class DbSimple_Ibase extends DbSimple_Generic_Database
 {
-    var $DbSimple_Ibase_BEST_TRANSACTION = IBASE_BEST_TRANSACTION;
-    var $DbSimple_Ibase_USE_NATIVE_PHOLDERS = true;
-    var $fetchFlags = IBASE_BEST_FETCH;
-    var $link;
-    var $trans;
-    var $prepareCache = array();
+    public $DbSimple_Ibase_BEST_TRANSACTION = IBASE_BEST_TRANSACTION;
+    public $DbSimple_Ibase_USE_NATIVE_PHOLDERS = true;
+    public $fetchFlags = IBASE_BEST_FETCH;
+    public $link;
+    public $trans;
+    public $prepareCache = array();
 
     /**
      * constructor(string $dsn)
      * Connect to Interbase/Firebird.
      */
-    function DbSimple_Ibase($dsn)
+    function __construct($dsn)
     {
         $p = DbSimple_Generic::parseDSN($dsn);
         if (!is_callable('ibase_connect')) {
@@ -77,9 +77,9 @@ class DbSimple_Ibase extends DbSimple_Generic_Database
         $this->trans = @ibase_trans($parameters, $this->link);
     }
 
-    function& _performNewBlob($blobid=null)
+    function _performNewBlob($blobid=null)
     {
-        $obj =& new DbSimple_Ibase_Blob($this, $blobid);
+        $obj = new DbSimple_Ibase_Blob($this, $blobid);
         return $obj;
     }
 
@@ -213,11 +213,11 @@ class DbSimple_Ibase extends DbSimple_Generic_Database
 
 class DbSimple_Ibase_Blob extends DbSimple_Generic_Blob
 {
-    var $blob; // resourse link
-    var $id;
-    var $database;
+    public $blob; // resourse link
+    public $id;
+    public $database;
 
-    function DbSimple_Ibase_Blob(&$database, $id=null)
+    function __construct(&$database, $id=null)
     {
         $this->database =& $database;
         $this->id = $id;

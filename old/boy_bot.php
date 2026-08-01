@@ -1,4 +1,4 @@
-<?
+<?php
 session_start();
 
 include("engline/config.php");
@@ -79,7 +79,7 @@ $orden = ($orden_d == 1) ?"<img src='img/orden/pal/$rang.gif' width='12' height=
 <div align="left">
 <table align="center" width="100%" border="0" cellspacing="0" cellpadding="0">
     <tr>
-        <td align="left" valign="middle" width="50%"><b><font size="2"><?showHPMP($login);?></font></b></td>
+        <td align="left" valign="middle" width="50%"><b><font size="2"><?phpshowHPMP($login);?></font></b></td>
         <td align="right" valign="middle">
             <input type="button" value="Обновить" onclick="location.href = 'boy_bot.php';">
             <input type="button" value="Вернуться" onclick="location.href = 'main.php?act=none';">
@@ -88,7 +88,7 @@ $orden = ($orden_d == 1) ?"<img src='img/orden/pal/$rang.gif' width='12' height=
 </table>
 <table align="center" cellSpacing="1" cellPadding="1" width="100%">
     <tr>
-<?
+<?php
 if($room == "Зал воинов" || $room == "Зал воинов 2" || $room == "Зал воинов 3" || $room == "Будуар" || $room == "Рыцарский Зал" || $room == "Комната Знахаря" || $room == "Торговый Зал" || $room == "Зал закона")
 {
 echo "<td class='m' width='40'>&nbsp;<b>Бои:</b></td>";
@@ -119,7 +119,7 @@ die ();
 <table width="100%"><td align="right"><input type="button" value="Обновить" onclick="location.href = 'boy_bot.php';"></td></table>
 <table width="65%" align="center"><td align="center">Бои с ботом - это бои где вы принимаете участие в поединке с ботом вашего уровня. Для того чтобы начать поединок нажмите на кнопку "Начать поединок".<br><small><font color="red">* Бои с ботом проводятся без обмундирования.</font></small></td></table>
 <center><br>
-<?
+<?php
 if (isset($train))
 {
     $q_team1 = $adb->selectCell("SELECT `player` FROM `team1` WHERE `player` = '$login';");
