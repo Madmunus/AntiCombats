@@ -1,4 +1,4 @@
-<?
+<?php
 if(empty($target)){$target="";}
 if (ereg("[<>\\/-]",$act) or ereg("[<>\\/-]",$give_zl) or ereg("[<>\\/-]",$target) or ereg("[<>\\/-]",$to) or ereg("[<>\\/-]",$item_id) or ereg("[<>\\/-]",$item) or ereg("[<>\\/-]",$log)) {print "?!"; exit();}
 $act=htmlspecialchars($act);
@@ -46,7 +46,7 @@ if(empty($target)){
 </table>
 </table>
 
-<?
+<?php
 }
 else{
 $user_sql="SELECT * FROM characters WHERE login='$login'";
@@ -115,7 +115,7 @@ else{
         <tr>
           <td width="10" height="5"><img border="0" src="img/cor_l_t.gif" width="10" height="10"></td>
           <td height="10" bgcolor="#CCCCCC" rowspan="2" valign="middle" colspan="2">
-<?
+<?php
 $t_level=$target_dat["level"];
 $p = str_replace(" ","%20",$target);
 print "<b>$orden$clan$target</b> [$t_level]<a href='info.php?log=$p' target=_new><img src='img/inf.gif' border=0 alt='Информация о персонаже $target'></a>";
@@ -130,14 +130,14 @@ print "<b>$orden$clan$target</b> [$t_level]<a href='info.php?log=$p' target=_new
 </table>
 
 <table border=0 bgcolor=#cccccc width=230 height=60><tr><td align=center valign=top>
-<?
+<?php
 if(empty($give_zl)){$give_zl="";}
 if(!empty($give_zl)){
 give_money($login,$target,$give_zl);
 }
 ?>
 
-<form name='give_money' action='main.php?act=perevod&target=<?echo $target?>' method='post'>
+<form name='give_money' action='main.php?act=perevod&target=<?phpecho $target?>' method='post'>
 Передать деньги:<br>
 <input type=text name='give_zl' class=new size=12>
 <input type=submit value=" OK " class=new>
@@ -150,13 +150,13 @@ give_money($login,$target,$give_zl);
 <td width=10><img src='img/cor_r_b.gif'></td>
 </tr>
 </table>
-<? 
+<?php 
 $user_sql="SELECT * FROM characters WHERE login='$login'";
 $user_q=mysql_query($user_sql);
 $user_dat=mysql_fetch_array($user_q);
 $money1=$user_dat["money"];
 $money = sprintf ("%01.2f", $money1);?>
-<br><Br><center><B>У вас в наличии:<FONT COLOR=339900> <?echo $money;?></font> кр.</B></center>
+<br><Br><center><B>У вас в наличии:<FONT COLOR=339900> <?phpecho $money;?></font> кр.</B></center>
 </td>
 <td width=10%><img src='img/1_10.gif'></tD>
 <td valign=top><table border=0 width=660 cellpadding=0 cellspacing=0>
@@ -165,7 +165,7 @@ $money = sprintf ("%01.2f", $money1);?>
 <table border="0" cellspacing="0" cellpadding="0" width="100%">
         <tr>
           <td width="10" height="5"><img border="0" src="img/cor_l_t.gif" width="10" height="10"></td>
-          <td height="10" bgcolor="#CCCCCC" rowspan="2" valign="middle" colspan="2">Выберете вещь из Вашего рюкзака, которую вы хотите подарить/передать персонажу "<b><?echo $target?></b>".</td>
+          <td height="10" bgcolor="#CCCCCC" rowspan="2" valign="middle" colspan="2">Выберете вещь из Вашего рюкзака, которую вы хотите подарить/передать персонажу "<b><?phpecho $target?></b>".</td>
           <td width="10" height="5"><img border="0" src="img/cor_r_t.gif" width="10" height="10"></td>
         </tr>
         <tr>
@@ -175,7 +175,7 @@ $money = sprintf ("%01.2f", $money1);?>
 </table>
 
 <table border=0 bgcolor=#cccccc width=100% height=100><tr><TD valign=top>
-<?
+<?php
 
 
 $total=0;
@@ -577,7 +577,7 @@ print "<center><Br><br>У вас нет вешей в рюкзаке.</center>";
 </tr>
 </table>
 
-<?
+<?php
 }
 
 }

@@ -1,4 +1,4 @@
-<?
+<?php
 session_start();
 define('AntiBK', true);
 
@@ -30,7 +30,7 @@ ArrToVar($char_db);
   <script type="text/javascript">
     try {top.checkGame();} catch(e) {location.href = 'index.php';}
 
-    var mail = <?echo $mail;?>;
+    var mail = <?phpecho $mail;?>;
 
     $(function (){
       var cur_Id = '4';
@@ -53,10 +53,10 @@ ArrToVar($char_db);
   </script>
 </head>
 <body>
-<div style="background: url(img/city/top_lite_<?echo $city;?>_11.gif) repeat-x bottom;">
-<table width="100%" border="0" cellspacing="0" cellpadding="0" style="background: url(img/city/top_lite_<?echo $city;?>_03.gif) repeat-x top;">
+<div style="background: url(img/city/top_lite_<?phpecho $city;?>_11.gif) repeat-x bottom;">
+<table width="100%" border="0" cellspacing="0" cellpadding="0" style="background: url(img/city/top_lite_<?phpecho $city;?>_03.gif) repeat-x top;">
   <tr>
-    <td align="left"><img height="14" src="img/city/top_lite_<?echo $city;?>_01.gif" width="64" /><span id="mail" style="position: absolute;"></span></td>
+    <td align="left"><img height="14" src="img/city/top_lite_<?phpecho $city;?>_01.gif" width="64" /><span id="mail" style="position: absolute;"></span></td>
     <td align="right">
       <table cellspacing="0" cellpadding="0" border="0" width="500">
         <tr valign="bottom">
@@ -68,7 +68,7 @@ ArrToVar($char_db);
                 <td><img height="11" src="img/mennu112_09.gif" width="1" /></td>
                 <td class="main_text" id="2">Общение</td>
                 <td><img height="11" src="img/mennu112_09.gif" width="1" /></td>
-                <td class="main_text" id="3"><?echo $lang['security'];?></td>
+                <td class="main_text" id="3"><?phpecho $lang['security'];?></td>
                 <td><img height="11" src="img/mennu112_09.gif" width="1" /></td>
                 <td class="main_text" id="4">Персонаж</td>
                 <td><img height="11" src="img/mennu112_09.gif" width="1" /></td>
@@ -82,11 +82,11 @@ ArrToVar($char_db);
     </td>
   </tr>
   <tr>
-    <td align="left"><img height="17" src="img/city/top_lite_<?echo $city;?>_07.gif" width="15" /><img height="17" src="img/city/top_lite_<?echo $city;?>_08.gif" width="152" /></td>
+    <td align="left"><img height="17" src="img/city/top_lite_<?phpecho $city;?>_07.gif" width="15" /><img height="17" src="img/city/top_lite_<?phpecho $city;?>_08.gif" width="152" /></td>
     <td align="right">
-      <table cellspacing="0" cellpadding="0" width="500" border="0" style="background: url(img/city/top_lite_<?echo $city;?>_15.gif);">
+      <table cellspacing="0" cellpadding="0" width="500" border="0" style="background: url(img/city/top_lite_<?phpecho $city;?>_15.gif);">
         <tr>
-          <td align="left"><img height="17" src="img/city/top_lite_<?echo $city;?>_13.gif" width="20" /></td>
+          <td align="left"><img height="17" src="img/city/top_lite_<?phpecho $city;?>_13.gif" width="20" /></td>
           <td valign="top">
             <table cellspacing="0" cellpadding="0" width="100%" border="0" align="right">
               <tr>
@@ -111,10 +111,10 @@ ArrToVar($char_db);
                   </span>
                   <span id="menu4" class="bottom_text">
                       <a class="menutop" id="inv" href="#">Инвентарь</a>
-                    | <a class="menutop" id="skills" href="#"><?echo $lang['abilities'];?></a>
-                    | <a class="menutop" id="zayavka" href="#"><?echo $lang['fights'];?></a>
-                    | <a class="menutop" id="info" href="#"><?echo $lang['form'];?></a>
-<?
+                    | <a class="menutop" id="skills" href="#"><?phpecho $lang['abilities'];?></a>
+                    | <a class="menutop" id="zayavka" href="#"><?phpecho $lang['fights'];?></a>
+                    | <a class="menutop" id="info" href="#"><?phpecho $lang['form'];?></a>
+<?php
 if ($admin_level > 0)
   echo "| <a class='menutop' id='admin' href='#'>Админка</a>";
 ?>
@@ -123,7 +123,7 @@ if ($admin_level > 0)
               </tr>
             </table>
           </td>
-          <td align="right"><img height="17" src="img/city/top_lite_<?echo $city;?>_18.gif" width="22" /></td>
+          <td align="right"><img height="17" src="img/city/top_lite_<?phpecho $city;?>_18.gif" width="22" /></td>
         </tr>
       </table>
     </td>

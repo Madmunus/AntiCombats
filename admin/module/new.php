@@ -1,4 +1,4 @@
-<?
+<?php
 defined('AntiBK') or die ("Доступ запрещен!");
 
 $r_login = (isset($_POST['r_login'])) ?$_POST['r_login'] :"";

@@ -1,4 +1,4 @@
-<?
+<?php
 $user_sql="SELECT * FROM characters WHERE login='$login'";
 
 

@@ -1,4 +1,4 @@
-<?
+<?php
 session_start();
 $login = $_SESSION['login'];
 include "conf.php";
@@ -49,8 +49,8 @@ body {
 
 <table border=1 width=100% bordercolor=black bgcolor=#fffbbb>
 <tr>
-<td width=20% valign=top><p>Игра проведена! <? print "<a href='lotto.php?act=none'><font color='black'>Главный холл</font></a>"; ?></p>
+<td width=20% valign=top><p>Игра проведена! <?php print "<a href='lotto.php?act=none'><font color='black'>Главный холл</font></a>"; ?></p>
  </td>
-<td valign=top><p>Выпавший номер:<? print "$num"; ?></p>
-  <p>Победитель: <? print"$win"; ?> Фонд составил <? print"$fond"; ?>кр.</p></td>
+<td valign=top><p>Выпавший номер:<?php print "$num"; ?></p>
+  <p>Победитель: <?php print"$win"; ?> Фонд составил <?php print"$fond"; ?>кр.</p></td>
 </tr></table></td></tr></table></td></tr></table></td></tr></table>

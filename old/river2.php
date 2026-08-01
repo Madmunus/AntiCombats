@@ -2,7 +2,7 @@
 
 <LINK REL=StyleSheet HREF="styles/main.css" TYPE='text/css'>
 <body topmargin="5" leftmargin="5" bgcolor="#eeeeee" style="font-family: Verdana; font-size: 10pt">
-<?
+<?php
 
 include "conf.php";
 include "functions.php";

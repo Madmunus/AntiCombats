@@ -1,11 +1,11 @@
-<?
+<?php
 if(empty($target)){
 ?>
 <div align=right>
 <table border=0 class=inv width=300 height=120>
 <tr><td align=left valign=top>
 <form name='shut_up' action='main.php?act=orden&ord=1&spell=21' method='post'>
-<?
+<?php
 $n=0;
 $QUER=mysql_query("SELECT * FROM clan");
 $nums = mysql_num_rows($QUER);
@@ -18,7 +18,7 @@ $log.= "<nobr><input type=radio name=target value='$nm'> <a href='clan_inf.php?c
 }
 ?>
 <center><b>Кланы</b></center>
-<?
+<?php
 echo $log;
 ?>
 <BR>
@@ -26,7 +26,7 @@ echo $log;
 </form>
 </td></tr>
 </table>
-<?
+<?php
 }
 else if($db["login"]=='Смотритель' or $db["login"]=='Мироздатель' or $db["login"]=='ПАЛАЧ'){
 
@@ -64,7 +64,7 @@ $story = $res["story"];
 ?><center>
 <form name='chin' action='main.php?act=orden&ord=1&spell=21&target=$ns&act1=save' method='post'>
 <table border=0>
-<?
+<?php
 echo"
 <script>
 function del(){
@@ -80,6 +80,6 @@ if(confirm('Вы уверены, что хотите удалить этот к�
 <input type=hidden name=id value='$id'>
 <tr><td><input type=submit value='Сохранить данные'></td><td></form>";?><input type=button onclick="del();" value='  Удалить клан  '></td></tr></table>
 
-<?
+<?php
 }
 ?>

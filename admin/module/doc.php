@@ -1,4 +1,4 @@
-<?
+<?php
 defined('AntiBK') or die ("Доступ запрещен!");
 
 $rows = $adb->select("SELECT * FROM `admin_menu` ORDER BY `id`;");
@@ -11,7 +11,7 @@ $rows = $adb->select("SELECT * FROM `admin_menu` ORDER BY `id`;");
 <br>
 <br>
 Навигация это , то меню где расположенны основные фишки такие как:<br><br>
-<?
+<?php
 foreach ($rows as $menu)
 {
     echo "$menu[name]<br>";

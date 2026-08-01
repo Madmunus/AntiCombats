@@ -1,4 +1,4 @@
-<?
+<?php
 defined('AntiBK') or die("Доступ запрещен!");
 
 $id = getVar('id', 0);
@@ -6,7 +6,7 @@ $id2 = getVar('id2', 0);
 ?>
 <script src="scripts/move_check.js" type="text/javascript"></script>
 <script src="scripts/bank.js" type="text/javascript"></script>
-<?
+<?php
 switch ($do)
 {
   case 'create':
@@ -146,18 +146,18 @@ switch ($do)
 <tr>
   <td valign='top' nowrap width="100%"><h3>Банк</h3></td>
   <td align="right" valign='top' nowrap>
-    <?getUpdateBar();?>
+    <?phpgetUpdateBar();?>
     <table width="148" border="0" cellpadding="0" cellspacing="1" bgcolor="#DEDEDE">
       <tr>
         <td bgcolor="#D3D3D3"><img src="img/links.gif" width="9" height="7" /></td>
-        <td bgcolor="#D3D3D3" nowrap><a href="main.php?action=go&room_go=fairstreet" class="passage" alt="<?echo $char->city->getRoomOnline('fairstreet', 'mini');?>">Страшилкина улица</a></td>
+        <td bgcolor="#D3D3D3" nowrap><a href="main.php?action=go&room_go=fairstreet" class="passage" alt="<?phpecho $char->city->getRoomOnline('fairstreet', 'mini');?>">Страшилкина улица</a></td>
       </tr>
     </table>
   </td>
 </tr>
 </table>
-<font color='red' id='error'><?$char->error->getFormattedError($error, $parameters);?></font>
-<?
+<font color='red' id='error'><?php$char->error->getFormattedError($error, $parameters);?></font>
+<?php
 if (empty($_SESSION['bankСredit']))
 {
   $deist = getVar('deist');
@@ -174,7 +174,7 @@ if (empty($_SESSION['bankСredit']))
 <li>Обменный пункт. Обмен еврокредитов на кредиты
 </ol>
 Хотите открыть свой счет? Услуга платная: 3.00 кр.  <input class='nav' type="button" value="Открыть счёт" id='link' link='none&deist=new' />
-<?
+<?php
     if ($rows)
     {
 ?>
@@ -187,7 +187,7 @@ if (empty($_SESSION['bankСredit']))
     <td>Номер счета</td>
     <td colspan="2">
       <select name="id" size="0" style="width: 90px;">
-<?      foreach ($rows as $num => $id)
+<?php      foreach ($rows as $num => $id)
           echo "<option value='$id'>$id</option>";
 ?>    </select>
     </td>
@@ -202,7 +202,7 @@ if (empty($_SESSION['bankСredit']))
 </td>
 </table>
 </form>
-<?
+<?php
     }
   }
   else
@@ -213,10 +213,10 @@ if (empty($_SESSION['bankСredit']))
     $maxid = ($adb->selectCell("SELECT MAX(`id`) FROM `character_bank`;")) + 1;
 ?>
 <h4>Открытие счета</h4>
-Запишите номер вашего счета: <b><?echo $maxid;?></b><br>
-Номер счета и пароль строго привязаны только к вашему персонажу. Только персонаж <b><?echo $login;?></b> может использовать этот счет, никто другой, даже зная ваш номер и пароль, не получит доступа к нему!<br>
+Запишите номер вашего счета: <b><?phpecho $maxid;?></b><br>
+Номер счета и пароль строго привязаны только к вашему персонажу. Только персонаж <b><?phpecho $login;?></b> может использовать этот счет, никто другой, даже зная ваш номер и пароль, не получит доступа к нему!<br>
 <form action='?do=create' name='newcredit' method="post"><br>
-<input type="hidden" name="id" value="<?echo $maxid;?>">
+<input type="hidden" name="id" value="<?phpecho $maxid;?>">
 <table>
   <tr><td>Придумайте пароль к счету<br><input type='password' name='pass1' size="20"></td></tr>
   <tr><td>Введите пароль повторно<br><input type='password' name='pass2' size="20"></td></tr>
@@ -224,7 +224,7 @@ if (empty($_SESSION['bankСredit']))
   <tr><td><input type='submit' value='Открыть счет' class='nav'></td></tr>
 </table>
 </form>
-<?
+<?php
   }
 }
 else
@@ -243,15 +243,15 @@ else
 ?>
 <table width="100%">
 <tr>
-  <td valign="top" width="30%"><h4>Управление счетом</h4> &nbsp;<b>Счёт №:</b> <?echo $id;?> <a href="?do=logout" title="Окончить работу c текущим счетом" class="nick">[x]</a></td>
+  <td valign="top" width="30%"><h4>Управление счетом</h4> &nbsp;<b>Счёт №:</b> <?phpecho $id;?> <a href="?do=logout" title="Окончить работу c текущим счетом" class="nick">[x]</a></td>
   <td valign="top" align="center" width="17%">
     <fieldset>
     <legend><b>У вас на счету</b></legend>
     <table>
-      <tr><td>Кредитов:</td><td><b><?echo $cash;?> кр.</b></td></tr>
-      <tr><td>Еврокредитов:</td><td><b><?echo $euro;?> екр.</b></td></tr>
+      <tr><td>Кредитов:</td><td><b><?phpecho $cash;?> кр.</b></td></tr>
+      <tr><td>Еврокредитов:</td><td><b><?phpecho $euro;?> екр.</b></td></tr>
       <tr><td colspan="2"><hr></td></tr>
-      <tr><td>При себе наличных:</td><td><b><?echo getMoney($money);?> кр.</b></td></tr>
+      <tr><td>При себе наличных:</td><td><b><?phpecho getMoney($money);?> кр.</b></td></tr>
     </table>
     </fieldset>
   </td>
@@ -264,13 +264,13 @@ else
   <td valign="top" width="53%">
     <fieldset>
       <legend><b>Пополнить счет</b></legend>
-      Сумма <input type="text" name="add_sum" size="6" maxlength="10"<?echo $m_dis;?>> кр. <input type="submit" class="nav" name="add_kredit" value="Положить кредиты на счет"<?echo $m_dis;?>><br>
+      Сумма <input type="text" name="add_sum" size="6" maxlength="10"<?phpecho $m_dis;?>> кр. <input type="submit" class="nav" name="add_kredit" value="Положить кредиты на счет"<?phpecho $m_dis;?>><br>
     </fieldset>
   </td>
   <td valign="top" width="47%">
     <fieldset>
       <legend><b>Снять со счета</b></legend>
-      Сумма <input type="text" name="get_sum" size="6" maxlength="10"<?echo $g_dis;?>> кр. <input type="submit" class="nav" name="get_kredit" value="Снять кредиты со счета"<?echo $g_dis;?>><br>
+      Сумма <input type="text" name="get_sum" size="6" maxlength="10"<?phpecho $g_dis;?>> кр. <input type="submit" class="nav" name="get_kredit" value="Снять кредиты со счета"<?phpecho $g_dis;?>><br>
     </fieldset>
   </td>
 </tr>
@@ -278,16 +278,16 @@ else
   <td valign="top">
     <fieldset>
       <legend><b>Перевести кредиты на другой счет</b></legend>
-      Сумма <input type="text" name="transfer_sum" size="6" maxlength="10"<?echo $g_dis;?>> кр.<br>
-      Номер счета куда перевести кредиты <input type="text" name="id2" size="12" maxlength="15"<?echo $g_dis;?>><br>
-      <input type="submit" class="nav" name="transfer_kredit" value="Перевести кредиты на другой счет"<?echo $g_dis;?>><br>
+      Сумма <input type="text" name="transfer_sum" size="6" maxlength="10"<?phpecho $g_dis;?>> кр.<br>
+      Номер счета куда перевести кредиты <input type="text" name="id2" size="12" maxlength="15"<?phpecho $g_dis;?>><br>
+      <input type="submit" class="nav" name="transfer_kredit" value="Перевести кредиты на другой счет"<?phpecho $g_dis;?>><br>
       Комиссия составляет <b>3.00 %</b> от суммы, но не менее <b>1.00 кр</b>.
     </fieldset>
   </td>
   <td valign="top">
     <fieldset>
       <legend><b>Курс еврокредита к мировой валюте</b></legend>
-      Данные на <?echo DATE_NO_SEC;?><br>
+      Данные на <?phpecho DATE_NO_SEC;?><br>
       1 екр. = <b>1.2552</b> долларов США<br>
       1 екр. = <b>1.0000</b> ЕВРО<br>
       1 екр. = <b>9.9431</b> укр. гривен<br>
@@ -302,8 +302,8 @@ else
       <legend><b>Обменный пункт</b></legend>
       Обменять еврокредиты на кредиты.<br>
       Курс <b>1 екр.</b> = <b>30.00 кр.</b><br>
-      Сумма <input type="text" name="convert_sum" size="6" maxlength="10"<?echo $e_dis;?>> екр.
-      <input type="submit" class="nav" name="convert_ekredit" value="Обменять"<?echo $e_dis;?>>
+      Сумма <input type="text" name="convert_sum" size="6" maxlength="10"<?phpecho $e_dis;?>> екр.
+      <input type="submit" class="nav" name="convert_ekredit" value="Обменять"<?phpecho $e_dis;?>>
     </fieldset>
   </td>
   <td></td>
@@ -324,14 +324,14 @@ else
         </tr>
       </table>
       <input type="submit" class="nav" name="change_psw" value="Сменить пароль"><br>
-      <?echo ($cash == 0 && $euro == 0) ?'<hr>Т.к. ваш счет с нулевым балансом, вы можете его в любой момент закрыть <input class="nav" type="button" name="close" value="Закрыть счет"><br>' :"";?>
+      <?phpecho ($cash == 0 && $euro == 0) ?'<hr>Т.к. ваш счет с нулевым балансом, вы можете его в любой момент закрыть <input class="nav" type="button" name="close" value="Закрыть счет"><br>' :"";?>
     </fieldset>
   </td>
   <td valign="top">
     <fieldset>
       <legend><b>Последние операции</b></legend>
         <table cellpadding="2" cellspacing="0" border="0">
-<?        $rows = $adb->select("SELECT `credit2`, 
+<?php        $rows = $adb->select("SELECT `credit2`, 
                                        `cash`, 
                                        `euro`, 
                                        `operation`, 
@@ -354,13 +354,13 @@ else
     <fieldset>
       <legend><b>Записная книжка</b></legend>
       Здесь вы можете записывать любую информацию для себя. Номера счетов друзей, кто кому чего должен и прочее. Записная книжка общая для всех счетов.<br>
-      <textarea name="notepad" rows="10" cols="67" style="width: 100%;"><?echo $note;?></textarea><br>
+      <textarea name="notepad" rows="10" cols="67" style="width: 100%;"><?phpecho $note;?></textarea><br>
       <input type="submit" class="nav" name="save_notepad" value="Сохранить изменения">
     </fieldset>
   </td>
 </tr>
 </table>
 </form>
-<?
+<?php
 }
 ?>

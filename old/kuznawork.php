@@ -1,7 +1,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta http-equiv="Content-Language" content="ru">
 <LINK REL=StyleSheet HREF='styles/style.css' TYPE='text/css'>
-<?
+<?php
 include "conf.php";
 session_start();
 
@@ -43,7 +43,7 @@ if($action == 'wait'){
               </tr></table>
 <td valign=top>
 
-<?
+<?php
 
 
 
@@ -58,7 +58,7 @@ print "<td valign=top bgcolor=#fffbbb><span class=usuallyb>";
 
 <html><head>
 
-<html><head><meta http-equiv="refresh" content="1;url=/kuznawork.php?&login=<? echo $login; ?>&obj_type=<? print $obj_type; ?>">    <script language="javascript">
+<html><head><meta http-equiv="refresh" content="1;url=/kuznawork.php?&login=<?php echo $login; ?>&obj_type=<?php print $obj_type; ?>">    <script language="javascript">
     var TIMELEFT = 7200;
     var DURATION = 1000;
 
@@ -105,14 +105,14 @@ print "<td valign=top bgcolor=#fffbbb><span class=usuallyb>";
               <TR>
 </table>
 
-<?
+<?php
 print("</head><body><br>");
 }
 else {
 ?>
 
 
-<?
+<?php
 $query=mysql_query("SELECT * FROM `characters` WHERE login='$who'");
 $db=mysql_fetch_array($query);
     {
@@ -130,11 +130,11 @@ elseif($data["num"]>999){
 $zarplata = '0.15';
 }
 ?>
-<html><head><meta http-equiv="refresh" content="1;url=/kuznawork.php?action=wait&login=<? echo $login; ?>&obj_type=<? print $obj_type; ?>">
+<html><head><meta http-equiv="refresh" content="1;url=/kuznawork.php?action=wait&login=<?php echo $login; ?>&obj_type=<?php print $obj_type; ?>">
 
 
 
-        Вещь <b><? print $res_name; ?></b> готова! Вам зачислены <b><? print $zarplata; ?></b> Ст.
+        Вещь <b><?php print $res_name; ?></b> готова! Вам зачислены <b><?php print $zarplata; ?></b> Ст.
 
 
 <script language="javascript">
@@ -185,7 +185,7 @@ $zarplata = '0.15';
               <TR>
 </table>
 <a class=us2 href="main.php?act=go&room_go=centplosh">Главный Хол</a>
-<?
+<?php
 
         $qqq = mysql_query("UPDATE `$obj_type` SET mountown=mountown+1 WHERE name='$res_name'");
         $qqqq = mysql_query("UPDATE `characters` SET money=money+'$zarplata' WHERE login='$who'");

@@ -1,24 +1,24 @@
-<?
+<?php
 defined('AntiBK') or die("Доступ запрещен!");
 
 $prisoners = $adb->selectCell("SELECT COUNT(*) FROM `characters` WHERE `prison` != '0';");
 ?>
 <table>
   <tr>
-    <td><img src="img/prison.jpg"><br>Всего в тюрьме: <b><?echo $prisoners;?></b></td>
+    <td><img src="img/prison.jpg"><br>Всего в тюрьме: <b><?phpecho $prisoners;?></b></td>
     <td width="100%" valign="top">
     <center>Тюрьма - место покоя тех, кто был глуп и наивен.</center>
-<?
+<?php
 if (!$char_db['prison'])
 {
 ?>
 <table width="148" align="right" border="0" cellpadding="0" cellspacing="1" bgcolor="#DEDEDE">
   <tr>
     <td bgcolor="#D3D3D3"><img src="img/links.gif" width="9" height="7"/></td>
-    <td bgcolor="#D3D3D3" nowrap><a href="main.php?action=go&room_go=centsquare" class="passage" alt="<?echo $char->city->getRoomOnline('centsquare', 'mini');?>">Центральная Площадь</a></td>
+    <td bgcolor="#D3D3D3" nowrap><a href="main.php?action=go&room_go=centsquare" class="passage" alt="<?phpecho $char->city->getRoomOnline('centsquare', 'mini');?>">Центральная Площадь</a></td>
   </tr>
 </table>
-<?
+<?php
 }
 else
 {

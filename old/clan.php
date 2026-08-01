@@ -1,4 +1,4 @@
-<?
+<?php
 $clan_t = $db["clan"];
 $clan_s = $db["clan_short"];
 $orden_t = $db["orden"];
@@ -17,11 +17,11 @@ $history = str_replace("<BR>","\n",$history);
 <body bgcolor="#EEEEEE" topmargin="2" leftmargin="2">
 <script>
 function goSite(){
-window.open("<?echo $clan_site?>");
+window.open("<?phpecho $clan_site?>");
 }
 </script>
 
-<?
+<?php
 if($clan_t!=''){
 if($db["orden"]==1){$orden_dis="Белое братство";}
 if($db["orden"]==2){$orden_dis="Армада";}

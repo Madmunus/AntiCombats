@@ -1,4 +1,4 @@
-<?
+<?phpphp
 session_start();
 include "conf.php";
 if($fuck==1){print "<script>location.href='battle.php'</script>";}
@@ -7,7 +7,7 @@ include "functions.php";
 <LINK REL=StyleSheet HREF='styles/style.css' TYPE='text/css'>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta http-equiv="Content-Language" content="ru">
-<?
+<?php
 $data = mysql_connect($base_name, $base_user, $base_pass);
 
 mysql_select_db($db_name,$data);
@@ -64,12 +64,12 @@ print "<table valign=\"bottom\" border=0 cellpadding=0 cellspacing=0 width=260><
 
 
 <script language=javascript>
-show(<?echo "$hp[0],$hp[1]"?>);
-<?
+show(<?phpecho "$hp[0],$hp[1]"?>);
+<?php
 if($level>=6 && $wis!=0){
 ?>
-showMN(<?echo "$mp[0],$mp[1]"?>);
-<?
+showMN(<?phpecho "$mp[0],$mp[1]"?>);
+<?php
 }
 ?>
 function show(min, max){
@@ -96,7 +96,7 @@ document.write("<table border=0 cellpadding=0 cellspacing=0 width=260 height=8 b
 
 </script>
 
-<?
+<?php
 }
 if($db["battle"]==0){
 print "<script>location.href='main.php?act=none'</script>";
@@ -447,14 +447,14 @@ top.talk.talker.text.focus();
 <TABLE BORDER=0 WIDTH=100% CELLPADDING=0 CELLSPACING=0>
  <TR>
   <TD WIDTH=210 VALIGN=TOP ALIGN=LEFT>
-  <?
+  <?php
   showHPMP($login);
   showPlayer($login);
   ?>
   </TD>
   <td width=5><img src="im/spacer.gif" width=5></td>
   <TD VALIGN=TOP>
-  <?
+  <?php
   if($winer!=0 AND $loser!=0){
     $b = 0;
   }
@@ -646,7 +646,7 @@ top.talk.talker.text.focus();
   </TD>
   <td width=5><img src="im/spacer.gif" width=5></td>
   <TD WIDTH=210 VALIGN=TOP ALIGN=LEFT>
-  <?
+  <?php
   if($opponent!='' AND $db["hp"]>0){
   $bot = 0;
     $BOT_L = mysql_query("SELECT * FROM bot_temp WHERE battle_id='$bid'");

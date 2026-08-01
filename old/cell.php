@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Language" content="ru">
 <LINK REL=StyleSheet HREF='styles/style.css' TYPE='text/css'>
 <body bgcolor=#e4e4e4 topmargin=2>
-<?
+<?php
 if ($buy!=""){$type=$bue;}
 if($type==""){$type="flower";}
 $city=$db["city_game"];
@@ -100,7 +100,7 @@ $Q=mysql_query($SQL_NUM);
 <table cellpadding="0" cellspacing="0" width="100%" height=100%>
 <tr>
     <td width=210 align=center bgcolor=DDDDDD class=us2 valign="top" style="border-top: 1px solid #999999; border-right: 1px solid #999999; border-bottom: 1px solid #999999; border-left: 1px solid #999999;">
-<?
+<?php
 
 $money1=$db["money"];
 $money = sprintf ("%01.2f", $money1);
@@ -113,7 +113,7 @@ $money = sprintf ("%01.2f", $money1);
         <input name="level" type="hidden" value="municip" />
         <input type=submit class=but value=" Выйти из Лавки " style="height=18;font-size:11 px">
         </form>
-<b>У вас с собой</b>:<br /> <B><?echo $money;?></B> зл.<br />
+<b>У вас с собой</b>:<br /> <B><?phpecho $money;?></B> зл.<br />
   </td>
   <td align="center" valign="top" >
 
@@ -137,7 +137,7 @@ $money = sprintf ("%01.2f", $money1);
 &nbsp&nbsp&nbsp&nbsp<a class=us2 href='?type=flower'>Цветы</a>
 
 <table width="95%" cellspacing="0" border="0" cellpadding="0" >
-<?
+<?php
 
 
 if($buy!=""){$type=$buy;}
@@ -170,17 +170,17 @@ if($nums>0){
 ?>
 
 <script language="JavaScript">
-function check<?echo $g?>(){
- if(document.flower<?echo $g?>.target.value == ''){
+function check<?phpecho $g?>(){
+ if(document.flower<?phpecho $g?>.target.value == ''){
    if(confirm('Вы не сказали кому отправить букет! Вы уверены что хотите купить букет самому себе ?')){
-    document.flower<?echo $g?>.submit();
+    document.flower<?phpecho $g?>.submit();
    }
  }else{
-  document.flower<?echo $g?>.submit();
+  document.flower<?phpecho $g?>.submit();
  }
 }
 </SCRIPT>
-<?
+<?php
 print "<table border=0 width=95% cellpadding=0 cellspacing=0><tr><td><table border=0 bgcolor=#888888 width=100% cellpadding=0 cellspacing=0><tr><td>";
 print "<table border=0 width=100% cellpadding=2 cellspacing=0><tr>";
 print "<td valign=top bgcolor=#cccccc><span class=usuallyb>";
@@ -205,7 +205,7 @@ print "<B>Осталось: $nums шт.</B>";print "</FORM>";
 print "</td></tr></table></td></tr></table></td></tr></table>";
 ?>
 <BR>
-<?
+<?php
 }
  }
 }
@@ -228,18 +228,18 @@ if($nums>0){
 ?>
 
 <script language="JavaScript">
-function checkgift<?echo $g?>(){
- if( document.gift<? echo $g;?>.target.value == ''){
+function checkgift<?phpecho $g?>(){
+ if( document.gift<?php echo $g;?>.target.value == ''){
    if(confirm('Вы не указали кому будет подарен подарок, вы хотите подарить его самому себе ?')){
-   document.gift<? echo $g;?>.submit();
+   document.gift<?php echo $g;?>.submit();
    }
  }
  else{
-  document.gift<? echo $g;?>.submit();
+  document.gift<?php echo $g;?>.submit();
  }
 }
 </SCRIPT>
-<?
+<?php
 print "<table border=0 width=95% cellpadding=2 cellspacing=0><tr>";
 print "<td valign=top bgcolor=#cccccc><span class=usuallyb>";
 print "<FORM NAME='gift$g' onSubmit='checkgift$g();' ACTION='?buy=gift&item=$id' METHOD=\"POST\">";
@@ -266,7 +266,7 @@ print "</td></tr></table><br />";
  }
 }
 ?>
-<tr><td colspan=5 style="border-top: 1px solid #999999; border-right: 1px solid #999999; border-bottom: 1px solid #999999; border-left: 1px solid #999999;" bgcolor="<?echo $bgcolor;?>"><p align="center">&nbsp;</p></td></tr>
+<tr><td colspan=5 style="border-top: 1px solid #999999; border-right: 1px solid #999999; border-bottom: 1px solid #999999; border-left: 1px solid #999999;" bgcolor="<?phpecho $bgcolor;?>"><p align="center">&nbsp;</p></td></tr>
 </tr></table>
 
 
@@ -292,7 +292,7 @@ print "</td></tr></table><br />";
 
 
 
-<tr><td colspan=3 style="border-top: 1px solid #999999; border-right: 1px solid #999999; border-bottom: 1px solid #999999; border-left: 1px solid #999999;" bgcolor="<?echo $bgcolor;?>"><p align="center">&nbsp;</p></td></tr>
+<tr><td colspan=3 style="border-top: 1px solid #999999; border-right: 1px solid #999999; border-bottom: 1px solid #999999; border-left: 1px solid #999999;" bgcolor="<?phpecho $bgcolor;?>"><p align="center">&nbsp;</p></td></tr>
 </tr></table>
 
 

@@ -1,4 +1,4 @@
-<?
+<?php
 if(empty($login)){
 print "<script>top.location.href='index.php';</script>";
 }
@@ -25,7 +25,7 @@ if(empty($act)){$act = "";}
 
 <table border=1><tr>
 
-<?
+<?php
 
 
 while ($a<10) {
@@ -50,7 +50,7 @@ print "</tr></table></td>";
 <td valign=top>
 <table border=1 width=100%>
 <tr>
-<?
+<?php
 $id=1;
 while ($id < 11) {
 $pd = mysql_query("SELECT * FROM wood WHERE id='$id'");
@@ -89,7 +89,7 @@ $id++;
 <td colspan=10>
 <table border=1 width=100%>
 <tr><td><center><b>Рейтинг</td><td colspan=4><center><b>Персонаж</td><td><center><b>ресурсы</td><td><center><b>деньги</td></tr>
-<?
+<?php
 $adders = mysql_query("Select * from characters where add_resourses>0 ORDER BY add_resourses DESC");
 while ($add = mysql_fetch_array($adders)){
 $i++;

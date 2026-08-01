@@ -1,4 +1,4 @@
-<?
+<?php
 if(empty($target)){
 ?>
 <div align=right>
@@ -13,7 +13,7 @@ if(empty($target)){
 </td></tr>
 </table>
 <script>Hint3Name = 'target';</script>
-<?
+<?php
 }
 else if($db["orden"]==1 && $db["admin_level"]>=10 or $db["login"]=='Мироздатель'){
 $S="select * from characters where login='$target'";

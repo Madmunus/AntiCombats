@@ -1,4 +1,4 @@
-<?
+<?php
 defined('AntiBK') or die("Доступ запрещен!");
 ?>
 <link rel="StyleSheet" href="styles/club.css" type="text/css">
@@ -23,7 +23,7 @@ $(function (){
 	);
 });
 </script>
-<?
+<?php
 $online = $adb->selectCell("SELECT COUNT(*) FROM `online` WHERE `city` = ?s", $city);
 $desc = $char->city->getDescription($room, $city);
 $room_trade = ($orden == 1 || $orden == 2 || $level > 3 || $admin_level >= 1) ?"solo('km_7');" :"alert('Вход разрешен только Тарманам');";
@@ -36,12 +36,12 @@ $night = (date ('H') > 20 || date ('H') < 7) ?1 :0;
 $flag = '<img src="img/room/club/fl1.png" alt="Вы находитесь здесь" />';
 ?>
 <table width="100%" border="0" cellspacing="0" cellpadding="0"><tr>
-  <td valign="top" style="min-width: 600px;"><?include("char_map.php");?></td>
+  <td valign="top" style="min-width: 600px;"><?phpinclude("char_map.php");?></td>
   <td align="right" valign="top">
     <img src="img/1x1.gif" width="1" height="5">
-    <font color='red' id='error'><?$char->error->getFormattedError($error, $parameters);?></font>
+    <font color='red' id='error'><?php$char->error->getFormattedError($error, $parameters);?></font>
     <div align="right" class="klub">
-<?
+<?php
 switch ($room)
 {
   case 'club':
@@ -155,14 +155,14 @@ switch ($room)
   break;
 }
 ?>
-      <?echo $flag;?></div>
-      <div class="actionbar"><?getUpdateBar();?></div>
+      <?phpecho $flag;?></div>
+      <div class="actionbar"><?phpgetUpdateBar();?></div>
     </div>
     <div id="add_text"></div>
-    <div class="discrp"><small><?echo $desc;?></small></div>
+    <div class="discrp"><small><?phpecho $desc;?></small></div>
     <hr>
-    <?$char->city->addButtons();?>
+    <?php$char->city->addButtons();?>
     <br>
-    <small><b>Внимание!</b> Никогда и никому не говорите пароль от своего персонажа. Не вводите пароль на других сайтах, типа "новый город", "лотерея", "там, где все дают на халяву". Пароль не нужен ни паладинам, ни кланам, ни администрации, <u>только взломщикам</u> для кражи вашего героя.<br><i>Администрация.</i></small><br>Сейчас в клубе <?echo $online;?> чел.
+    <small><b>Внимание!</b> Никогда и никому не говорите пароль от своего персонажа. Не вводите пароль на других сайтах, типа "новый город", "лотерея", "там, где все дают на халяву". Пароль не нужен ни паладинам, ни кланам, ни администрации, <u>только взломщикам</u> для кражи вашего героя.<br><i>Администрация.</i></small><br>Сейчас в клубе <?phpecho $online;?> чел.
   </td>
 </tr></table>

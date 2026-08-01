@@ -1,11 +1,11 @@
-<?
+<?php
 if (ereg("[<>\\/-]",$act) or ereg("[<>\\/-]",$ord) or ereg("[<>\\/-]",$spell)) {print "?!"; exit();}
 $act=htmlspecialchars($act);
 $ord=htmlspecialchars($ord);
 $spell=htmlspecialchars($spell);
 ?>
 <p align=right><input type=button value="Вернуться" class=nav onclick="javascript:location.href='main.php?act=none'">&nbsp;&nbsp;&nbsp;&nbsp;</p>
-<?
+<?php
 if(empty($ord)){$ord=$db["orden"];}
         print "<hr color=#000000 noshade size=1 width=100%><table width=100%><td>";
 if($ord==1 or $ord==2 or $db["login"]=='Смотритель' or $db["login"]=='Мироздатель'){

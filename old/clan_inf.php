@@ -1,4 +1,4 @@
-<?
+<?php
 define('AntiBK', true);
 
 include_once("engline/config.php");
@@ -28,7 +28,7 @@ $orden = $char->getLogin('turn', $glava);
 ?>
 <html>
 <head>
-<title>Анти Бойцовский Клуб - Информация о клане <?echo $name;?></title>
+<title>Анти Бойцовский Клуб - Информация о клане <?phpecho $name;?></title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta http-equiv="Content-Language" content="ru">
 <link rel="StyleSheet" href="styles/style.css" type="text/css">
@@ -37,7 +37,7 @@ $orden = $char->getLogin('turn', $glava);
 <table width="100%" cellspacing="0" cellpadding="0">
   <tr> 
     <td width="100%" align="center" valign="top" colspan="2">
-<?
+<?php
       echo "Информация о клане:  <b>\"$name\"</b>";
       echo "<table width='100%' cellspacing='0' cellpadding='0'><tr>";
       echo "<td width='50%'>Уровень: <b>0</b></td>";
@@ -53,13 +53,13 @@ $orden = $char->getLogin('turn', $glava);
   </tr>
   <tr>
     <td width="50%" valign="top">
-<?
+<?php
       echo "Глава клана: ".$char->getLogin('clan', $glava);
 ?>
     </td>
     <td width="50%" valign="top">
       Бойцы клана:<br>
-<?
+<?php
     $rows = $adb->selectCol("SELECT `login` 
                              FROM `characters` 
                              WHERE `clan_short` = ?s 

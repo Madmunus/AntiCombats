@@ -1,14 +1,14 @@
-<?
+<?php
 defined('AntiBK') or die ("Доступ запрещен!");
 
 $r_login = (isset($_POST['r_login'])) ?$_POST['r_login'] :"";
 ?>
 <form method="post" action="">
 <strong>Логин</strong><br>
-<input type="text" name="r_login" size="25" value="<?echo $r_login;?>">
+<input type="text" name="r_login" size="25" value="<?phpecho $r_login;?>">
 <input type="submit" name="submit" value="Далее">
 </form>
-<?
+<?php
 if (isset($_POST['r_login']) && $r_login == '')
     echo "Вы не ввели Логин.";
 else if ($r_login != '')

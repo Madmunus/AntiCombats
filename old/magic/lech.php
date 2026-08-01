@@ -1,4 +1,4 @@
-<?
+<?php
 if(empty($param)){
 ?><br><p align=right><input type=button value="Вернуться" class=nav onclick="javascript:location.href='main.php?act=none'"></p>
 <div align=center><br><br><br>
@@ -7,7 +7,7 @@ if(empty($param)){
 </table>
 <table border=0 bgcolor=#cccccc cellpadding=0 cellspacing=0 width=300 height=60>
 <tr><td align=left valign=top>
-<form name='attack' action='?act=magic&school=earth&scroll=<?echo $scroll?>' method='post'>
+<form name='attack' action='?act=magic&school=earth&scroll=<?phpecho $scroll?>' method='post'>
 <small>
 &nbsp&nbspЗаклятие "Лечение травм"<BR>
 </small>
@@ -22,7 +22,7 @@ if(empty($param)){
 <td width=10><img src='img/cor_l_b.gif'></td><td bgcolor=#cccccc><img src='img/10_10.gif'></td><td width=10><img src='img/cor_r_b.gif'></td>
 </table>
 </div>
-<?
+<?php
 }
 else if($db["battle"]==0){
 if (ereg("[<>\\/-]",$act) or ereg("[<>\\/-]",$school) or ereg("[<>\\/-]",$scroll) or ereg("[<>\\/-]",$param)) {print "?!"; exit();}

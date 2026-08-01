@@ -1,4 +1,4 @@
-<?
+<?php
 define('AntiBK', true);
 
 include_once("engline/config.php");
@@ -27,7 +27,7 @@ $log = (!preg_match('//u', $log)) ?iconv("CP1251", "UTF-8", rawurldecode($log)) 
   <script src="scripts/show.js" type="text/javascript"></script>
 </head>
 <body>
-<?
+<?php
 if (empty($log))
   error('Указанный персонаж не найден...');
 
@@ -88,7 +88,7 @@ $info->showStatAddition();
       <table width="100%" border="0" cellpadding="1" cellspacing="2">
       <tr valign="top">
         <td align="center" width="227" style="padding-right: 10px;">
-<?        $info->showCharacter();
+<?php        $info->showCharacter();
           echo "<strong>$city</strong><br>";
           echo ($online) ?"<small>Персонаж сейчас находится в клубе.<br>\"<strong>$room</strong>\"</small>" :"<small>Персонаж не в клубе, но был тут:<br>".date('d.m.y H:i', $last_time)." <img src='img/clok3_2.png' alt='Время сервера' border='0'><br> (".getFormatedTime($last_time)." назад)</small>";
           echo "</td>";
@@ -117,7 +117,7 @@ $info->showStatAddition();
       <table width="100%" border="0" cellspacing="0" cellpadding="0">
         <tr>
           <td align="left" valign="top">
-<?
+<?php
 /* TODO: Gift system
 $rows = $adb->select("SELECT `c`.`id`, 
                              `c`.`gift_author` 
@@ -148,7 +148,7 @@ foreach ($rows as $dat_t)
         <tr>
           <td align="left" valign="top" style="padding-left: 4px;">
             <h3>Анкетные данные</h3>
-<?          echo "Имя: $name<br>";
+<?php          echo "Имя: $name<br>";
             echo "Пол: $sex";
             echo ($town) ?"<br>Город: $town" :"";
             echo ($icq && !$hide_icq) ?"<br>ICQ: $icq" :"";
@@ -163,7 +163,7 @@ foreach ($rows as $dat_t)
   </tr>
   <tr>
     <td class="bottomleftcorner"><img src="img/info/x.gif"></td>
-    <td class="bottomcenterline"><div><?echo $config['copyright'];?></div></td>
+    <td class="bottomcenterline"><div><?phpecho $config['copyright'];?></div></td>
     <td class="bottomrightcorner"><img src="img/info/x.gif"></td>
   </tr>
 </table>

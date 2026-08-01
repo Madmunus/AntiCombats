@@ -1,11 +1,11 @@
-<?
+<?php
 $mail_to = getVar('mail_to', 0);
 $mail_id = getVar('mail_id', 0);
 $send_sum = getVar('send_sum', 0);
 ?>
 <script src="scripts/mail.js" type="text/javascript"></script>
 <script src="scripts/move_check.js" type="text/javascript"></script>
-<?
+<?php
 $mail_recieve = $adb->selectCell("SELECT COUNT(*) FROM `city_mail_items` WHERE `to` = ?d", $guid) | 0;
 switch ($do)
 {
@@ -30,12 +30,12 @@ switch ($do)
   <td valign="top" height="100%">
     <table width="100%" cellspacing="0" cellpadding="4" bgcolor="#d2d2d2">
     <tr>
-      <td class="pH3">&nbsp; &nbsp; Почтовое отделение<?echo (isset($lang['mail_'.$do])) ?$lang['mail_'.$do] :"";?></td>
-      <td align="right" valign="top"><?echo $char->getLogin();?></td>
+      <td class="pH3">&nbsp; &nbsp; Почтовое отделение<?phpecho (isset($lang['mail_'.$do])) ?$lang['mail_'.$do] :"";?></td>
+      <td align="right" valign="top"><?phpecho $char->getLogin();?></td>
     </tr>
     </table>
-    <font color='red' id='error'><?$char->error->getFormattedError($error, $parameters);?></font>
-<?
+    <font color='red' id='error'><?php$char->error->getFormattedError($error, $parameters);?></font>
+<?php
 switch ($do)
 {
   default:
@@ -54,7 +54,7 @@ switch ($do)
   По истечению этого срока, посылка отправляется обратно или удаляется.
   <br>
   <small><br>Администрация почты заявляет, что не несет ответственности за хранимый или пересылаемый товар/кредиты/сообщения и не гарантирует 100% его доставку. В случае форс-мажорных обстоятельств, товар/кредиты/сообщения могут быть утеряны.</small>
-<?
+<?php
   break;
   case 'items':
     if (!$login_mail)
@@ -69,8 +69,8 @@ switch ($do)
                                   WHERE `login` = ?s or `guid` = ?s", $login_mail ,$login_mail) or $char->error->Map(203, $login_mail);
     $login_mail = $mail_info['guid'];
 ?>
-    К кому передавать: <?echo $char->getLogin('mail', $login_mail);?> &nbsp;<input type="button" value="Сменить" onclick="findLogin('Почтовые услуги', 'main.php', 'login_mail', '', '', '<input type=hidden value=items name=do>', 0); return false;" class="nav"><br>
-<?
+    К кому передавать: <?phpecho $char->getLogin('mail', $login_mail);?> &nbsp;<input type="button" value="Сменить" onclick="findLogin('Почтовые услуги', 'main.php', 'login_mail', '', '', '<input type=hidden value=items name=do>', 0); return false;" class="nav"><br>
+<?php
     if ($city == $mail_info['city'])
       echo "Находится в этом городе";
     else
@@ -81,20 +81,20 @@ switch ($do)
 <script type="text/javascript">
 $(function (){
   section = (c = getCookie('section')) ?c :1;
-  showInventory(section, 'mail_to', '<?echo $login_mail;?>');
+  showInventory(section, 'mail_to', '<?phpecho $login_mail;?>');
 });
 </script>
     <table border="0" width="100%" bgColor="#d4d2d2" cellpadding="3" cellspacing="0">
       <tr>
-        <td width="25%" align="center" id="section_1"><a href="javascript:showInventory(1, 'mail_to', '<?echo $login_mail;?>');" class="nick"><b><?echo $lang['sec_item'];?></b></a></td>
-        <td width="25%" align="center" id="section_2"><a href="javascript:showInventory(2, 'mail_to', '<?echo $login_mail;?>');" class="nick"><b><?echo $lang['sec_thing'];?></b></a></td>
-        <td width="25%" align="center" id="section_3"><a href="javascript:showInventory(3, 'mail_to', '<?echo $login_mail;?>');" class="nick"><b><?echo $lang['sec_elix'];?></b></a></td>
-        <td width="25%" align="center" id="section_4"><a href="javascript:showInventory(4, 'mail_to', '<?echo $login_mail;?>');" class="nick"><b><?echo $lang['sec_other'];?></b></a></td>
+        <td width="25%" align="center" id="section_1"><a href="javascript:showInventory(1, 'mail_to', '<?phpecho $login_mail;?>');" class="nick"><b><?phpecho $lang['sec_item'];?></b></a></td>
+        <td width="25%" align="center" id="section_2"><a href="javascript:showInventory(2, 'mail_to', '<?phpecho $login_mail;?>');" class="nick"><b><?phpecho $lang['sec_thing'];?></b></a></td>
+        <td width="25%" align="center" id="section_3"><a href="javascript:showInventory(3, 'mail_to', '<?phpecho $login_mail;?>');" class="nick"><b><?phpecho $lang['sec_elix'];?></b></a></td>
+        <td width="25%" align="center" id="section_4"><a href="javascript:showInventory(4, 'mail_to', '<?phpecho $login_mail;?>');" class="nick"><b><?phpecho $lang['sec_other'];?></b></a></td>
       </tr>
     </table>
-    <div align="center" style="background: #a5a5a5;"><b><?echo $lang['back_pack'];?> (<?echo lowercase($lang['mass'])." $mass/$maxmass";?>)</div>
+    <div align="center" style="background: #a5a5a5;"><b><?phpecho $lang['back_pack'];?> (<?phpecho lowercase($lang['mass'])." $mass/$maxmass";?>)</div>
     <div id="inventory"></div>
-<?
+<?php
   break;
   case 'money':
     if (!$login_mail)
@@ -109,16 +109,16 @@ $(function (){
                                   WHERE `login` = ?s or `guid` = ?d", $login_mail ,$login_mail) or $char->error->Map(203, $login_mail);
     $login_mail = $mail_info['guid'];
 ?>
-    К кому передавать: <?echo $char->getLogin('mail', $login_mail);?> &nbsp;<input type="button" value="Сменить" onclick="findLogin('Почтовые услуги', 'main.php', 'login_mail', '', '', '<input type=hidden value=money name=do>', 0); return false;" class="nav"><br>
-<?
+    К кому передавать: <?phpecho $char->getLogin('mail', $login_mail);?> &nbsp;<input type="button" value="Сменить" onclick="findLogin('Почтовые услуги', 'main.php', 'login_mail', '', '', '<input type=hidden value=money name=do>', 0); return false;" class="nav"><br>
+<?php
     if ($city == $mail_info['city'])
       echo "Находится в этом городе";
     else
       echo "Находится в $mail_info[city]";
 ?>  <br>
-    <form action='?do=check&mail_to=<?echo $login_mail;?>' name='mail' method='post'>
+    <form action='?do=check&mail_to=<?phpecho $login_mail;?>' name='mail' method='post'>
     <fieldset><legend><b>Передать кредиты</b></legend>
-      У вас на счету: <font color="#339900"><b><?echo $money;?></b></font> кр.<br>
+      У вас на счету: <font color="#339900"><b><?phpecho $money;?></b></font> кр.<br>
       Передать кредиты, минимально 1 кр. Комиссия составит 5%<br>
       Укажите передаваемую сумму: <input type="text" name="send_sum" maxlength="8" size="6"><input type="submit" class="nav" value="Передать" name="send_money"><br>
     </fieldset>
@@ -140,7 +140,7 @@ function ch_l ()
 }
 ch_l();
 </script>
-<?
+<?php
   break;
   case 'report':
   break;
@@ -190,15 +190,15 @@ ch_l();
     <table cellpadding="0" cellspacing="0" width="100%" style="padding-left: 5px;">
       <tr>
         <td align="right">
-          <?getUpdateBar();?>
+          <?phpgetUpdateBar();?>
           <table width="148" border="0" cellpadding="0" cellspacing="1" bgcolor="#DEDEDE">
             <tr>
               <td bgcolor="#D3D3D3"><img src="img/links.gif" width="9" height="7" /></td>
-              <td bgcolor="#D3D3D3" nowrap><a href="main.php?action=go&room_go=centsquare" class="passage" alt="<?echo $char->city->getRoomOnline('centsquare', 'mini');?>">Центральная Площадь</a></td>
+              <td bgcolor="#D3D3D3" nowrap><a href="main.php?action=go&room_go=centsquare" class="passage" alt="<?phpecho $char->city->getRoomOnline('centsquare', 'mini');?>">Центральная Площадь</a></td>
             </tr>
             <tr>
               <td bgcolor="#D3D3D3"><img src="img/links.gif" width="9" height="7" /></td>
-              <td bgcolor="#D3D3D3" nowrap><a href="main.php" class="passage" alt="<?echo $char->city->getRoomOnline('Филиал Аукциона', 'mini');?>">Филиал Аукциона</a></td>
+              <td bgcolor="#D3D3D3" nowrap><a href="main.php" class="passage" alt="<?phpecho $char->city->getRoomOnline('Филиал Аукциона', 'mini');?>">Филиал Аукциона</a></td>
             </tr>
           </table>
         </td>
@@ -206,22 +206,22 @@ ch_l();
       <tr>
         <td colspan="2">
           <nobr>
-          <?echo "$lang[money] ".getMoney($money);?> кр.<br>
-          Передач: <?echo $char_db['transfers'];?><br><br>
-<?
+          <?phpecho "$lang[money] ".getMoney($money);?> кр.<br>
+          Передач: <?phpecho $char_db['transfers'];?><br><br>
+<?php
 if ($do == 'items') echo "<b>Передать предметы</b><br>";
 else
 {
 ?>
-          <a href="main.php?do=items<?echo ($login_mail) ?"&login_mail=$login_mail" :""?>" class="nick">Передать предметы</a><br>
-<?
+          <a href="main.php?do=items<?phpecho ($login_mail) ?"&login_mail=$login_mail" :""?>" class="nick">Передать предметы</a><br>
+<?php
 }
 if ($do == 'money') echo "<b>Кредиты и Телеграф</b><br>";
 else
 {
 ?>
-          <a href="main.php?do=money<?echo ($login_mail) ?"&login_mail=$login_mail" :""?>" class="nick">Кредиты и Телеграф</a><br>
-<?
+          <a href="main.php?do=money<?phpecho ($login_mail) ?"&login_mail=$login_mail" :""?>" class="nick">Кредиты и Телеграф</a><br>
+<?php
 }
 if ($mail_recieve > 0 && $do == 'get_mail') echo "<b>Получить вещи</b><br><br>";
 else if ($mail_recieve > 0)                 echo "<a href='main.php?do=get_mail' class='nick'>Получить вещи</a><br><br>";
@@ -230,14 +230,14 @@ else
 ?>
           <font color="gray">Получить вещи</font><br>
           <br>
-<?
+<?php
 }
 if ($do == 'report') echo "<b>Отчеты</b><br>";
 else
 {
 ?>
           <a href="main.php?do=report" class="nick">Отчеты</a><br>
-<?
+<?php
 }
 ?>
           </nobr>
@@ -247,54 +247,9 @@ else
   </td>
 </tr></table>
 
-<?
-/* if($_POST['act']==send)
-{
-    $_POST[to] = htmlspecialchars($_POST[to]);
-    $_POST[telegram] = htmlspecialchars($_POST[telegram]);
-    $_POST[telegram] = str_replace("'",'"',$_POST[telegram]);
-
-    $num = mysql_num_rows(mysql_query("select login from characters where login='$_POST[to]'"));
-
-    if(!$_POST[to])echo"<span style='color:red'>укажите кому вы хотите достовить телеграмму...</span>";
-    elseif(!$_POST[telegram])echo"<span style='color:red'>в телеграмме должно присутствовать хотя бы одно слово...</span>";
-    elseif($num<1)echo"<span style='color:red'>персонажа «$_POST[to]» не существует, проверьте написание логина персонажа...</span>";
-    else
-    {
-        $_POST[telegram] = explode(" ", $_POST[telegram]);
-        $count = count($_POST[telegram]);
-        $cost = $count*0.00;
-        $_POST[telegram] = implode(" ", $_POST[telegram]);
-        if($row[money]<$cost)echo"<span style='color:red'>у вас нехватает ".($cost-$row[money])." золота, что бы отправить телеграмму...</span>";
-        else
-        {
-            $result1 = mysql_query("update characters set money=money-$cost where login='$login'");
-            if($result1)
-            {
-                $array = file("telegraf/telegraf.dat");
-                $time = Date("d.m.Y H:i");
-                $file = fopen("telegraf/telegraf.dat", "a+");
-                flock($file,2);
-                fwrite($file,"$time|$login|$_POST[to]|$_POST[telegram]|
-                ");
-                flock($file,3);
-                fclose($file);
-                echo"<u>вы успешно отправили телеграмму оплатив $cost золота.</u>";
-            }
-        }
-    }
-}
-$file = file("telegraf/telegraf.dat");
-$num = count($file);
-for ($i = 0; $i <= $num; $i++)
-{
-    $row = explode("|",$file[$i]);
-    if ($row[1]==$$login)
-    {
-        echo "$row[0] для «$row[2]»<br>";
-        $found = 1;
-    }
-}
-if ($found != 1)
-    echo"<i>Все телеграммы доставлины...</i>"; */
+<?php
+/* 
+// Конвертировано для PHP 8.3 - закомментированный код удален (устаревший функционал)
+// Оригинальный код использовал mysql_* функции и работу с файлами
+*/
 ?>
